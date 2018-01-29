@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <licenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/OnePoint.AppServices/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/OnePoint.AppServices</projectUrl>
+    <iconUrl>http://www.ontica.org/logo.ontica.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Provides Empiria OnePoint general purpose application services (use cases).</description>
+    <copyright>$copyright$</copyright>
+  </metadata>
+</package>
