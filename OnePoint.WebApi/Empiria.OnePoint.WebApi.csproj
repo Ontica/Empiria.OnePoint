@@ -34,6 +34,16 @@
     <FileAlignment>8192</FileAlignment>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Empiria.Documents">
+      <HintPath>..\..\..\empiria.assemblies\OnePoint.Temporal\Empiria.Documents.dll</HintPath>
+    </Reference>
+    <Reference Include="Empiria.Geography">
+      <HintPath>..\..\..\empiria.assemblies\OnePoint.Temporal\Empiria.Geography.dll</HintPath>
+    </Reference>
+    <Reference Include="Empiria.Land.Registration, Version=3.0.308.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\empiria.assemblies\OnePoint.Temporal\Empiria.Land.Registration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -43,6 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empiria.OnePoint.WebApi.AssemblyInfo.cs" />
+    <Compile Include="Filings\FilingResponseModel.cs" />
+    <Compile Include="Filings\FilingsController.cs" />
+    <Compile Include="Filings\PaymentOrderResponseModel.cs" />
+    <Compile Include="Filings\PaymentsController.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Empiria.WebApi">
@@ -53,6 +67,10 @@
     <ProjectReference Include="..\OnePoint.AppServices\Empiria.OnePoint.AppServices.csproj">
       <Project>{a6e859fb-a156-48af-9f3a-07f3dc5dede2}</Project>
       <Name>Empiria.OnePoint.AppServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OnePoint.Core\Empiria.OnePoint.csproj">
+      <Project>{4804dd40-6864-48d3-8b6e-f0f6f665e517}</Project>
+      <Name>Empiria.OnePoint</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
