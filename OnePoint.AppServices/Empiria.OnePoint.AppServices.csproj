@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,10 +40,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empiria.OnePoint.AppServices.AssemblyInfo.cs" />
+    <Compile Include="RootTypes\FilingServices.cs" />
+    <Compile Include="RootTypes\PaymentServices.cs" />
+    <Compile Include="RootTypes\ServiceLocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="RootTypes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Empiria.Foundation">
+      <Version>6.8.328</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OnePoint.Core\Empiria.OnePoint.csproj">
