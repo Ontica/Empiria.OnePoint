@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empiria.OnePoint.AppServices.AssemblyInfo.cs" />
+    <Compile Include="RootTypes\ESignServices.cs" />
     <Compile Include="RootTypes\FilingServices.cs" />
     <Compile Include="RootTypes\PaymentServices.cs" />
     <Compile Include="RootTypes\ServiceLocator.cs" />
