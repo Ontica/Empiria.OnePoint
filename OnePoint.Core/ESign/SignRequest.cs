@@ -150,7 +150,7 @@ namespace Empiria.OnePoint.ESign {
     #region Public methods
 
     protected override void OnSave() {
-      ESignRepository.WriteSignRequest(this);
+      SignServicesRepository.WriteSignRequest(this);
     }
 
     #endregion Public methods
