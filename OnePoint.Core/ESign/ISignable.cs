@@ -18,7 +18,8 @@ namespace Empiria.OnePoint.ESign {
       get;
     }
 
-    string ESignInputData {
+    // ToDo: Must return a byte[]
+    string SignInputData {
       get;
     }
 

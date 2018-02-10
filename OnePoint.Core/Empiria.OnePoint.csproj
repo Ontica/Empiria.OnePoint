@@ -40,8 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empiria.OnePoint.AssemblyInfo.cs" />
-    <Compile Include="ESign\SignableDocumentsRepository.cs" />
-    <Compile Include="ESign\ESignStatus.cs" />
+    <Compile Include="ESign\SignRequest.cs" />
+    <Compile Include="ESign\SignEvent.cs" />
+    <Compile Include="ESign\Signer.cs" />
+    <Compile Include="ESign\SignCredentials.cs" />
+    <Compile Include="ESign\SignTask.cs" />
+    <Compile Include="ESign\SignEventType.cs" />
+    <Compile Include="ESign\SignServicesRepository.cs" />
+    <Compile Include="ESign\SignStatus.cs" />
     <Compile Include="ESign\ISignable.cs" />
     <Compile Include="ESign\SignableDocument.cs" />
     <Compile Include="RootTypes\IFiling.cs" />

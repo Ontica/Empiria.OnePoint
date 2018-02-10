@@ -28,6 +28,10 @@ namespace Empiria.OnePoint.ESign {
       return BaseObject.ParseId<SignableDocument>(id);
     }
 
+    static public SignableDocument Parse(string uid) {
+      return BaseObject.ParseKey<SignableDocument>(uid);
+    }
+
     static public SignableDocument Empty {
       get {
         return BaseObject.ParseEmpty<SignableDocument>();
@@ -38,7 +42,7 @@ namespace Empiria.OnePoint.ESign {
 
     #region Public properties
 
-    [DataField("DocumentUID")]
+    [DataField("UID")]
     public string UID {
       get;
       private set;
@@ -47,6 +51,20 @@ namespace Empiria.OnePoint.ESign {
 
     [DataField("DocumentType")]
     public string DocumentType {
+      get;
+      private set;
+    }
+
+
+    [DataField("DocumentNo")]
+    public string DocumentNo {
+      get;
+      private set;
+    }
+
+
+    [DataField("TransactionNo")]
+    public string TransactionNo {
       get;
       private set;
     }
@@ -72,9 +90,18 @@ namespace Empiria.OnePoint.ESign {
       private set;
     }
 
+    public string Uri {
+      get {
+        if (this.Status == SignStatus.Signed) {
+          return "http://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/signed.pdf";
+        } else {
+          return "http://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/unsigned.pdf";
+        }
+      }
+    }
 
-    [DataField("InputData")]
-    public string ESignInputData {
+    [DataField("SignInputData")]
+    public string SignInputData {
       get;
       private set;
     }
@@ -108,8 +135,8 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    [DataField("ESignStatus", Default = ESignStatus.Pending)]
-    public ESignStatus Status {
+    [DataField("SignStatus", Default = SignStatus.Pending)]
+    public SignStatus Status {
       get;
       private set;
     }
@@ -126,7 +153,7 @@ namespace Empiria.OnePoint.ESign {
         return new object[] {
           1, "Id", this.Id, "DocumentUID", this.UID, "DocumentType", this.DocumentType,
           "RequestedBy", this.RequestedBy, "RequestedTime", this.RequestedTime,
-          "Description", this.Description, "InputData", this.ESignInputData,
+          "Description", this.Description, "SignInputData", this.SignInputData,
           "ExtData", this.ExtensionData.ToString(), "PostingTime", this.PostingTime,
           "PostedById", this.PostedBy.Id, "Status", this.Status
         };
@@ -153,7 +180,7 @@ namespace Empiria.OnePoint.ESign {
         this.PostedBy = Contact.Parse(ExecutionServer.CurrentUserId);
         this.PostingTime = DateTime.Now;
       }
-      SignableDocumentsRepository.WriteDocument(this);
+      SignServicesRepository.WriteDocument(this);
     }
 
     #endregion Public methods
