@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Empiria.Contacts;
@@ -21,35 +22,35 @@ namespace Empiria.OnePoint.ESign {
     #region Query services
 
     /// <summary>Gets a list of pending documents to sign for the current authenticated user.</summary>
-    static public Task<FixedList<SignableDocument>> GetMyDocumentsToSign(string filter, string sort) {
+    static public Task<FixedList<SignRequest>> GetMyPendingSignRequests(string filter, string sort) {
       Contact me = EmpiriaUser.Current.AsContact();
 
       // ToDo: Assert 'me' is a valid e-signer contact.
-      // ToDo: Do something with filter and sort before send them as-is parameters.
+      // ToDo: Do something with filter and sort before send them as parameters.
 
-      return Task.FromResult(SignableDocumentsRepository.GetDocumentsToSign(me, filter, sort));
+      return Task.FromResult(SignServicesRepository.GetPendingSignRequests(me, filter, sort));
     }
 
 
     /// <summary>Gets a list of electronically signed documents by the current authenticated user.</summary>
-    static public Task<FixedList<SignableDocument>> GetMySignedDocuments(string filter, string sort) {
+    static public Task<FixedList<SignRequest>> GetMySignedRequests(string filter, string sort) {
       Contact me = EmpiriaUser.Current.AsContact();
 
       // ToDo: Assert 'me' is a valid e-signer contact.
-      // ToDo: Do something with filter and sort before send them as-is parameters.
+      // ToDo: Do something with filter and sort before send them as parameters.
 
-      return Task.FromResult(SignableDocumentsRepository.GetSignedDocuments(me, filter, sort));
+      return Task.FromResult(SignServicesRepository.GetSignedRequests(me, filter, sort));
     }
 
 
     /// <summary>Gets a list of refused documents to sign by the current authenticated user.</summary>
-    static public Task<FixedList<SignableDocument>> GetMyRefusedToSignDocuments(string filter, string sort) {
+    static public Task<FixedList<SignRequest>> GetMyRefusedToSignRequests(string filter, string sort) {
       Contact me = EmpiriaUser.Current.AsContact();
 
       // ToDo: Assert 'me' is a valid e-signer contact.
-      // ToDo: Do something with filter and sort before send them as-is parameters.
+      // ToDo: Do something with filter and sort before send them as parameters.
 
-      return Task.FromResult(SignableDocumentsRepository.GetRefusedDocuments(me, filter, sort));
+      return Task.FromResult(SignServicesRepository.GetRefusedRequests(me, filter, sort));
     }
 
     #endregion Query services
