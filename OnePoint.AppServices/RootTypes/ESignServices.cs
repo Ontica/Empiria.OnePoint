@@ -55,6 +55,70 @@ namespace Empiria.OnePoint.ESign {
 
     #endregion Query services
 
+    #region Command services
+
+    static public Task<FixedList<SignEvent>> Sign(SignTask eSignTask) {
+      EnsureValidEventType(eSignTask, SignEventType.Signed);
+
+      FixedList<SignEvent> signEvents = ExecuteSignTask(eSignTask);
+
+      //NotifierService.NotifySigned(signEvents);
+
+      //EMailService.NotifySignEvents(signEvents);
+
+      return Task.FromResult(signEvents);
+    }
+
+
+    static public Task<FixedList<SignEvent>> RefuseSign(SignTask eSignTask) {
+      EnsureValidEventType(eSignTask, SignEventType.Refused);
+
+      FixedList<SignEvent> refuseSignEvents = ExecuteSignTask(eSignTask);
+
+      return Task.FromResult(refuseSignEvents);
+    }
+
+
+    static public Task<FixedList<SignEvent>> RevokeSign(SignTask eSignTask) {
+      EnsureValidEventType(eSignTask, SignEventType.Revoked);
+
+      FixedList<SignEvent> revokeSignEvents = ExecuteSignTask(eSignTask);
+
+      return Task.FromResult(revokeSignEvents);
+    }
+
+
+    static public Task<FixedList<SignEvent>> UnrefuseSign(SignTask eSignTask) {
+      EnsureValidEventType(eSignTask, SignEventType.Unrefused);
+
+      FixedList<SignEvent> unrefuseSignEvents = ExecuteSignTask(eSignTask);
+
+      return Task.FromResult(unrefuseSignEvents);
+    }
+
+    #endregion Command services
+
+    #region Utility methods
+
+    static private void EnsureValidEventType(SignTask eSignTask,
+                                             SignEventType eventType) {
+      Assertion.Assert(eSignTask.EventType == eventType,
+                       $"EventType type value must be '{eventType}'.");
+    }
+
+
+    static private FixedList<SignEvent> ExecuteSignTask(SignTask task) {
+      var currentUserESignCredentials = SignCredentials.ForCurrentUser();
+
+      var signer = new Signer(currentUserESignCredentials);
+
+      FixedList<SignEvent> signEvents = signer.Execute(task);
+
+      return signEvents;
+    }
+
+    #endregion Utility methods
+
   }  // class Empiria.OnePoint.ESign
 
 }  // namespace Empiria.OnePoint.AppServices
