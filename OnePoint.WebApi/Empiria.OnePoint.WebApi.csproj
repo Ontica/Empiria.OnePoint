@@ -53,8 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Empiria.OnePoint.WebApi.AssemblyInfo.cs" />
-    <Compile Include="ESign\ESignedDocumentResponseModel.cs" />
-    <Compile Include="ESign\ESignServicesController.cs" />
+    <Compile Include="ESign\SignableDocumentModels.cs" />
+    <Compile Include="ESign\SignRequestModels.cs" />
+    <Compile Include="ESign\SignEventModels.cs" />
+    <Compile Include="ESign\SignServicesController.cs" />
     <Compile Include="Filings\FilingResponseModel.cs" />
     <Compile Include="Filings\FilingsController.cs" />
     <Compile Include="Filings\PaymentOrderResponseModel.cs" />
