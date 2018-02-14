@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 using Empiria.Security;
@@ -24,12 +23,12 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpGet]
     [Route("v2/e-sign/events/mine")]
-    public async Task<CollectionModel> GetMyLastSignEvents([FromUri] string filter = "",
-                                                           [FromUri] string sort = "") {
+    public CollectionModel GetMyLastSignEvents([FromUri] string filter = "",
+                                               [FromUri] string sort = "") {
       try {
         var me = EmpiriaUser.Current.AsContact();
 
-        FixedList<SignEvent> events = await SignServicesRepository.GetLastSignEvents(me, filter, sort);
+        FixedList<SignEvent> events = SignServicesRepository.GetLastSignEvents(me, filter, sort);
 
         return new CollectionModel(this.Request, events.ToResponse());
 

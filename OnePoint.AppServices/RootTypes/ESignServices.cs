@@ -8,56 +8,15 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Empiria.Contacts;
-using Empiria.Security;
 
 namespace Empiria.OnePoint.ESign {
 
   /// <summary>Use cases that implements electronic signature services.</summary>
   static public class ESignServices {
 
-    #region Query services
+    #region Public methods
 
-    /// <summary>Gets a list of pending documents to sign for the current authenticated user.</summary>
-    static public Task<FixedList<SignRequest>> GetMyPendingSignRequests(string filter, string sort) {
-      Contact me = EmpiriaUser.Current.AsContact();
-
-      // ToDo: Assert 'me' is a valid e-signer contact.
-      // ToDo: Do something with filter and sort before send them as parameters.
-
-      return Task.FromResult(SignServicesRepository.GetPendingSignRequests(me, filter, sort));
-    }
-
-
-    /// <summary>Gets a list of electronically signed documents by the current authenticated user.</summary>
-    static public Task<FixedList<SignRequest>> GetMySignedRequests(string filter, string sort) {
-      Contact me = EmpiriaUser.Current.AsContact();
-
-      // ToDo: Assert 'me' is a valid e-signer contact.
-      // ToDo: Do something with filter and sort before send them as parameters.
-
-      return Task.FromResult(SignServicesRepository.GetSignedRequests(me, filter, sort));
-    }
-
-
-    /// <summary>Gets a list of refused documents to sign by the current authenticated user.</summary>
-    static public Task<FixedList<SignRequest>> GetMyRefusedToSignRequests(string filter, string sort) {
-      Contact me = EmpiriaUser.Current.AsContact();
-
-      // ToDo: Assert 'me' is a valid e-signer contact.
-      // ToDo: Do something with filter and sort before send them as parameters.
-
-      return Task.FromResult(SignServicesRepository.GetRefusedRequests(me, filter, sort));
-    }
-
-    #endregion Query services
-
-    #region Command services
-
-    static public Task<FixedList<SignEvent>> Sign(SignTask eSignTask) {
+    static public FixedList<SignEvent> Sign(SignTask eSignTask) {
       EnsureValidEventType(eSignTask, SignEventType.Signed);
 
       FixedList<SignEvent> signEvents = ExecuteSignTask(eSignTask);
@@ -66,37 +25,37 @@ namespace Empiria.OnePoint.ESign {
 
       //EMailService.NotifySignEvents(signEvents);
 
-      return Task.FromResult(signEvents);
+      return signEvents;
     }
 
 
-    static public Task<FixedList<SignEvent>> RefuseSign(SignTask eSignTask) {
+    static public FixedList<SignEvent> RefuseSign(SignTask eSignTask) {
       EnsureValidEventType(eSignTask, SignEventType.Refused);
 
       FixedList<SignEvent> refuseSignEvents = ExecuteSignTask(eSignTask);
 
-      return Task.FromResult(refuseSignEvents);
+      return refuseSignEvents;
     }
 
 
-    static public Task<FixedList<SignEvent>> RevokeSign(SignTask eSignTask) {
+    static public FixedList<SignEvent> RevokeSign(SignTask eSignTask) {
       EnsureValidEventType(eSignTask, SignEventType.Revoked);
 
       FixedList<SignEvent> revokeSignEvents = ExecuteSignTask(eSignTask);
 
-      return Task.FromResult(revokeSignEvents);
+      return revokeSignEvents;
     }
 
 
-    static public Task<FixedList<SignEvent>> UnrefuseSign(SignTask eSignTask) {
+    static public FixedList<SignEvent> UnrefuseSign(SignTask eSignTask) {
       EnsureValidEventType(eSignTask, SignEventType.Unrefused);
 
       FixedList<SignEvent> unrefuseSignEvents = ExecuteSignTask(eSignTask);
 
-      return Task.FromResult(unrefuseSignEvents);
+      return unrefuseSignEvents;
     }
 
-    #endregion Command services
+    #endregion Public methods
 
     #region Utility methods
 

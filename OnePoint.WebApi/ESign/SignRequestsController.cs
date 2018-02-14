@@ -8,10 +8,10 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 using Empiria.Json;
+using Empiria.Security;
 using Empiria.WebApi;
 using Empiria.WebApi.Models;
 
@@ -25,11 +25,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpGet]
     [Route("v2/e-sign/requests/pending/mine")]
-    public async Task<CollectionModel> GetMyPendingRequests([FromUri] string filter = "",
-                                                            [FromUri] string sort = "") {
+    public CollectionModel GetMyPendingRequests([FromUri] string filter = "",
+                                                [FromUri] string sort = "") {
       try {
+        var me = EmpiriaUser.Current.AsContact();
+
         FixedList<SignRequest> signRequests =
-                                    await ESignServices.GetMyPendingSignRequests(filter, sort);
+                                  SignServicesRepository.GetPendingSignRequests(me, filter, sort);
 
         return new CollectionModel(this.Request, signRequests.ToResponse());
 
@@ -42,11 +44,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpGet]
     [Route("v2/e-sign/requests/refused/mine")]
-    public async Task<CollectionModel> GetMyRefusedRequests([FromUri] string filter = "",
-                                                            [FromUri] string sort = "") {
+    public CollectionModel GetMyRefusedRequests([FromUri] string filter = "",
+                                                [FromUri] string sort = "") {
       try {
+        var me = EmpiriaUser.Current.AsContact();
+
         FixedList<SignRequest> refusedRequests =
-                                    await ESignServices.GetMyRefusedToSignRequests(filter, sort);
+                                    SignServicesRepository.GetRefusedRequests(me, filter, sort);
 
         return new CollectionModel(this.Request, refusedRequests.ToResponse());
 
@@ -59,11 +63,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpGet]
     [Route("v2/e-sign/requests/signed/mine")]
-    public async Task<CollectionModel> GetMySignedRequests([FromUri] string filter = "",
-                                                           [FromUri] string sort = "") {
+    public CollectionModel GetMySignedRequests([FromUri] string filter = "",
+                                               [FromUri] string sort = "") {
       try {
+        var me = EmpiriaUser.Current.AsContact();
+
         FixedList<SignRequest> signedRequests =
-                                      await ESignServices.GetMySignedRequests(filter, sort);
+                                      SignServicesRepository.GetSignedRequests(me, filter, sort);
 
         return new CollectionModel(this.Request, signedRequests.ToResponse());
 
@@ -79,11 +85,11 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/signed/mine")]
-    public async Task<CollectionModel> SignRequests([FromBody] object body) {
+    public CollectionModel SignRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Signed, body);
 
-        FixedList<SignEvent> signEvents = await ESignServices.Sign(signTask);
+        FixedList<SignEvent> signEvents = ESignServices.Sign(signTask);
 
         return new CollectionModel(this.Request, signEvents.ToResponse());
 
@@ -96,11 +102,11 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/refused/mine")]
-    public async Task<CollectionModel> RefuseSignRequests([FromBody] object body) {
+    public CollectionModel RefuseSignRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Refused, body);
 
-        FixedList<SignEvent> refuseSignEvents = await ESignServices.RefuseSign(signTask);
+        FixedList<SignEvent> refuseSignEvents = ESignServices.RefuseSign(signTask);
 
         return new CollectionModel(this.Request, refuseSignEvents.ToResponse());
 
@@ -113,11 +119,11 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/revoked/mine")]
-    public async Task<CollectionModel> RevokeSignedRequests([FromBody] object body) {
+    public CollectionModel RevokeSignedRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Revoked, body);
 
-        FixedList<SignEvent> revokeSignEvents = await ESignServices.RevokeSign(signTask);
+        FixedList<SignEvent> revokeSignEvents = ESignServices.RevokeSign(signTask);
 
         return new CollectionModel(this.Request, revokeSignEvents.ToResponse());
 
@@ -130,11 +136,11 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/unrefused/mine")]
-    public async Task<CollectionModel> UnrefuseSignRequests([FromBody] object body) {
+    public CollectionModel UnrefuseSignRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Unrefused, body);
 
-        FixedList<SignEvent> unrefuseSignEvents = await ESignServices.UnrefuseSign(signTask);
+        FixedList<SignEvent> unrefuseSignEvents = ESignServices.UnrefuseSign(signTask);
 
         return new CollectionModel(this.Request, unrefuseSignEvents.ToResponse());
 

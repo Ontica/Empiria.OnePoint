@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Threading.Tasks;
 
 using Empiria.Contacts;
 using Empiria.Data;
@@ -21,53 +20,52 @@ namespace Empiria.OnePoint.ESign {
 
     #region SignEvent Query methods
 
-    static public async Task<FixedList<SignEvent>> GetLastSignEvents(Contact requestedTo,
-                                                                     string filter, string sort) {
+    static public FixedList<SignEvent> GetLastSignEvents(Contact requestedTo,
+                                                         string filter, string sort) {
       if (String.IsNullOrWhiteSpace(filter)) {
         filter = GeneralDataOperations.AllRecordsFilter;
       }
       var op = DataOperation.Parse("@qryEOPSignEventsForSigner",
                                     requestedTo.Id, filter);
 
-      return await Task.FromResult(DataReader.GetFixedList<SignEvent>(op));
+      return DataReader.GetFixedList<SignEvent>(op);
     }
 
     #endregion SignEvent Query methods
 
-
     #region SignRequest Query methods
 
-    static public FixedList<SignRequest> GetPendingSignRequests(Contact contact,
+    static public FixedList<SignRequest> GetPendingSignRequests(Contact requestedTo,
                                                                 string filter, string sort) {
       if (String.IsNullOrWhiteSpace(filter)) {
         filter = GeneralDataOperations.AllRecordsFilter;
       }
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   contact.Id, (char) SignStatus.Pending, filter);
+                                   requestedTo.Id, (char) SignStatus.Pending, filter);
 
       return DataReader.GetFixedList<SignRequest>(op);
     }
 
 
-    static public FixedList<SignRequest> GetRefusedRequests(Contact contact,
+    static public FixedList<SignRequest> GetRefusedRequests(Contact requestedTo,
                                                             string filter, string sort) {
       if (String.IsNullOrWhiteSpace(filter)) {
         filter = GeneralDataOperations.AllRecordsFilter;
       }
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   contact.Id, (char) SignStatus.Refused, filter);
+                                   requestedTo.Id, (char) SignStatus.Refused, filter);
 
       return DataReader.GetFixedList<SignRequest>(op);
     }
 
 
-    static public FixedList<SignRequest> GetSignedRequests(Contact contact,
+    static public FixedList<SignRequest> GetSignedRequests(Contact requestedTo,
                                                            string filter, string sort) {
       if (String.IsNullOrWhiteSpace(filter)) {
         filter = GeneralDataOperations.AllRecordsFilter;
       }
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   contact.Id, (char) SignStatus.Signed, filter);
+                                   requestedTo.Id, (char) SignStatus.Signed, filter);
 
       return DataReader.GetFixedList<SignRequest>(op);
     }
