@@ -39,13 +39,24 @@ namespace Empiria.OnePoint.ESign {
 
       this.EnsureValidCredentials(task);
 
-      List<SignEvent> eventsList = new List<SignEvent>(task.SignRequests.Count);
+      var eventsList = new List<SignEvent>(task.SignRequests.Count);
 
-      foreach (var request in task.SignRequests) {
-        SignEvent signEvent = this.CreateSignEvent(task, request);
+      using (var context = StorageContext.Open()) {
 
-        eventsList.Add(signEvent);
-      }
+        foreach (var request in task.SignRequests) {
+          SignEvent signEvent = this.CreateSignEvent(task, request);
+
+          context.Watch(request);
+
+          signEvent.Save();
+          request.Save();
+
+          eventsList.Add(signEvent);
+        }
+
+        context.Update();
+
+      }  // using
 
       return eventsList.ToFixedList();
     }
@@ -55,20 +66,35 @@ namespace Empiria.OnePoint.ESign {
     #region Private methods
 
     private SignEvent CreateSignEvent(SignTask signTask, SignRequest signRequest) {
-      string sign = this.SignInputData(signTask.ESignCredentials,
-                                       signRequest.Document.SignInputData);
+      switch (signTask.EventType) {
+        case SignEventType.Signed:
+          string digitalSign = this.SignData(signTask.ESignCredentials,
+                                             signRequest.Document.SignInputData);
 
-      var signEvent = new SignEvent(signTask.EventType, signRequest, sign);
+          return signRequest.Sign(digitalSign);
 
-      return signEvent;
+        case SignEventType.Refused:
+          return signRequest.Refuse();
+
+        case SignEventType.Revoked:
+          return signRequest.Revoke();
+
+        case SignEventType.Unrefused:
+          return signRequest.Unrefuse();
+
+        default:
+          throw Assertion.AssertNoReachThisCode();
+      }
     }
+
 
     private void EnsureValidCredentials(SignTask signTask) {
       Assertion.Assert(signTask.ESignCredentials.Password == "prueba",
                        "No reconozco la contraseña para ejecutar la firma electrónica.");
     }
 
-    private string SignInputData(SignCredentials credentials, string inputData) {
+
+    private string SignData(SignCredentials credentials, string inputData) {
       return Cryptographer.CreateHashCode(inputData, credentials.Password);
     }
 

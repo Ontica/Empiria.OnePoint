@@ -121,6 +121,7 @@ namespace Empiria.OnePoint.ESign {
       }
     }
 
+
     object[] IProtected.GetDataIntegrityFieldValues(int version) {
       if (version == 1) {
         return new object[] {
@@ -134,6 +135,7 @@ namespace Empiria.OnePoint.ESign {
       }
       throw new SecurityException(SecurityException.Msg.WrongDIFVersionRequested, version);
     }
+
 
     private IntegrityValidator _validator = null;
     public IntegrityValidator Integrity {
@@ -149,8 +151,84 @@ namespace Empiria.OnePoint.ESign {
 
     #region Public methods
 
+
+    internal SignEvent Sign(string digitalSign) {
+      Assertion.Assert(this.SignStatus == SignStatus.Pending,
+                       "Sign is allowed only to requests in pending status.");
+
+      // ToDo: Ensure digitalSign is valid for RequestedTo user and Document.SignInputData
+
+      var signEvent = new SignEvent(SignEventType.Signed, this, digitalSign);
+
+      this.UpdateStatus(signEvent);
+
+      return signEvent;
+    }
+
+
+    internal SignEvent Revoke() {
+      Assertion.Assert(this.SignStatus == SignStatus.Signed,
+                       "Revoke is allowed only to requests with signed status.");
+
+      var signEvent = new SignEvent(SignEventType.Revoked, this);
+
+      this.UpdateStatus(signEvent);
+
+      return signEvent;
+    }
+
+
+    internal SignEvent Refuse() {
+      Assertion.Assert(this.SignStatus == SignStatus.Pending,
+                       "Sign refuse is allowed only to requests with pending status.");
+
+      var signEvent = new SignEvent(SignEventType.Refused, this);
+
+      this.UpdateStatus(signEvent);
+
+      return signEvent;
+    }
+
+
+    internal SignEvent Unrefuse() {
+      Assertion.Assert(this.SignStatus == SignStatus.Refused,
+                       "Unrefuse is allowed only to requests with refused status.");
+
+      var signEvent = new SignEvent(SignEventType.Unrefused, this);
+
+      this.UpdateStatus(signEvent);
+
+      return signEvent;
+    }
+
+
     protected override void OnSave() {
       SignServicesRepository.WriteSignRequest(this);
+    }
+
+
+    private void UpdateStatus(SignEvent signEvent) {
+      if (signEvent.EventType == SignEventType.Signed) {
+        this.SignStatus = SignStatus.Signed;
+        this.DigitalSign = signEvent.DigitalSign;
+        this.SignTime = signEvent.Timestamp;
+
+      } else if (signEvent.EventType == SignEventType.Revoked) {
+        this.SignStatus = SignStatus.Pending;
+        this.DigitalSign = String.Empty;
+        this.SignTime = DateTime.MaxValue;
+
+      } else if (signEvent.EventType == SignEventType.Refused) {
+        this.SignStatus = SignStatus.Refused;
+        this.DigitalSign = String.Empty;
+        this.SignTime = signEvent.Timestamp;
+
+      } else if (signEvent.EventType == SignEventType.Unrefused) {
+        this.SignStatus = SignStatus.Pending;
+        this.DigitalSign = String.Empty;
+        this.SignTime = signEvent.Timestamp;
+
+      }
     }
 
     #endregion Public methods

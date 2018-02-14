@@ -59,16 +59,29 @@ namespace Empiria.OnePoint.ESign {
 
     #region Command internal methods
 
+    static internal void AppendSignEvent(SignEvent o) {
+      var op = DataOperation.Parse("apdEOPSignEvent", o.Id, o.UID,
+                                   o.SignRequest.Id, (char) o.EventType,
+                                   o.DigitalSign, o.Timestamp,
+                                   o.Integrity.GetUpdatedHashCode());
+
+      DataWriter.Execute(op);
+    }
+
+
     static internal void WriteDocument(SignableDocument o) {
       throw new NotImplementedException();
     }
 
-    static internal void WriteSignEvent(SignEvent o) {
-      throw new NotImplementedException();
-    }
 
     static internal void WriteSignRequest(SignRequest o) {
-      throw new NotImplementedException();
+      var op = DataOperation.Parse("writeEOPSignRequest", o.Id, o.UID,
+                    o.RequestedBy.Id, o.RequestedTime, o.RequestedTo.Id,
+                    o.Document.Id, o.SignatureKind, o.ExtensionData.ToString(),
+                    (char) o.SignStatus, o.SignTime, o.DigitalSign,
+                    o.Integrity.GetUpdatedHashCode());
+
+      DataWriter.Execute(op);
     }
 
     #endregion Command internal methods
