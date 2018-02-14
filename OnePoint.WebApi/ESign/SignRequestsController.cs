@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
 *  Assembly : Empiria.OnePoint.WebApi.dll                  Pattern : Web Api Controller                      *
-*  Type     : SignServicesController                       License : Please read LICENSE.txt file            *
+*  Type     : SignRequestsController                       License : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Web api interface to manage document's e-signature services.                                   *
+*  Summary  : Web api interface to manage document's e-signature services through SignRequest entities.      *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -17,8 +17,9 @@ using Empiria.WebApi.Models;
 
 namespace Empiria.OnePoint.ESign.WebApi {
 
-  /// <summary>Services to manage document's e-signature services.</summary>
-  public class SignServicesController : WebApiController {
+  /// <summary>Web api interface to manage document's e-signature services
+  /// through SignRequest entities.</summary>
+  public class SignRequestsController : WebApiController {
 
     #region GET methods
 
@@ -161,6 +162,6 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     #endregion Private methods
 
-  }  // class SignServicesController
+  }  // class SignRequestsController
 
 }  // namespace Empiria.OnePoint.WebApi
