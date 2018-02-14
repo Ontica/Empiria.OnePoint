@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Threading.Tasks;
 
 using Empiria.Contacts;
 using Empiria.Data;
@@ -17,6 +18,22 @@ namespace Empiria.OnePoint.ESign {
   /// <summary>Provides data read and write methods for involved entities
   /// in electronic-sign services.</summary>
   static public class SignServicesRepository {
+
+    #region SignEvent Query methods
+
+    static public async Task<FixedList<SignEvent>> GetLastSignEvents(Contact requestedTo,
+                                                                     string filter, string sort) {
+      if (String.IsNullOrWhiteSpace(filter)) {
+        filter = GeneralDataOperations.AllRecordsFilter;
+      }
+      var op = DataOperation.Parse("@qryEOPSignEventsForSigner",
+                                    requestedTo.Id, filter);
+
+      return await Task.FromResult(DataReader.GetFixedList<SignEvent>(op));
+    }
+
+    #endregion SignEvent Query methods
+
 
     #region SignRequest Query methods
 
@@ -33,7 +50,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     static public FixedList<SignRequest> GetRefusedRequests(Contact contact,
-                                                             string filter, string sort) {
+                                                            string filter, string sort) {
       if (String.IsNullOrWhiteSpace(filter)) {
         filter = GeneralDataOperations.AllRecordsFilter;
       }
