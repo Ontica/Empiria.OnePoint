@@ -1,4 +1,4 @@
-﻿# Empiria OnePoint Core Domain
+﻿# Empiria OnePoint Core
 
    Provides government's services to perform procedure and document filing tasks requested by people,
    business and organizations.

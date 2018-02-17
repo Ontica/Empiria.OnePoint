@@ -1,93 +1,63 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{134A4028-AC6C-4692-B6E1-A55C1B1F9E31}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Empiria.OnePoint.WebApi</RootNamespace>
-    <AssemblyName>Empiria.OnePoint.WebApi</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Company>Ontica</Company>
+    <Product>Empiria OnePoint Application Services</Product>
+    <Description>HTTP/JSON RESTful interface to access Empiria OnePoint services.</Description>
+    <Copyright>(c) 2017-2018. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/OnePoint.WebApi/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/OnePoint.WebApi</PackageProjectUrl>
+    <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
+    <PackageTags>e-government, gobierno electrónico, servicios en línea, firma electrónica, api, web services</PackageTags>
+    <RepositoryUrl>https://github.com/Ontica/Empiria.OnePoint</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Ontica</Authors>
+    <TargetFramework>net46</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NeutralLanguage></NeutralLanguage>
+    <Configurations>Debug;Release;Multisolutions</Configurations>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <NoWarn />
+    <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <FileAlignment>8192</FileAlignment>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <NoWarn />
+    <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Empiria.Documents">
-      <HintPath>..\..\..\empiria.assemblies\OnePoint.Temporal\Empiria.Documents.dll</HintPath>
-    </Reference>
-    <Reference Include="Empiria.Geography">
-      <HintPath>..\..\..\empiria.assemblies\OnePoint.Temporal\Empiria.Geography.dll</HintPath>
-    </Reference>
-    <Reference Include="Empiria.Land.Registration, Version=3.0.308.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\empiria.assemblies\OnePoint.Temporal\Empiria.Land.Registration.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <ProjectReference Include="..\OnePoint.AppServices\Empiria.OnePoint.AppServices.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+  <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
+    <PackageReference Include="Empiria.WebApi" Version="2.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Empiria.OnePoint.WebApi.AssemblyInfo.cs" />
-    <Compile Include="ESign\SignableDocumentModels.cs" />
-    <Compile Include="ESign\SignEventsController.cs" />
-    <Compile Include="ESign\SignRequestModels.cs" />
-    <Compile Include="ESign\SignEventModels.cs" />
-    <Compile Include="ESign\SignRequestsController.cs" />
-    <Compile Include="Filings\FilingResponseModel.cs" />
-    <Compile Include="Filings\FilingsController.cs" />
-    <Compile Include="Filings\PaymentOrderResponseModel.cs" />
-    <Compile Include="Filings\PaymentsController.cs" />
+  <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
+    <ProjectReference Include="..\..\extensions\WebApi\Empiria.WebApi.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Empiria.WebApi">
-      <Version>1.2.328</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OnePoint.AppServices\Empiria.OnePoint.AppServices.csproj">
-      <Project>{a6e859fb-a156-48af-9f3a-07f3dc5dede2}</Project>
-      <Name>Empiria.OnePoint.AppServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OnePoint.Core\Empiria.OnePoint.csproj">
-      <Project>{4804dd40-6864-48d3-8b6e-f0f6f665e517}</Project>
-      <Name>Empiria.OnePoint</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Global.asax" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="empiria.config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

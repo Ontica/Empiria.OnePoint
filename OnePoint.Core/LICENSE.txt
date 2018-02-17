@@ -1,5 +1,5 @@
-﻿Empiria OnePoint Core Domain
-============================
+﻿Empiria OnePoint Core
+=====================
 
 Copyright (c) 2017-2018. La Vía Óntica SC, Ontica LLC and contributors.
 -----------------------------------------------------------------------
