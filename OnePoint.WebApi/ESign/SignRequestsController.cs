@@ -24,14 +24,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
     #region GET methods
 
     [HttpGet]
-    [Route("v2/e-sign/requests/pending/mine")]
-    public CollectionModel GetMyPendingRequests([FromUri] string filter = "",
-                                                [FromUri] string sort = "") {
+    [Route("v2/e-sign/requests/mine")]
+    public CollectionModel GetMyRequests([FromUri] string keywords = "") {
       try {
         var me = EmpiriaUser.Current.AsContact();
 
         FixedList<SignRequest> signRequests =
-                                  SignServicesRepository.GetPendingSignRequests(me, filter, sort);
+                                  SignServicesRepository.GetAllRequests(me, keywords);
 
         return new CollectionModel(this.Request, signRequests.ToResponse());
 
@@ -43,14 +42,31 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     [HttpGet]
-    [Route("v2/e-sign/requests/refused/mine")]
-    public CollectionModel GetMyRefusedRequests([FromUri] string filter = "",
-                                                [FromUri] string sort = "") {
+    [Route("v2/e-sign/requests/mine/pending")]
+    public CollectionModel GetMyPendingRequests([FromUri] string keywords = "") {
+      try {
+        var me = EmpiriaUser.Current.AsContact();
+
+        FixedList<SignRequest> signRequests =
+                                  SignServicesRepository.GetPendingSignRequests(me, keywords);
+
+        return new CollectionModel(this.Request, signRequests.ToResponse());
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v2/e-sign/requests/mine/refused")]
+    public CollectionModel GetMyRefusedRequests([FromUri] string keywords = "") {
       try {
         var me = EmpiriaUser.Current.AsContact();
 
         FixedList<SignRequest> refusedRequests =
-                                    SignServicesRepository.GetRefusedRequests(me, filter, sort);
+                                    SignServicesRepository.GetRefusedRequests(me, keywords);
 
         return new CollectionModel(this.Request, refusedRequests.ToResponse());
 
@@ -62,14 +78,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     [HttpGet]
-    [Route("v2/e-sign/requests/signed/mine")]
-    public CollectionModel GetMySignedRequests([FromUri] string filter = "",
-                                               [FromUri] string sort = "") {
+    [Route("v2/e-sign/requests/mine/signed")]
+    public CollectionModel GetMySignedRequests([FromUri] string keywords = "") {
       try {
         var me = EmpiriaUser.Current.AsContact();
 
         FixedList<SignRequest> signedRequests =
-                                      SignServicesRepository.GetSignedRequests(me, filter, sort);
+                                      SignServicesRepository.GetSignedRequests(me, keywords);
 
         return new CollectionModel(this.Request, signedRequests.ToResponse());
 
@@ -84,7 +99,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
     #region POST methods
 
     [HttpPost]
-    [Route("v2/e-sign/requests/signed/mine")]
+    [Route("v2/e-sign/requests/mine/signed")]
     public CollectionModel SignRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Signed, body);
@@ -101,7 +116,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     [HttpPost]
-    [Route("v2/e-sign/requests/refused/mine")]
+    [Route("v2/e-sign/requests/mine/refused")]
     public CollectionModel RefuseSignRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Refused, body);
@@ -118,7 +133,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     [HttpPost]
-    [Route("v2/e-sign/requests/revoked/mine")]
+    [Route("v2/e-sign/requests/mine/revoked")]
     public CollectionModel RevokeSignedRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Revoked, body);
@@ -135,7 +150,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     [HttpPost]
-    [Route("v2/e-sign/requests/unrefused/mine")]
+    [Route("v2/e-sign/requests/mine/unrefused")]
     public CollectionModel UnrefuseSignRequests([FromBody] object body) {
       try {
         SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Unrefused, body);

@@ -21,10 +21,9 @@ namespace Empiria.OnePoint.ESign {
     #region SignEvent Query methods
 
     static public FixedList<SignEvent> GetLastSignEvents(Contact requestedTo,
-                                                         string filter, string sort) {
-      if (String.IsNullOrWhiteSpace(filter)) {
-        filter = GeneralDataOperations.AllRecordsFilter;
-      }
+                                                         string keywords = "") {
+      string filter = GetSignRequestKeywordsFilter(keywords);
+
       var op = DataOperation.Parse("@qryEOPSignEventsForSigner",
                                     requestedTo.Id, filter);
 
@@ -35,11 +34,21 @@ namespace Empiria.OnePoint.ESign {
 
     #region SignRequest Query methods
 
+    static public FixedList<SignRequest> GetAllRequests(Contact requestedTo,
+                                                        string keywords = "") {
+      string filter = GetSignRequestKeywordsFilter(keywords);
+
+      var op = DataOperation.Parse("@qryEOPSignRequestsForContact",
+                                    requestedTo.Id, filter);
+
+      return DataReader.GetFixedList<SignRequest>(op);
+    }
+
+
     static public FixedList<SignRequest> GetPendingSignRequests(Contact requestedTo,
-                                                                string filter, string sort) {
-      if (String.IsNullOrWhiteSpace(filter)) {
-        filter = GeneralDataOperations.AllRecordsFilter;
-      }
+                                                                string keywords = "") {
+      string filter = GetSignRequestKeywordsFilter(keywords);
+
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
                                    requestedTo.Id, (char) SignStatus.Pending, filter);
 
@@ -48,10 +57,9 @@ namespace Empiria.OnePoint.ESign {
 
 
     static public FixedList<SignRequest> GetRefusedRequests(Contact requestedTo,
-                                                            string filter, string sort) {
-      if (String.IsNullOrWhiteSpace(filter)) {
-        filter = GeneralDataOperations.AllRecordsFilter;
-      }
+                                                            string keywords = "") {
+      string filter = GetSignRequestKeywordsFilter(keywords);
+
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
                                    requestedTo.Id, (char) SignStatus.Refused, filter);
 
@@ -60,10 +68,9 @@ namespace Empiria.OnePoint.ESign {
 
 
     static public FixedList<SignRequest> GetSignedRequests(Contact requestedTo,
-                                                           string filter, string sort) {
-      if (String.IsNullOrWhiteSpace(filter)) {
-        filter = GeneralDataOperations.AllRecordsFilter;
-      }
+                                                           string keywords = "") {
+      string filter = GetSignRequestKeywordsFilter(keywords);
+
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
                                    requestedTo.Id, (char) SignStatus.Signed, filter);
 
@@ -100,6 +107,19 @@ namespace Empiria.OnePoint.ESign {
     }
 
     #endregion Command internal methods
+
+    #region Private utility methods
+
+    static private string GetSignRequestKeywordsFilter(string keywords) {
+      string filter = GeneralDataOperations.AllRecordsFilter;
+
+      if (!String.IsNullOrWhiteSpace(keywords)) {
+        filter = SearchExpression.ParseAndLike("Keywords", EmpiriaString.BuildKeywords(keywords));
+      }
+      return filter;
+    }
+
+    #endregion Private utility methods
 
   } // class SignServicesRepository
 
