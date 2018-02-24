@@ -25,6 +25,7 @@ namespace Empiria.OnePoint.ESign {
       this.EnsureIsValid();
     }
 
+
     static public SignTask Parse(JsonObject json) {
       SignTask.EnsureIsValid(json);
 
@@ -61,7 +62,7 @@ namespace Empiria.OnePoint.ESign {
     } = new FixedList<SignRequest>();
 
 
-    public SignCredentials ESignCredentials {
+    internal SignCredentials SignCredentials {
       get;
       private set;
     } = SignCredentials.Empty;
@@ -77,14 +78,14 @@ namespace Empiria.OnePoint.ESign {
       Assertion.Assert(this.SignRequests.Count > 0,
                        "SignRequests can't be an empty list.");
 
-      Assertion.Assert(!this.ESignCredentials.IsEmptyInstance,
-                       "E-sign credentials can't be an empty instance.");
+      Assertion.Assert(!this.SignCredentials.IsEmptyInstance,
+                       "SignCredentials can't be an empty instance.");
     }
 
 
     private void LoadData(JsonObject json) {
       this.EventType = json.Get<SignEventType>("eventType");
-      this.ESignCredentials = SignCredentials.Parse(json.Slice("credentials"));
+      this.SignCredentials = SignCredentials.Parse(json.Slice("credentials"));
 
       this.SignRequests = json.GetList<SignRequest>("signRequests")
                               .ToFixedList();

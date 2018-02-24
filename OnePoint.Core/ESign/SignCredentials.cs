@@ -14,7 +14,7 @@ using Empiria.Json;
 namespace Empiria.OnePoint.ESign {
 
   /// <summary>Holds information about a user's electronic sign credentials.</summary>
-  public class SignCredentials {
+  internal class SignCredentials {
 
     #region Constructors and parsers
 
@@ -28,14 +28,23 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    static public SignCredentials Parse(JsonObject json) {
+    static internal SignCredentials Parse(JsonObject json) {
       SignCredentials.EnsureIsValid(json);
 
       return new SignCredentials(json);
     }
 
 
-    static public SignCredentials Empty {
+    static internal SignCredentials ForCurrentUser() {
+      var json = new JsonObject() {
+        new JsonItem("password", "prueba"),
+      };
+
+      return new SignCredentials(json);
+    }
+
+
+    static internal SignCredentials Empty {
       get {
         return new SignCredentials() {
           IsEmptyInstance = true
@@ -43,6 +52,23 @@ namespace Empiria.OnePoint.ESign {
       }
     }
 
+    #endregion Constructors and parsers
+
+    #region Properties
+
+    internal bool IsEmptyInstance {
+      get;
+      private set;
+    } = false;
+
+
+    internal string Password {
+      get;
+    }
+
+    #endregion Properties
+
+    #region Methods
 
     static internal void EnsureIsValid(JsonObject json) {
       Assertion.AssertObject(json, "json");
@@ -51,30 +77,7 @@ namespace Empiria.OnePoint.ESign {
                        "Credentials object must have a 'password' field with no empty data.");
     }
 
-    #endregion Constructors and parsers
-
-    #region Properties
-
-    public bool IsEmptyInstance {
-      get;
-      private set;
-    } = false;
-
-
-    public string Password {
-      get;
-    }
-
-
-    public static SignCredentials ForCurrentUser() {
-      var json = new JsonObject() {
-        new JsonItem("password", "prueba"),
-      };
-
-      return new SignCredentials(json);
-    }
-
-    #endregion Properties
+    #endregion Methods
 
   }  // class SignCredentials
 

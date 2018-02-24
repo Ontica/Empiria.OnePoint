@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.AppServices.dll             Pattern : Application Service                     *
+*  Assembly : Empiria.OnePoint.dll                         Pattern : Application Service                     *
 *  Type     : ESignServices                                License : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Use cases that implements electronic signature services.                                       *
@@ -9,7 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-namespace Empiria.OnePoint.ESign {
+using Empiria.OnePoint.ESign;
+
+namespace Empiria.OnePoint.AppServices {
 
   /// <summary>Use cases that implements electronic signature services.</summary>
   static public class ESignServices {
@@ -24,6 +26,8 @@ namespace Empiria.OnePoint.ESign {
       //NotifierService.NotifySigned(signEvents);
 
       //EMailService.NotifySignEvents(signEvents);
+
+      var a = PaymentOrderData.Empty;
 
       return signEvents;
     }

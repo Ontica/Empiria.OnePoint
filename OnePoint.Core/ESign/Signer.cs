@@ -16,7 +16,7 @@ namespace Empiria.OnePoint.ESign {
 
   /// <summary>Performs the electronic sign of one or more documents according
   /// to a SignTask command.</summary>
-  public class Signer {
+  internal class Signer {
 
     #region Fields
 
@@ -26,7 +26,7 @@ namespace Empiria.OnePoint.ESign {
 
     #region Constructors and parsers
 
-    public Signer(SignCredentials credentials) {
+    internal Signer(SignCredentials credentials) {
       this.credentials = credentials;
     }
 
@@ -34,7 +34,7 @@ namespace Empiria.OnePoint.ESign {
 
     #region Methods
 
-    public FixedList<SignEvent> Execute(SignTask task) {
+    internal FixedList<SignEvent> Execute(SignTask task) {
       Assertion.AssertObject(task, "task");
 
       this.EnsureValidCredentials(task);
@@ -68,7 +68,7 @@ namespace Empiria.OnePoint.ESign {
     private SignEvent CreateSignEvent(SignTask signTask, SignRequest signRequest) {
       switch (signTask.EventType) {
         case SignEventType.Signed:
-          string digitalSign = this.SignData(signTask.ESignCredentials,
+          string digitalSign = this.SignData(signTask.SignCredentials,
                                              signRequest.Document.SignInputData);
 
           return signRequest.Sign(digitalSign);
@@ -89,7 +89,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     private void EnsureValidCredentials(SignTask signTask) {
-      Assertion.Assert(signTask.ESignCredentials.Password == "prueba",
+      Assertion.Assert(signTask.SignCredentials.Password == "prueba",
                        "No reconozco la contraseña para ejecutar la firma electrónica.");
     }
 

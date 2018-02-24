@@ -52,7 +52,7 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OnePoint.AppServices\Empiria.OnePoint.AppServices.csproj" />
+    <ProjectReference Include="..\OnePoint.Core\Empiria.OnePoint.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.WebApi" Version="2.0.0" />

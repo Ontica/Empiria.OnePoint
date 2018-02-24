@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Solution : Empiria OnePoint                             System  : OnePoint Application Services           *
-*  Assembly : Empiria.OnePoint.AppServices.dll             Pattern : Application Service                     *
+*  Assembly : Empiria.OnePoint.dll                         Pattern : Application Service                     *
 *  Type     : FilingServices                               License : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Filing use cases.                                                                              *

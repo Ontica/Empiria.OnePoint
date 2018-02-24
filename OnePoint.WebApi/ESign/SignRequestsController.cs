@@ -15,6 +15,8 @@ using Empiria.Security;
 using Empiria.WebApi;
 using Empiria.WebApi.Models;
 
+using Empiria.OnePoint.AppServices;
+
 namespace Empiria.OnePoint.ESign.WebApi {
 
   /// <summary>Web api interface to manage document's e-signature services
