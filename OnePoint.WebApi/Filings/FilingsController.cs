@@ -10,9 +10,7 @@
 using System;
 using System.Web.Http;
 
-// ToDo: Merge Empiria.WebApi.Models types into Empiria.WebApi namespace.
 using Empiria.WebApi;
-using Empiria.WebApi.Models;
 
 using Empiria.OnePoint.AppServices;
 

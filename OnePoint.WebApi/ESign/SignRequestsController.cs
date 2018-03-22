@@ -13,7 +13,6 @@ using System.Web.Http;
 using Empiria.Json;
 using Empiria.Security;
 using Empiria.WebApi;
-using Empiria.WebApi.Models;
 
 using Empiria.OnePoint.AppServices;
 

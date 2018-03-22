@@ -12,7 +12,6 @@ using System.Web.Http;
 
 using Empiria.Security;
 using Empiria.WebApi;
-using Empiria.WebApi.Models;
 
 namespace Empiria.OnePoint.ESign.WebApi {
 
