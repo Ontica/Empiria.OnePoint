@@ -29,7 +29,8 @@ namespace Empiria.OnePoint.AppServices {
 
       ITreasuryConnector connector = ServiceLocator.GetTreasuryConnector();
 
-      paymentOrderData = await connector.RefreshPaymentOrder(paymentOrderData);
+      paymentOrderData = await connector.RefreshPaymentOrder(paymentOrderData)
+                                        .ConfigureAwait(false);
 
       if (paymentOrderData.IsCompleted) {
         filing.SetPaymentOrderData(paymentOrderData);
@@ -48,7 +49,8 @@ namespace Empiria.OnePoint.AppServices {
 
       ITreasuryConnector connector = ServiceLocator.GetTreasuryConnector();
 
-      paymentOrderData = await connector.GeneratePaymentOrder(filing);
+      paymentOrderData = await connector.GeneratePaymentOrder(filing)
+                                        .ConfigureAwait(false);
 
       filing.SetPaymentOrderData(paymentOrderData);
 
