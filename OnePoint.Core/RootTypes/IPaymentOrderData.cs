@@ -36,6 +36,11 @@ namespace Empiria.OnePoint {
       get;
     }
 
+
+    bool IsEmptyInstance {
+      get;
+    }
+
     DateTime PaymentDate {
       get;
     }

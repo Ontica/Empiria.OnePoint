@@ -43,7 +43,7 @@ namespace Empiria.OnePoint.AppServices {
     static public async Task<IPaymentOrderData> RequestPaymentOrderData(IFiling filing) {
       IPaymentOrderData paymentOrderData = filing.TryGetPaymentOrderData();
 
-      if (paymentOrderData != null && paymentOrderData.RouteNumber != "") {
+      if (paymentOrderData != null) {
         return paymentOrderData;
       }
 
