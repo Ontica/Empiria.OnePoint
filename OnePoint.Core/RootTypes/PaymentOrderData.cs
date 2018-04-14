@@ -156,16 +156,16 @@ namespace Empiria.OnePoint {
     public virtual JsonObject ToJson() {
       var json = new JsonObject();
 
-      json.Add(new JsonItem("RouteNumber", this.RouteNumber));
-      json.Add(new JsonItem("IssueTime", this.IssueTime));
-      json.Add(new JsonItem("DueDate", this.DueDate));
-      json.Add(new JsonItem("ControlTag", this.ControlTag));
+      json.Add("RouteNumber", this.RouteNumber);
+      json.Add("IssueTime", this.IssueTime);
+      json.Add("DueDate", this.DueDate);
+      json.Add("ControlTag", this.ControlTag);
 
       if (this.IsCompleted) {
-        json.Add(new JsonItem("IsCompleted", this.IsCompleted));
-        json.Add(new JsonItem("PaymentDate", this.PaymentDate));
-        json.Add(new JsonItem("PaymentRef", this.PaymentReference));
-        json.Add(new JsonItem("PaymentTotal", this.PaymentTotal));
+        json.Add("IsCompleted", this.IsCompleted);
+        json.Add("PaymentDate", this.PaymentDate);
+        json.Add("PaymentRef", this.PaymentReference);
+        json.Add("PaymentTotal", this.PaymentTotal);
       }
       return json;
     }

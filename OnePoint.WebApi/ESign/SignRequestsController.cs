@@ -175,7 +175,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
       var bodyAsJson = JsonObject.Parse(body);
 
-      bodyAsJson.Add(new JsonItem("eventType", eventType.ToString()));
+      bodyAsJson.Add("eventType", eventType.ToString());
 
       SignTask.EnsureIsValid(bodyAsJson);
 

@@ -36,9 +36,9 @@ namespace Empiria.OnePoint.ESign {
 
 
     static internal SignCredentials ForCurrentUser() {
-      var json = new JsonObject() {
-        new JsonItem("password", "prueba"),
-      };
+      var json = new JsonObject();
+
+      json.Add("password", "prueba");
 
       return new SignCredentials(json);
     }
