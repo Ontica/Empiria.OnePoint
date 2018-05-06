@@ -45,13 +45,6 @@ namespace Empiria.OnePoint.ESign {
 
     #region Public properties
 
-    [DataField("UID")]
-    public string UID {
-      get;
-      private set;
-    } = Guid.NewGuid().ToString();
-
-
     [DataField("SignableDocumentId")]
     public SignableDocument Document {
       get;

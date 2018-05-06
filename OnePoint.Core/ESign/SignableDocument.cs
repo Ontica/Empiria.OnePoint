@@ -42,12 +42,6 @@ namespace Empiria.OnePoint.ESign {
 
     #region Public properties
 
-    [DataField("UID")]
-    public string UID {
-      get;
-      private set;
-    }
-
 
     [DataField("DocumentType")]
     public string DocumentType {
@@ -93,9 +87,9 @@ namespace Empiria.OnePoint.ESign {
     public string Uri {
       get {
         if (this.Status == SignStatus.Signed) {
-          return "http://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/signed.pdf";
+          return "https://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/signed.pdf";
         } else {
-          return "http://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/unsigned.pdf";
+          return "https://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/unsigned.pdf";
         }
       }
     }

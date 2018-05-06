@@ -48,13 +48,6 @@ namespace Empiria.OnePoint.ESign {
 
     #region Properties
 
-    [DataField("UID")]
-    public string UID {
-      get;
-      private set;
-    }
-
-
     [DataField("SignRequestId")]
     public SignRequest SignRequest {
       get;
@@ -123,8 +116,6 @@ namespace Empiria.OnePoint.ESign {
 
     protected override void OnSave() {
       if (this.IsNew) {
-        this.UID = Guid.NewGuid().ToString();
-
         SignServicesRepository.AppendSignEvent(this);
       } else {
         throw new InvalidOperationException("Update SignEvent instances not allowed.");
