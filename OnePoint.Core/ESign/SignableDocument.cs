@@ -86,10 +86,10 @@ namespace Empiria.OnePoint.ESign {
 
     public string Uri {
       get {
-        if (this.Status == SignStatus.Signed) {
-          return "https://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/signed.pdf";
+        if (DocumentNo.StartsWith("CE")) {
+          return $"https://registropublico.tlaxcala.gob.mx/intranet/land.registration.system/certificate.aspx?uid={DocumentNo}";
         } else {
-          return "https://registropublico.tlaxcala.gob.mx/intranet/emitted.certificates/unsigned.pdf";
+          return $"https://registropublico.tlaxcala.gob.mx/intranet/land.registration.system/recording.seal.aspx?uid={DocumentNo}";
         }
       }
     }
