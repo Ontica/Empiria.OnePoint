@@ -18,6 +18,8 @@ namespace Empiria.OnePoint.ESign {
   /// <summary>Represents a signable document.</summary>
   public class SignableDocument : BaseObject, ISignable, IProtected {
 
+    static private readonly string SignableDocumentsURL = ConfigurationData.Get<string>("SignableDocumentsURL");
+
     #region Constructors and parsers
 
     private SignableDocument() {
@@ -87,9 +89,14 @@ namespace Empiria.OnePoint.ESign {
     public string Uri {
       get {
         if (DocumentNo.StartsWith("CE")) {
-          return $"https://registropublico.tlaxcala.gob.mx/intranet/land.registration.system/certificate.aspx?uid={DocumentNo}";
+          return $"{SignableDocumentsURL}/certificate.aspx?uid={DocumentNo}";
+
+        } else if (DocumentNo.StartsWith("RP")) {
+          return $"{SignableDocumentsURL}/recording.seal.aspx?uid={DocumentNo}";
+
         } else {
-          return $"https://registropublico.tlaxcala.gob.mx/intranet/land.registration.system/recording.seal.aspx?uid={DocumentNo}";
+          throw Assertion.AssertNoReachThisCode("Unrecognized document type.");
+
         }
       }
     }

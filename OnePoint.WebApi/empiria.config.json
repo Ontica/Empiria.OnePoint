@@ -12,6 +12,16 @@
       "type": "",
       "key": "GlobalConfigurationFile",
       "value": "{{GLOBAL-CONFIGURATION-FILE}}"
+    },
+    {
+      "type": "OnePoint.ESign",
+      "key": "SignableDocumentsURL",
+      "value": "{{SIGNABLE-DOCUMENTS-URL}}"
+    },
+    {
+      "type": "Data",
+      "key": "IsObjectIdGeneratorServer",
+      "value": true
     }
   ]
 }
