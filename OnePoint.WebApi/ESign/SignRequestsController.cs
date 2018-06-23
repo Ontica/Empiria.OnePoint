@@ -25,6 +25,21 @@ namespace Empiria.OnePoint.ESign.WebApi {
     #region GET methods
 
     [HttpGet]
+    [Route("v2/e-sign/requests/by-document-no/{documentNo}")]
+    public SingleObjectModel GetSignRequest(string documentNo) {
+      try {
+        SignRequest signRequest = SignServicesRepository.GetRequestByDocumentNo(documentNo);
+
+        return new SingleObjectModel(this.Request, signRequest.ToResponse(),
+                                     typeof(SignRequest).FullName);
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+
+      }
+    }
+
+    [HttpGet]
     [Route("v2/e-sign/requests/mine")]
     public CollectionModel GetMyRequests([FromUri] string keywords = "") {
       try {

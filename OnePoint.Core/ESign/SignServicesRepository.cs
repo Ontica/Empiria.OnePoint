@@ -77,6 +77,13 @@ namespace Empiria.OnePoint.ESign {
       return DataReader.GetFixedList<SignRequest>(op);
     }
 
+
+    public static SignRequest GetRequestByDocumentNo(string documentNo) {
+      var op = DataOperation.Parse("@getEOPSignRequestByDocumentNo", documentNo);
+
+      return DataReader.GetObject<SignRequest>(op);
+    }
+
     #endregion SignRequest Query methods
 
     #region Command internal methods
