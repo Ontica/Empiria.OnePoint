@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Collections.Generic;
+using System.Security;
 
 using Empiria.Security;
 
@@ -89,13 +90,15 @@ namespace Empiria.OnePoint.ESign {
 
 
     private void EnsureValidCredentials(SignTask signTask) {
-      Assertion.Assert(signTask.SignCredentials.Password == "prueba",
-                       "No reconozco la contraseña para ejecutar la firma electrónica.");
+      //Assertion.Assert(signTask.SignCredentials.Password == "prueba1",
+      //                 "No reconozco la contraseña para ejecutar la firma electrónica.");
     }
 
 
     private string SignData(SignCredentials credentials, string inputData) {
-      return Cryptographer.CreateHashCode(inputData, credentials.Password);
+      SecureString securedPassword = Cryptographer.ConvertToSecureString(credentials.Password);
+
+      return Cryptographer.SignText(inputData, securedPassword);
     }
 
     #endregion Methods
