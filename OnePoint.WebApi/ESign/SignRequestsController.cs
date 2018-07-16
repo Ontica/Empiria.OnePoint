@@ -24,6 +24,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     #region GET methods
 
+    [AllowAnonymous]
     [HttpGet]
     [Route("v2/e-sign/requests/by-document-no/{documentNo}")]
     public SingleObjectModel GetSignRequest(string documentNo) {
@@ -92,6 +93,23 @@ namespace Empiria.OnePoint.ESign.WebApi {
       }
     }
 
+
+    [HttpGet]
+    [Route("v2/e-sign/requests/mine/revoked")]
+    public CollectionModel GetMyRevokedRequests([FromUri] string keywords = "") {
+      try {
+        var me = EmpiriaUser.Current.AsContact();
+
+        FixedList<SignRequest> revokedRequests =
+                                    SignServicesRepository.GetRevokedRequests(me, keywords);
+
+        return new CollectionModel(this.Request, revokedRequests.ToResponse());
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+
+      }
+    }
 
     [HttpGet]
     [Route("v2/e-sign/requests/mine/signed")]

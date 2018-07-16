@@ -146,8 +146,8 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal SignEvent Sign(string digitalSign) {
-      Assertion.Assert(this.SignStatus == SignStatus.Pending,
-                       "Sign is allowed only to requests in pending status.");
+      Assertion.Assert(this.SignStatus == SignStatus.Pending || this.SignStatus == SignStatus.Revoked,
+                       "Sign is allowed only to requests in pending or revoked status.");
 
       // ToDo: Ensure digitalSign is valid for RequestedTo user and Document.SignInputData
 
@@ -207,7 +207,7 @@ namespace Empiria.OnePoint.ESign {
         this.SignTime = signEvent.Timestamp;
 
       } else if (signEvent.EventType == SignEventType.Revoked) {
-        this.SignStatus = SignStatus.Pending;
+        this.SignStatus = SignStatus.Revoked;
         this.DigitalSign = String.Empty;
         this.SignTime = DateTime.MaxValue;
 

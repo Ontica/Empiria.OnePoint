@@ -66,6 +66,16 @@ namespace Empiria.OnePoint.ESign {
       return DataReader.GetFixedList<SignRequest>(op);
     }
 
+    static public FixedList<SignRequest> GetRevokedRequests(Contact requestedTo,
+                                                            string keywords = "") {
+      string filter = GetSignRequestKeywordsFilter(keywords);
+
+      var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
+                                   requestedTo.Id, (char) SignStatus.Revoked, filter);
+
+      return DataReader.GetFixedList<SignRequest>(op);
+    }
+
 
     static public FixedList<SignRequest> GetSignedRequests(Contact requestedTo,
                                                            string keywords = "") {
