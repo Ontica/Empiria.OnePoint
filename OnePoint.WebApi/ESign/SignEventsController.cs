@@ -22,13 +22,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpGet]
     [Route("v2/e-sign/events/mine")]
-    public CollectionModel GetMyLastSignEvents([FromUri] string keywords = "") {
+    public PagedCollectionModel GetMyLastSignEvents([FromUri] string keywords = "") {
       try {
         var me = EmpiriaUser.Current.AsContact();
 
         FixedList<SignEvent> events = SignServicesRepository.GetLastSignEvents(me, keywords);
 
-        return new CollectionModel(this.Request, events.ToResponse());
+        return new PagedCollectionModel(this.Request, events.ToResponse());
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
