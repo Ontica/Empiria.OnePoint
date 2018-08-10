@@ -209,7 +209,7 @@ namespace Empiria.OnePoint.ESign {
       } else if (signEvent.EventType == SignEventType.Revoked) {
         this.SignStatus = SignStatus.Revoked;
         this.DigitalSign = String.Empty;
-        this.SignTime = DateTime.MaxValue;
+        this.SignTime = ExecutionServer.DateMaxValue;
 
       } else if (signEvent.EventType == SignEventType.Refused) {
         this.SignStatus = SignStatus.Refused;

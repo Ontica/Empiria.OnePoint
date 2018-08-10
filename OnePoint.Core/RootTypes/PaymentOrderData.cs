@@ -34,15 +34,13 @@ namespace Empiria.OnePoint {
       this.ControlTag = controlTag;
     }
 
-    static private readonly PaymentOrderData _empty = new PaymentOrderData() {
+
+    static public PaymentOrderData Empty {
+      get;
+    } = new PaymentOrderData() {
       IsEmptyInstance = true
     };
 
-    static public PaymentOrderData Empty {
-      get {
-        return _empty;
-      }
-    }
 
     static public PaymentOrderData Parse(JsonObject jsonObject) {
       if (jsonObject.IsEmptyInstance) {
