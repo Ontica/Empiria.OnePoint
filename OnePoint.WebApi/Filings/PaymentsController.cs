@@ -6,7 +6,7 @@
 *                                                                                                            *
 *  Summary  : Services to manage filing's payments.                                                          *
 *                                                                                                            *
-********************************* Copyright (c) 2009-2018. La Vía Óntica SC, Ontica LLC and contributors.  **/
+********************************* Copyright (c) 2009-2019. La Vía Óntica SC, Ontica LLC and contributors.  **/
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
