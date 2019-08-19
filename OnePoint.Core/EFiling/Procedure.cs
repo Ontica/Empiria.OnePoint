@@ -1,0 +1,77 @@
+﻿/* Empiria OnePoint ******************************************************************************************
+*                                                                                                            *
+*  Module   : Electronic Filing                          Component : Domain Layer                            *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object Type                     *
+*  Type     : Procedure                                  License   : Please read LICENSE.txt file            *
+*                                                                                                            *
+*  Summary  : Defines a procedure and its rules.                                                             *
+*                                                                                                            *
+************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
+using System;
+
+namespace Empiria.OnePoint.EFiling {
+
+  /// <summary>Defines a procedure and its rules.</summary>
+  public class Procedure: BaseObject {
+
+    #region Constructors and parsers
+
+    private Procedure() {
+      // Required by Empiria Framework
+    }
+
+
+    static internal Procedure Parse(int id) {
+      return BaseObject.ParseId<Procedure>(id);
+    }
+
+
+    static public Procedure Parse(string uid) {
+      return BaseObject.ParseKey<Procedure>(uid);
+    }
+
+
+    static public Procedure Empty {
+      get {
+        return BaseObject.ParseEmpty<Procedure>();
+      }
+    }
+
+
+    static public FixedList<Procedure> GetList() {
+      return BaseObject.GetList<Procedure>().ToFixedList();
+    }
+
+    #endregion Constructors and parsers
+
+    #region Properties
+
+    [DataField("ObjectKey")]
+    public string NamedKey {
+      get;
+      private set;
+    }
+
+
+    [DataField("ObjectName")]
+    public string DisplayName {
+      get;
+      private set;
+    }
+
+
+    #endregion Properties
+
+
+    #region Methods
+
+    internal IFilingTransactionProvider GetFilingTransactionProvider() {
+      return OnePointExternalProviders.GetFilingTransactionProvider(this);
+    }
+
+
+    #endregion Methods
+
+  }  // class Procedure
+
+}  // namespace Empiria.OnePoint.EFiling
