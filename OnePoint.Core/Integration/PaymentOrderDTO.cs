@@ -1,29 +1,28 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : Core Domain                             *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Information Holder                      *
-*  Type     : PaymentOrderData                             License : Please read LICENSE.txt file            *
+*  Module   : Electronic Payment Services                Component : External Services Providers             *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Data Transfer Object                    *
+*  Type     : PaymentOrderDTO                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Holds payment order data that serves as a DTO used to interact with a ITreasuryConnector.      *
+*  Summary  : Holds payment order data used to interact with OnePoint payment services.                      *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
 using Empiria.Json;
 
-namespace Empiria.OnePoint {
+namespace Empiria.OnePoint.EPayments {
 
-  /// <summary>Holds payment order data that serves as a Data Transfer Object (DTO)
-  /// used interact with a ITreasuryConnector.</summary>
-  public class PaymentOrderData : IPaymentOrderData {
+  /// <summary>Holds payment order data used to interact with OnePoint payment services.</summary>
+  public class PaymentOrderDTO {
 
     #region Constructors and parsers
 
-    protected PaymentOrderData() {
+    protected PaymentOrderDTO() {
       // Public instance creation not allowed. Instances must be created using a derived class.
     }
 
-    public PaymentOrderData(string routeNumber, DateTime dueDate, string controlTag) {
+    public PaymentOrderDTO(string routeNumber, DateTime dueDate, string controlTag) {
       Assertion.AssertObject(routeNumber, "routeNumber");
       Assertion.Assert(dueDate < DateTime.Today.AddYears(1),
                        "dueDate must be within one year starting today.");
@@ -35,19 +34,19 @@ namespace Empiria.OnePoint {
     }
 
 
-    static public PaymentOrderData Empty {
+    static public PaymentOrderDTO Empty {
       get;
-    } = new PaymentOrderData() {
+    } = new PaymentOrderDTO() {
       IsEmptyInstance = true
     };
 
 
-    static public PaymentOrderData Parse(JsonObject jsonObject) {
+    static public PaymentOrderDTO Parse(JsonObject jsonObject) {
       if (jsonObject.IsEmptyInstance) {
-        return PaymentOrderData.Empty;
+        return PaymentOrderDTO.Empty;
       }
 
-      var paymentOrder = new PaymentOrderData();
+      var paymentOrder = new PaymentOrderDTO();
 
       paymentOrder.RouteNumber = jsonObject.Get<string>("RouteNumber");
       paymentOrder.IssueTime = jsonObject.Get<DateTime>("IssueTime");
@@ -176,4 +175,4 @@ namespace Empiria.OnePoint {
 
   }  // class PaymentOrderData
 
-}  // namespace Empiria.OnePoint
+}  // namespace Empiria.OnePoint.EPayments
