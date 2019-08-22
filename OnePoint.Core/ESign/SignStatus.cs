@@ -1,17 +1,17 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Enumerated Type                         *
-*  Type     : SignStatus                                   License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Enumerated Type                         *
+*  Type     : SignStatus                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Electronic-sign status used by both signable documents and sign requests.                      *
+*  Summary  : Electronic-sign status used by signable documents and sign requests.                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
 namespace Empiria.OnePoint.ESign {
 
-  /// <summary>Electronic-sign status used by both signable documents and sign requests.</summary>
+  /// <summary>Electronic-sign status used by signable documents and sign requests.</summary>
   public enum SignStatus {
 
     /// <summary>Signature pending.</summary>

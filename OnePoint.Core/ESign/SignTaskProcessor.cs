@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Information Holder                      *
-*  Type     : Signer                                       License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Command processor                       *
+*  Type     : SignTaskProcessor                          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Performs the electronic sign of one or more documents according to a SignTask command.         *
+*  Summary  : Performs SignTask command execution over one or more documents.                                *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -15,25 +15,22 @@ using Empiria.Security;
 
 namespace Empiria.OnePoint.ESign {
 
-  /// <summary>Performs the electronic sign of one or more documents according
-  /// to a SignTask command.</summary>
-  internal class Signer {
-
-    #region Fields
-
-    private SignCredentials credentials;
-
-    #endregion Fields
+  /// <summary>Performs SignTask command execution over one or more documents.</summary>
+  internal class SignTaskProcessor {
 
     #region Constructors and parsers
 
-    internal Signer(SignCredentials credentials) {
-      this.credentials = credentials;
+
+    internal SignTaskProcessor() {
+
     }
+
 
     #endregion Constructors and parsers
 
+
     #region Methods
+
 
     internal FixedList<SignEvent> Execute(SignTask task) {
       Assertion.AssertObject(task, "task");
@@ -62,9 +59,11 @@ namespace Empiria.OnePoint.ESign {
       return eventsList.ToFixedList();
     }
 
+
     #endregion Methods
 
     #region Private methods
+
 
     private SignEvent CreateSignEvent(SignTask signTask, SignRequest signRequest) {
       switch (signTask.EventType) {
@@ -101,8 +100,9 @@ namespace Empiria.OnePoint.ESign {
       return Cryptographer.SignText(inputData, securedPassword);
     }
 
+
     #endregion Methods
 
-  }  // class Signer
+  }  // class SignTaskProcessor
 
 }  // namespace Empiria.OnePoint.ESign

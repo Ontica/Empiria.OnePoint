@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Information Holder                      *
-*  Type     : SignEvent                                    License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object                          *
+*  Type     : SignEvent                                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents a sign event that is the result or outcome of an electronic-sign operation.         *
+*  Summary  : Contains data about the result or outcome of an electronic-sign operation.                     *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -13,8 +13,8 @@ using Empiria.Security;
 
 namespace Empiria.OnePoint.ESign {
 
-  /// <summary>Represents a sign event that is the result or outcome of an electronic-sign operation.</summary>
-  public class SignEvent : BaseObject, IProtected {
+  /// <summary>Contains data about the result or outcome of an electronic-sign operation.</summary>
+  internal class SignEvent : BaseObject, IProtected {
 
     #region Constructors and parsers
 
@@ -116,9 +116,9 @@ namespace Empiria.OnePoint.ESign {
 
     protected override void OnSave() {
       if (this.IsNew) {
-        SignServicesRepository.AppendSignEvent(this);
+        SignDataServices.AppendSignEvent(this);
       } else {
-        throw new InvalidOperationException("Update SignEvent instances not allowed.");
+        throw new InvalidOperationException("Update data of SignEvent instances is not allowed.");
       }
     }
 

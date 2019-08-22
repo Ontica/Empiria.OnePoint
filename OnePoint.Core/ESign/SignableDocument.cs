@@ -1,8 +1,8 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Empiria BaseObject Type                 *
-*  Type     : SignableDocument                             License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object                          *
+*  Type     : SignableDocument                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents a signable document.                                                                *
 *                                                                                                            *
@@ -16,7 +16,7 @@ using Empiria.Security;
 namespace Empiria.OnePoint.ESign {
 
   /// <summary>Represents a signable document.</summary>
-  public class SignableDocument : BaseObject, ISignable, IProtected {
+  internal class SignableDocument : BaseObject, IProtected {
 
     static private readonly string SignableDocumentsURL = ConfigurationData.Get<string>("SignableDocumentsURL");
 
@@ -181,7 +181,7 @@ namespace Empiria.OnePoint.ESign {
         this.PostedBy = Contact.Parse(ExecutionServer.CurrentUserId);
         this.PostingTime = DateTime.Now;
       }
-      SignServicesRepository.WriteDocument(this);
+      SignDataServices.WriteDocument(this);
     }
 
     #endregion Public methods

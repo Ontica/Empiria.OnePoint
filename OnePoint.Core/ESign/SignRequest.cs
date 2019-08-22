@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Empiria BaseObject Type                 *
-*  Type     : SignRequest                                  License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object                          *
+*  Type     : SignRequest                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents a document's sign request.                                                          *
+*  Summary  : Represents an electronical-sign request over a document. It's like an e-sign service order.    *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -15,8 +15,9 @@ using Empiria.Security;
 
 namespace Empiria.OnePoint.ESign {
 
-  /// <summary>Represents a document's sign request.</summary>
-  public class SignRequest : BaseObject, IProtected {
+  /// <summary>Represents an electronical-sign request over a document.
+  /// It's like an e-sign service order.</summary>
+  internal class SignRequest : BaseObject, IProtected {
 
     #region Constructors and parsers
 
@@ -196,7 +197,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     protected override void OnSave() {
-      SignServicesRepository.WriteSignRequest(this);
+      SignDataServices.WriteSignRequest(this);
     }
 
 

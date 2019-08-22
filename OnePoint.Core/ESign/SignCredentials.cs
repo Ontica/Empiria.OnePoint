@@ -1,15 +1,13 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Information Holder                      *
-*  Type     : SignCredentials                              License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Information Holder                      *
+*  Type     : SignCredentials                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Holds information about a user's electronic sign credentials.                                  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
-using Empiria.Json;
 
 namespace Empiria.OnePoint.ESign {
 
@@ -18,49 +16,17 @@ namespace Empiria.OnePoint.ESign {
 
     #region Constructors and parsers
 
-    private SignCredentials() {
 
+    internal SignCredentials(string password) {
+      Assertion.AssertObject(password, "password");
+
+      this.Password = password;
     }
 
-
-    private SignCredentials(JsonObject json) {
-      this.Password = json.Get<string>("password");
-    }
-
-
-    static internal SignCredentials Parse(JsonObject json) {
-      SignCredentials.EnsureIsValid(json);
-
-      return new SignCredentials(json);
-    }
-
-
-    static internal SignCredentials ForCurrentUser() {
-      var json = new JsonObject();
-
-      json.Add("password", "prueba");
-
-      return new SignCredentials(json);
-    }
-
-
-    static internal SignCredentials Empty {
-      get {
-        return new SignCredentials() {
-          IsEmptyInstance = true
-        };
-      }
-    }
 
     #endregion Constructors and parsers
 
     #region Properties
-
-    internal bool IsEmptyInstance {
-      get;
-      private set;
-    } = false;
-
 
     internal string Password {
       get;
@@ -68,16 +34,6 @@ namespace Empiria.OnePoint.ESign {
 
     #endregion Properties
 
-    #region Methods
-
-    static internal void EnsureIsValid(JsonObject json) {
-      Assertion.AssertObject(json, "json");
-
-      Assertion.Assert(json.HasValue("password"),
-                       "Credentials object must have a 'password' field with no empty data.");
-    }
-
-    #endregion Methods
 
   }  // class SignCredentials
 

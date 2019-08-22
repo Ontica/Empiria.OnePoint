@@ -1,8 +1,8 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Enumerated Type                         *
-*  Type     : SignEventType                                License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Enumerated Type                         *
+*  Type     : SignEventType                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Describes the type of an electronic sign event type.                                           *
 *                                                                                                            *

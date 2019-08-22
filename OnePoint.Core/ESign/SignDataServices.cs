@@ -1,8 +1,8 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Repository                              *
-*  Type     : SignServicesRepository                       License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Domain                                  *
+*  Assembly : Empiria.OnePoint.dll                       Pattern   : Data services                           *
+*  Type     : SignDataServices                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Provides data read and write methods for involved entities in electronic-sign services.        *
 *                                                                                                            *
@@ -16,26 +16,13 @@ namespace Empiria.OnePoint.ESign {
 
   /// <summary>Provides data read and write methods for involved entities
   /// in electronic-sign services.</summary>
-  static public class SignServicesRepository {
+  static internal class SignDataServices {
 
-    #region SignEvent Query methods
+    #region Query methods
 
-    static public FixedList<SignEvent> GetLastSignEvents(Contact requestedTo,
-                                                         string keywords = "") {
-      string filter = GetSignRequestKeywordsFilter(keywords);
 
-      var op = DataOperation.Parse("@qryEOPSignEventsForSigner",
-                                    requestedTo.Id, filter);
-
-      return DataReader.GetFixedList<SignEvent>(op);
-    }
-
-    #endregion SignEvent Query methods
-
-    #region SignRequest Query methods
-
-    static public FixedList<SignRequest> GetAllRequests(Contact requestedTo,
-                                                        string keywords = "") {
+    static internal FixedList<SignRequest> GetESignRequests(IContact requestedTo,
+                                                            string keywords = "") {
       string filter = GetSignRequestKeywordsFilter(keywords);
 
       var op = DataOperation.Parse("@qryEOPSignRequestsForContact",
@@ -45,58 +32,39 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    static public FixedList<SignRequest> GetPendingSignRequests(Contact requestedTo,
-                                                                string keywords = "") {
-      string filter = GetSignRequestKeywordsFilter(keywords);
-
-      var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   requestedTo.Id, (char) SignStatus.Pending, filter);
-
-      return DataReader.GetFixedList<SignRequest>(op);
-    }
-
-
-    static public FixedList<SignRequest> GetRefusedRequests(Contact requestedTo,
+    static internal FixedList<SignRequest> GetESignRequests(IContact requestedTo, SignStatus status,
                                                             string keywords = "") {
       string filter = GetSignRequestKeywordsFilter(keywords);
 
       var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   requestedTo.Id, (char) SignStatus.Refused, filter);
+                                   requestedTo.Id, (char) status, filter);
 
       return DataReader.GetFixedList<SignRequest>(op);
     }
 
-    static public FixedList<SignRequest> GetRevokedRequests(Contact requestedTo,
+
+    static internal FixedList<SignEvent> GetLastESignEvents(IContact requestedTo,
                                                             string keywords = "") {
       string filter = GetSignRequestKeywordsFilter(keywords);
 
-      var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   requestedTo.Id, (char) SignStatus.Revoked, filter);
+      var op = DataOperation.Parse("@qryEOPSignEventsForSigner",
+                                    requestedTo.Id, filter);
 
-      return DataReader.GetFixedList<SignRequest>(op);
+      return DataReader.GetFixedList<SignEvent>(op);
     }
 
 
-    static public FixedList<SignRequest> GetSignedRequests(Contact requestedTo,
-                                                           string keywords = "") {
-      string filter = GetSignRequestKeywordsFilter(keywords);
-
-      var op = DataOperation.Parse("@qryEOPSignRequestsForContactInStatus",
-                                   requestedTo.Id, (char) SignStatus.Signed, filter);
-
-      return DataReader.GetFixedList<SignRequest>(op);
-    }
-
-
-    public static SignRequest GetRequestByDocumentNo(string documentNo) {
+    static internal SignRequest GetESignRequestByDocumentNo(string documentNo) {
       var op = DataOperation.Parse("@getEOPSignRequestByDocumentNo", documentNo);
 
       return DataReader.GetObject<SignRequest>(op);
     }
 
-    #endregion SignRequest Query methods
+    #endregion Query methods
 
-    #region Command internal methods
+
+    #region Command methods
+
 
     static internal void AppendSignEvent(SignEvent o) {
       var op = DataOperation.Parse("apdEOPSignEvent", o.Id, o.UID,
@@ -123,9 +91,11 @@ namespace Empiria.OnePoint.ESign {
       DataWriter.Execute(op);
     }
 
-    #endregion Command internal methods
+    #endregion Command methods
 
-    #region Private utility methods
+
+    #region Utility methods
+
 
     static private string GetSignRequestKeywordsFilter(string keywords) {
       string filter = GeneralDataOperations.AllRecordsFilter;
@@ -136,8 +106,8 @@ namespace Empiria.OnePoint.ESign {
       return filter;
     }
 
-    #endregion Private utility methods
+    #endregion Utility methods
 
-  } // class SignServicesRepository
+  } // class SignDataServices
 
 } // namespace Empiria.OnePoint.ESign
