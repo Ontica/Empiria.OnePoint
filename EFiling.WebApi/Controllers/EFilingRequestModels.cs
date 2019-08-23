@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing                          Component : Web Api                                 *
-*  Assembly : Empiria.OnePoint.WebApi.dll                Pattern   : Response methods                        *
+*  Module   : Electronic Filing Services                 Component : Web Api interface                       *
+*  Assembly : Empiria.OnePoint.EFiling.WebApi.dll        Pattern   : Response methods                        *
 *  Type     : EFilingRequestModels                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Response models for electronic application filing requests.                                    *

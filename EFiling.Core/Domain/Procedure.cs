@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing                          Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object Type                     *
+*  Module   : Electronic Filing Services                 Component : Domain Layer                            *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Empiria Object Type                     *
 *  Type     : Procedure                                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Defines a procedure and its rules.                                                             *
@@ -66,7 +66,7 @@ namespace Empiria.OnePoint.EFiling {
     #region Methods
 
     internal IFilingTransactionProvider GetFilingTransactionProvider() {
-      return OnePointExternalProviders.GetFilingTransactionProvider(this);
+      return ExternalProviders.GetFilingTransactionProvider(this);
     }
 
 

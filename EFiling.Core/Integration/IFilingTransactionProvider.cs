@@ -1,11 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing                          Component : Integration Layer                       *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Application Service interface           *
-*  Type     : ITransactionAppService                     License   : Please read LICENSE.txt file            *
+*  Module   : Electronic Filing Services                 Component : Integration Layer                       *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Adapter Interface                       *
+*  Type     : IFilingTransactionProvider                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Acts as an abstract class that holds data for an external transaction request, that may be     *
-*             integrated into an Empiria Land transaction.                                                   *
+*  Summary  : Interface used to connect with external filing transaction providers.                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -14,7 +13,8 @@ using Empiria.Json;
 
 namespace Empiria.OnePoint.EFiling {
 
- public interface IFilingTransactionProvider {
+  /// <summary>Interface used to connect with external filing transaction providers.</summary>
+  public interface IFilingTransactionProvider {
 
     IFilingTransaction CreateTransaction(EFilingRequest filingRequest);
 

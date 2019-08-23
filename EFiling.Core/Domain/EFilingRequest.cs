@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing                          Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object Type                     *
+*  Module   : Electronic Filing Services                 Component : Domain Layer                            *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Empiria Object Type                     *
 *  Type     : EFilingRequest                             License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents an electronic filing request typically submitted to a government agency.            *

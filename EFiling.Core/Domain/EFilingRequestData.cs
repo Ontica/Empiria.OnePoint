@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing                          Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Data Services                           *
+*  Module   : Electronic Filing Services                 Component : Domain Layer                            *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Data Services                           *
 *  Type     : EFilingRequestData                         License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Indicates the status of an electronic filing request.                                          *

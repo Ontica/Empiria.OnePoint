@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing Services                 Component : Use cases                               *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Static class                            *
+*  Module   : Electronic Filing Services                 Component : Use cases Layer                         *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Static class                            *
 *  Type     : EFilingUseCases                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Use cases that implements electronic filing services.                                          *

@@ -1,11 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Filing                          Component : Web Api                                 *
-*  Assembly : Empiria.OnePoint.WebApi.dll                Pattern   : Web Api Controller                      *
+*  Module   : Electronic Filing Services                 Component : Web Api interface                       *
+*  Assembly : Empiria.OnePoint.EFiling.WebApi.dll        Pattern   : Web Api Controller                      *
 *  Type     : EFilingRequestsController                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Public API to read and write electronic application filing requests,                           *
-*             typically submitted to government agencies.                                                    *
+*  Summary  : Web api controller that provides filing request services.                                      *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
