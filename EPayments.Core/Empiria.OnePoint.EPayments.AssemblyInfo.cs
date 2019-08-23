@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : Core Domain                             *
-*  Assembly : Empiria.OnePoint.dll                         Pattern : Assembly Attributes File                *
-*                                                          License : Please read LICENSE.txt file            *
+*  Module   : Electronic Payment Services                Component : Domain and Use Cases Layer              *
+*  Assembly : Empiria.OnePoint.EPayments.dll             Pattern   : Assembly Attributes File                *
+*  Type     : None                                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Empiria OnePoint core domain.                                                                  *
+*  Summary  : Provides electronical filing services.                                                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;

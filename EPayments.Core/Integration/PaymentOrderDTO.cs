@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Payment Services                Component : External Services Providers             *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Data Transfer Object                    *
+*  Module   : Electronic Payment Services                Component : Integration Layer                       *
+*  Assembly : Empiria.OnePoint.EPayments.dll             Pattern   : Data Transfer Object                    *
 *  Type     : PaymentOrderDTO                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Holds payment order data used to interact with OnePoint payment services.                      *
+*  Summary  : Holds payment order data used to interact with external systems.                               *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -13,7 +13,7 @@ using Empiria.Json;
 
 namespace Empiria.OnePoint.EPayments {
 
-  /// <summary>Holds payment order data used to interact with OnePoint payment services.</summary>
+  /// <summary>Holds payment order data used to interact with external systems.</summary>
   public class PaymentOrderDTO {
 
     #region Constructors and parsers
@@ -173,6 +173,6 @@ namespace Empiria.OnePoint.EPayments {
 
     #endregion Methods
 
-  }  // class PaymentOrderData
+  }  // class PaymentOrderDTO
 
 }  // namespace Empiria.OnePoint.EPayments

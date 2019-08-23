@@ -2,17 +2,18 @@
   <PropertyGroup>
     <Company>Ontica</Company>
     <Product>Empiria OnePoint</Product>
-    <Description>Components to provide services and interact with people, business and organizations using a single point of contact.</Description>
+    <Description>Empiria OnePoint Electronic Payment Services.</Description>
     <Copyright>(c) 2017-2019. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <FileVersion>2.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/OnePoint.Core/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/OnePoint.Core</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/EPayments.Core/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/EPayments.Core</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
-    <PackageTags>e-government, gobierno electrónico, servicios en línea, firma electrónica</PackageTags>
+    <PackageTags>e-government, gobierno electrónico, pago electrónico, órdenes de pago, líneas de captura,
+    trámites en línea, e-payment, electronic filing, electronic payments</PackageTags>
     <RepositoryUrl>https://github.com/Ontica/Empiria.OnePoint</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Ontica</Authors>
@@ -56,5 +57,8 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\core\Core\Empiria.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UseCases\" />
   </ItemGroup>
 </Project>
