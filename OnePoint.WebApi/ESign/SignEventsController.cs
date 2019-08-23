@@ -1,42 +1,39 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.WebApi.dll                  Pattern : Web Api Controller                      *
-*  Type     : SignEventsController                         License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Web Api                                 *
+*  Assembly : Empiria.OnePoint.WebApi.dll                Pattern   : Web Api Controller                      *
+*  Type     : SignEventsController                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Web api interface to get SignEvents entities.                                                  *
+*  Summary  : Web api interface to get electronic sign events.                                               *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Web.Http;
 
-using Empiria.Security;
 using Empiria.WebApi;
 
 namespace Empiria.OnePoint.ESign.WebApi {
 
-  /// <summary>Web api interface to get SignEvents entities.</summary>
+  /// <summary>Web api interface to get electronic sign events.</summary>
   public class SignEventsController : WebApiController {
 
-    #region GET methods
 
     [HttpGet]
     [Route("v2/e-sign/events/mine")]
-    public PagedCollectionModel GetMyLastSignEvents([FromUri] string keywords = "") {
+    public PagedCollectionModel GetMyLastESignEvents([FromUri] string keywords = "") {
       try {
-        var me = EmpiriaUser.Current.AsContact();
+        FixedList<SignEventDTO> events = ESignUseCases.GetMyLastESignEvents(keywords);
 
-        FixedList<SignEvent> events = SignServicesRepository.GetLastSignEvents(me, keywords);
-
-        return new PagedCollectionModel(this.Request, events.ToResponse());
+        return new PagedCollectionModel(this.Request, events, typeof(SignEventDTO).FullName);
 
       } catch (Exception e) {
+        EmpiriaLog.Error(e);
+
         throw base.CreateHttpException(e);
 
       }
     }
 
-    #endregion GET methods
 
   }  // class SignEventsController
 

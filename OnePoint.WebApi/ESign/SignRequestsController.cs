@@ -1,55 +1,49 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Solution : Empiria OnePoint                             System  : E-Sign Services                         *
-*  Assembly : Empiria.OnePoint.WebApi.dll                  Pattern : Web Api Controller                      *
-*  Type     : SignRequestsController                       License : Please read LICENSE.txt file            *
+*  Module   : Electronic Sign Services                   Component : Web Api                                 *
+*  Assembly : Empiria.OnePoint.WebApi.dll                Pattern   : Web Api Controller                      *
+*  Type     : SignRequestsController                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Web api interface to manage document's e-signature services through SignRequest entities.      *
+*  Summary  : Web api interface to access e-signature services through SignRequest entities.                 *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Web.Http;
 
 using Empiria.Json;
-using Empiria.Security;
 using Empiria.WebApi;
-
-using Empiria.OnePoint.AppServices;
 
 namespace Empiria.OnePoint.ESign.WebApi {
 
-  /// <summary>Web api interface to manage document's e-signature services
-  /// through SignRequest entities.</summary>
+  /// <summary>Web api interface to access e-signature services through SignRequest entities.</summary>
   public class SignRequestsController : WebApiController {
 
-    #region GET methods
+    #region Query methods
 
     [AllowAnonymous]
     [HttpGet]
     [Route("v2/e-sign/requests/by-document-no/{documentNo}")]
-    public SingleObjectModel GetSignRequest(string documentNo) {
+    public SingleObjectModel GetESignRequestByDocumentNo(string documentNo) {
       try {
-        SignRequest signRequest = SignServicesRepository.GetRequestByDocumentNo(documentNo);
+        SignRequestDTO signRequest = ESignUseCases.GetESignRequestByDocumentNo(documentNo);
 
-        return new SingleObjectModel(this.Request, signRequest.ToResponse(),
-                                     typeof(SignRequest).FullName);
+        return GetResponse(signRequest);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
 
       }
     }
+
 
     [HttpGet]
     [Route("v2/e-sign/requests/mine")]
-    public CollectionModel GetMyRequests([FromUri] string keywords = "") {
+    public CollectionModel GetMyESignRequests([FromUri] string keywords = "") {
       try {
-        var me = EmpiriaUser.Current.AsContact();
+        FixedList<SignRequestDTO> myRequests =
+                                  ESignUseCases.GetMyESignRequests(keywords);
 
-        FixedList<SignRequest> signRequests =
-                                  SignServicesRepository.GetAllRequests(me, keywords);
-
-        return new CollectionModel(this.Request, signRequests.ToResponse());
+        return GetResponse(myRequests);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -59,15 +53,16 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     [HttpGet]
-    [Route("v2/e-sign/requests/mine/pending")]
-    public CollectionModel GetMyPendingRequests([FromUri] string keywords = "") {
+    [Route("v2/e-sign/requests/mine/{status}")]
+    public CollectionModel GetMyESignRequestsInStatus([FromUri] string status,
+                                                      [FromUri] string keywords = "") {
       try {
-        var me = EmpiriaUser.Current.AsContact();
+        SignStatus signStatus = GetSignStatusFromRequest(status);
 
-        FixedList<SignRequest> signRequests =
-                                  SignServicesRepository.GetPendingSignRequests(me, keywords);
+        FixedList<SignRequestDTO> myRequests =
+                                  ESignUseCases.GetMyESignRequests(signStatus, keywords);
 
-        return new CollectionModel(this.Request, signRequests.ToResponse());
+        return GetResponse(myRequests);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -75,72 +70,20 @@ namespace Empiria.OnePoint.ESign.WebApi {
       }
     }
 
-
-    [HttpGet]
-    [Route("v2/e-sign/requests/mine/refused")]
-    public CollectionModel GetMyRefusedRequests([FromUri] string keywords = "") {
-      try {
-        var me = EmpiriaUser.Current.AsContact();
-
-        FixedList<SignRequest> refusedRequests =
-                                    SignServicesRepository.GetRefusedRequests(me, keywords);
-
-        return new CollectionModel(this.Request, refusedRequests.ToResponse());
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-
-      }
-    }
+    #endregion Query methods
 
 
-    [HttpGet]
-    [Route("v2/e-sign/requests/mine/revoked")]
-    public CollectionModel GetMyRevokedRequests([FromUri] string keywords = "") {
-      try {
-        var me = EmpiriaUser.Current.AsContact();
-
-        FixedList<SignRequest> revokedRequests =
-                                    SignServicesRepository.GetRevokedRequests(me, keywords);
-
-        return new CollectionModel(this.Request, revokedRequests.ToResponse());
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-
-      }
-    }
-
-    [HttpGet]
-    [Route("v2/e-sign/requests/mine/signed")]
-    public CollectionModel GetMySignedRequests([FromUri] string keywords = "") {
-      try {
-        var me = EmpiriaUser.Current.AsContact();
-
-        FixedList<SignRequest> signedRequests =
-                                      SignServicesRepository.GetSignedRequests(me, keywords);
-
-        return new CollectionModel(this.Request, signedRequests.ToResponse());
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-
-      }
-    }
-
-    #endregion GET methods
-
-    #region POST methods
+    #region Command methods
 
     [HttpPost]
     [Route("v2/e-sign/requests/mine/signed")]
-    public CollectionModel SignRequests([FromBody] object body) {
+    public CollectionModel Sign([FromBody] SignTaskDTO signTaskDTO) {
       try {
-        SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Signed, body);
+        AssertSignTaskDTOIsValid(signTaskDTO);
 
-        FixedList<SignEvent> signEvents = ESignServices.Sign(signTask);
+        FixedList<SignEventDTO> signEvents = ESignUseCases.Sign(signTaskDTO);
 
-        return new CollectionModel(this.Request, signEvents.ToResponse());
+        return GetResponse(signEvents);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -151,13 +94,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/mine/refused")]
-    public CollectionModel RefuseSignRequests([FromBody] object body) {
+    public CollectionModel RefuseSign([FromBody] SignTaskDTO signTaskDTO) {
       try {
-        SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Refused, body);
+        AssertSignTaskDTOIsValid(signTaskDTO);
 
-        FixedList<SignEvent> refuseSignEvents = ESignServices.RefuseSign(signTask);
+        FixedList<SignEventDTO> refuseSignEvents = ESignUseCases.RefuseSign(signTaskDTO);
 
-        return new CollectionModel(this.Request, refuseSignEvents.ToResponse());
+        return GetResponse(refuseSignEvents);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -168,13 +111,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/mine/revoked")]
-    public CollectionModel RevokeSignedRequests([FromBody] object body) {
+    public CollectionModel RevokeSign([FromBody] SignTaskDTO signTaskDTO) {
       try {
-        SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Revoked, body);
+        AssertSignTaskDTOIsValid(signTaskDTO);
 
-        FixedList<SignEvent> revokeSignEvents = ESignServices.RevokeSign(signTask);
+        FixedList<SignEventDTO> revokeSignEvents = ESignUseCases.RevokeSign(signTaskDTO);
 
-        return new CollectionModel(this.Request, revokeSignEvents.ToResponse());
+        return GetResponse(revokeSignEvents);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -185,13 +128,13 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     [HttpPost]
     [Route("v2/e-sign/requests/mine/unrefused")]
-    public CollectionModel UnrefuseSignRequests([FromBody] object body) {
+    public CollectionModel UnrefuseSign([FromBody] SignTaskDTO signTaskDTO) {
       try {
-        SignTask signTask = this.BuildESignTaskFromBody(SignEventType.Unrefused, body);
+        AssertSignTaskDTOIsValid(signTaskDTO);
 
-        FixedList<SignEvent> unrefuseSignEvents = ESignServices.UnrefuseSign(signTask);
+        FixedList<SignEventDTO> unrefuseSignEvents = ESignUseCases.UnrefuseSign(signTaskDTO);
 
-        return new CollectionModel(this.Request, unrefuseSignEvents.ToResponse());
+        return GetResponse(unrefuseSignEvents);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -199,23 +142,53 @@ namespace Empiria.OnePoint.ESign.WebApi {
       }
     }
 
-    #endregion POST methods
+    #endregion Command methods
 
-    #region Private methods
 
-    private SignTask BuildESignTaskFromBody(SignEventType eventType, object body) {
-      base.RequireBody(body);
+    #region Utility methods
 
-      var bodyAsJson = JsonObject.Parse(body);
+    private void AssertSignTaskDTOIsValid(SignTaskDTO signTaskDTO) {
+      base.RequireBody(signTaskDTO);
 
-      bodyAsJson.Add("eventType", eventType.ToString());
-
-      SignTask.EnsureIsValid(bodyAsJson);
-
-      return SignTask.Parse(bodyAsJson);
+      ESignUseCases.EnsureValidSignTaskDTO(signTaskDTO);
     }
 
-    #endregion Private methods
+
+    private SingleObjectModel GetResponse(SignRequestDTO signRequest) {
+      return new SingleObjectModel(this.Request, signRequest, typeof(SignRequestDTO).FullName);
+    }
+
+
+    private CollectionModel GetResponse(FixedList<SignRequestDTO> signRequests) {
+      return new CollectionModel(this.Request, signRequests, typeof(SignRequestDTO).FullName);
+    }
+
+
+    private CollectionModel GetResponse(FixedList<SignEventDTO> signEvents) {
+      return new CollectionModel(this.Request, signEvents, typeof(SignEventDTO).FullName);
+    }
+
+
+    private SignStatus GetSignStatusFromRequest(string status) {
+      Assertion.AssertObject(status, "status");
+
+      switch (status.ToLowerInvariant()) {
+        case "pending":
+          return SignStatus.Pending;
+        case "refused":
+          return SignStatus.Refused;
+        case "revoked":
+          return SignStatus.Revoked;
+        case "signed":
+          return SignStatus.Signed;
+        default:
+          throw new WebApiException(WebApiException.Msg.BadRequest,
+                                    $"Request has an unrecognized sign status '{status}'.");
+      }
+    }
+
+
+    #endregion Utility methods
 
   }  // class SignRequestsController
 
