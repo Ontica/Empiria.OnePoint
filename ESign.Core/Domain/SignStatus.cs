@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Domain                                  *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Enumerated Type                         *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Enumerated Type                         *
 *  Type     : SignStatus                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Electronic-sign status used by signable documents and sign requests.                           *

@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Sign Services                   Component : Web Api                                 *
-*  Assembly : Empiria.OnePoint.WebApi.dll                Pattern   : Web Api Controller                      *
+*  Module   : Electronic Sign Services                   Component : Web Api interface                       *
+*  Assembly : Empiria.OnePoint.ESign.WebApi.dll          Pattern   : Web Api Controller                      *
 *  Type     : SignEventsController                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Web api interface to get electronic sign events.                                               *
+*  Summary  : Web Api used to get electronic sign events.                                                    *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -14,7 +14,7 @@ using Empiria.WebApi;
 
 namespace Empiria.OnePoint.ESign.WebApi {
 
-  /// <summary>Web api interface to get electronic sign events.</summary>
+  /// <summary>Web Api used to get electronic sign events.</summary>
   public class SignEventsController : WebApiController {
 
 

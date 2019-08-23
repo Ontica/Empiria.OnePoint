@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Domain                                  *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Data services                           *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Data services                           *
 *  Type     : SignDataServices                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Provides data read and write methods for involved entities in electronic-sign services.        *

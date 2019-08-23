@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Use cases                               *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Input Data Transfer Objects             *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Input Data Transfer Objects             *
 *  Type     : ESign Input Data Transfer Objects          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Contains output data transfer objects for electronic sign use cases.                           *

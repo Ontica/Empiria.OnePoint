@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Use cases                               *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Use Cases Data Mapper                   *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Use Cases Data Mapper                   *
 *  Type     : ESignMapper                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Data mapping methods between electronic sign entities and their data transfer objects.         *

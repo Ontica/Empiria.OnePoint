@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Use cases                               *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Use Cases class                         *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Use Cases class                         *
 *  Type     : ESignUseCases                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Use cases that implements electronic signature services.                                       *

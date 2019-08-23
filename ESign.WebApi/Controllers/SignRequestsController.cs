@@ -1,21 +1,20 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Electronic Sign Services                   Component : Web Api                                 *
-*  Assembly : Empiria.OnePoint.WebApi.dll                Pattern   : Web Api Controller                      *
+*  Module   : Electronic Sign Services                   Component : Web Api interface                       *
+*  Assembly : Empiria.OnePoint.ESign.WebApi.dll          Pattern   : Web Api Controller                      *
 *  Type     : SignRequestsController                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Web api interface to access e-signature services through SignRequest entities.                 *
+*  Summary  : Web Api used to provide electronic sign services through sign tasks.                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Web.Http;
 
-using Empiria.Json;
 using Empiria.WebApi;
 
 namespace Empiria.OnePoint.ESign.WebApi {
 
-  /// <summary>Web api interface to access e-signature services through SignRequest entities.</summary>
+  /// <summary>Web Api used to provide electronic sign services through sign tasks.</summary>
   public class SignRequestsController : WebApiController {
 
     #region Query methods

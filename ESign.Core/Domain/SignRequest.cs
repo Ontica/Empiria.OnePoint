@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Domain                                  *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object                          *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Empiria Object                          *
 *  Type     : SignRequest                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents an electronical-sign request over a document. It's like an e-sign service order.    *

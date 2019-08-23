@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Domain                                  *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Command processor                       *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Command processor                       *
 *  Type     : SignTaskProcessor                          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Performs SignTask command execution over one or more documents.                                *

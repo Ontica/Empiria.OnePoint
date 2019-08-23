@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Domain                                  *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Information Holder                      *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Information Holder                      *
 *  Type     : SignTask                                   License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Contains information about an electronic sign task over one or more SignRequests.              *

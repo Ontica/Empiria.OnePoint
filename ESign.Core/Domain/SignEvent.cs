@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Sign Services                   Component : Domain                                  *
-*  Assembly : Empiria.OnePoint.dll                       Pattern   : Empiria Object                          *
+*  Assembly : Empiria.OnePoint.ESign.dll                 Pattern   : Empiria Object                          *
 *  Type     : SignEvent                                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Contains data about the result or outcome of an electronic-sign operation.                     *
