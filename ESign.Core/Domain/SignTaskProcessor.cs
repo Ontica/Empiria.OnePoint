@@ -68,8 +68,8 @@ namespace Empiria.OnePoint.ESign {
     private SignEvent CreateSignEvent(SignTask signTask, SignRequest signRequest) {
       switch (signTask.EventType) {
         case SignEventType.Signed:
-          string digitalSign = this.SignData(signTask.SignCredentials,
-                                             signRequest.Document.SignInputData);
+          string digitalSign = SignData(signTask.SignCredentials,
+                                        signRequest.Document.SignInputData);
 
           return signRequest.Sign(digitalSign);
 
@@ -94,7 +94,7 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    private string SignData(SignCredentials credentials, string inputData) {
+    static private string SignData(SignCredentials credentials, string inputData) {
       SecureString securedPassword = Cryptographer.ConvertToSecureString(credentials.Password);
 
       return Cryptographer.SignText(inputData, securedPassword);

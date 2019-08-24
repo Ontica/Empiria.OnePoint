@@ -168,7 +168,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
     }
 
 
-    private SignStatus GetSignStatusFromRequest(string status) {
+    static private SignStatus GetSignStatusFromRequest(string status) {
       Assertion.AssertObject(status, "status");
 
       switch (status.ToLowerInvariant()) {

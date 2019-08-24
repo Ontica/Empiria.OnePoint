@@ -1,4 +1,4 @@
-﻿# Empiria OnePoint Elctronic Filing Web Api
+﻿# Empiria OnePoint Electronic Filing Web Api
 
 Web Api interface for Empiria OnePoint Electronic Filing services.
 

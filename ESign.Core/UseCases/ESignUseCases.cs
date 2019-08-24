@@ -20,24 +20,39 @@ namespace Empiria.OnePoint.ESign {
     #region Use cases
 
 
+    static public FixedList<SignRequestDTO> GetESignRequests(IContact requestedTo) {
+      return GetESignRequests(requestedTo, String.Empty);
+    }
+
+
     static public FixedList<SignRequestDTO> GetESignRequests(IContact requestedTo,
-                                                             string keywords = "") {
+                                                             string keywords) {
       FixedList<SignRequest> r = SignDataServices.GetESignRequests(requestedTo, keywords);
 
       return ESignMapper.Map(r);
     }
 
 
+    static public FixedList<SignRequestDTO> GetESignRequests(IContact requestedTo, SignStatus status) {
+      return GetESignRequests(requestedTo, status, String.Empty);
+    }
+
+
     static public FixedList<SignRequestDTO> GetESignRequests(IContact requestedTo, SignStatus status,
-                                                             string keywords = "") {
+                                                             string keywords) {
       FixedList<SignRequest> r = SignDataServices.GetESignRequests(requestedTo, status, keywords);
 
       return ESignMapper.Map(r);
     }
 
 
+    static public FixedList<SignEventDTO> GetLastESignEvents(IContact requestedTo) {
+      return GetLastESignEvents(requestedTo, String.Empty);
+    }
+
+
     static public FixedList<SignEventDTO> GetLastESignEvents(IContact requestedTo,
-                                                             string keywords = "") {
+                                                             string keywords) {
       FixedList<SignEvent> r = SignDataServices.GetLastESignEvents(requestedTo, keywords);
 
       return ESignMapper.Map(r);
@@ -54,7 +69,12 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    static public FixedList<SignEventDTO> GetMyLastESignEvents(string keywords = "") {
+    static public FixedList<SignEventDTO> GetMyLastESignEvents() {
+      return GetLastESignEvents(GetCurrentUser());
+    }
+
+
+    static public FixedList<SignEventDTO> GetMyLastESignEvents(string keywords) {
       return GetLastESignEvents(GetCurrentUser(), keywords);
     }
 

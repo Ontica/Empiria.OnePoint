@@ -23,15 +23,16 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    internal SignEvent(SignEventType eventType,
-                       SignRequest signRequest,
-                       string digitalSign = "") {
+    internal SignEvent(SignEventType eventType, SignRequest signRequest):
+                                  this(eventType, signRequest, String.Empty) {
 
+    }
+
+
+    internal SignEvent(SignEventType eventType, SignRequest signRequest, string digitalSign) {
       this.EventType = eventType;
       this.SignRequest = signRequest;
       this.DigitalSign = digitalSign;
-
-      this.EnsureIsValid();
     }
 
 
@@ -108,11 +109,6 @@ namespace Empiria.OnePoint.ESign {
     #endregion Properties
 
     #region Methods
-
-    private void EnsureIsValid() {
-
-    }
-
 
     protected override void OnSave() {
       if (this.IsNew) {

@@ -225,13 +225,11 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Public methods
 
-    private void AssertCanBeClosed() {
-
-    }
 
     internal void Delete() {
-
+      throw new NotImplementedException("EFilingRequest.Delete()");
     }
+
 
     internal void RevokeSign(JsonObject bodyAsJson) {
       this.ExtensionData.Remove("esign");
@@ -242,7 +240,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void Sign(JsonObject bodyAsJson) {
-      var signToken = bodyAsJson.Get<string>("signToken");
+      // var signToken = bodyAsJson.Get<string>("signToken");
 
       // var securedToken = Cryptographer.ConvertToSecureString(signToken);
 

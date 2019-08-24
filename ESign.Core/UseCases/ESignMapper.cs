@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.ESign {
     static internal SignRequestDTO Map(SignRequest request) {
       SignableDocument document = request.Document;
 
-      return new SignRequestDTO() {
+      return new SignRequestDTO {
         uid = request.UID,
         requestedBy = request.RequestedBy.Alias,
         requestedTime = request.RequestedTime,
@@ -46,7 +46,7 @@ namespace Empiria.OnePoint.ESign {
 
         document = Map(document),
 
-        filing = new SignRequestFilingDTO() {
+        filing = new SignRequestFilingDTO {
           filingNo = document.TransactionNo,
           filingTime = document.RequestedTime,
           filedBy = document.RequestedBy,
@@ -57,7 +57,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     static internal SignableDocumentDTO Map(SignableDocument document) {
-      return new SignableDocumentDTO() {
+      return new SignableDocumentDTO {
         uid = document.UID,
         type = document.DocumentType,
         documentNo = document.DocumentNo,
@@ -68,7 +68,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     static internal SignEventDTO Map(SignEvent signEvent) {
-      return new SignEventDTO() {
+      return new SignEventDTO {
         uid = signEvent.UID,
         eventType = signEvent.EventType.ToString(),
         timeStamp = signEvent.Timestamp,
