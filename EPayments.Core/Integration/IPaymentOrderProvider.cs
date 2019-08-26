@@ -15,9 +15,12 @@ namespace Empiria.OnePoint.EPayments {
   /// <summary>Interface used to connect with external payment orders providers.</summary>
   public interface IPaymentOrderProvider {
 
+
     Task<PaymentOrderDTO> GeneratePaymentOrder(IPayable payableEntity);
 
+
     Task<PaymentOrderDTO> RefreshPaymentOrder(PaymentOrderDTO paymentOrder);
+
 
   }  // interface IPaymentOrderProvider
 

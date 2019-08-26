@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Payment Services                Component : Integration Layer                       *
-*  Assembly : Empiria.OnePoint.EPayments.dll             Pattern   : Data Transfer Object                    *
+*  Assembly : Empiria.OnePoint.Integration.dll           Pattern   : Adapter Interface                       *
 *  Type     : PaymentOrderDTO                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Holds payment order data used to interact with external systems.                               *

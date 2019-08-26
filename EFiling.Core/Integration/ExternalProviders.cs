@@ -11,15 +11,13 @@ using System;
 
 using Empiria.Reflection;
 
-
 namespace Empiria.OnePoint.EFiling {
-
 
   /// <summary>Plugin factory methods that provide access to external services.</summary>
   static internal class ExternalProviders {
 
 
-    static internal IFilingTransactionProvider GetFilingTransactionProvider(Procedure procedure) {
+    static public IFilingTransactionProvider GetFilingTransactionProvider(IProcedure procedure) {
       Type type = ObjectFactory.GetType("Empiria.Land.Registration",
                                         "Empiria.Land.Integration.LandFilingTransactionProvider");
 
@@ -30,4 +28,3 @@ namespace Empiria.OnePoint.EFiling {
   }  // class ExternalProviders
 
 }  // namespace Empiria.OnePoint.EFiling
-

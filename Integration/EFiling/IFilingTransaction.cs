@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Integration Layer                       *
-*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Adapter Data Interface                  *
+*  Assembly : Empiria.OnePoint.Integration.dll           Pattern   : Adapter Data Interface                  *
 *  Type     : IFilingTransaction                         License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Holds information about an electronical filing transaction.                                    *

@@ -12,7 +12,7 @@ using System;
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Defines a procedure and its rules.</summary>
-  public class Procedure: BaseObject {
+  public class Procedure: BaseObject, IProcedure {
 
     #region Constructors and parsers
 

@@ -16,6 +16,7 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Interface used to connect with external filing transaction providers.</summary>
   public interface IFilingTransactionProvider {
 
+
     IFilingTransaction CreateTransaction(EFilingRequest filingRequest);
 
 

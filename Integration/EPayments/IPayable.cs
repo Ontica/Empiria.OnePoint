@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Payment Services                Component : Integration Layer                       *
-*  Assembly : Empiria.OnePoint.EPayments.dll             Pattern   : Adapter Interface                       *
+*  Assembly : Empiria.OnePoint.Integration.dll           Pattern   : Adapter Interface                       *
 *  Type     : IPayable                                   License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Allows set payment order data into external payable entities, like electronic filing           *
@@ -20,7 +20,9 @@ namespace Empiria.OnePoint.EPayments {
       get;
     }
 
+
     void SetPaymentOrderData(PaymentOrderDTO paymentOrderData);
+
 
     PaymentOrderDTO TryGetPaymentOrderData();
 

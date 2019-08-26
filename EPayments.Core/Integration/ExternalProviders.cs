@@ -13,11 +13,12 @@ using Empiria.Reflection;
 
 namespace Empiria.OnePoint.EPayments {
 
+
   /// <summary>Plugin factory methods that provide access to external services.</summary>
   static internal class ExternalProviders {
 
 
-    static internal IPaymentOrderProvider GetPaymentOrderProvider() {
+    static public IPaymentOrderProvider GetPaymentOrderProvider() {
       Type type = ObjectFactory.GetType("Empiria.Land.Connectors",
                                         "Empiria.Land.Integration.TlaxcalaGov.PaymentOrderConnector");
 
@@ -28,4 +29,3 @@ namespace Empiria.OnePoint.EPayments {
   }  // class ExternalProviders
 
 }  // namespace Empiria.OnePoint.EPayments
-
