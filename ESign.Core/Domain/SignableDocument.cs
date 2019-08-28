@@ -162,7 +162,7 @@ namespace Empiria.OnePoint.ESign {
       throw new SecurityException(SecurityException.Msg.WrongDIFVersionRequested, version);
     }
 
-    private IntegrityValidator _validator = null;
+    private IntegrityValidator _validator;
     public IntegrityValidator Integrity {
       get {
         if (_validator == null) {

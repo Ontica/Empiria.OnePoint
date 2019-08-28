@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.EPayments {
 
     static public PaymentOrderDTO Empty {
       get;
-    } = new PaymentOrderDTO() {
+    } = new PaymentOrderDTO {
       IsEmptyInstance = true
     };
 
@@ -70,7 +70,7 @@ namespace Empiria.OnePoint.EPayments {
     public bool IsEmptyInstance {
       get;
       private set;
-    } = false;
+    }
 
 
     /// <summary>Línea de captura.</summary>
@@ -105,7 +105,8 @@ namespace Empiria.OnePoint.EPayments {
     public bool IsCompleted {
       get;
       private set;
-    } = false;
+    }
+
 
     /// <summary>Fecha en que se efectuó el pago.</summary>
     public DateTime PaymentDate {
@@ -125,7 +126,7 @@ namespace Empiria.OnePoint.EPayments {
     public decimal PaymentTotal {
       get;
       private set;
-    } = decimal.Zero;
+    }
 
 
     #endregion Public properties

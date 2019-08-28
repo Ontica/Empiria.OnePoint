@@ -42,7 +42,7 @@ namespace Empiria.OnePoint.ESign {
       using (var context = StorageContext.Open()) {
 
         foreach (var request in task.SignRequests) {
-          SignEvent signEvent = this.CreateSignEvent(task, request);
+          SignEvent signEvent = CreateSignEvent(task, request);
 
           context.Watch(request);
 
@@ -62,10 +62,11 @@ namespace Empiria.OnePoint.ESign {
 
     #endregion Methods
 
+
     #region Private methods
 
 
-    private SignEvent CreateSignEvent(SignTask signTask, SignRequest signRequest) {
+    static private SignEvent CreateSignEvent(SignTask signTask, SignRequest signRequest) {
       switch (signTask.EventType) {
         case SignEventType.Signed:
           string digitalSign = SignData(signTask.SignCredentials,
@@ -102,6 +103,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     #endregion Methods
+
 
   }  // class SignTaskProcessor
 

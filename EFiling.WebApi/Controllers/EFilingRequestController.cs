@@ -22,6 +22,18 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     #region Query API
 
     [HttpGet]
+    [Route("v2/electronic-filing/tests")]
+    public SingleObjectModel GetEFilingRequest() {
+      try {
+        return new SingleObjectModel(this.Request, "Test me");
+        // return GenerateResponse(filingRequest);
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+      }
+    }
+
+    [HttpGet]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID}")]
     public SingleObjectModel GetEFilingRequest([FromUri] string filingRequestUID) {
       try {
