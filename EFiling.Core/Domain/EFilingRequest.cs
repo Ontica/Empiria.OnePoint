@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
+using System.Data;
 using Empiria.Contacts;
 using Empiria.Json;
 using Empiria.Security;
@@ -25,10 +25,14 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    public EFilingRequest(JsonObject data) {
+    public EFilingRequest(Procedure procedure, Requester requestedBy) {
+      Assertion.AssertObject(procedure, "procedure");
+      Assertion.AssertObject(requestedBy, "requestedBy");
+
       this.ExtensionData = new JsonObject();
 
-      this.LoadData(data);
+      this.Procedure = procedure;
+      this.SetRequester(requestedBy);
     }
 
 
@@ -42,6 +46,13 @@ namespace Empiria.OnePoint.EFiling {
       return EFilingRequestData.GetList(status, keywords);
     }
 
+
+    protected override void OnLoadObjectData(DataRow row) {
+      this.RequestedBy.email = this.ExtensionData.Get("requestedByData/email", String.Empty);
+      this.RequestedBy.phone = this.ExtensionData.Get("requestedByData/phone", String.Empty);
+      this.RequestedBy.rfc = this.ExtensionData.Get("requestedByData/rfc", String.Empty);
+    }
+
     #endregion Constructors and parsers
 
     #region Public properties
@@ -53,8 +64,8 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    [DataField("RequestedBy")]
-    public string RequestedBy {
+    [DataObject()]
+    public Requester RequestedBy {
       get;
       private set;
     }
@@ -83,7 +94,8 @@ namespace Empiria.OnePoint.EFiling {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(this.RequestedBy);
+        return EmpiriaString.BuildKeywords(this.RequestedBy.name,
+                                           this.Procedure.DisplayName);
       }
     }
 
@@ -146,6 +158,12 @@ namespace Empiria.OnePoint.EFiling {
       }
     }
 
+    public JsonObject ApplicationForm {
+      get {
+        return ExtensionData.Slice("appForm", false);
+      }
+    }
+
 
     public string ElectronicSign {
       get {
@@ -174,7 +192,7 @@ namespace Empiria.OnePoint.EFiling {
       if (version == 1) {
         return new object[] {
           1, "Id", this.Id, "UID", this.UID,
-          "ProcedureId", this.Procedure.Id, "RequestedBy", this.RequestedBy,
+          "ProcedureId", this.Procedure.Id, "RequestedBy", this.RequestedBy.name,
           "AgencyId", this.Agency.Id, "AgentId", this.Agent.Id,
           "ExtensionData", this.ExtensionData.ToString(), "LastUpdateTime", this.LastUpdateTime,
           "PostingTime", this.PostingTime, "PostedById", this.PostedBy.Id, "Status", (char) this.Status
@@ -195,6 +213,29 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    internal EPayments.PaymentOrderDTO GetPaymentOrder() {
+      Assertion.AssertObject(this.TransactionUID, "this.TransactionUID");
+
+      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
+
+      return transactionProvider.TryGetPaymentOrderData(this.TransactionUID);
+    }
+
+
+    internal string GetPaymentReceipt() {
+      return this.ExtensionData.Get("paymentData/receiptNo", "");
+    }
+
+
+    internal IFilingTransaction GetTransaction() {
+      Assertion.AssertObject(this.TransactionUID, "this.TransactionUID");
+
+      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
+
+      return transactionProvider.GetTransaction(this.TransactionUID);
+    }
+
+
     internal void GeneratePaymentOrder() {
       if (this.TransactionUID.Length != 0) {
         return;
@@ -210,6 +251,24 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    internal void SetApplicationForm(JsonObject json) {
+      this.ExtensionData.Set("appForm", json);
+    }
+
+
+    internal void SetPaymentReceipt(string receiptNo) {
+      this.ExtensionData.Set("paymentData/receiptNo", receiptNo);
+    }
+
+    internal void SetRequester(Requester requester) {
+      this.RequestedBy = requester;
+
+      this.ExtensionData.SetIfValue("requestedByData/email", requester.email);
+      this.ExtensionData.SetIfValue("requestedByData/phone", requester.phone);
+      this.ExtensionData.SetIfValue("requestedByData/rfc", requester.rfc);
+    }
+
+
     internal void Submit() {
       if (this.TransactionUID.Length == 0) {
         return;
@@ -217,10 +276,13 @@ namespace Empiria.OnePoint.EFiling {
 
       var transactionProvider = this.Procedure.GetFilingTransactionProvider();
 
+      transactionProvider.SetPayment(this.TransactionUID, this.GetPaymentReceipt());
+
       transactionProvider.SubmitTransaction(this.TransactionUID);
 
       this.Status = EFilingRequestStatus.Submitted;
     }
+
 
     #region Public methods
 
@@ -263,32 +325,21 @@ namespace Empiria.OnePoint.EFiling {
       if (this.IsNew) {
         this.PostedBy = Contact.Parse(ExecutionServer.CurrentUserId);
         this.PostingTime = DateTime.Now;
-        this.Agency = Organization.Parse(511);
-        this.Agent = Contact.Parse(1090);
+        this.Agency = Organization.Parse(510);
+        this.Agent = Contact.Parse(509);
       }
       EFilingRequestData.WriteFilingRequest(this);
     }
 
 
-    internal void Update(JsonObject data) {
-      Assertion.AssertObject(data, "data");
+    internal void Update(Requester requestedBy) {
+      Assertion.AssertObject(requestedBy, "requestedBy");
 
-      this.LoadData(data);
+      this.SetRequester(requestedBy);
     }
 
 
     #endregion Public methods
-
-
-    #region Private methods
-
-
-    private void LoadData(JsonObject data) {
-      this.RequestedBy = data.GetClean("requestedBy").ToUpperInvariant();
-    }
-
-
-    #endregion Private methods
 
   } // class EFilingRequest
 

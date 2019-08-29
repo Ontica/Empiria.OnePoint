@@ -14,10 +14,17 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Holds information about an electronical filing transaction.</summary>
   public interface IFilingTransaction {
 
+    int Id {
+      get;
+    }
+
     string UID {
       get;
     }
 
+    string StatusName {
+      get;
+    }
 
     DateTime PresentationTime {
       get;

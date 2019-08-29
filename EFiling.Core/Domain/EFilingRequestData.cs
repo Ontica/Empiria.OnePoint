@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.EFiling {
 
     static internal void WriteFilingRequest(EFilingRequest o) {
       var op = DataOperation.Parse("writeEOPFilingRequest", o.Id, o.UID,
-                    o.Procedure.Id, o.RequestedBy, o.Agency.Id, o.Agent.Id,
+                    o.Procedure.Id, o.RequestedBy.name, o.Agency.Id, o.Agent.Id,
                     o.ExtensionData.ToString(), o.Keywords,
                     o.LastUpdateTime, o.PostingTime, o.PostedBy.Id,
                     (char) o.Status, o.Integrity.GetUpdatedHashCode());

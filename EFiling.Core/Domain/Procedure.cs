@@ -44,6 +44,7 @@ namespace Empiria.OnePoint.EFiling {
 
     #endregion Constructors and parsers
 
+
     #region Properties
 
     [DataField("ObjectKey")]

@@ -23,16 +23,18 @@ namespace Empiria.OnePoint.EFiling {
     IFilingTransaction GetTransaction(string transactionUID);
 
 
-    IFilingTransaction SetPayment(string transactionUID, JsonObject paymentData);
+    IFilingTransaction SetPayment(string transactionUID, string receiptNo);
 
 
     IFilingTransaction SubmitTransaction(string transactionUID);
+
+
+    EPayments.PaymentOrderDTO TryGetPaymentOrderData(string transactionUID);
 
 
     IFilingTransaction UpdateTransaction(EFilingRequest filingRequest);
 
 
   }  // interface IFilingTransactionProvider
-
 
 }  // namespace Empiria.OnePoint.EFiling
