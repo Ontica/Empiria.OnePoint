@@ -19,43 +19,59 @@ namespace Empiria.OnePoint.EFiling {
     #region Use cases
 
 
-    static public EFilingRequest CreateEFilingRequest(JsonObject creationData) {
-      Assertion.AssertObject(creationData, "creationData");
+    //static public EFilingRequest CreateApplicationForm(string filingRequestUID, JsonObject formData) {
+    //  EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
+    //  Assertion.AssertObject(formData, "formData");
 
-      var filingRequest = new EFilingRequest(creationData);
+    //  var applicationForm = filingRequest.AddApplicationForm(formData);
+
+    //  applicationForm.Save();
+
+    //  return filingRequest;
+    //}
+
+
+    static public EFilingRequestDTO CreateEFilingRequest(CreateEFilingRequestDTO requestDTO) {
+      Assertion.AssertObject(requestDTO, "requestDTO");
+
+      var procedure = Procedure.Parse(requestDTO.procedureType);
+
+      var filingRequest = new EFilingRequest(procedure, requestDTO.requestedBy);
 
       filingRequest.Save();
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public EFilingRequest GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
+    static public EFilingRequestDTO GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       filingRequest.GeneratePaymentOrder();
 
       filingRequest.Save();
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public EFilingRequest GetEFilingRequest(string filingRequestUID) {
+    static public EFilingRequestDTO GetEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public FixedList<EFilingRequest> GetEFilingRequestListByStatus(EFilingRequestStatus status,
-                                                                          string keywords) {
-      return EFilingRequest.GetList(status, keywords);
+    static public FixedList<EFilingRequestDTO> GetEFilingRequestListByStatus(EFilingRequestStatus status,
+                                                                             string keywords) {
+      var list = EFilingRequest.GetList(status, keywords);
+
+      return EFilingMapper.Map(list);
     }
 
 
-    static public EFilingRequest RevokeEFilingRequestSign(string filingRequestUID,
-                                                          JsonObject revokeSignData) {
+    static public EFilingRequestDTO RevokeEFilingRequestSign(string filingRequestUID,
+                                                             JsonObject revokeSignData) {
       Assertion.AssertObject(revokeSignData, "revokeSignData");
 
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
@@ -64,12 +80,26 @@ namespace Empiria.OnePoint.EFiling {
 
       filingRequest.Save();
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public EFilingRequest SignEFilingRequest(string filingRequestUID,
-                                                    JsonObject signData) {
+    static public EFilingRequestDTO SetPaymentReceipt(string filingRequestUID,
+                                                      string receiptNo) {
+      Assertion.AssertObject(receiptNo, "receiptNo");
+
+      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
+
+      filingRequest.SetPaymentReceipt(receiptNo);
+
+      filingRequest.Save();
+
+      return EFilingMapper.Map(filingRequest);
+    }
+
+
+    static public EFilingRequestDTO SignEFilingRequest(string filingRequestUID,
+                                                       JsonObject signData) {
       Assertion.AssertObject(signData, "signData");
 
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
@@ -77,32 +107,43 @@ namespace Empiria.OnePoint.EFiling {
 
       filingRequest.Save();
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public EFilingRequest SubmitEFilingRequest(string filingRequestUID) {
+    static public EFilingRequestDTO SubmitEFilingRequest(string filingRequestUID) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
       filingRequest.Submit();
 
       filingRequest.Save();
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public EFilingRequest UpdateEFilingRequest(string filingRequestUID,
-                                                      JsonObject updateData) {
-      Assertion.AssertObject(updateData, "updateData");
-
+    static public EFilingRequestDTO UpdateApplicationForm(string filingRequestUID, JsonObject json) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
-      filingRequest.Update(updateData);
+      filingRequest.SetApplicationForm(json);
 
       filingRequest.Save();
 
-      return filingRequest;
+      return EFilingMapper.Map(filingRequest);
+    }
+
+
+    static public EFilingRequestDTO UpdateEFilingRequest(string filingRequestUID,
+                                                         Requester requestedBy) {
+      Assertion.AssertObject(requestedBy, "requestedBy");
+
+      var filingRequest = ParseEFilingRequest(filingRequestUID);
+
+      filingRequest.Update(requestedBy);
+
+      filingRequest.Save();
+
+      return EFilingMapper.Map(filingRequest);
     }
 
 
