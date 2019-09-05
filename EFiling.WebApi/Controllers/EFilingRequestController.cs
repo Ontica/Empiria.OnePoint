@@ -17,6 +17,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Public API to read and write electronic application filing requests,
   /// typically submitted to government agencies.</summary>
+  [WebApiAuthorizationFilter(WebApiClaimType.ClientApp_Controller, "Electronic.Filing.Client.Application")]
   public class EFilingRequestsController : WebApiController {
 
     #region Query API
