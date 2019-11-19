@@ -9,8 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-using Empiria.Json;
-
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Interface used to connect with external filing transaction providers.</summary>

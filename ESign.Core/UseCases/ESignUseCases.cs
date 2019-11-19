@@ -86,8 +86,25 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    static public FixedList<SignEventDTO> Sign(SignTaskDTO signTaskDTO) {
-      return ExecuteSignTask(signTaskDTO, SignEventType.Signed);
+    static public SignRequestDTO PostDocument(DocumentPostDTO document) {
+      // EnsureValidDocumentPostDTO(document);
+
+      SignableDocument signableDocument;
+
+      if (document.uid.Length != 0) {
+        signableDocument = SignableDocument.Parse(document.uid);
+      } else {
+        signableDocument = new SignableDocument(document);
+      }
+      signableDocument.Save();
+
+      var signRequest = new SignRequest(signableDocument);
+
+      signRequest.Update(document);
+
+      signRequest.Save();
+
+      return ESignMapper.Map(signRequest);
     }
 
 
@@ -98,6 +115,11 @@ namespace Empiria.OnePoint.ESign {
 
     static public FixedList<SignEventDTO> RevokeSign(SignTaskDTO signTaskDTO) {
       return ExecuteSignTask(signTaskDTO, SignEventType.Revoked);
+    }
+
+
+    static public FixedList<SignEventDTO> Sign(SignTaskDTO signTaskDTO) {
+      return ExecuteSignTask(signTaskDTO, SignEventType.Signed);
     }
 
 
@@ -125,8 +147,7 @@ namespace Empiria.OnePoint.ESign {
                              "signTaskDTO.signRequests");
 
       Assertion.Assert(signTaskDTO.signRequests.Count > 0,
-                      "signTaskDTO.signRequests must be a no empty array");
-
+                      "signTaskDTO.signRequests must be a non empty array");
     }
 
 

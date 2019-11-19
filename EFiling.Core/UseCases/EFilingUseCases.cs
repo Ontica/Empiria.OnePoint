@@ -11,6 +11,8 @@ using System;
 
 using Empiria.Json;
 
+// using Empiria.OnePoint.ESign;
+
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Use cases that implements electronic filing services.</summary>
@@ -99,11 +101,22 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static public EFilingRequestDTO SignEFilingRequest(string filingRequestUID,
-                                                       JsonObject signData) {
-      Assertion.AssertObject(signData, "signData");
+                                                       JsonObject signInputData) {
+      Assertion.AssertObject(signInputData, "signInputData");
 
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-      filingRequest.Sign(signData);
+
+      filingRequest.Sign(signInputData);
+
+      //DocumentPostDTO document = BuildDocumentPostDTO(filingRequest);
+
+      //SignRequestDTO signRequestDTO = ESignUseCases.PostDocument(document);
+
+      //SignTaskDTO signTaskDTO = BuildSignTaskDTO(signRequestDTO, signInputData);
+
+      //SignEventDTO signEvent = ESignUseCases.Sign(signTaskDTO)[0];
+
+      //filingRequest.SetESignData(BuildFilingRequestSignData(signEvent));
 
       filingRequest.Save();
 
@@ -151,6 +164,45 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #region Utility methods
+
+
+    //static private DocumentPostDTO BuildDocumentPostDTO(EFilingRequest filingRequest) {
+    //  SignRequestPostDTO signRequestDTO = new SignRequestPostDTO() {
+    //    requestedById = filingRequest.PostedBy.Id,
+    //    signerId = filingRequest.Agent.Id,
+    //    signatureKind = "Firma notario"
+    //  };
+
+    //  return new DocumentPostDTO() {
+    //    documentType = filingRequest.Procedure.DisplayName,
+    //    requestedBy = filingRequest.RequestedBy.name,
+    //    requestedTime = filingRequest.PostingTime,
+    //    signInputData = filingRequest.GetESignInputData(),
+    //    postedById = filingRequest.PostedBy.Id,
+    //    postingTime = DateTime.Now,
+    //    signRequests = new SignRequestPostDTO[1]{ signRequestDTO }
+    //  };
+    //}
+
+
+    //static private JsonObject BuildFilingRequestSignData(SignEventDTO signEvent) {
+    //  var json = new JsonObject();
+
+    //  json.Add("signature", signEvent.signRequest.digitalSignature);
+    //  json.Add("timestamp", signEvent.timeStamp);
+
+    //  return json;
+    //}
+
+
+    //static private SignTaskDTO BuildSignTaskDTO(SignRequestDTO signRequestDTO, JsonObject signInputData) {
+    //  return new SignTaskDTO() {
+    //    credentials = new SignCredentialsDTO() {
+    //      password = signInputData.Get<string>("signToken")
+    //    },
+    //    signRequests = new FixedList<string>(new string[1] { signRequestDTO.uid })
+    //  };
+    //}
 
 
     static private EFilingRequest ParseEFilingRequest(string filingRequestUID) {

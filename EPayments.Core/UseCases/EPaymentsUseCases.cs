@@ -60,13 +60,6 @@ namespace Empiria.OnePoint.EPayments {
 
     #endregion Use cases
 
-
-    #region Utility methods
-
-
-    #endregion Utility methods
-
-
   }  // class EPaymentsUseCases
 
 }  // namespace Empiria.OnePoint.EPayments

@@ -26,6 +26,20 @@ namespace Empiria.OnePoint.ESign {
       // Required by Empiria Framework.
     }
 
+
+    public SignableDocument(DocumentPostDTO document) {
+      this.DocumentType = document.documentType;
+      this.DocumentNo = document.documentNo;
+      this.TransactionNo = document.transactionNo;
+      this.RequestedBy = document.requestedBy;
+      this.RequestedTime = document.requestedTime;
+      this.Description = document.description;
+      this.SignInputData = document.signInputData;
+      this.PostedBy = Contact.Parse(document.postedById);
+      this.PostingTime = document.postingTime;
+    }
+
+
     static public SignableDocument Parse(int id) {
       return BaseObject.ParseId<SignableDocument>(id);
     }
@@ -86,6 +100,7 @@ namespace Empiria.OnePoint.ESign {
       private set;
     }
 
+
     public string Uri {
       get {
         if (DocumentNo.StartsWith("CE")) {
@@ -95,7 +110,8 @@ namespace Empiria.OnePoint.ESign {
           return $"{SignableDocumentsURL}/recording.seal.aspx?uid={DocumentNo}";
 
         } else {
-          throw Assertion.AssertNoReachThisCode("Unrecognized document type.");
+          return $"{SignableDocumentsURL}/recording.seal.aspx?uid={DocumentNo}";
+          // throw Assertion.AssertNoReachThisCode("Unrecognized document type.");
 
         }
       }
@@ -156,7 +172,7 @@ namespace Empiria.OnePoint.ESign {
           "RequestedBy", this.RequestedBy, "RequestedTime", this.RequestedTime,
           "Description", this.Description, "SignInputData", this.SignInputData,
           "ExtData", this.ExtensionData.ToString(), "PostingTime", this.PostingTime,
-          "PostedById", this.PostedBy.Id, "Status", this.Status
+          "PostedById", this.PostedBy.Id, "Status", (char) this.Status
         };
       }
       throw new SecurityException(SecurityException.Msg.WrongDIFVersionRequested, version);

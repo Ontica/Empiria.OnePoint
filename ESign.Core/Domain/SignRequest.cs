@@ -26,6 +26,11 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
+    internal SignRequest(SignableDocument document) {
+      this.Document = document;
+    }
+
+
     static public SignRequest Parse(int id) {
       return BaseObject.ParseId<SignRequest>(id);
     }
@@ -132,6 +137,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     private IntegrityValidator _validator;
+
     public IntegrityValidator Integrity {
       get {
         if (_validator == null) {
@@ -140,6 +146,7 @@ namespace Empiria.OnePoint.ESign {
         return _validator;
       }
     }
+
 
     #endregion Public properties
 
@@ -198,6 +205,13 @@ namespace Empiria.OnePoint.ESign {
 
     protected override void OnSave() {
       SignDataServices.WriteSignRequest(this);
+    }
+
+
+    internal void Update(DocumentPostDTO document) {
+      this.RequestedTime = document.requestedTime;
+      this.RequestedBy = Contact.Parse(document.signRequests[0].requestedById);
+      this.RequestedTo = Contact.Parse(document.signRequests[0].signerId);
     }
 
 

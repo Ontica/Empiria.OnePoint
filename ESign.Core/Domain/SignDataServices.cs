@@ -77,7 +77,14 @@ namespace Empiria.OnePoint.ESign {
 
 
     static internal void WriteDocument(SignableDocument o) {
-      throw new NotImplementedException();
+      var op = DataOperation.Parse("writeEOPSignableDocument", o.Id, o.UID,
+                    o.DocumentType, o.TransactionNo, o.DocumentNo,
+                    o.Description, o.RequestedBy, o.RequestedTime,
+                    o.SignInputData, o.ExtensionData.ToString(),
+                    o.Keywords, o.PostingTime,  o.PostedBy.Id, (char) o.Status,
+                    o.Integrity.GetUpdatedHashCode());
+
+      DataWriter.Execute(op);
     }
 
 

@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Data;
+
 using Empiria.Contacts;
 using Empiria.Json;
 using Empiria.Security;
@@ -158,6 +159,12 @@ namespace Empiria.OnePoint.EFiling {
       }
     }
 
+
+    //internal void SetESignData(JsonObject eSignData) {
+    //  ExtensionData.Set("esign", eSignData);
+    //}
+
+
     public JsonObject ApplicationForm {
       get {
         return ExtensionData.Slice("appForm", false);
@@ -167,7 +174,7 @@ namespace Empiria.OnePoint.EFiling {
 
     public string ElectronicSign {
       get {
-        return ExtensionData.Get("esign/sign", String.Empty);
+        return ExtensionData.Get("esign/signature", String.Empty);
       }
     }
 
@@ -212,6 +219,11 @@ namespace Empiria.OnePoint.EFiling {
       }
     }
 
+    internal string GetESignInputData() {
+      return EmpiriaString.BuildDigitalString(this.Id, this.UID, this.Procedure.Id, this.RequestedBy,
+                                              this.Agency.Id, this.Agent.Id, this.LastUpdateTime,
+                                              this.ApplicationForm.ToString());
+    }
 
     internal EPayments.PaymentOrderDTO GetPaymentOrder() {
       Assertion.AssertObject(this.TransactionUID, "this.TransactionUID");
@@ -223,7 +235,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal string GetPaymentReceipt() {
-      return this.ExtensionData.Get("paymentData/receiptNo", "");
+      return this.ExtensionData.Get("paymentData/receiptNo", String.Empty);
     }
 
 
@@ -259,6 +271,7 @@ namespace Empiria.OnePoint.EFiling {
     internal void SetPaymentReceipt(string receiptNo) {
       this.ExtensionData.Set("paymentData/receiptNo", receiptNo);
     }
+
 
     internal void SetRequester(Requester requester) {
       this.RequestedBy = requester;

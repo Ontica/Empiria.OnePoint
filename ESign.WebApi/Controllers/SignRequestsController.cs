@@ -76,6 +76,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
     #region Command methods
 
+
     [HttpPost]
     [Route("v2/e-sign/requests/mine/signed")]
     public CollectionModel Sign([FromBody] SignTaskDTO signTaskDTO) {
@@ -147,6 +148,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     #region Utility methods
+
 
     private void AssertSignTaskDTOIsValid(SignTaskDTO signTaskDTO) {
       base.RequireBody(signTaskDTO);
