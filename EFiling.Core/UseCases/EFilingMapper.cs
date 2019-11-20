@@ -53,7 +53,7 @@ namespace Empiria.OnePoint.EFiling {
 
       if (request.ElectronicSign.Length != 0) {
         r.esign = new ESignDataDTO {
-          hash = request.UID.ToString().Substring(0, 8).ToUpperInvariant(),
+          hash = request.GetSecurityHash(),
           seal = request.GetElectronicSeal(),
           sign = request.ElectronicSign
         };

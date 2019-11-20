@@ -10,6 +10,7 @@
 using System;
 
 using Empiria.Data;
+using Empiria.Security;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -19,14 +20,14 @@ namespace Empiria.OnePoint.EFiling {
     #region Internal methods
 
     static internal FixedList<EFilingRequest> GetList(EFilingRequestStatus status, string keywords) {
-      string filter = status != EFilingRequestStatus.All ? $"RequestStatus = '{(char) status}'" : String.Empty;
+      int agencyId = EFilingUserContext.Current().Agency.Id;
+
+      string filter = status != EFilingRequestStatus.All ? $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}'"
+                                                         : $"AgencyId = {agencyId}";
 
       string likeKeywords = SearchExpression.ParseAndLikeKeywords("RequestKeywords", keywords);
       if (!String.IsNullOrWhiteSpace(keywords)) {
-        if (filter.Length != 0) {
-          filter += " AND ";
-        }
-        filter += likeKeywords;
+        filter += " AND " + likeKeywords;
       }
 
       string sort = "PostingTime DESC";

@@ -86,6 +86,17 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    static public EFilingRequestDTO SendEFilingRequestToSign(string filingRequestUID) {
+      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
+
+      filingRequest.SendToSign();
+
+      filingRequest.Save();
+
+      return EFilingMapper.Map(filingRequest);
+    }
+
+
     static public EFilingRequestDTO SetPaymentReceipt(string filingRequestUID,
                                                       string receiptNo) {
       Assertion.AssertObject(receiptNo, "receiptNo");

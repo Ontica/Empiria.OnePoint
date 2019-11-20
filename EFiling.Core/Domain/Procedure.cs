@@ -9,6 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Json;
+
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Defines a procedure and its rules.</summary>
@@ -61,10 +63,25 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    [DataField("ObjectExtData")]
+    public JsonObject ExtensionData {
+      get;
+      private set;
+    } = new JsonObject();
+
+
+    public bool RequiresSign {
+      get {
+        return this.ExtensionData.Get("requiresSign", true);
+      }
+    }
+
+
     #endregion Properties
 
 
     #region Methods
+
 
     internal IFilingTransactionProvider GetFilingTransactionProvider() {
       return ExternalProviders.GetFilingTransactionProvider(this);

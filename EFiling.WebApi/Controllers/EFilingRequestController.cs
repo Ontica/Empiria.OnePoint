@@ -121,6 +121,20 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/send-to-sign")]
+    public SingleObjectModel SendToSign([FromUri] string filingRequestUID) {
+      try {
+        EFilingRequestDTO filingRequest = EFilingUseCases.SendEFilingRequestToSign(filingRequestUID);
+
+        return GenerateResponse(filingRequest);
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+      }
+    }
+
+
+    [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/set-payment-receipt")]
     public SingleObjectModel SetPaymentReceipt([FromUri] string filingRequestUID,
                                                [FromBody] object paymentData) {
