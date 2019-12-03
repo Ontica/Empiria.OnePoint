@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 using Empiria.Json;
@@ -73,10 +74,10 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/generate-payment-order")]
-    public SingleObjectModel GeneratePaymentOrderForEFilingRequest([FromUri] string filingRequestUID) {
+    public async Task<SingleObjectModel> GeneratePaymentOrderForEFilingRequest([FromUri] string filingRequestUID) {
       try {
         EFilingRequestDTO filingRequest =
-                          EFilingUseCases.GeneratePaymentOrderForEFilingRequest(filingRequestUID);
+                          await EFilingUseCases.GeneratePaymentOrderForEFilingRequest(filingRequestUID);
 
         return GenerateResponse(filingRequest);
 

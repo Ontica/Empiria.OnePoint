@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.EFiling {
         r.form = appForm;
       }
 
-      if (request.ElectronicSign.Length != 0) {
+      if (request.IsSigned) {
         r.esign = new ESignDataDTO {
           hash = request.GetSecurityHash(),
           seal = request.GetElectronicSeal(),
@@ -59,18 +59,22 @@ namespace Empiria.OnePoint.EFiling {
         };
       }
 
-      if (request.TransactionUID.Length != 0) {
+      if (request.HasTransaction) {
         var t = request.GetTransaction();
+
+        Assertion.AssertObject(t, $"Can't retrive transaction with UID ${t.UID}.");
 
         var p = request.GetPaymentOrder();
 
-        r.paymentOrder = new PaymentOrderDTO {
-          urlPath = $"land.registration.system.transactions/bank.payment.order.aspx?id={t.Id}",
-          routeNumber = p.RouteNumber,
-          receiptNo = request.GetPaymentReceipt(),
-          dueDate = p.DueDate,
-          total = p.PaymentTotal
-        };
+        if (p != null) {
+          r.paymentOrder = new PaymentOrderDTO {
+            urlPath = $"land.registration.system.transactions/bank.payment.order.aspx?id={t.Id}",
+            routeNumber = p.RouteNumber,
+            receiptNo = request.GetPaymentReceipt(),
+            dueDate = p.DueDate,
+            total = p.PaymentTotal
+          };
+        }
 
         r.transaction = new TransactionDataDTO {
           uid = t.UID,
@@ -79,6 +83,15 @@ namespace Empiria.OnePoint.EFiling {
         };
 
       }
+
+      var userContext = EFilingUserContext.Current();
+
+      r.permissions = new PermissionsDTO {
+        canManage = userContext.IsManager,
+        canRegister = userContext.IsRegister,
+        canSendToSign = userContext.IsRegister && !userContext.IsSigner,
+        canSign = userContext.IsSigner
+      };
 
       return r;
     }

@@ -72,6 +72,12 @@ namespace Empiria.OnePoint.EFiling {
       internal set;
     }
 
+
+    public PermissionsDTO permissions {
+      get;
+      internal set;
+    }
+
   }  // class EFilingRequestDTO
 
 
@@ -220,5 +226,33 @@ namespace Empiria.OnePoint.EFiling {
     }
 
   }  // class NamedStatus
+
+
+
+  /// <summary>User permissions over a filing request.</summary>
+  public class PermissionsDTO {
+
+    public bool canManage {
+      get;
+      internal set;
+    }
+
+    public bool canRegister {
+      get;
+      internal set;
+    }
+
+    public bool canSendToSign {
+      get;
+      internal set;
+    }
+
+    public bool canSign {
+      get;
+      internal set;
+    }
+
+  }  // class PermissionsDTO
+
 
 } // namespace Empiria.OnePoint.EFiling

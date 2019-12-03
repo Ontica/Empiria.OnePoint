@@ -18,9 +18,7 @@ namespace Empiria.OnePoint.EFiling {
 
     Pending = 'P',
 
-    OnSign = 'G',
-
-    Signed = 'S',
+    OnSign = 'S',
 
     OnPayment = 'Y',
 

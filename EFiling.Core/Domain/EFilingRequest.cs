@@ -9,15 +9,27 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Data;
+using System.Threading.Tasks;
 
 using Empiria.Contacts;
 using Empiria.Json;
 using Empiria.Security;
 
+using Empiria.OnePoint.EPayments;
+
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Represents an electronic filing request typically submitted to a government agency.</summary>
   public class EFilingRequest : BaseObject, IProtected {
+
+
+    #region Fields
+
+    static private readonly bool USE_PAYMENT_ORDER_MOCK_SERVICE =
+                                                ConfigurationData.Get("UsePaymentOrderMockService", false);
+
+    #endregion Fields
+
 
     #region Constructors and parsers
 
@@ -161,9 +173,6 @@ namespace Empiria.OnePoint.EFiling {
           case EFilingRequestStatus.OnSign:
             return "En firma";
 
-          case EFilingRequestStatus.Signed:
-            return "Firmada";
-
           case EFilingRequestStatus.OnPayment:
             return "Por pagar";
 
@@ -251,14 +260,7 @@ namespace Empiria.OnePoint.EFiling {
     #region Public methods
 
 
-    internal void Delete() {
-      EnsureCanBeEdited();
-
-      this.Status = EFilingRequestStatus.Deleted;
-    }
-
-
-    internal void GeneratePaymentOrder() {
+    internal void CreateTransaction() {
       if (this.HasTransaction) {
         return;
       }
@@ -268,8 +270,44 @@ namespace Empiria.OnePoint.EFiling {
       var transaction = transactionProvider.CreateTransaction(this);
 
       ExtensionData.Set("transaction/uid", transaction.UID);
+    }
+
+
+    internal void Delete() {
+      EnsureCanBeEdited();
+
+      this.Status = EFilingRequestStatus.Deleted;
+    }
+
+
+    internal async Task GeneratePaymentOrder() {
+      if (!this.HasTransaction) {
+        return;
+      }
+
+      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
+
+      var transaction = transactionProvider.GetTransactionAsPayable(this.TransactionUID);
+
+      EPayments.PaymentOrderDTO paymentOrder = await GeneratePaymentOrder(transaction).ConfigureAwait(false);
+
+      transactionProvider.SetPaymentOrder(transaction, paymentOrder);
 
       this.Status = EFilingRequestStatus.OnPayment;
+    }
+
+
+    private async Task<EPayments.PaymentOrderDTO> GeneratePaymentOrder(IPayable transaction) {
+      try {
+        if (!USE_PAYMENT_ORDER_MOCK_SERVICE) {
+          return await EPaymentsUseCases.RequestPaymentOrderData(transaction)
+                                        .ConfigureAwait(false);
+        } else {
+          return PaymentOrderMockData();
+        }
+      } catch (Exception e) {
+        throw new InvalidCastException("No puedo generar la orden de pago", e);
+      }
     }
 
 
@@ -390,7 +428,7 @@ namespace Empiria.OnePoint.EFiling {
       JsonObject signData = requestSigner.Sign(credentials);
       this.ExtensionData.Set("esign", signData);
 
-      this.Status = EFilingRequestStatus.Signed;
+      this.Status = EFilingRequestStatus.OnPayment;
       this.LastUpdateTime = DateTime.Now;
     }
 
@@ -464,6 +502,14 @@ namespace Empiria.OnePoint.EFiling {
 
       Assertion.Assert(userContext.User.Equals(this.Agent),
                       "Current user is not the same as this filing signer.");
+    }
+
+
+    private EPayments.PaymentOrderDTO PaymentOrderMockData() {
+      var routeNumber = EmpiriaString.BuildRandomString(16, 16);
+      var controlTag = EmpiriaString.BuildRandomString(6, 6);
+
+      return new OnePoint.EPayments.PaymentOrderDTO(routeNumber, DateTime.Today.AddDays(20), controlTag);
     }
 
 

@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Threading.Tasks;
 
 using Empiria.Json;
 
@@ -46,10 +47,14 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
+    static public async Task<EFilingRequestDTO> GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
-      filingRequest.GeneratePaymentOrder();
+      if (!filingRequest.HasTransaction) {
+        filingRequest.CreateTransaction();
+      }
+
+      await filingRequest.GeneratePaymentOrder();
 
       filingRequest.Save();
 

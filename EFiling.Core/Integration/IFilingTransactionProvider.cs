@@ -9,19 +9,27 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.OnePoint.EPayments;
+
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Interface used to connect with external filing transaction providers.</summary>
   public interface IFilingTransactionProvider {
 
 
-    IFilingTransaction CreateTransaction(EFilingRequest filingRequest);
+    IPayable CreateTransaction(EFilingRequest filingRequest);
 
 
     IFilingTransaction GetTransaction(string transactionUID);
 
 
+    IPayable GetTransactionAsPayable(string transactionUID);
+
+
     IFilingTransaction SetPayment(string transactionUID, string receiptNo);
+
+
+    IFilingTransaction SetPaymentOrder(IPayable transaction, OnePoint.EPayments.PaymentOrderDTO paymentOrderData);
 
 
     IFilingTransaction SubmitTransaction(string transactionUID);
