@@ -273,6 +273,13 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    internal void UpdateTransaction() {
+      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
+
+      transactionProvider.UpdateTransaction(this);
+    }
+
+
     internal void Delete() {
       EnsureCanBeEdited();
 

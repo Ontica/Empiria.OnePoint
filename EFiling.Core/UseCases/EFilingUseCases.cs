@@ -22,18 +22,6 @@ namespace Empiria.OnePoint.EFiling {
     #region Use cases
 
 
-    //static public EFilingRequest CreateApplicationForm(string filingRequestUID, JsonObject formData) {
-    //  EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-    //  Assertion.AssertObject(formData, "formData");
-
-    //  var applicationForm = filingRequest.AddApplicationForm(formData);
-
-    //  applicationForm.Save();
-
-    //  return filingRequest;
-    //}
-
-
     static public EFilingRequestDTO CreateEFilingRequest(CreateEFilingRequestDTO requestDTO) {
       Assertion.AssertObject(requestDTO, "requestDTO");
 
@@ -52,7 +40,10 @@ namespace Empiria.OnePoint.EFiling {
 
       if (!filingRequest.HasTransaction) {
         filingRequest.CreateTransaction();
+      } else {
+        filingRequest.UpdateTransaction();
       }
+      filingRequest.Save();
 
       await filingRequest.GeneratePaymentOrder();
 
