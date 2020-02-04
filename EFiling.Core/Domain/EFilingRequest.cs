@@ -287,6 +287,11 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    internal void Finish() {
+      this.Status = EFilingRequestStatus.Finished;
+    }
+
+
     internal async Task GeneratePaymentOrder() {
       if (!this.HasTransaction) {
         return;

@@ -26,6 +26,9 @@ namespace Empiria.OnePoint.EFiling {
     IPayable GetTransactionAsPayable(string transactionUID);
 
 
+    void MarkAsReceived(string transactionUID);
+
+
     IFilingTransaction SetPayment(string transactionUID, string receiptNo);
 
 
@@ -39,7 +42,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     IFilingTransaction UpdateTransaction(EFilingRequest filingRequest);
-
 
   }  // interface IFilingTransactionProvider
 
