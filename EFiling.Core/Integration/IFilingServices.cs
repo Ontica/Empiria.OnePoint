@@ -11,13 +11,16 @@ using System;
 
 namespace Empiria.OnePoint.EFiling {
 
-
   /// <summary>Interface used to gain access electronic filing services.</summary>
   public interface IFilingServices {
 
+
+    EFilingRequest GetEFilingRequest(string filingRequestUID);
+
+
     void NotifyEvent(string filingRequestUID, string eventName);
 
-  }  // interface IFilingServices
 
+  }  // interface IFilingServices
 
 }  // namespace Empiria.OnePoint.EFiling
