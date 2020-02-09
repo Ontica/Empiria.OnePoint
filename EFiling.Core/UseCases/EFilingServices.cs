@@ -16,6 +16,18 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Services
 
+
+    public EFilingRequest GetEFilingRequest(string filingRequestUID) {
+      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
+
+      var filingRequest = EFilingRequest.TryParse(filingRequestUID);
+
+      Assertion.AssertObject(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
+
+      return filingRequest;
+    }
+
+
     public void NotifyEvent(string filingRequestUID, string eventName) {
       Assertion.AssertObject(filingRequestUID, "filingRequestUID");
       Assertion.AssertObject(eventName, "eventName");
