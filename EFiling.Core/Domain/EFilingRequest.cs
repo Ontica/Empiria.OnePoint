@@ -67,7 +67,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-
     #endregion Constructors and parsers
 
     #region Public properties
@@ -205,6 +204,13 @@ namespace Empiria.OnePoint.EFiling {
     public bool HasTransaction {
       get {
         return this.TransactionUID.Length != 0;
+      }
+    }
+
+
+    public bool IsClosed {
+      get {
+        return (this.Status == EFilingRequestStatus.Finished || this.Status == EFilingRequestStatus.Rejected);
       }
     }
 

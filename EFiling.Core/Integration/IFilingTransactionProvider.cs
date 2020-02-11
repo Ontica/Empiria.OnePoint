@@ -20,6 +20,9 @@ namespace Empiria.OnePoint.EFiling {
     IPayable CreateTransaction(EFilingRequest filingRequest);
 
 
+    FixedList<EFilingDocumentDTO> GetOutputDocuments(string transactionUID);
+
+
     IFilingTransaction GetTransaction(string transactionUID);
 
 
@@ -30,7 +33,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     IFilingTransaction SetPayment(string transactionUID, string receiptNo);
-
 
     IFilingTransaction SetPaymentOrder(IPayable transaction, OnePoint.EPayments.PaymentOrderDTO paymentOrderData);
 

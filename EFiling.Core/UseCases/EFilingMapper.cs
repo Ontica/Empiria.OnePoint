@@ -84,6 +84,10 @@ namespace Empiria.OnePoint.EFiling {
 
       }
 
+      if (request.HasTransaction && request.IsClosed) {
+        r.outputDocuments = GetOutputDocuments(request);
+      }
+
       var userContext = EFilingUserContext.Current();
 
       r.permissions = new PermissionsDTO {
@@ -94,6 +98,13 @@ namespace Empiria.OnePoint.EFiling {
       };
 
       return r;
+    }
+
+
+    private static FixedList<EFilingDocumentDTO> GetOutputDocuments(EFilingRequest filingRequest) {
+      var provider = ExternalProviders.GetFilingTransactionProvider(filingRequest.Procedure);
+
+      return provider.GetOutputDocuments(filingRequest.TransactionUID);
     }
 
   }  // class EFilingMapper

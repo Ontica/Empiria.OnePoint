@@ -9,9 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-using Empiria.Json;
-
-
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Electronic filing request DTO.</summary>
@@ -57,20 +54,35 @@ namespace Empiria.OnePoint.EFiling {
       internal set;
     }
 
+
     public PaymentOrderDTO paymentOrder {
       get;
       internal set;
     }
+
 
     public ESignDataDTO esign {
       get;
       internal set;
     }
 
+
     public TransactionDataDTO transaction {
       get;
       internal set;
     }
+
+
+    public FixedList<EFilingDocumentDTO> inputDocuments {
+      get;
+      internal set;
+    } = new FixedList<EFilingDocumentDTO>();
+
+
+    public FixedList<EFilingDocumentDTO> outputDocuments {
+      get;
+      internal set;
+    } = new FixedList<EFilingDocumentDTO>();
 
 
     public PermissionsDTO permissions {
