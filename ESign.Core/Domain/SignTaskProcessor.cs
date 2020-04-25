@@ -35,7 +35,7 @@ namespace Empiria.OnePoint.ESign {
     internal FixedList<SignEvent> Execute(SignTask task) {
       Assertion.AssertObject(task, "task");
 
-      this.EnsureValidCredentials(task);
+      this.EnsureValidCredentials(task.SignCredentials);
 
       var eventsList = new List<SignEvent>(task.SignRequests.Count);
 
@@ -89,10 +89,10 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    private void EnsureValidCredentials(SignTask signTask) {
-      //Assertion.Assert(signTask.SignCredentials.Password == "prueba1",
-      //                 "No reconozco la contraseña para ejecutar la firma electrónica.");
-    }
+    private void EnsureValidCredentials(SignCredentials credentials) {
+      SecureString securedPassword = Cryptographer.ConvertToSecureString(credentials.Password);
+
+      Cryptographer.AssertValidPrivateKeyPassword(securedPassword);    }
 
 
     static private string SignData(SignCredentials credentials, string inputData) {
