@@ -33,21 +33,12 @@ namespace Empiria.OnePoint.EFiling {
       Assertion.AssertObject(eventName, "eventName");
 
       switch (eventName) {
-
         case "TransactionReceived":
-          return;
-
         case "TransactionReadyToDelivery":
-          TransactionReadyToDelivery(filingRequestUID, eventName);
-          return;
-
         case "TransactionReturned":
-          return;
-
         case "TransactionArchived":
-          return;
-
         case "TransactionReentered":
+          ChangeTransactionStatus(filingRequestUID, eventName);
           return;
 
         default:
@@ -62,17 +53,43 @@ namespace Empiria.OnePoint.EFiling {
     #region Implementation
 
 
-    private void TransactionReadyToDelivery(string filingRequestUID, string eventName) {
+    private void ChangeTransactionStatus(string filingRequestUID, string eventName) {
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
       Assertion.AssertObject(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
-      var externalProvider = ExternalProviders.GetFilingTransactionProvider(null);
+      IFilingTransactionProvider externalProvider = ExternalProviders.GetFilingTransactionProvider(null);
 
-      externalProvider.MarkAsReceived(filingRequest.TransactionUID);
+      externalProvider.EventProcessed(filingRequest.TransactionUID, eventName);
 
-      filingRequest.Finish();
+      var newStatus = GetNewStatusAfterEvent(eventName);
+
+      filingRequest.UpdateStatus(newStatus);
+
       filingRequest.Save();
+    }
+
+
+    private EFilingRequestStatus GetNewStatusAfterEvent(string eventName) {
+      switch (eventName) {
+        case "TransactionReceived":
+          return EFilingRequestStatus.Submitted;
+
+        case "TransactionReadyToDelivery":
+          return EFilingRequestStatus.Finished;
+
+        case "TransactionReturned":
+          return EFilingRequestStatus.Rejected;
+
+        case "TransactionArchived":
+          return EFilingRequestStatus.Finished;
+
+        case "TransactionReentered":
+          return EFilingRequestStatus.Submitted;
+
+        default:
+          throw Assertion.AssertNoReachThisCode($"Unrecognized external event with name '{eventName}'");
+      }
     }
 
 

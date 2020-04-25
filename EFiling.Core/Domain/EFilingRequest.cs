@@ -69,6 +69,7 @@ namespace Empiria.OnePoint.EFiling {
 
     #endregion Constructors and parsers
 
+
     #region Public properties
 
     [DataField("ProcedureId")]
@@ -210,7 +211,8 @@ namespace Empiria.OnePoint.EFiling {
 
     public bool IsClosed {
       get {
-        return (this.Status == EFilingRequestStatus.Finished || this.Status == EFilingRequestStatus.Rejected);
+        return (this.Status == EFilingRequestStatus.Finished ||
+                this.Status == EFilingRequestStatus.Rejected);
       }
     }
 
@@ -290,11 +292,6 @@ namespace Empiria.OnePoint.EFiling {
       EnsureCanBeEdited();
 
       this.Status = EFilingRequestStatus.Deleted;
-    }
-
-
-    internal void Finish() {
-      this.Status = EFilingRequestStatus.Finished;
     }
 
 
@@ -470,6 +467,11 @@ namespace Empiria.OnePoint.EFiling {
       EnsureCanBeEdited();
 
       this.SetRequester(requestedBy);
+    }
+
+
+    internal void UpdateStatus(EFilingRequestStatus newStatus) {
+      this.Status = newStatus;
     }
 
 
