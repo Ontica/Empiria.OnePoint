@@ -70,6 +70,26 @@ namespace Empiria.OnePoint.EFiling {
     } = new JsonObject();
 
 
+    public int AuthorityOfficeId {
+      get {
+        return this.ExtensionData.Get<int>("authorityOfficeId");
+      }
+    }
+
+    public int TransactionTypeId {
+      get {
+        return this.ExtensionData.Get<int>("transactionTypeId");
+      }
+    }
+
+
+    public int DocumentTypeId {
+      get {
+        return this.ExtensionData.Get<int>("documentTypeId");
+      }
+    }
+
+
     public bool RequiresSign {
       get {
         return this.ExtensionData.Get("requiresSign", true);

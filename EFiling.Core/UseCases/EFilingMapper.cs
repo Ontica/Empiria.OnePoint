@@ -107,6 +107,7 @@ namespace Empiria.OnePoint.EFiling {
       return provider.GetOutputDocuments(filingRequest.TransactionUID);
     }
 
+
   }  // class EFilingMapper
 
 }  // namespace Empiria.OnePoint.ESign
