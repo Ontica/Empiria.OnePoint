@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Empiria Object Type                     *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Empiria BaseObject                      *
 *  Type     : EFilingRequest                             License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents an electronic filing request typically submitted to a government agency.            *
@@ -15,30 +15,21 @@ using Empiria.Contacts;
 using Empiria.Json;
 using Empiria.Security;
 
-using Empiria.OnePoint.EPayments;
-
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Represents an electronic filing request typically submitted to a government agency.</summary>
   public class EFilingRequest : BaseObject, IProtected {
 
 
-    #region Fields
-
-    static private readonly bool USE_PAYMENT_ORDER_MOCK_SERVICE =
-                                                ConfigurationData.Get("UsePaymentOrderMockService", false);
-
-    #endregion Fields
-
-
     #region Constructors and parsers
 
     private EFilingRequest() {
       // Required by Empiria Framework
+      this.ExternalServicesHandler = new EFilingExternalServicesInteractor(this);
     }
 
 
-    public EFilingRequest(Procedure procedure, Requester requestedBy) {
+    public EFilingRequest(Procedure procedure, Requester requestedBy) : this() {
       Assertion.AssertObject(procedure, "procedure");
       Assertion.AssertObject(requestedBy, "requestedBy");
 
@@ -46,6 +37,7 @@ namespace Empiria.OnePoint.EFiling {
 
       this.Procedure = procedure;
       this.SetRequester(requestedBy);
+      this.SetUserContextData();
     }
 
 
@@ -55,17 +47,30 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static public FixedList<EFilingRequest> GetList(EFilingRequestStatus status,
-                                                    string keywords) {
-      return EFilingRequestData.GetList(status, keywords);
+                                                    string keywords, int count = -1) {
+      return EFilingRequestData.GetList(status, keywords, count);
     }
 
 
     protected override void OnLoadObjectData(DataRow row) {
-      this.RequestedBy.email = this.ExtensionData.Get("requestedByData/email", String.Empty);
-      this.RequestedBy.phone = this.ExtensionData.Get("requestedByData/phone", String.Empty);
-      this.RequestedBy.rfc = this.ExtensionData.Get("requestedByData/rfc", String.Empty);
-    }
+      var json = this.ExtensionData.Slice("requestedByData", false);
 
+      this.RequestedBy.Load(json);
+
+      if (this.TransactionUID.Length != 0 && this.Transaction.UID.Length == 0) {
+        this.Transaction = new EFilingTransaction(this.ExtensionData.Get<string>("transaction/uid"));
+      }
+
+      if (this.Transaction.ExtensionData.Contains("paymentData")) {
+        this.PaymentOrder = EFilingPaymentOrder.Parse(this.Transaction.ExtensionData.Slice("paymentData"));
+
+      } else if (this.ExtensionData.Contains("paymentData/receiptNo")) {
+        var receiptNo = this.ExtensionData.Get<string>("paymentData/receiptNo");
+
+        this.PaymentOrder = new EFilingPaymentOrder();
+        this.PaymentOrder.ReceiptNo = receiptNo;
+      }
+    }
 
     #endregion Constructors and parsers
 
@@ -130,14 +135,14 @@ namespace Empiria.OnePoint.EFiling {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(this.RequestedBy.name,
+        return EmpiriaString.BuildKeywords(this.RequestedBy.Name,
                                            this.Procedure.DisplayName);
       }
     }
 
 
-    [DataField("LastUpdateTime", Default = "ExecutionServer.DateMinValue")]
-    public DateTime LastUpdateTime {
+    [DataField("RequestLastUpdate", Default = "ExecutionServer.DateMinValue")]
+    public DateTime LastUpdate {
       get;
       private set;
     }
@@ -195,26 +200,18 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    public string ElectronicSign {
-      get {
-        return ExtensionData.Get("esign/signature", String.Empty);
-      }
-    }
-
-
-    public bool HasTransaction {
-      get {
-        return this.TransactionUID.Length != 0;
-      }
-    }
-
-
     public bool IsClosed {
       get {
         return (this.Status == EFilingRequestStatus.Finished ||
                 this.Status == EFilingRequestStatus.Rejected);
       }
     }
+
+
+    #endregion Public properties
+
+
+    #region Electronic sign
 
 
     public bool IsSigned {
@@ -224,12 +221,183 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    public string TransactionUID {
+    public string ElectronicSign {
+      get {
+        return ExtensionData.Get("esign/signature", String.Empty);
+      }
+    }
+
+
+    private void EnsureCanBeSigned() {
+      Assertion.Assert(!this.IsSigned, "This filing was already signed.");
+
+      var userContext = EFilingUserContext.Current();
+
+      Assertion.Assert(userContext.IsSigner, "Current user can't sign this filing.");
+    }
+
+
+    private void EnsureCanRevokeSign() {
+      Assertion.Assert(this.IsSigned, "This filing is not signed.");
+
+      var userContext = EFilingUserContext.Current();
+
+      Assertion.Assert(userContext.IsSigner, "Current user can't revoke sign.");
+
+      Assertion.Assert(userContext.User.Equals(this.Agent),
+                      "Current user is not the same as this filing signer.");
+    }
+
+
+    internal string GetSecurityHash() {
+      return Cryptographer.CreateHashCode(this.GetElectronicSeal(),
+                                          this.UID)
+                          .Substring(0, 8)
+                          .ToUpperInvariant();
+    }
+
+
+    internal virtual string GetElectronicSeal() {
+      var text = this.GetESignInputData();
+
+      return Cryptographer.CreateHashCode(text, this.UID);
+    }
+
+
+    internal string GetESignInputData() {
+      return EmpiriaString.BuildDigitalString(this.Id, this.UID, this.Procedure.Id, this.RequestedBy,
+                                              this.Agency.Id, this.Agent.Id, this.AuthorizationTime,
+                                              this.ApplicationForm.ToString());
+    }
+
+
+    internal void RevokeSign(JsonObject credentials) {
+      Assertion.AssertObject(credentials, "credentials");
+
+      this.EnsureCanRevokeSign();
+
+      var requestSigner = new EFilingRequestSigner(this);
+
+      requestSigner.RevokeSign(credentials);
+
+      this.AuthorizationTime = ExecutionServer.DateMaxValue;
+
+      this.ExtensionData.Remove("esign");
+
+      this.Status = EFilingRequestStatus.Pending;
+      this.LastUpdate = ExecutionServer.DateMinValue;
+    }
+
+
+    internal void SendToSign() {
+      EnsureCanBeEdited();
+
+      this.Status = EFilingRequestStatus.OnSign;
+    }
+
+
+    internal void Sign(JsonObject credentials) {
+      Assertion.AssertObject(credentials, "credentials");
+
+      EnsureCanBeSigned();
+
+      var requestSigner = new EFilingRequestSigner(this);
+
+      this.AuthorizationTime = DateTime.Now;
+
+      JsonObject signData = requestSigner.Sign(credentials);
+      this.ExtensionData.Set("esign", signData);
+
+      this.LastUpdate = DateTime.Now;
+
+      this.Status = EFilingRequestStatus.OnPayment;
+    }
+
+    #endregion Electronic sign
+
+
+    #region Transaction data
+
+    public bool HasTransaction {
+      get {
+        return this.TransactionUID.Length != 0 || this.Transaction.UID.Length != 0;
+      }
+    }
+
+
+    [DataObject()]
+    public EFilingTransaction Transaction {
+      get;
+      private set;
+    }
+
+
+    private string TransactionUID {
       get {
         return ExtensionData.Get("transaction/uid", String.Empty);
       }
     }
 
+
+    internal async Task CreateTransaction() {
+      Assertion.Assert(!this.HasTransaction, $"A transaction was already linked to this request.");
+
+      var createdTransaction = await this.ExternalServicesHandler.CreateTransaction();
+
+      this.Transaction = new EFilingTransaction(createdTransaction.UID);
+
+      await this.Transaction.Synchronize(this.ExternalServicesHandler);
+    }
+
+
+    internal void RemoveOldTransactionData_REFACTORING() {
+      Assertion.AssertObject(this.Transaction.UID, $"NEW TRANSACTION NOT LINKED.");
+
+      // ExtensionData.Remove("transactionuid");
+      ExtensionData.Remove("transaction");
+
+      // ExtensionData.Remove("paymentData/receiptNo");
+      ExtensionData.Remove("paymentData");
+
+    }
+
+
+    #endregion Transaction data
+
+
+    #region Payment data
+
+    public bool HasPaymentOrder {
+      get {
+        return this.PaymentOrder.RouteNumber.Length != 0;
+      }
+    }
+
+
+    internal EFilingPaymentOrder PaymentOrder {
+      get;
+      private set;
+    } = EFilingPaymentOrder.Empty;
+
+
+    internal async Task CreatePaymentOrder() {
+      var dto = await this.ExternalServicesHandler.GeneratePaymentOrder();
+
+      this.PaymentOrder = new EFilingPaymentOrder(dto);
+    }
+
+
+    internal void SetPaymentReceipt(string receiptNo) {
+      Assertion.AssertObject(receiptNo, "receiptNo");
+
+      this.PaymentOrder.ReceiptNo = receiptNo;
+    }
+
+
+    #endregion Payment data
+
+
+    #region Integrity validation
 
     int IProtected.CurrentDataIntegrityVersion {
       get {
@@ -237,13 +405,14 @@ namespace Empiria.OnePoint.EFiling {
       }
     }
 
+
     object[] IProtected.GetDataIntegrityFieldValues(int version) {
       if (version == 1) {
         return new object[] {
           1, "Id", this.Id, "UID", this.UID,
-          "ProcedureId", this.Procedure.Id, "RequestedBy", this.RequestedBy.name,
+          "ProcedureId", this.Procedure.Id, "RequestedBy", this.RequestedBy.Name,
           "AgencyId", this.Agency.Id, "AgentId", this.Agent.Id,
-          "ExtensionData", this.ExtensionData.ToString(), "LastUpdateTime", this.LastUpdateTime,
+          "ExtensionData", this.ExtensionData.ToString(), "LastUpdateTime", this.LastUpdate,
           "PostingTime", this.PostingTime, "PostedById", this.PostedBy.Id, "Status", (char) this.Status
         };
       }
@@ -262,31 +431,10 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    #endregion Fields
+    #endregion Integrity validation
 
 
-    #region Public methods
-
-
-    internal void CreateTransaction() {
-      if (this.HasTransaction) {
-        return;
-      }
-
-      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
-
-      var transaction = transactionProvider.CreateTransaction(this);
-
-      ExtensionData.Set("transaction/uid", transaction.UID);
-    }
-
-
-    internal void UpdateTransaction() {
-      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
-
-      transactionProvider.UpdateTransaction(this);
-    }
-
+    #region Public Methods
 
     internal void Delete() {
       EnsureCanBeEdited();
@@ -295,183 +443,65 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    internal async Task GeneratePaymentOrder() {
-      if (!this.HasTransaction) {
-        return;
-      }
-
-      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
-
-      var transaction = transactionProvider.GetTransactionAsPayable(this.TransactionUID);
-
-      EPayments.PaymentOrderDTO paymentOrder = await GeneratePaymentOrder(transaction).ConfigureAwait(false);
-
-      transactionProvider.SetPaymentOrder(transaction, paymentOrder);
-
-      this.Status = EFilingRequestStatus.OnPayment;
-    }
-
-
-    private async Task<EPayments.PaymentOrderDTO> GeneratePaymentOrder(IPayable transaction) {
-      try {
-        if (!USE_PAYMENT_ORDER_MOCK_SERVICE) {
-          return await EPaymentsUseCases.RequestPaymentOrderData(transaction)
-                                        .ConfigureAwait(false);
-        } else {
-          return PaymentOrderMockData();
-        }
-      } catch (Exception e) {
-        throw new InvalidCastException("No puedo generar la orden de pago", e);
-      }
-    }
-
-
-    internal virtual string GetElectronicSeal() {
-      var text = this.GetESignInputData();
-
-      return Cryptographer.CreateHashCode(text, this.UID);
-    }
-
-
-    internal string GetESignInputData() {
-      return EmpiriaString.BuildDigitalString(this.Id, this.UID, this.Procedure.Id, this.RequestedBy,
-                                              this.Agency.Id, this.Agent.Id, this.AuthorizationTime,
-                                              this.ApplicationForm.ToString());
-    }
-
-
-    internal EPayments.PaymentOrderDTO GetPaymentOrder() {
-      Assertion.AssertObject(this.HasTransaction,
-                             "This filing has not be linked to a transaction yet.");
-
-      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
-
-      return transactionProvider.TryGetPaymentOrderData(this.TransactionUID);
-    }
-
-
-    internal string GetPaymentReceipt() {
-      return this.ExtensionData.Get("paymentData/receiptNo", String.Empty);
-    }
-
-
-    internal string GetSecurityHash() {
-      return Cryptographer.CreateHashCode(this.GetElectronicSeal(),
-                                          this.UID)
-                           .Substring(0, 8)
-                           .ToUpperInvariant();
-    }
-
-
-    internal IFilingTransaction GetTransaction() {
-      Assertion.AssertObject(this.HasTransaction,
-                             "This filing has not be linked to a transaction yet.");
-
-      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
-
-      return transactionProvider.GetTransaction(this.TransactionUID);
-    }
-
-
     protected override void OnSave() {
       if (this.IsNew) {
-        SetUserContextData();
         this.PostingTime = DateTime.Now;
       }
+
+      this.Transaction.ExtensionData.SetIfValue("paymentData",
+                                                this.PaymentOrder.ToJson());
 
       EFilingRequestData.WriteFilingRequest(this);
     }
 
 
-    internal void RevokeSign(JsonObject credentials) {
-      Assertion.AssertObject(credentials, "credentials");
-
-      this.EnsureCanRevokeSign();
-
-      var requestSigner = new EFilingRequestSigner(this);
-
-      requestSigner.RevokeSign(credentials);
-
-      this.AuthorizationTime = ExecutionServer.DateMaxValue;
-
-      this.ExtensionData.Remove("esign");
-
-      this.Status = EFilingRequestStatus.Pending;
-      this.LastUpdateTime = ExecutionServer.DateMinValue;
-    }
-
-
-    internal void SendToSign() {
-      EnsureCanBeEdited();
-
-      this.Status = EFilingRequestStatus.OnSign;
-    }
-
-
     internal void SetApplicationForm(JsonObject json) {
+      Assertion.AssertObject(json, "json");
+
       EnsureCanBeEdited();
 
       this.ExtensionData.Set("appForm", json);
     }
 
 
-    internal void SetPaymentReceipt(string receiptNo) {
-      this.ExtensionData.Set("paymentData/receiptNo", receiptNo);
-    }
-
-
     internal void SetRequester(Requester requester) {
+      Assertion.AssertObject(requester, "requester");
+
       EnsureCanBeEdited();
 
       this.RequestedBy = requester;
 
-      this.ExtensionData.SetIfValue("requestedByData/email", requester.email);
-      this.ExtensionData.SetIfValue("requestedByData/phone", requester.phone);
-      this.ExtensionData.SetIfValue("requestedByData/rfc", requester.rfc);
+      this.ExtensionData.SetIfValue("requestedBy", requester.ToJson());
     }
 
 
-    internal void Sign(JsonObject credentials) {
-      Assertion.AssertObject(credentials, "credentials");
-
-      EnsureCanBeSigned();
-
-      var requestSigner = new EFilingRequestSigner(this);
-
-      this.AuthorizationTime = DateTime.Now;
-
-      JsonObject signData = requestSigner.Sign(credentials);
-      this.ExtensionData.Set("esign", signData);
-
-      this.Status = EFilingRequestStatus.OnPayment;
-      this.LastUpdateTime = DateTime.Now;
-    }
-
-
-    internal void Submit() {
+    internal async Task Submit() {
       EnsureCanBeSubmitted();
 
-      var transactionProvider = this.Procedure.GetFilingTransactionProvider();
+      await this.ExternalServicesHandler.SetPayment();
 
-      transactionProvider.SetPayment(this.TransactionUID, this.GetPaymentReceipt());
+      await this.ExternalServicesHandler.Submit();
 
-      transactionProvider.SubmitTransaction(this.TransactionUID);
-
-      this.Status = EFilingRequestStatus.Submitted;
+      await this.UpdateStatus(EFilingRequestStatus.Submitted);
     }
 
 
-    internal void Update(Requester requestedBy) {
-      Assertion.AssertObject(requestedBy, "requestedBy");
-
-      EnsureCanBeEdited();
-
-      this.SetRequester(requestedBy);
+    internal async Task Synchronize() {
+      if (this.HasTransaction) {
+        await this.Transaction.Synchronize(this.ExternalServicesHandler);
+      }
+      if (this.HasTransaction || this.HasPaymentOrder) {
+        await this.PaymentOrder.Synchronize(this.ExternalServicesHandler);
+      }
     }
 
 
-    internal void UpdateStatus(EFilingRequestStatus newStatus) {
+    internal async Task UpdateStatus(EFilingRequestStatus newStatus) {
       this.Status = newStatus;
+
+      if (StatusNeedsExternalDataSynchronization(newStatus)) {
+        await this.Synchronize();
+      }
     }
 
 
@@ -479,7 +509,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #region Private methods
-
 
     private void EnsureCanBeEdited() {
       Assertion.Assert(!this.IsSigned, "This filing is already signed, so it can't be edited.");
@@ -493,19 +522,13 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private void EnsureCanBeSigned() {
-      Assertion.Assert(!this.IsSigned, "This filing was already signed.");
-
-      var userContext = EFilingUserContext.Current();
-
-      Assertion.Assert(userContext.IsSigner, "Current user can't sign this filing.");
-    }
-
-
     private void EnsureCanBeSubmitted() {
-      if (this.HasTransaction) {
-        return;
-      }
+      Assertion.Assert(this.Status == EFilingRequestStatus.OnPayment,
+                       "Invalid status for submitting. Must be OnPayment");
+
+
+      Assertion.AssertObject(this.PaymentOrder.ReceiptNo,
+                             "No receipt number.");
 
       var userContext = EFilingUserContext.Current();
 
@@ -513,23 +536,8 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private void EnsureCanRevokeSign() {
-      Assertion.Assert(this.IsSigned, "This filing is not signed.");
-
-      var userContext = EFilingUserContext.Current();
-
-      Assertion.Assert(userContext.IsSigner, "Current user can't revoke sign.");
-
-      Assertion.Assert(userContext.User.Equals(this.Agent),
-                      "Current user is not the same as this filing signer.");
-    }
-
-
-    private EPayments.PaymentOrderDTO PaymentOrderMockData() {
-      var routeNumber = EmpiriaString.BuildRandomString(16, 16);
-      var controlTag = EmpiriaString.BuildRandomString(6, 6);
-
-      return new OnePoint.EPayments.PaymentOrderDTO(routeNumber, DateTime.Today.AddDays(20), controlTag);
+    private EFilingExternalServicesInteractor ExternalServicesHandler {
+      get;
     }
 
 
@@ -539,6 +547,14 @@ namespace Empiria.OnePoint.EFiling {
       this.PostedBy = userContext.User;
       this.Agency = userContext.Agency;
       this.Agent = userContext.Agent;
+    }
+
+
+    static private bool StatusNeedsExternalDataSynchronization(EFilingRequestStatus newStatus) {
+      return (newStatus == EFilingRequestStatus.Finished ||
+              newStatus == EFilingRequestStatus.Rejected ||
+              newStatus == EFilingRequestStatus.Submitted ||
+              newStatus == EFilingRequestStatus.OnPayment);
     }
 
 
