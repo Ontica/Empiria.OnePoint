@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Linq;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -23,88 +22,72 @@ namespace Empiria.OnePoint.EFiling {
 
     static internal EFilingRequestDTO Map(EFilingRequest request) {
       var r = new EFilingRequestDTO {
-        uid = request.UID,
-        procedureType = request.Procedure.NamedKey,
-        requestedBy = request.RequestedBy,
-        preparer = new Preparer {
-          agency = request.Agency.Alias,
-          agent = request.Agent.Alias,
+        UID = request.UID,
+        ProcedureType = request.Procedure.NamedKey,
+        RequestedBy = request.RequestedBy,
+        Preparer = new Preparer {
+          Agency = request.Agency.Alias,
+          Agent = request.Agent.Alias,
         },
-        summary = request.Procedure.DisplayName,
-        lastUpdateTime = request.LastUpdateTime,
-        status = new NamedStatus {
-          type = request.Status.ToString(),
-          name = request.StatusName,
+        Summary = request.Procedure.DisplayName,
+        LastUpdateTime = request.LastUpdate,
+        Status = new NamedStatus {
+          Type = request.Status.ToString(),
+          Name = request.StatusName,
         }
       };
 
       if (request.ApplicationForm.HasItems) {
         var appForm = new ApplicationFormDTO {
-          uid = request.UID,
-          type = request.Procedure.NamedKey,
-          typeName = request.Procedure.DisplayName,
-          filledOutBy = request.PostedBy.Alias,
-          filledOutTime = request.LastUpdateTime,
-          fields = request.ApplicationForm.ToObject()
+          UID = request.UID,
+          Type = request.Procedure.NamedKey,
+          TypeName = request.Procedure.DisplayName,
+          FilledOutBy = request.PostedBy.Alias,
+          FilledOutTime = request.LastUpdate,
+          Fields = request.ApplicationForm.ToObject()
         };
 
-        r.form = appForm;
+        r.Form = appForm;
       }
 
       if (request.IsSigned) {
-        r.esign = new ESignDataDTO {
-          hash = request.GetSecurityHash(),
-          seal = request.GetElectronicSeal(),
-          sign = request.ElectronicSign
+        r.Esign = new ESignDataDTO {
+          Hash = request.GetSecurityHash(),
+          Seal = request.GetElectronicSeal(),
+          Sign = request.ElectronicSign
         };
       }
 
       if (request.HasTransaction) {
-        var t = request.GetTransaction();
+        var t = request.Transaction;
 
         Assertion.AssertObject(t, $"Can't retrive transaction with UID ${t.UID}.");
 
-        var p = request.GetPaymentOrder();
-
-        if (p != null) {
-          r.paymentOrder = new PaymentOrderDTO {
-            urlPath = $"land.registration.system.transactions/bank.payment.order.aspx?id={t.Id}",
-            routeNumber = p.RouteNumber,
-            receiptNo = request.GetPaymentReceipt(),
-            dueDate = p.DueDate,
-            total = p.PaymentTotal
-          };
-        }
-
-        r.transaction = new TransactionDataDTO {
-          uid = t.UID,
-          status = t.StatusName,
-          presentationDate = t.PresentationTime
+        r.Transaction = new TransactionDataDTO {
+          UID = t.UID,
+          Status = t.Status,
+          PresentationDate = t.PresentationTime
         };
 
-      }
+        if (request.HasPaymentOrder) {
+          r.PaymentOrder = new PaymentDataDTO(request);
+        }
 
-      if (request.HasTransaction && request.IsClosed) {
-        r.outputDocuments = GetOutputDocuments(request);
+        if (request.IsClosed) {
+          r.OutputDocuments = request.Transaction.OutputDocuments;
+        }
       }
 
       var userContext = EFilingUserContext.Current();
 
-      r.permissions = new PermissionsDTO {
-        canManage = userContext.IsManager,
-        canRegister = userContext.IsRegister,
-        canSendToSign = userContext.IsRegister && !userContext.IsSigner,
-        canSign = userContext.IsSigner
+      r.Permissions = new PermissionsDTO {
+        CanManage = userContext.IsManager,
+        CanRegister = userContext.IsRegister,
+        CanSendToSign = userContext.IsRegister && !userContext.IsSigner,
+        CanSign = userContext.IsSigner
       };
 
       return r;
-    }
-
-
-    private static FixedList<EFilingDocumentDTO> GetOutputDocuments(EFilingRequest filingRequest) {
-      var provider = ExternalProviders.GetFilingTransactionProvider(filingRequest.Procedure);
-
-      return provider.GetOutputDocuments(filingRequest.TransactionUID);
     }
 
 
