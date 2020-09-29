@@ -125,7 +125,7 @@ namespace Empiria.OnePoint.EPayments {
     /// <summary>Importe total del pago.</summary>
     public decimal PaymentTotal {
       get;
-      private set;
+      set;
     }
 
 

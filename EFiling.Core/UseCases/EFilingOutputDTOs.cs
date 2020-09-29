@@ -14,78 +14,78 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Electronic filing request DTO.</summary>
   public class EFilingRequestDTO {
 
-    public string uid {
+    public string UID {
       get;
       internal set;
     }
 
-    public string procedureType {
+    public string ProcedureType {
       get;
       internal set;
     }
 
-    public Requester requestedBy {
+    public Requester RequestedBy {
       get;
       internal set;
     }
 
-    public Preparer preparer {
+    public Preparer Preparer {
       get;
       internal set;
     }
 
-    public string summary {
+    public string Summary {
       get;
       internal set;
     }
 
-    public DateTime lastUpdateTime {
+    public DateTime LastUpdateTime {
       get;
       internal set;
     }
 
-    public NamedStatus status {
+    public NamedStatus Status {
       get;
       internal set;
     }
 
-    public ApplicationFormDTO form {
-      get;
-      internal set;
-    }
-
-
-    public PaymentOrderDTO paymentOrder {
+    public ApplicationFormDTO Form {
       get;
       internal set;
     }
 
 
-    public ESignDataDTO esign {
+    public PaymentDataDTO PaymentOrder {
       get;
       internal set;
     }
 
 
-    public TransactionDataDTO transaction {
+    public ESignDataDTO Esign {
       get;
       internal set;
     }
 
 
-    public FixedList<EFilingDocumentDTO> inputDocuments {
+    public TransactionDataDTO Transaction {
       get;
       internal set;
-    } = new FixedList<EFilingDocumentDTO>();
+    }
 
 
-    public FixedList<EFilingDocumentDTO> outputDocuments {
+    public FixedList<EFilingDocument> InputDocuments {
       get;
       internal set;
-    } = new FixedList<EFilingDocumentDTO>();
+    } = new FixedList<EFilingDocument>();
 
 
-    public PermissionsDTO permissions {
+    public FixedList<EFilingDocument> OutputDocuments {
+      get;
+      internal set;
+    } = new FixedList<EFilingDocument>();
+
+
+    public PermissionsDTO Permissions {
       get;
       internal set;
     }
@@ -97,17 +97,17 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Electronic filing transaction DTO.</summary>
   public class TransactionDataDTO {
 
-    public string uid {
+    public string UID {
       get;
       internal set;
     }
 
-    public string status {
+    public string Status {
       get;
       internal set;
     }
 
-    public DateTime presentationDate {
+    public DateTime PresentationDate {
       get;
       internal set;
     }
@@ -119,17 +119,17 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Electronic sign data for filing requests.</summary>
   public class ESignDataDTO {
 
-    public string hash {
+    public string Hash {
       get;
       internal set;
     }
 
-    public string seal {
+    public string Seal {
       get;
       internal set;
     }
 
-    public string sign {
+    public string Sign {
       get;
       internal set;
     }
@@ -139,32 +139,51 @@ namespace Empiria.OnePoint.EFiling {
 
 
   /// <summary>Payment order data for filing requests.</summary>
-  public class PaymentOrderDTO {
+  public class PaymentDataDTO {
 
-    public string urlPath {
+    public PaymentDataDTO(EFilingRequest request) {
+      var paymentOrder = request.PaymentOrder;
+
+      this.UrlPath = $"land.registration.system.transactions/bank.payment.order.aspx?" +
+                     $"uid={request.Transaction.UID}&externalUID={request.UID}";
+
+      this.RouteNumber = paymentOrder.RouteNumber;
+      this.DueDate = paymentOrder.DueDate;
+      this.Total = paymentOrder.Total;
+
+      this.ReceiptNo = paymentOrder.ReceiptNo;
+    }
+
+
+    public string UrlPath {
       get;
       internal set;
     }
 
-    public string routeNumber {
+
+    public string RouteNumber {
       get;
       internal set;
     }
 
-    public DateTime dueDate {
+
+    public DateTime DueDate {
       get;
       internal set;
     }
 
-    public decimal total {
+
+    public decimal Total {
       get;
       internal set;
     }
 
-    public string receiptNo {
+
+    public string ReceiptNo {
       get;
       internal set;
     }
+
 
   } // class PaymentOrderDTO
 
@@ -173,32 +192,32 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Application form associated with a filing request.</summary>
   public class ApplicationFormDTO {
 
-    public string uid {
+    public string UID {
       get;
       internal set;
     }
 
-    public string type {
+    public string Type {
       get;
       internal set;
     }
 
-    public string typeName {
+    public string TypeName {
       get;
       internal set;
     }
 
-    public string filledOutBy {
+    public string FilledOutBy {
       get;
       internal set;
     }
 
-    public DateTime filledOutTime {
+    public DateTime FilledOutTime {
       get;
       internal set;
     }
 
-    public dynamic fields {
+    public dynamic Fields {
       get;
       internal set;
     } = new object();
@@ -210,12 +229,12 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>The preparer of a filing request.</summary>
   public class Preparer {
 
-    public string agency {
+    public string Agency {
       get;
       internal set;
     }
 
-    public string agent {
+    public string Agent {
       get;
       internal set;
     }
@@ -227,12 +246,12 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Serves to send status type and name.</summary>
   public class NamedStatus {
 
-    public string type {
+    public string Type {
       get;
       internal set;
     }
 
-    public string name {
+    public string Name {
       get;
       internal set;
     }
@@ -244,22 +263,22 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>User permissions over a filing request.</summary>
   public class PermissionsDTO {
 
-    public bool canManage {
+    public bool CanManage {
       get;
       internal set;
     }
 
-    public bool canRegister {
+    public bool CanRegister {
       get;
       internal set;
     }
 
-    public bool canSendToSign {
+    public bool CanSendToSign {
       get;
       internal set;
     }
 
-    public bool canSign {
+    public bool CanSign {
       get;
       internal set;
     }
