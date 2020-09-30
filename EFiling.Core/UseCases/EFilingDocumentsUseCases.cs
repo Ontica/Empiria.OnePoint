@@ -16,12 +16,12 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Use cases
 
-    static public FixedList<EFilingDocumentDTO> GetOutputDocuments(string filingRequestUID) {
+    static public FixedList<EFilingDocument> GetOutputDocuments(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       var provider = ExternalProviders.GetFilingTransactionProvider(filingRequest.Procedure);
 
-      return provider.GetOutputDocuments(filingRequest.TransactionUID);
+      return provider.GetOutputDocuments(filingRequest.Transaction.UID);
     }
 
     #endregion Use cases

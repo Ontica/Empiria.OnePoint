@@ -12,15 +12,12 @@ using System.Threading.Tasks;
 
 using Empiria.Json;
 
-// using Empiria.OnePoint.ESign;
-
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Use cases that implements electronic filing services.</summary>
   static public class EFilingUseCases {
 
     #region Use cases
-
 
     static public EFilingRequestDTO CreateEFilingRequest(CreateEFilingRequestDTO requestDTO) {
       Assertion.AssertObject(requestDTO, "requestDTO");
@@ -35,17 +32,42 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    static public async Task SynchronizeExternalData() {
+      var list = EFilingRequest.GetList<EFilingRequest>();
+
+      foreach (var request in list) {
+        if (request.HasTransaction) {
+          await SynchronizeExternalData(request.UID).ConfigureAwait(false);
+        }
+      }
+    }
+
+
+    static public async Task<EFilingRequestDTO> SynchronizeExternalData(string filingRequestUID) {
+      var filingRequest = ParseEFilingRequest(filingRequestUID);
+
+      await filingRequest.Synchronize();
+
+      filingRequest.RemoveOldTransactionData_REFACTORING();
+
+      filingRequest.Save();
+
+      return EFilingMapper.Map(filingRequest);
+    }
+
+
     static public async Task<EFilingRequestDTO> GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       if (!filingRequest.HasTransaction) {
-        filingRequest.CreateTransaction();
+        await filingRequest.CreateTransaction();
       } else {
-        filingRequest.UpdateTransaction();
+        await filingRequest.Synchronize();
       }
-      filingRequest.Save();
 
-      await filingRequest.GeneratePaymentOrder();
+      if (!filingRequest.HasPaymentOrder) {
+        await filingRequest.CreatePaymentOrder();
+      }
 
       filingRequest.Save();
 
@@ -61,8 +83,8 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static public FixedList<EFilingRequestDTO> GetEFilingRequestListByStatus(EFilingRequestStatus status,
-                                                                             string keywords) {
-      var list = EFilingRequest.GetList(status, keywords);
+                                                                             string keywords, int count = -1) {
+      var list = EFilingRequest.GetList(status, keywords, count);
 
       return EFilingMapper.Map(list);
     }
@@ -131,10 +153,10 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO SubmitEFilingRequest(string filingRequestUID) {
+    static public async Task<EFilingRequestDTO> SubmitEFilingRequest(string filingRequestUID) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
-      filingRequest.Submit();
+      await filingRequest.Submit();
 
       filingRequest.Save();
 
@@ -159,7 +181,7 @@ namespace Empiria.OnePoint.EFiling {
 
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
-      filingRequest.Update(requestedBy);
+      filingRequest.SetRequester(requestedBy);
 
       filingRequest.Save();
 
@@ -171,45 +193,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #region Utility methods
-
-
-    //static private DocumentPostDTO BuildDocumentPostDTO(EFilingRequest filingRequest) {
-    //  SignRequestPostDTO signRequestDTO = new SignRequestPostDTO() {
-    //    requestedById = filingRequest.PostedBy.Id,
-    //    signerId = filingRequest.Agent.Id,
-    //    signatureKind = "Firma notario"
-    //  };
-
-    //  return new DocumentPostDTO() {
-    //    documentType = filingRequest.Procedure.DisplayName,
-    //    requestedBy = filingRequest.RequestedBy.name,
-    //    requestedTime = filingRequest.PostingTime,
-    //    signInputData = filingRequest.GetESignInputData(),
-    //    postedById = filingRequest.PostedBy.Id,
-    //    postingTime = DateTime.Now,
-    //    signRequests = new SignRequestPostDTO[1]{ signRequestDTO }
-    //  };
-    //}
-
-
-    //static private JsonObject BuildFilingRequestSignData(SignEventDTO signEvent) {
-    //  var json = new JsonObject();
-
-    //  json.Add("signature", signEvent.signRequest.digitalSignature);
-    //  json.Add("timestamp", signEvent.timeStamp);
-
-    //  return json;
-    //}
-
-
-    //static private SignTaskDTO BuildSignTaskDTO(SignRequestDTO signRequestDTO, JsonObject signInputData) {
-    //  return new SignTaskDTO() {
-    //    credentials = new SignCredentialsDTO() {
-    //      password = signInputData.Get<string>("signToken")
-    //    },
-    //    signRequests = new FixedList<string>(new string[1] { signRequestDTO.uid })
-    //  };
-    //}
 
 
     static private EFilingRequest ParseEFilingRequest(string filingRequestUID) {
