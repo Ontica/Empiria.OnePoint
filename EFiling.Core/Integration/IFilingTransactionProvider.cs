@@ -23,7 +23,7 @@ namespace Empiria.OnePoint.EFiling {
     void EventProcessed(string transactionUID, string eventName);
 
 
-    FixedList<EFilingDocumentDTO> GetOutputDocuments(string transactionUID);
+    FixedList<EFilingDocument> GetOutputDocuments(string transactionUID);
 
 
     IFilingTransaction GetTransaction(string transactionUID);
@@ -35,13 +35,13 @@ namespace Empiria.OnePoint.EFiling {
     IFilingTransaction SetPayment(string transactionUID, string receiptNo);
 
 
-    IFilingTransaction SetPaymentOrder(IPayable transaction, EPayments.PaymentOrderDTO paymentOrderData);
+    IFilingTransaction SetPaymentOrder(IPayable transaction, PaymentOrderDTO paymentOrderData);
 
 
     IFilingTransaction SubmitTransaction(string transactionUID);
 
 
-    EPayments.PaymentOrderDTO TryGetPaymentOrderData(string transactionUID);
+    PaymentOrderDTO TryGetPaymentOrderData(string transactionUID);
 
 
     IFilingTransaction UpdateTransaction(EFilingRequest filingRequest);

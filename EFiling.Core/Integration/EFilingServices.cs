@@ -53,20 +53,20 @@ namespace Empiria.OnePoint.EFiling {
     #region Implementation
 
 
-    private void ChangeTransactionStatus(string filingRequestUID, string eventName) {
+    private async void ChangeTransactionStatus(string filingRequestUID, string eventName) {
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
       Assertion.AssertObject(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
-      IFilingTransactionProvider externalProvider = ExternalProviders.GetFilingTransactionProvider(null);
+      var interactor = new EFilingExternalServicesInteractor(filingRequest);
 
-      externalProvider.EventProcessed(filingRequest.TransactionUID, eventName);
+      EFilingRequestStatus newStatus = GetNewStatusAfterEvent(eventName);
 
-      var newStatus = GetNewStatusAfterEvent(eventName);
-
-      filingRequest.UpdateStatus(newStatus);
+      await filingRequest.UpdateStatus(newStatus);
 
       filingRequest.Save();
+
+      interactor.InformEventProcessed(filingRequest.Transaction.UID, eventName);
     }
 
 
