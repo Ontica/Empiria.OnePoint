@@ -22,10 +22,10 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpGet]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/output-documents")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/output-documents")]
     public CollectionModel GetOutputDocuments([FromUri] string filingRequestUID) {
       try {
-        FixedList<EFilingDocumentDTO> documents = EFilingDocumentsUseCases.GetOutputDocuments(filingRequestUID);
+        FixedList<EFilingDocument> documents = EFilingDocumentsUseCases.GetOutputDocuments(filingRequestUID);
 
         return GenerateResponse(documents);
 
@@ -41,8 +41,8 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     #region Utility methods
 
 
-    private CollectionModel GenerateResponse(FixedList<EFilingDocumentDTO> list) {
-      return new CollectionModel(this.Request, list, typeof(EFilingDocumentDTO).FullName);
+    private CollectionModel GenerateResponse(FixedList<EFilingDocument> list) {
+      return new CollectionModel(this.Request, list, typeof(EFilingDocument).FullName);
     }
 
 
