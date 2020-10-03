@@ -25,7 +25,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpGet]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public SingleObjectModel GetEFilingRequest([FromUri] string filingRequestUID) {
       try {
         EFilingRequestDTO filingRequest = EFilingUseCases.GetEFilingRequest(filingRequestUID);
@@ -43,7 +43,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     public PagedCollectionModel GetEFilingRequestList([FromUri] EFilingRequestStatus status = EFilingRequestStatus.Pending,
                                                       [FromUri] string keywords = "") {
       try {
-        FixedList<EFilingRequestDTO> list = EFilingUseCases.GetEFilingRequestListByStatus(status, keywords);
+        FixedList<EFilingRequestDTO> list = EFilingUseCases.GetEFilingRequestListByStatus(status, keywords, 50);
 
         return GeneratePagedResponse(list);
 
@@ -73,7 +73,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/generate-payment-order")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/generate-payment-order")]
     public async Task<SingleObjectModel> GeneratePaymentOrderForEFilingRequest([FromUri] string filingRequestUID) {
       try {
         EFilingRequestDTO filingRequest =
@@ -88,7 +88,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/sign")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/sign")]
     public SingleObjectModel SignEFilingRequest([FromUri] string filingRequestUID,
                                                 [FromBody] object body) {
       try {
@@ -105,7 +105,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/revoke-sign")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/revoke-sign")]
     public SingleObjectModel RevokeEFilingRequestSign([FromUri] string filingRequestUID,
                                                       [FromBody] object body) {
       try {
@@ -122,7 +122,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/send-to-sign")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/send-to-sign")]
     public SingleObjectModel SendToSign([FromUri] string filingRequestUID) {
       try {
         EFilingRequestDTO filingRequest = EFilingUseCases.SendEFilingRequestToSign(filingRequestUID);
@@ -136,7 +136,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/set-payment-receipt")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/set-payment-receipt")]
     public SingleObjectModel SetPaymentReceipt([FromUri] string filingRequestUID,
                                                [FromBody] object paymentData) {
       try {
@@ -153,10 +153,10 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/submit")]
-    public SingleObjectModel SubmitEFilingRequest([FromUri] string filingRequestUID) {
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/submit")]
+    public async Task<SingleObjectModel> SubmitEFilingRequest([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDTO filingRequest = EFilingUseCases.SubmitEFilingRequest(filingRequestUID);
+        EFilingRequestDTO filingRequest = await EFilingUseCases.SubmitEFilingRequest(filingRequestUID);
 
         return GenerateResponse(filingRequest);
 
@@ -167,7 +167,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}/update-application-form")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/update-application-form")]
     public SingleObjectModel UpdateApplicationForm([FromUri] string filingRequestUID,
                                                    [FromBody] object applicationForm) {
       try {
@@ -184,10 +184,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID}")]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public SingleObjectModel UpdateEFilingRequest([FromUri] string filingRequestUID,
                                                   [FromBody] Requester requestedBy) {
       try {
+
         EFilingRequestDTO filingRequest = EFilingUseCases.UpdateEFilingRequest(filingRequestUID, requestedBy);
 
         return GenerateResponse(filingRequest);
@@ -196,6 +197,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
         throw base.CreateHttpException(e);
       }
     }
+
 
     #endregion Command API
 
