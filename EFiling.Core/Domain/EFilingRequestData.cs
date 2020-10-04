@@ -10,7 +10,6 @@
 using System;
 
 using Empiria.Data;
-using Empiria.Security;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -19,7 +18,9 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Internal methods
 
-    static internal FixedList<EFilingRequest> GetList(EFilingRequestStatus status, string keywords) {
+    static internal FixedList<EFilingRequest> GetList(EFilingRequestStatus status,
+                                                      string keywords,
+                                                      int count = -1) {
       int agencyId = EFilingUserContext.Current().Agency.Id;
 
       string filter = status != EFilingRequestStatus.All ? $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}'"
@@ -30,17 +31,25 @@ namespace Empiria.OnePoint.EFiling {
         filter += " AND " + likeKeywords;
       }
 
-      string sort = "PostingTime DESC";
+      string sort = "FilingRequestId DESC";
 
-      return BaseObject.GetList<EFilingRequest>(filter, sort).ToFixedList();
+      var list = BaseObject.GetList<EFilingRequest>(filter, sort);
+
+      if (count > 0 && list.Count > count) {
+        return BaseObject.GetList<EFilingRequest>(filter, sort).GetRange(0, count).ToFixedList();
+      } else {
+        return BaseObject.GetList<EFilingRequest>(filter, sort).ToFixedList();
+      }
     }
+
 
     static internal void WriteFilingRequest(EFilingRequest o) {
       var op = DataOperation.Parse("writeEOPFilingRequest", o.Id, o.UID,
-                    o.Procedure.Id, o.RequestedBy.name, o.Agency.Id, o.Agent.Id,
-                    o.ExtensionData.ToString(), o.Keywords,
-                    o.LastUpdateTime, o.PostingTime, o.PostedBy.Id,
-                    (char) o.Status, o.Integrity.GetUpdatedHashCode());
+                    o.Procedure.Id, o.RequestedBy.Name, o.Agency.Id, o.Agent.Id,
+                    o.ExtensionData.ToString(), o.Keywords, o.LastUpdate,
+                    o.Transaction.UID, o.Transaction.Status,
+                    o.Transaction.ExtensionData.ToString(), o.Transaction.LastUpdate,
+                    o.PostingTime, o.PostedBy.Id, (char) o.Status, o.Integrity.GetUpdatedHashCode());
 
       DataWriter.Execute(op);
     }
