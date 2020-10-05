@@ -23,8 +23,14 @@ namespace Empiria.OnePoint.EFiling {
                                                       int count = -1) {
       int agencyId = EFilingUserContext.Current().Agency.Id;
 
-      string filter = status != EFilingRequestStatus.All ? $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}'"
-                                                         : $"AgencyId = {agencyId}";
+      string filter = String.Empty;
+
+      if (status != EFilingRequestStatus.All) {
+        filter = $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}' AND RequestStatus <> 'X'";
+      } else {
+        filter = $"AgencyId = {agencyId} AND RequestStatus <> 'X'";
+      }
+
 
       string likeKeywords = SearchExpression.ParseAndLikeKeywords("RequestKeywords", keywords);
       if (!String.IsNullOrWhiteSpace(keywords)) {

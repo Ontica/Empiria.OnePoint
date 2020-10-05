@@ -32,6 +32,15 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    static public void DeleteEFilingRequest(string filingRequestUID) {
+      var filingRequest = ParseEFilingRequest(filingRequestUID);
+
+      filingRequest.Delete();
+
+      filingRequest.Save();
+    }
+
+
     static public async Task SynchronizeExternalData() {
       var list = EFilingRequest.GetList<EFilingRequest>();
 

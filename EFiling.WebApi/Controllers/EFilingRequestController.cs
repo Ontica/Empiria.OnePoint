@@ -72,6 +72,21 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     }
 
 
+    [HttpDelete]
+    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
+    public NoDataModel DeleteEFilingRequest([FromUri] string filingRequestUID) {
+      try {
+
+        EFilingUseCases.DeleteEFilingRequest(filingRequestUID);
+
+        return new NoDataModel(this.Request);
+
+      } catch (Exception e) {
+        throw base.CreateHttpException(e);
+      }
+    }
+
+
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/generate-payment-order")]
     public async Task<SingleObjectModel> GeneratePaymentOrderForEFilingRequest([FromUri] string filingRequestUID) {
