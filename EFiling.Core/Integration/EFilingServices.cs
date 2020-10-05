@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Threading.Tasks;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -28,7 +29,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    public void NotifyEvent(string filingRequestUID, string eventName) {
+    public async Task NotifyEvent(string filingRequestUID, string eventName) {
       Assertion.AssertObject(filingRequestUID, "filingRequestUID");
       Assertion.AssertObject(eventName, "eventName");
 
@@ -38,7 +39,7 @@ namespace Empiria.OnePoint.EFiling {
         case "TransactionReturned":
         case "TransactionArchived":
         case "TransactionReentered":
-          ChangeTransactionStatus(filingRequestUID, eventName);
+          await ChangeTransactionStatus(filingRequestUID, eventName);
           return;
 
         default:
@@ -53,20 +54,20 @@ namespace Empiria.OnePoint.EFiling {
     #region Implementation
 
 
-    private async void ChangeTransactionStatus(string filingRequestUID, string eventName) {
+    private async Task ChangeTransactionStatus(string filingRequestUID, string eventName) {
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
       Assertion.AssertObject(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
       var interactor = new EFilingExternalServicesInteractor(filingRequest);
 
+      interactor.InformEventProcessed(filingRequest.Transaction.UID, eventName);
+
       EFilingRequestStatus newStatus = GetNewStatusAfterEvent(eventName);
 
       await filingRequest.UpdateStatus(newStatus);
 
       filingRequest.Save();
-
-      interactor.InformEventProcessed(filingRequest.Transaction.UID, eventName);
     }
 
 

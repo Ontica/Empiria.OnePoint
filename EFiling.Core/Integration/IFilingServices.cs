@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Threading.Tasks;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -18,7 +19,7 @@ namespace Empiria.OnePoint.EFiling {
     EFilingRequest GetEFilingRequest(string filingRequestUID);
 
 
-    void NotifyEvent(string filingRequestUID, string eventName);
+    Task NotifyEvent(string filingRequestUID, string eventName);
 
 
   }  // interface IFilingServices
