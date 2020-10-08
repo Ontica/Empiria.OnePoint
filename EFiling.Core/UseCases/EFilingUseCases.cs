@@ -57,8 +57,6 @@ namespace Empiria.OnePoint.EFiling {
 
       await filingRequest.Synchronize();
 
-      filingRequest.RemoveOldTransactionData_REFACTORING();
-
       filingRequest.Save();
 
       return EFilingMapper.Map(filingRequest);

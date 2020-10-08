@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.EFiling {
       this.ExtensionData = new JsonObject();
 
       this.Procedure = procedure;
-      this.SetRequester(requestedBy);
+      this.SetRequesterData(requestedBy);
       this.SetUserContextData();
     }
 
@@ -53,24 +53,10 @@ namespace Empiria.OnePoint.EFiling {
 
 
     protected override void OnLoadObjectData(DataRow row) {
-      var json = this.ExtensionData.Slice("requestedByData", false);
-
-      this.RequestedBy.Load(json);
-
-      if (this.TransactionUID.Length != 0 && this.Transaction.UID.Length == 0) {
-        this.Transaction = new EFilingTransaction(this.ExtensionData.Get<string>("transaction/uid"));
-      }
-
-      if (this.Transaction.ExtensionData.Contains("paymentData")) {
-        this.PaymentOrder = EFilingPaymentOrder.Parse(this.Transaction.ExtensionData.Slice("paymentData"));
-
-      } else if (this.ExtensionData.Contains("paymentData/receiptNo")) {
-        var receiptNo = this.ExtensionData.Get<string>("paymentData/receiptNo");
-
-        this.PaymentOrder = new EFilingPaymentOrder();
-        this.PaymentOrder.ReceiptNo = receiptNo;
-      }
+      this.LoadRequesterData();
+      this.LoadPaymentData();
     }
+
 
     #endregion Constructors and parsers
 
@@ -118,7 +104,7 @@ namespace Empiria.OnePoint.EFiling {
       }
       private set {
         if (value != ExecutionServer.DateMaxValue) {
-          this.ExtensionData.SetIfValue("authorizationTime", value);
+          this.ExtensionData.Set("authorizationTime", value);
         } else {
           this.ExtensionData.Remove("authorizationTime");
         }
@@ -320,7 +306,7 @@ namespace Empiria.OnePoint.EFiling {
 
     public bool HasTransaction {
       get {
-        return this.TransactionUID.Length != 0 || this.Transaction.UID.Length != 0;
+        return this.Transaction.UID.Length != 0;
       }
     }
 
@@ -332,13 +318,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private string TransactionUID {
-      get {
-        return ExtensionData.Get("transaction/uid", String.Empty);
-      }
-    }
-
-
     internal async Task CreateTransaction() {
       Assertion.Assert(!this.HasTransaction, $"A transaction was already linked to this request.");
 
@@ -347,18 +326,6 @@ namespace Empiria.OnePoint.EFiling {
       this.Transaction = new EFilingTransaction(createdTransaction.UID);
 
       await this.Transaction.Synchronize(this.ExternalServicesHandler);
-    }
-
-
-    internal void RemoveOldTransactionData_REFACTORING() {
-      Assertion.AssertObject(this.Transaction.UID, $"NEW TRANSACTION NOT LINKED.");
-
-      // ExtensionData.Remove("transactionuid");
-      ExtensionData.Remove("transaction");
-
-      // ExtensionData.Remove("paymentData/receiptNo");
-      ExtensionData.Remove("paymentData");
-
     }
 
 
@@ -391,6 +358,21 @@ namespace Empiria.OnePoint.EFiling {
       Assertion.AssertObject(receiptNo, "receiptNo");
 
       this.PaymentOrder.ReceiptNo = receiptNo;
+    }
+
+
+    private void LoadPaymentData() {
+      if (this.Transaction.ExtensionData.Contains("paymentData")) {
+        var paymentData = this.Transaction.ExtensionData.Slice("paymentData");
+
+        this.PaymentOrder = EFilingPaymentOrder.Parse(paymentData);
+      }
+    }
+
+
+    private void SetPaymentData() {
+      this.Transaction.ExtensionData.SetIfValue("paymentData",
+                                                this.PaymentOrder.ToJson());
     }
 
 
@@ -448,8 +430,7 @@ namespace Empiria.OnePoint.EFiling {
         this.PostingTime = DateTime.Now;
       }
 
-      this.Transaction.ExtensionData.SetIfValue("paymentData",
-                                                this.PaymentOrder.ToJson());
+      this.SetPaymentData();
 
       EFilingRequestData.WriteFilingRequest(this);
     }
@@ -464,14 +445,14 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    internal void SetRequester(Requester requester) {
+    internal void SetRequesterData(Requester requester) {
       Assertion.AssertObject(requester, "requester");
 
       EnsureCanBeEdited();
 
       this.RequestedBy = requester;
 
-      this.ExtensionData.SetIfValue("requestedBy", requester.ToJson());
+      this.ExtensionData.SetIfValue("requestedByData", requester.ToJson());
     }
 
 
@@ -510,6 +491,11 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Private methods
 
+    private EFilingExternalServicesInteractor ExternalServicesHandler {
+      get;
+    }
+
+
     private void EnsureCanBeEdited() {
       Assertion.Assert(!this.IsSigned, "This filing is already signed, so it can't be edited.");
 
@@ -536,8 +522,10 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private EFilingExternalServicesInteractor ExternalServicesHandler {
-      get;
+    private void LoadRequesterData() {
+      var json = this.ExtensionData.Slice("requestedByData", false);
+
+      this.RequestedBy.Load(json);
     }
 
 
