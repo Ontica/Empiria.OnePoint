@@ -62,7 +62,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public async Task<EFilingRequestDto> GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
+    static public async Task<EFilingRequestDto> GeneratePaymentOrder(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       if (!filingRequest.HasTransaction) {

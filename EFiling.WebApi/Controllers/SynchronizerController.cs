@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Web Api interface                       *
 *  Assembly : Empiria.OnePoint.EFiling.WebApi.dll        Pattern   : Web Api Controller                      *
-*  Type     : EFilingRequestSynchronizerController       License   : Please read LICENSE.txt file            *
+*  Type     : SynchronizerController                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Web services used to synchronize the external data of filing requests.                         *
 *                                                                                                            *
@@ -17,7 +17,8 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web services used to synchronize the external data of filing requests.</summary>
   [WebApiAuthorizationFilter(WebApiClaimType.ClientApp_Controller, "Electronic.Filing.Client.Application")]
-  public class EFilingRequestSynchronizerController : WebApiController {
+  public class SynchronizerController : WebApiController {
+
 
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/synchronize")]
@@ -47,6 +48,6 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     }
 
 
-  }  // class EFilingRequestSynchronizerController
+  }  // class SynchronizerController
 
 }  // namespace Empiria.OnePoint.EFiling.WebApi

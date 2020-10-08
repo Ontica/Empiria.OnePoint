@@ -21,8 +21,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
   [WebApiAuthorizationFilter(WebApiClaimType.ClientApp_Controller, "Electronic.Filing.Client.Application")]
   public class EFilingRequestsController : WebApiController {
 
-    #region Query API
-
+    #region Query services
 
     [HttpGet]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
@@ -30,7 +29,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         EFilingRequestDto filingRequest = EFilingUseCases.GetEFilingRequest(filingRequestUID);
 
-        return GenerateResponse(filingRequest);
+        return new SingleObjectModel(this.Request, filingRequest);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -45,18 +44,16 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         FixedList<EFilingRequestDto> list = EFilingUseCases.GetEFilingRequestListByStatus(status, keywords, 50);
 
-        return GeneratePagedResponse(list);
+        return new PagedCollectionModel(this.Request, list);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
       }
     }
 
+    #endregion Query services
 
-    #endregion Query API
-
-
-    #region Command API
+    #region Command services
 
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests")]
@@ -64,7 +61,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         EFilingRequestDto filingRequest = EFilingUseCases.CreateEFilingRequest(createRequestDTO);
 
-        return GenerateResponse(filingRequest);
+        return new SingleObjectModel(this.Request, filingRequest);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -88,92 +85,12 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
 
     [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/generate-payment-order")]
-    public async Task<SingleObjectModel> GeneratePaymentOrderForEFilingRequest([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequest =
-                          await EFilingUseCases.GeneratePaymentOrderForEFilingRequest(filingRequestUID);
-
-        return GenerateResponse(filingRequest);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-      }
-    }
-
-
-    [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/sign")]
-    public SingleObjectModel SignEFilingRequest([FromUri] string filingRequestUID,
-                                                [FromBody] object body) {
-      try {
-        var signData = GetBodyAsJson(body);
-
-        EFilingRequestDto filingRequest = EFilingUseCases.SignEFilingRequest(filingRequestUID, signData);
-
-        return GenerateResponse(filingRequest);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-      }
-    }
-
-
-    [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/revoke-sign")]
-    public SingleObjectModel RevokeEFilingRequestSign([FromUri] string filingRequestUID,
-                                                      [FromBody] object body) {
-      try {
-        var revokeSignData = GetBodyAsJson(body);
-
-        EFilingRequestDto filingRequest = EFilingUseCases.RevokeEFilingRequestSign(filingRequestUID, revokeSignData);
-
-        return GenerateResponse(filingRequest);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-      }
-    }
-
-
-    [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/send-to-sign")]
-    public SingleObjectModel SendToSign([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequest = EFilingUseCases.SendEFilingRequestToSign(filingRequestUID);
-
-        return GenerateResponse(filingRequest);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-      }
-    }
-
-
-    [HttpPost]
-    [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/set-payment-receipt")]
-    public SingleObjectModel SetPaymentReceipt([FromUri] string filingRequestUID,
-                                               [FromBody] object paymentData) {
-      try {
-        var json = JsonObject.Parse(paymentData);
-
-        EFilingRequestDto filingRequest = EFilingUseCases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
-
-        return GenerateResponse(filingRequest);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
-      }
-    }
-
-
-    [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/submit")]
     public async Task<SingleObjectModel> SubmitEFilingRequest([FromUri] string filingRequestUID) {
       try {
         EFilingRequestDto filingRequest = await EFilingUseCases.SubmitEFilingRequest(filingRequestUID);
 
-        return GenerateResponse(filingRequest);
+        return new SingleObjectModel(this.Request, filingRequest);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -190,7 +107,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
         EFilingRequestDto filingRequest = EFilingUseCases.UpdateApplicationForm(filingRequestUID, json);
 
-        return GenerateResponse(filingRequest);
+        return new SingleObjectModel(this.Request, filingRequest);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -206,7 +123,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
         EFilingRequestDto filingRequest = EFilingUseCases.UpdateEFilingRequest(filingRequestUID, requestedBy);
 
-        return GenerateResponse(filingRequest);
+        return new SingleObjectModel(this.Request, filingRequest);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -214,30 +131,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     }
 
 
-    #endregion Command API
-
-
-    #region Utility methods
-
-
-    private PagedCollectionModel GeneratePagedResponse(FixedList<EFilingRequestDto> list) {
-      return new PagedCollectionModel(this.Request, list, typeof(EFilingRequestDto).FullName);
-    }
-
-
-    private SingleObjectModel GenerateResponse(EFilingRequestDto filingRequest) {
-      return new SingleObjectModel(this.Request, filingRequest, typeof(EFilingRequestDto).FullName);
-    }
-
-
-    private JsonObject GetBodyAsJson(object body) {
-      base.RequireBody(body);
-
-      return JsonObject.Parse(body);
-    }
-
-
-    #endregion Utility methods
+    #endregion Command services
 
   }  // class EFilingRequestsController
 

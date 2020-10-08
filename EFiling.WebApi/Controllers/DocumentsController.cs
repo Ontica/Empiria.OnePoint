@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Web Api interface                       *
 *  Assembly : Empiria.OnePoint.EFiling.WebApi.dll        Pattern   : Web Api Controller                      *
-*  Type     : EFilingDocumentsController                 License   : Please read LICENSE.txt file            *
+*  Type     : DocumentsController                        License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Web api controller that provides input and output e-documents for filing requests.             *
 *                                                                                                            *
@@ -16,9 +16,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web api controller that provides input and output e-documents for filing requests.</summary>
   [WebApiAuthorizationFilter(WebApiClaimType.ClientApp_Controller, "Electronic.Filing.Client.Application")]
-  public class EFilingDocumentsController : WebApiController {
-
-    #region Query API
+  public class DocumentsController : WebApiController {
 
 
     [HttpGet]
@@ -27,7 +25,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         FixedList<EFilingDocument> documents = EFilingDocumentsUseCases.GetOutputDocuments(filingRequestUID);
 
-        return GenerateResponse(documents);
+        return new CollectionModel(this.Request, documents);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -35,19 +33,6 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     }
 
 
-    #endregion Query API
-
-
-    #region Utility methods
-
-
-    private CollectionModel GenerateResponse(FixedList<EFilingDocument> list) {
-      return new CollectionModel(this.Request, list, typeof(EFilingDocument).FullName);
-    }
-
-
-    #endregion Utility methods
-
-  }  // class EFilingDocumentsController
+  }  // class DocumentsController
 
 }  // namespace Empiria.OnePoint.EFiling.WebApi
