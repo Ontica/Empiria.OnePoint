@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 using Empiria.OnePoint.EPayments;
 
-
 namespace Empiria.OnePoint.EFiling {
 
   internal class EFilingExternalServicesInteractor {
@@ -21,11 +20,7 @@ namespace Empiria.OnePoint.EFiling {
 
     internal readonly EFilingRequest FilingRequest;
 
-    internal string TransactionUID {
-      get {
-        return this.FilingRequest.Transaction.UID;
-      }
-    }
+    private string TransactionUID => this.FilingRequest.Transaction.UID;
 
     #endregion Fields
 

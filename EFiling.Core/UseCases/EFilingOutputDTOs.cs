@@ -1,8 +1,8 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Use cases                               *
-*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Output Data Transfer Objects            *
-*  Type     : EFiling Ouput DTOs                         License   : Please read LICENSE.txt file            *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Data Transfer Objects                   *
+*  Type     : EFiling Output DTOs                        License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Contains output data transfer objects for electronic sign use cases.                           *
 *                                                                                                            *
@@ -11,7 +11,7 @@ using System;
 
 namespace Empiria.OnePoint.EFiling {
 
-  /// <summary>Electronic filing request DTO.</summary>
+
   public class EFilingRequestDto {
 
     private readonly EFilingRequest request;
@@ -33,7 +33,7 @@ namespace Empiria.OnePoint.EFiling {
       }
     }
 
-    public Requester RequestedBy {
+    public RequesterDto RequestedBy {
       get {
         return request.RequestedBy;
       }
@@ -96,7 +96,8 @@ namespace Empiria.OnePoint.EFiling {
 
     public string InputDocumentsStatus {
       get {
-        return "optional";
+        return "none";  // 'none' | 'optional' | 'required' | 'completed';
+        // 'protected' | 'readonly' | 'editable' | 'signed' | 'submitted' | 'verified' | 'returned' | 'rejected';
       }
     }
 
@@ -128,6 +129,13 @@ namespace Empiria.OnePoint.EFiling {
       this.transaction = request.Transaction;
     }
 
+
+    public string UID {
+      get {
+        return this.transaction.UID;
+      }
+    }
+
     public string Status {
       get {
         return this.transaction.Status;
@@ -153,21 +161,22 @@ namespace Empiria.OnePoint.EFiling {
       this.request = request;
     }
 
+
     public string Hash {
       get {
-        return request.GetSecurityHash();
+        return request.SecurityData.GetSecurityHash();
       }
     }
 
     public string Seal {
       get {
-        return request.GetElectronicSeal();
+        return request.SecurityData.GetElectronicSeal();
       }
     }
 
     public string Sign {
       get {
-        return request.ElectronicSign;
+        return request.SecurityData.ElectronicSign;
       }
     }
 

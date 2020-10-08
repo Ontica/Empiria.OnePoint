@@ -7,7 +7,6 @@
 *  Summary  : Defines a procedure.                                                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -20,4 +19,4 @@ namespace Empiria.OnePoint.EFiling {
 
   }  // interface IProcedure
 
-}  // namespace Empiria.OnePoint.EFiling
+}

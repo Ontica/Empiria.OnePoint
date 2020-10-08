@@ -13,11 +13,14 @@ using Empiria.Json;
 
 namespace Empiria.OnePoint.EFiling {
 
-
   /// <summary>Holds data about an e-filing request input or output document.</summary>
   public class EFilingDocument {
 
-    #region Constuctors and parsers
+    #region Constructors and parsers
+
+    public EFilingDocument() {
+      // no-op
+    }
 
     static public EFilingDocument Parse(JsonObject json) {
       var doc = new EFilingDocument();
@@ -46,38 +49,44 @@ namespace Empiria.OnePoint.EFiling {
       return json;
     }
 
+    #endregion Constructors and parsers
 
-    #endregion Constuctors and parsers
 
     #region Properties
 
     public string UID {
-      get; set;
+      get;
+      set;
     } = String.Empty;
 
 
     public string Type {
-      get; set;
+      get;
+      set;
     } = String.Empty;
 
 
     public string TypeName {
-      get; set;
+      get;
+      set;
     } = String.Empty;
 
 
     public string Name {
-      get; set;
+      get;
+      set;
     } = String.Empty;
 
 
     public string ContentType {
-      get; set;
+      get;
+      set;
     } = String.Empty;
 
 
     public string Uri {
-      get; set;
+      get;
+      set;
     } = String.Empty;
 
 

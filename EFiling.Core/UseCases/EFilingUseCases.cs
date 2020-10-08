@@ -7,7 +7,6 @@
 *  Summary  : Use cases that implements electronic filing services.                                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Threading.Tasks;
 
 using Empiria.Json;
@@ -89,8 +88,8 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public FixedList<EFilingRequestDto> GetEFilingRequestListByStatus(EFilingRequestStatus status,
-                                                                             string keywords, int count = -1) {
+    static public FixedList<EFilingRequestDto> GetEFilingRequestListByStatus(RequestStatus status,
+                                                                             string keywords, int count) {
       var list = EFilingRequest.GetList(status, keywords, count);
 
       return EFilingMapper.Map(list);
@@ -161,7 +160,8 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDto UpdateApplicationForm(string filingRequestUID, JsonObject json) {
+    static public EFilingRequestDto UpdateApplicationForm(string filingRequestUID,
+                                                          JsonObject json) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
       filingRequest.SetApplicationForm(json);
@@ -173,7 +173,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static public EFilingRequestDto UpdateEFilingRequest(string filingRequestUID,
-                                                         Requester requestedBy) {
+                                                         RequesterDto requestedBy) {
       Assertion.AssertObject(requestedBy, "requestedBy");
 
       var filingRequest = ParseEFilingRequest(filingRequestUID);
@@ -199,7 +199,7 @@ namespace Empiria.OnePoint.EFiling {
 
       if (request == null) {
         throw new ResourceNotFoundException("ElectronicFilingRequest.UID.NotFound",
-                                            $"No tenemos registrada ninguna solicitud con identificador {filingRequestUID}.");
+                        $"No tenemos registrada ninguna solicitud con identificador {filingRequestUID}.");
       }
 
       return request;

@@ -1,0 +1,116 @@
+﻿/* Empiria OnePoint ******************************************************************************************
+*                                                                                                            *
+*  Module   : Electronic Filing Services                 Component : Domain Layer                            *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Service provider                        *
+*  Type     : RequestSigner                              License   : Please read LICENSE.txt file            *
+*                                                                                                            *
+*  Summary  : Performs electronic sign operations for e-filing requests.                                     *
+*                                                                                                            *
+************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
+using System;
+using System.Security;
+
+using Empiria.Json;
+using Empiria.Security;
+
+namespace Empiria.OnePoint.EFiling {
+
+  /// <summary>Performs electronic sign operations for e-filing requests.</summary>
+  internal class RequestSigner {
+
+    private readonly EFilingRequest _request;
+
+    #region Constructors and parsers
+
+    public RequestSigner(EFilingRequest request) {
+      _request = request;
+
+      this.SecurityData = new SecurityData(request);
+    }
+
+
+    #endregion Constructors and parsers
+
+    #region Public members
+
+    internal SecurityData SecurityData {
+      get;
+    }
+
+
+    internal void RevokeSign(JsonObject credentials) {
+      Assertion.AssertObject(credentials, "credentials");
+
+      EnsureCanRevokeSign();
+
+      var password = credentials.Get<string>("revokeSignToken");
+
+      SecureString securedPassword = Cryptographer.ConvertToSecureString(password);
+
+      Cryptographer.AssertValidPrivateKeyPassword(securedPassword);
+
+      _request.OnSignRevoked();
+    }
+
+
+    internal void Sign(JsonObject credentials) {
+      Assertion.AssertObject(credentials, "credentials");
+
+      EnsureCanBeSigned();
+
+      _request.OnBeforeSign();
+
+      JsonObject signData = this.GetESignData(credentials);
+
+      _request.OnSigned(signData);
+    }
+
+
+    #endregion Public members
+
+
+    #region Private methods
+
+    private void EnsureCanBeSigned() {
+      Assertion.Assert(!_request.IsSigned, "This filing was already signed.");
+
+      var userContext = EFilingUserContext.Current();
+
+      Assertion.Assert(userContext.IsSigner, "Current user can't sign this filing.");
+    }
+
+
+    private void EnsureCanRevokeSign() {
+      Assertion.Assert(_request.IsSigned, "This filing is not signed.");
+
+      var userContext = EFilingUserContext.Current();
+
+      Assertion.Assert(userContext.IsSigner, "Current user can't revoke sign.");
+
+      Assertion.Assert(userContext.User.Equals(_request.Agent),
+                      "Current user is not the same as this filing signer.");
+    }
+
+
+    private JsonObject GetESignData(JsonObject credentials) {
+      var password = credentials.Get<string>("signToken");
+
+      SecureString securedPassword = Cryptographer.ConvertToSecureString(password);
+
+      var electronicSeal = this.SecurityData.GetElectronicSeal();
+
+      var signature = Cryptographer.SignText(electronicSeal, securedPassword);
+
+      var signData = new JsonObject();
+
+      signData.Add("signature", signature);
+      signData.Add("timestamp", DateTime.Now);
+
+      return signData;
+    }
+
+    #endregion Private methods
+
+  }  // class RequestSigner
+
+} // namespace Empiria.OnePoint.EFiling

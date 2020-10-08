@@ -19,31 +19,23 @@ namespace Empiria.OnePoint.EFiling {
     #region Constructors and parsers
 
     private EFilingTransaction() {
-      // Required by Empiria Framework.
+      // required by Empiria Framework
     }
 
 
-    internal EFilingTransaction(string uid) {
-      this.UID = uid;
+    internal EFilingTransaction(string transactionUID) {
+      this.UID = transactionUID;
     }
-
 
     #endregion Constructors and parsers
 
     #region Public properties
 
-    //[DataField("FilingRequestId")]
-    public EFilingRequest Request {
-      get;
-      private set;
-    }
-
-
     [DataField("TransactionUID")]
     public string UID {
       get;
       private set;
-    }
+    } = String.Empty;
 
 
     [DataField("TransactionExtData")]
@@ -64,7 +56,7 @@ namespace Empiria.OnePoint.EFiling {
     public string Status {
       get;
       private set;
-    }
+    } = String.Empty;
 
 
     public DateTime PresentationTime {
@@ -100,7 +92,7 @@ namespace Empiria.OnePoint.EFiling {
     internal async Task Synchronize(EFilingExternalServicesInteractor servicesHandler) {
       IFilingTransaction updatedData;
 
-      if (servicesHandler.FilingRequest.Status == EFilingRequestStatus.OnPayment) {
+      if (servicesHandler.FilingRequest.Status == RequestStatus.OnPayment) {
         updatedData = await servicesHandler.UpdateExternalTransaction();
       } else {
         updatedData = await servicesHandler.GetTransaction();

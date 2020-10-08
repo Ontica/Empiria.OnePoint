@@ -7,8 +7,6 @@
 *  Summary  : Interface used to connect with external filing transaction providers.                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
-
 using Empiria.OnePoint.EPayments;
 
 namespace Empiria.OnePoint.EFiling {

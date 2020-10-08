@@ -1,41 +1,22 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Information Holder                      *
-*  Type     : EFilingPaymentOrder                        License   : Please read LICENSE.txt file            *
+*  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Data Transfer Object                    *
+*  Type     : RequesterDto                               License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Contains data about a electronic filing requester.                                             *
+*  Summary  : Holds information about a e-filing requester.                                                  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+
 using Empiria.Json;
 
 namespace Empiria.OnePoint.EFiling {
 
-  public class Requester {
+  /// <summary>Holds information about a e-filing requester.</summary>
+  public class RequesterDto {
 
-    [DataField("RequestedBy")]
-    public string Name {
-      get; set;
-    }
-
-
-    public string Email {
-      get; set;
-    } = String.Empty;
-
-
-    public string Phone {
-      get; set;
-    } = String.Empty;
-
-
-    public string Rfc {
-      get; set;
-    } = String.Empty;
-
-
-    #region Methods
+    #region Constructors and parsers
 
     internal void Load(JsonObject json) {
       this.Email = json.Get("email", String.Empty);
@@ -54,9 +35,37 @@ namespace Empiria.OnePoint.EFiling {
       return json;
     }
 
+    #endregion Constructors and parsers
 
-    #endregion Methods
+    #region Properties
 
-  }  // class Requester
+    [DataField("RequestedBy")]
+    public string Name {
+      get;
+      set;
+    } = String.Empty;
+
+
+    public string Email {
+      get;
+      set;
+    } = String.Empty;
+
+
+    public string Phone {
+      get;
+      set;
+    } = String.Empty;
+
+
+    public string Rfc {
+      get;
+      set;
+    } = String.Empty;
+
+
+    #endregion Properties
+
+  }  // class RequesterDto
 
 }  // namespace Empiria.OnePoint.EFiling

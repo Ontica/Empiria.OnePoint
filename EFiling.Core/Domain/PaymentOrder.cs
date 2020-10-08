@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Information Holder                      *
-*  Type     : EFilingPaymentOrder                        License   : Please read LICENSE.txt file            *
+*  Type     : PaymentOrder                               License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Contains data about a payment order and its payment receipt.                                   *
 *                                                                                                            *
@@ -11,27 +11,26 @@ using System;
 using System.Threading.Tasks;
 
 using Empiria.Json;
-
 using Empiria.OnePoint.EPayments;
 
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Contains data about a payment order and its payment receipt.</summary>
-  public class EFilingPaymentOrder {
+  public class PaymentOrder {
 
     #region Constructors and parsers
 
-    internal EFilingPaymentOrder() {
+    internal PaymentOrder() {
 
     }
 
-    internal EFilingPaymentOrder(PaymentOrderDTO dto) {
+    internal PaymentOrder(PaymentOrderDTO dto) {
       this.LoadFromDTO(dto);
     }
 
 
-    static internal EFilingPaymentOrder Parse(JsonObject json) {
-      var po = new EFilingPaymentOrder();
+    static internal PaymentOrder Parse(JsonObject json) {
+      var po = new PaymentOrder();
 
       po.RouteNumber = json.Get("paymentOrder/routeNumber", po.RouteNumber);
       po.IssueTime = json.Get("paymentOrder/issueTime", po.IssueTime);
@@ -45,9 +44,9 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static internal EFilingPaymentOrder Empty {
+    static internal PaymentOrder Empty {
       get {
-        return new EFilingPaymentOrder() { IsEmptyInstance = true };
+        return new PaymentOrder() { IsEmptyInstance = true };
       }
     }
 
@@ -60,6 +59,7 @@ namespace Empiria.OnePoint.EFiling {
       get;
       private set;
     }
+
 
     public string RouteNumber {
       get;
@@ -116,7 +116,6 @@ namespace Empiria.OnePoint.EFiling {
         return JsonObject.Empty;
       }
 
-
       var json = new JsonObject();
 
       json.SetIfValue("paymentOrder/routeNumber", this.RouteNumber);
@@ -129,6 +128,7 @@ namespace Empiria.OnePoint.EFiling {
 
       return json;
     }
+
 
     private void LoadFromDTO(PaymentOrderDTO dto) {
       this.RouteNumber = dto.RouteNumber;

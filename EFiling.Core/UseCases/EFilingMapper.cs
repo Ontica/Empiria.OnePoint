@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Data mapping methods between electronic filing entities and their data transfer objects.</summary>

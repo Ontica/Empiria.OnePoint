@@ -4,16 +4,16 @@
 *  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Empiria Object Type                     *
 *  Type     : Procedure                                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Defines a procedure and its rules.                                                             *
+*  Summary  : Defines a procedure and its rules. Each e-filing request has an associated procedure that      *
+*             holds the business or legal rules tied to it and its configured transaction provider as well.  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
-
 using Empiria.Json;
 
 namespace Empiria.OnePoint.EFiling {
 
-  /// <summary>Defines a procedure and its rules.</summary>
+  /// <summary>Defines a procedure and its rules. Each e-filing request has an associated procedure that
+  /// holds the business or legal rules tied to it and its configured transaction provider as well.</summary>
   public class Procedure: BaseObject, IProcedure {
 
     #region Constructors and parsers
@@ -76,6 +76,7 @@ namespace Empiria.OnePoint.EFiling {
       }
     }
 
+
     public int TransactionTypeId {
       get {
         return this.ExtensionData.Get<int>("transactionTypeId");
@@ -101,7 +102,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #region Methods
-
 
     internal IFilingTransactionProvider GetFilingTransactionProvider() {
       return ExternalProviders.GetFilingTransactionProvider(this);

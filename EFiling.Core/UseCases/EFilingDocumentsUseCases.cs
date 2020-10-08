@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Use cases that implement documentation services for electronic filing requests.</summary>

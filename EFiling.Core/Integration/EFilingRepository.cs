@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Data Services                           *
-*  Type     : EFilingRequestData                         License   : Please read LICENSE.txt file            *
+*  Type     : EFilingRepository                          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Indicates the status of an electronic filing request.                                          *
+*  Summary  : Provides data persistence methods for electronic filing requests.                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -13,24 +13,23 @@ using Empiria.Data;
 
 namespace Empiria.OnePoint.EFiling {
 
-  /// <summary>Provides database methods for recordable resources: real estate and associations.</summary>
-  static public class EFilingRequestData {
+  /// <summary>Provides data persistence methods for electronic filing requests.</summary>
+  static public class EFilingRepository {
 
     #region Internal methods
 
-    static internal FixedList<EFilingRequest> GetList(EFilingRequestStatus status,
+    static internal FixedList<EFilingRequest> GetList(RequestStatus status,
                                                       string keywords,
-                                                      int count = -1) {
+                                                      int count) {
       int agencyId = EFilingUserContext.Current().Agency.Id;
 
       string filter = String.Empty;
 
-      if (status != EFilingRequestStatus.All) {
+      if (status != RequestStatus.All) {
         filter = $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}' AND RequestStatus <> 'X'";
       } else {
         filter = $"AgencyId = {agencyId} AND RequestStatus <> 'X'";
       }
-
 
       string likeKeywords = SearchExpression.ParseAndLikeKeywords("RequestKeywords", keywords);
       if (!String.IsNullOrWhiteSpace(keywords)) {
@@ -55,7 +54,7 @@ namespace Empiria.OnePoint.EFiling {
                     o.ExtensionData.ToString(), o.Keywords, o.LastUpdate,
                     o.Transaction.UID, o.Transaction.Status,
                     o.Transaction.ExtensionData.ToString(), o.Transaction.LastUpdate,
-                    o.PostingTime, o.PostedBy.Id, (char) o.Status, o.Integrity.GetUpdatedHashCode());
+                    o.PostingTime, o.PostedBy.Id, (char) o.Status, o.SecurityData.Integrity.GetUpdatedHashCode());
 
       DataWriter.Execute(op);
     }
@@ -63,6 +62,6 @@ namespace Empiria.OnePoint.EFiling {
 
     #endregion Internal methods
 
-  } // class EFilingRequestData
+  } // class EFilingRepository
 
 } // namespace Empiria.OnePoint.EFiling

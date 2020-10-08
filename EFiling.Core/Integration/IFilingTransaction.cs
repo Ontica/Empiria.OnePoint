@@ -31,6 +31,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-  }  // IFilingTransaction
+  }  // IFilingTransaction.Integration
 
 }  // namespace Empiria.OnePoint.EFiling

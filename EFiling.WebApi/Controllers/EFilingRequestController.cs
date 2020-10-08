@@ -40,7 +40,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
 
     [HttpGet]
     [Route("v2/electronic-filing/filing-requests")]
-    public PagedCollectionModel GetEFilingRequestList([FromUri] EFilingRequestStatus status = EFilingRequestStatus.Pending,
+    public PagedCollectionModel GetEFilingRequestList([FromUri] RequestStatus status = RequestStatus.Pending,
                                                       [FromUri] string keywords = "") {
       try {
         FixedList<EFilingRequestDto> list = EFilingUseCases.GetEFilingRequestListByStatus(status, keywords, 50);
@@ -201,7 +201,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpPut, HttpPatch]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public SingleObjectModel UpdateEFilingRequest([FromUri] string filingRequestUID,
-                                                  [FromBody] Requester requestedBy) {
+                                                  [FromBody] RequesterDto requestedBy) {
       try {
 
         EFilingRequestDto filingRequest = EFilingUseCases.UpdateEFilingRequest(filingRequestUID, requestedBy);

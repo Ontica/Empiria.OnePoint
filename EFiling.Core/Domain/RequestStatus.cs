@@ -2,17 +2,16 @@
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Enumeration Type                        *
-*  Type     : EFilingRequestStatus                       License   : Please read LICENSE.txt file            *
+*  Type     : RequestStatus                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Indicates the status of an electronic filing request.                                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Indicates the status of an electronic filing request.</summary>
-  public enum EFilingRequestStatus {
+  public enum RequestStatus {
 
     All = '?',
 
@@ -30,6 +29,6 @@ namespace Empiria.OnePoint.EFiling {
 
     Deleted = 'X'
 
-  }
+  }  // RequestStatus
 
 } // namespace Empiria.OnePoint.EFiling

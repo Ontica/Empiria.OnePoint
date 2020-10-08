@@ -17,7 +17,7 @@ namespace Empiria.OnePoint.EFiling {
       get; set;
     }
 
-    public Requester requestedBy {
+    public RequesterDto requestedBy {
       get; set;
     }
 

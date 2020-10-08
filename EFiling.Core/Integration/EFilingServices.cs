@@ -63,7 +63,7 @@ namespace Empiria.OnePoint.EFiling {
 
       interactor.InformEventProcessed(filingRequest.Transaction.UID, eventName);
 
-      EFilingRequestStatus newStatus = GetNewStatusAfterEvent(eventName);
+      RequestStatus newStatus = GetNewStatusAfterEvent(eventName);
 
       await filingRequest.UpdateStatus(newStatus);
 
@@ -71,22 +71,22 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private EFilingRequestStatus GetNewStatusAfterEvent(string eventName) {
+    private RequestStatus GetNewStatusAfterEvent(string eventName) {
       switch (eventName) {
         case "TransactionReceived":
-          return EFilingRequestStatus.Submitted;
+          return RequestStatus.Submitted;
 
         case "TransactionReadyToDelivery":
-          return EFilingRequestStatus.Finished;
+          return RequestStatus.Finished;
 
         case "TransactionReturned":
-          return EFilingRequestStatus.Rejected;
+          return RequestStatus.Rejected;
 
         case "TransactionArchived":
-          return EFilingRequestStatus.Finished;
+          return RequestStatus.Finished;
 
         case "TransactionReentered":
-          return EFilingRequestStatus.Submitted;
+          return RequestStatus.Submitted;
 
         default:
           throw Assertion.AssertNoReachThisCode($"Unrecognized external event with name '{eventName}'");
