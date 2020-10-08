@@ -37,7 +37,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/synchronize/{filingRequestUID:guid}")]
     public async Task<SingleObjectModel> SynchronizeRequestExternalData([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDTO filingRequest = await EFilingUseCases.SynchronizeExternalData(filingRequestUID);
+        EFilingRequestDto filingRequest = await EFilingUseCases.SynchronizeExternalData(filingRequestUID);
 
         return new SingleObjectModel(this.Request, filingRequest);
 

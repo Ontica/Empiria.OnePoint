@@ -7,7 +7,7 @@
 *  Summary  : Use cases that implement documentation services for electronic filing requests.                *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
+
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -25,7 +25,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
     #endregion Use cases
-
 
     #region Utility methods
 

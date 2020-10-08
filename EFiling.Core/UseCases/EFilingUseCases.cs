@@ -19,7 +19,7 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Use cases
 
-    static public EFilingRequestDTO CreateEFilingRequest(CreateEFilingRequestDTO requestDTO) {
+    static public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDTO requestDTO) {
       Assertion.AssertObject(requestDTO, "requestDTO");
 
       var procedure = Procedure.Parse(requestDTO.procedureType);
@@ -45,14 +45,14 @@ namespace Empiria.OnePoint.EFiling {
       var list = EFilingRequest.GetList<EFilingRequest>();
 
       foreach (var request in list) {
-        if (request.HasTransaction) {
+        if (request.HasTransaction && request.Transaction.LastUpdate == ExecutionServer.DateMinValue) {
           await SynchronizeExternalData(request.UID).ConfigureAwait(false);
         }
       }
     }
 
 
-    static public async Task<EFilingRequestDTO> SynchronizeExternalData(string filingRequestUID) {
+    static public async Task<EFilingRequestDto> SynchronizeExternalData(string filingRequestUID) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
       await filingRequest.Synchronize();
@@ -65,7 +65,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public async Task<EFilingRequestDTO> GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
+    static public async Task<EFilingRequestDto> GeneratePaymentOrderForEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       if (!filingRequest.HasTransaction) {
@@ -84,14 +84,14 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO GetEFilingRequest(string filingRequestUID) {
+    static public EFilingRequestDto GetEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public FixedList<EFilingRequestDTO> GetEFilingRequestListByStatus(EFilingRequestStatus status,
+    static public FixedList<EFilingRequestDto> GetEFilingRequestListByStatus(EFilingRequestStatus status,
                                                                              string keywords, int count = -1) {
       var list = EFilingRequest.GetList(status, keywords, count);
 
@@ -99,7 +99,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO RevokeEFilingRequestSign(string filingRequestUID,
+    static public EFilingRequestDto RevokeEFilingRequestSign(string filingRequestUID,
                                                              JsonObject revokeSignData) {
       Assertion.AssertObject(revokeSignData, "revokeSignData");
 
@@ -113,7 +113,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO SendEFilingRequestToSign(string filingRequestUID) {
+    static public EFilingRequestDto SendEFilingRequestToSign(string filingRequestUID) {
       EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
 
       filingRequest.SendToSign();
@@ -124,7 +124,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO SetPaymentReceipt(string filingRequestUID,
+    static public EFilingRequestDto SetPaymentReceipt(string filingRequestUID,
                                                       string receiptNo) {
       Assertion.AssertObject(receiptNo, "receiptNo");
 
@@ -138,7 +138,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO SignEFilingRequest(string filingRequestUID,
+    static public EFilingRequestDto SignEFilingRequest(string filingRequestUID,
                                                        JsonObject signInputData) {
       Assertion.AssertObject(signInputData, "signInputData");
 
@@ -146,23 +146,13 @@ namespace Empiria.OnePoint.EFiling {
 
       filingRequest.Sign(signInputData);
 
-      //DocumentPostDTO document = BuildDocumentPostDTO(filingRequest);
-
-      //SignRequestDTO signRequestDTO = ESignUseCases.PostDocument(document);
-
-      //SignTaskDTO signTaskDTO = BuildSignTaskDTO(signRequestDTO, signInputData);
-
-      //SignEventDTO signEvent = ESignUseCases.Sign(signTaskDTO)[0];
-
-      //filingRequest.SetESignData(BuildFilingRequestSignData(signEvent));
-
       filingRequest.Save();
 
       return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public async Task<EFilingRequestDTO> SubmitEFilingRequest(string filingRequestUID) {
+    static public async Task<EFilingRequestDto> SubmitEFilingRequest(string filingRequestUID) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
       await filingRequest.Submit();
@@ -173,7 +163,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO UpdateApplicationForm(string filingRequestUID, JsonObject json) {
+    static public EFilingRequestDto UpdateApplicationForm(string filingRequestUID, JsonObject json) {
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
       filingRequest.SetApplicationForm(json);
@@ -184,13 +174,13 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDTO UpdateEFilingRequest(string filingRequestUID,
+    static public EFilingRequestDto UpdateEFilingRequest(string filingRequestUID,
                                                          Requester requestedBy) {
       Assertion.AssertObject(requestedBy, "requestedBy");
 
       var filingRequest = ParseEFilingRequest(filingRequestUID);
 
-      filingRequest.SetRequester(requestedBy);
+      filingRequest.SetRequesterData(requestedBy);
 
       filingRequest.Save();
 

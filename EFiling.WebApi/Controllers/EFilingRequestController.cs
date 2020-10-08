@@ -28,7 +28,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public SingleObjectModel GetEFilingRequest([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDTO filingRequest = EFilingUseCases.GetEFilingRequest(filingRequestUID);
+        EFilingRequestDto filingRequest = EFilingUseCases.GetEFilingRequest(filingRequestUID);
 
         return GenerateResponse(filingRequest);
 
@@ -43,7 +43,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     public PagedCollectionModel GetEFilingRequestList([FromUri] EFilingRequestStatus status = EFilingRequestStatus.Pending,
                                                       [FromUri] string keywords = "") {
       try {
-        FixedList<EFilingRequestDTO> list = EFilingUseCases.GetEFilingRequestListByStatus(status, keywords, 50);
+        FixedList<EFilingRequestDto> list = EFilingUseCases.GetEFilingRequestListByStatus(status, keywords, 50);
 
         return GeneratePagedResponse(list);
 
@@ -62,7 +62,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests")]
     public SingleObjectModel CreateEFilingRequest([FromBody] CreateEFilingRequestDTO createRequestDTO) {
       try {
-        EFilingRequestDTO filingRequest = EFilingUseCases.CreateEFilingRequest(createRequestDTO);
+        EFilingRequestDto filingRequest = EFilingUseCases.CreateEFilingRequest(createRequestDTO);
 
         return GenerateResponse(filingRequest);
 
@@ -91,7 +91,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/generate-payment-order")]
     public async Task<SingleObjectModel> GeneratePaymentOrderForEFilingRequest([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDTO filingRequest =
+        EFilingRequestDto filingRequest =
                           await EFilingUseCases.GeneratePaymentOrderForEFilingRequest(filingRequestUID);
 
         return GenerateResponse(filingRequest);
@@ -109,7 +109,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         var signData = GetBodyAsJson(body);
 
-        EFilingRequestDTO filingRequest = EFilingUseCases.SignEFilingRequest(filingRequestUID, signData);
+        EFilingRequestDto filingRequest = EFilingUseCases.SignEFilingRequest(filingRequestUID, signData);
 
         return GenerateResponse(filingRequest);
 
@@ -126,7 +126,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         var revokeSignData = GetBodyAsJson(body);
 
-        EFilingRequestDTO filingRequest = EFilingUseCases.RevokeEFilingRequestSign(filingRequestUID, revokeSignData);
+        EFilingRequestDto filingRequest = EFilingUseCases.RevokeEFilingRequestSign(filingRequestUID, revokeSignData);
 
         return GenerateResponse(filingRequest);
 
@@ -140,7 +140,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/send-to-sign")]
     public SingleObjectModel SendToSign([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDTO filingRequest = EFilingUseCases.SendEFilingRequestToSign(filingRequestUID);
+        EFilingRequestDto filingRequest = EFilingUseCases.SendEFilingRequestToSign(filingRequestUID);
 
         return GenerateResponse(filingRequest);
 
@@ -157,7 +157,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         var json = JsonObject.Parse(paymentData);
 
-        EFilingRequestDTO filingRequest = EFilingUseCases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
+        EFilingRequestDto filingRequest = EFilingUseCases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
 
         return GenerateResponse(filingRequest);
 
@@ -171,7 +171,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/submit")]
     public async Task<SingleObjectModel> SubmitEFilingRequest([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDTO filingRequest = await EFilingUseCases.SubmitEFilingRequest(filingRequestUID);
+        EFilingRequestDto filingRequest = await EFilingUseCases.SubmitEFilingRequest(filingRequestUID);
 
         return GenerateResponse(filingRequest);
 
@@ -188,7 +188,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         var json = JsonObject.Parse(applicationForm);
 
-        EFilingRequestDTO filingRequest = EFilingUseCases.UpdateApplicationForm(filingRequestUID, json);
+        EFilingRequestDto filingRequest = EFilingUseCases.UpdateApplicationForm(filingRequestUID, json);
 
         return GenerateResponse(filingRequest);
 
@@ -204,7 +204,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
                                                   [FromBody] Requester requestedBy) {
       try {
 
-        EFilingRequestDTO filingRequest = EFilingUseCases.UpdateEFilingRequest(filingRequestUID, requestedBy);
+        EFilingRequestDto filingRequest = EFilingUseCases.UpdateEFilingRequest(filingRequestUID, requestedBy);
 
         return GenerateResponse(filingRequest);
 
@@ -220,13 +220,13 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     #region Utility methods
 
 
-    private PagedCollectionModel GeneratePagedResponse(FixedList<EFilingRequestDTO> list) {
-      return new PagedCollectionModel(this.Request, list, typeof(EFilingRequestDTO).FullName);
+    private PagedCollectionModel GeneratePagedResponse(FixedList<EFilingRequestDto> list) {
+      return new PagedCollectionModel(this.Request, list, typeof(EFilingRequestDto).FullName);
     }
 
 
-    private SingleObjectModel GenerateResponse(EFilingRequestDTO filingRequest) {
-      return new SingleObjectModel(this.Request, filingRequest, typeof(EFilingRequestDTO).FullName);
+    private SingleObjectModel GenerateResponse(EFilingRequestDto filingRequest) {
+      return new SingleObjectModel(this.Request, filingRequest, typeof(EFilingRequestDto).FullName);
     }
 
 

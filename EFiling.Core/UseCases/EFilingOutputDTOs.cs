@@ -12,71 +12,93 @@ using System;
 namespace Empiria.OnePoint.EFiling {
 
   /// <summary>Electronic filing request DTO.</summary>
-  public class EFilingRequestDTO {
+  public class EFilingRequestDto {
+
+    private readonly EFilingRequest request;
+
+    internal EFilingRequestDto(EFilingRequest request) {
+      this.request = request;
+    }
+
 
     public string UID {
-      get;
-      internal set;
+      get {
+        return this.request.UID;
+      }
     }
 
     public string ProcedureType {
-      get;
-      internal set;
+      get {
+        return request.Procedure.NamedKey;
+      }
     }
 
     public Requester RequestedBy {
-      get;
-      internal set;
+      get {
+        return request.RequestedBy;
+      }
     }
 
     public Preparer Preparer {
-      get;
-      internal set;
+      get {
+        return new Preparer {
+          Agency = request.Agency.Alias,
+          Agent = request.Agent.Alias,
+        };
+      }
     }
 
     public string Summary {
-      get;
-      internal set;
+      get {
+        return request.Procedure.DisplayName;
+      }
     }
 
     public DateTime LastUpdateTime {
-      get;
-      internal set;
+      get {
+        return request.LastUpdate;
+      }
     }
 
     public NamedStatus Status {
+      get {
+        return new NamedStatus {
+          Type = request.Status.ToString(),
+          Name = request.StatusName,
+        };
+      }
+    }
+
+    public ApplicationFormDto Form {
       get;
       internal set;
     }
 
-    public ApplicationFormDTO Form {
+    public PaymentDataDto PaymentOrder {
       get;
       internal set;
     }
 
-
-    public PaymentDataDTO PaymentOrder {
+    public ESignDataDto Esign {
       get;
       internal set;
     }
 
-
-    public ESignDataDTO Esign {
+    public TransactionDataDto Transaction {
       get;
       internal set;
     }
-
-
-    public TransactionDataDTO Transaction {
-      get;
-      internal set;
-    }
-
 
     public FixedList<EFilingDocument> InputDocuments {
       get;
-      internal set;
     } = new FixedList<EFilingDocument>();
+
+
+    public string InputDocumentsStatus {
+      get {
+        return "optional";
+      }
+    }
 
 
     public FixedList<EFilingDocument> OutputDocuments {
@@ -85,9 +107,12 @@ namespace Empiria.OnePoint.EFiling {
     } = new FixedList<EFilingDocument>();
 
 
-    public PermissionsDTO Permissions {
-      get;
-      internal set;
+    public PermissionsDto Permissions {
+      get {
+        var userContext = EFilingUserContext.Current();
+
+        return new PermissionsDto(userContext);
+      }
     }
 
   }  // class EFilingRequestDTO
@@ -95,134 +120,152 @@ namespace Empiria.OnePoint.EFiling {
 
 
   /// <summary>Electronic filing transaction DTO.</summary>
-  public class TransactionDataDTO {
+  public class TransactionDataDto {
 
-    public string UID {
-      get;
-      internal set;
+    private readonly EFilingTransaction transaction;
+
+    internal TransactionDataDto(EFilingRequest request) {
+      this.transaction = request.Transaction;
     }
 
     public string Status {
-      get;
-      internal set;
+      get {
+        return this.transaction.Status;
+      }
     }
 
     public DateTime PresentationDate {
-      get;
-      internal set;
+      get {
+        return this.transaction.PresentationTime;
+      }
     }
 
-  } // class TransactionDataDTO
+  } // class TransactionDataDto
 
 
 
   /// <summary>Electronic sign data for filing requests.</summary>
-  public class ESignDataDTO {
+  public class ESignDataDto {
+
+    private readonly EFilingRequest request;
+
+    internal ESignDataDto(EFilingRequest request) {
+      this.request = request;
+    }
 
     public string Hash {
-      get;
-      internal set;
+      get {
+        return request.GetSecurityHash();
+      }
     }
 
     public string Seal {
-      get;
-      internal set;
+      get {
+        return request.GetElectronicSeal();
+      }
     }
 
     public string Sign {
-      get;
-      internal set;
+      get {
+        return request.ElectronicSign;
+      }
     }
 
-  } // class TransactionDataDTO
+  } // class ESignDataDto
 
 
 
   /// <summary>Payment order data for filing requests.</summary>
-  public class PaymentDataDTO {
+  public class PaymentDataDto {
 
-    public PaymentDataDTO(EFilingRequest request) {
-      var paymentOrder = request.PaymentOrder;
+    private readonly EFilingRequest request;
 
-      this.UrlPath = $"land.registration.system.transactions/bank.payment.order.aspx?" +
-                     $"uid={request.Transaction.UID}&externalUID={request.UID}";
-
-      this.RouteNumber = paymentOrder.RouteNumber;
-      this.DueDate = paymentOrder.DueDate;
-      this.Total = paymentOrder.Total;
-
-      this.ReceiptNo = paymentOrder.ReceiptNo;
+    internal PaymentDataDto(EFilingRequest request) {
+      this.request = request;
     }
 
 
     public string UrlPath {
-      get;
-      internal set;
+      get {
+        return $"land.registration.system.transactions/bank.payment.order.aspx?" +
+               $"uid={request.Transaction.UID}&externalUID={request.UID}";
+      }
     }
-
 
     public string RouteNumber {
-      get;
-      internal set;
+      get {
+        return request.PaymentOrder.RouteNumber;
+      }
     }
-
 
     public DateTime DueDate {
-      get;
-      internal set;
+      get {
+        return request.PaymentOrder.DueDate;
+      }
     }
-
 
     public decimal Total {
-      get;
-      internal set;
+      get {
+        return request.PaymentOrder.Total;
+      }
     }
-
 
     public string ReceiptNo {
-      get;
-      internal set;
+      get {
+        return request.PaymentOrder.ReceiptNo;
+      }
     }
 
-
-  } // class PaymentOrderDTO
+  } // class PaymentDataDto
 
 
 
   /// <summary>Application form associated with a filing request.</summary>
-  public class ApplicationFormDTO {
+  public class ApplicationFormDto {
+
+    private readonly EFilingRequest request;
+
+    internal ApplicationFormDto(EFilingRequest request) {
+      this.request = request;
+    }
 
     public string UID {
-      get;
-      internal set;
+      get {
+        return request.UID;
+      }
     }
 
     public string Type {
-      get;
-      internal set;
+      get {
+        return request.Procedure.NamedKey;
+      }
     }
 
     public string TypeName {
-      get;
-      internal set;
+      get {
+        return request.Procedure.DisplayName;
+      }
     }
 
     public string FilledOutBy {
-      get;
-      internal set;
+      get {
+        return request.PostedBy.Alias;
+      }
     }
 
     public DateTime FilledOutTime {
-      get;
-      internal set;
+      get {
+        return request.LastUpdate;
+      }
     }
 
     public dynamic Fields {
-      get;
-      internal set;
-    } = new object();
+      get {
+        return request.ApplicationForm.ToObject();
+      }
+    }
 
-  } // class ApplicationFormDTO
+  } // class ApplicationFormDto
 
 
 
@@ -261,29 +304,40 @@ namespace Empiria.OnePoint.EFiling {
 
 
   /// <summary>User permissions over a filing request.</summary>
-  public class PermissionsDTO {
+  public class PermissionsDto {
+
+    private readonly EFilingUserContext userContext;
+
+    internal PermissionsDto(EFilingUserContext userContext) {
+      this.userContext = userContext;
+    }
+
 
     public bool CanManage {
-      get;
-      internal set;
+      get {
+        return userContext.IsManager;
+      }
     }
 
     public bool CanRegister {
-      get;
-      internal set;
+      get {
+        return userContext.IsRegister;
+      }
     }
 
     public bool CanSendToSign {
-      get;
-      internal set;
+      get {
+        return userContext.IsRegister && !userContext.IsSigner;
+      }
     }
 
     public bool CanSign {
-      get;
-      internal set;
+      get {
+        return userContext.IsSigner;
+      }
     }
 
-  }  // class PermissionsDTO
+  }  // class PermissionsDto
 
 
 } // namespace Empiria.OnePoint.EFiling
