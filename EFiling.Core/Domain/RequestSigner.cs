@@ -18,12 +18,22 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Performs electronic sign operations for e-filing requests.</summary>
   internal class RequestSigner {
 
+    #region Fields
+
     private readonly EFilingRequest _request;
+
+    private readonly RequestStatusHandler _statusHandler;
+
+    #endregion Fields
 
     #region Constructors and parsers
 
-    internal RequestSigner(EFilingRequest request) {
+    internal RequestSigner(EFilingRequest request, RequestStatusHandler statusHandler) {
+      Assertion.AssertObject(request, "request");
+      Assertion.AssertObject(statusHandler, "statusHandler");
+
       _request = request;
+      _statusHandler = statusHandler;
 
       this.SecurityData = new SecurityData(request);
     }
@@ -72,7 +82,9 @@ namespace Empiria.OnePoint.EFiling {
 
       this.AuthorizationTime = ExecutionServer.DateMaxValue;
 
-      _request.OnSignRevoked();
+      _request.ExtensionData.Remove("esign");
+
+      _statusHandler.SignRevoked();
     }
 
 
@@ -85,7 +97,9 @@ namespace Empiria.OnePoint.EFiling {
 
       JsonObject signData = this.GetESignData(credentials);
 
-      _request.OnSigned(signData);
+      _request.ExtensionData.Set("esign", signData);
+
+      _statusHandler.Signed();
     }
 
 

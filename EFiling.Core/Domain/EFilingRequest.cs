@@ -35,10 +35,10 @@ namespace Empiria.OnePoint.EFiling {
     #region Constructors and parsers
 
     private EFilingRequest() {
-      _requestSigner = new RequestSigner(this);
       _externalServicesHandler = new EFilingExternalServicesInteractor(this);
-      _paymentOrderHandler = new PaymentOrderHandler(this, _externalServicesHandler);
       _statusHandler = new RequestStatusHandler(this, _externalServicesHandler);
+      _paymentOrderHandler = new PaymentOrderHandler(this, _externalServicesHandler);
+      _requestSigner = new RequestSigner(this, _statusHandler);
     }
 
 
@@ -120,7 +120,7 @@ namespace Empiria.OnePoint.EFiling {
     public virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(this.RequestedBy.Name,
-                                           this.Procedure.DisplayName);
+                                           this.Transaction.UID);
       }
     }
 
@@ -206,19 +206,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    internal void OnSigned(JsonObject signData) {
-      this.ExtensionData.Set("esign", signData);
-
-      _statusHandler.Signed();
-    }
-
-
-    internal void OnSignRevoked() {
-      this.ExtensionData.Remove("esign");
-
-      _statusHandler.SignRevoked();
-    }
-
     #endregion Security members
 
 
@@ -286,11 +273,18 @@ namespace Empiria.OnePoint.EFiling {
     #endregion Payment data
 
 
-    #region Public Methods
+    #region Methods
 
 
     internal void Delete() {
       _statusHandler.Delete();
+    }
+
+
+    private void LoadRequesterData() {
+      var json = this.ExtensionData.Slice("requestedByData", false);
+
+      this.RequestedBy.Load(json);
     }
 
 
@@ -330,6 +324,17 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
+    internal void SetUserContextData() {
+      _statusHandler.EnsureCanBeEdited();
+
+      var userContext = EFilingUserContext.Current();
+
+      this.PostedBy = userContext.User;
+      this.Agency = userContext.Agency;
+      this.Agent = userContext.Agent;
+    }
+
+
     internal async Task Submit() {
       await _statusHandler.Submit()
                           .ConfigureAwait(false);
@@ -351,27 +356,8 @@ namespace Empiria.OnePoint.EFiling {
                           .ConfigureAwait(false);
     }
 
-    #endregion Public methods
+    #endregion Methods
 
-
-    #region Private methods
-
-    private void LoadRequesterData() {
-      var json = this.ExtensionData.Slice("requestedByData", false);
-
-      this.RequestedBy.Load(json);
-    }
-
-
-    internal void SetUserContextData() {
-      var userContext = EFilingUserContext.Current();
-
-      this.PostedBy = userContext.User;
-      this.Agency = userContext.Agency;
-      this.Agent = userContext.Agent;
-    }
-
-    #endregion Private methods
 
   } // class EFilingRequest
 
