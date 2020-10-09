@@ -95,7 +95,7 @@ namespace Empiria.OnePoint.EFiling {
     #region Private methods
 
     private void EnsureCanBeSigned() {
-      Assertion.Assert(!_request.IsSigned, "This filing was already signed.");
+      Assertion.Assert(!this.IsSigned, "This filing was already signed.");
 
       var userContext = EFilingUserContext.Current();
 
@@ -104,7 +104,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     private void EnsureCanRevokeSign() {
-      Assertion.Assert(_request.IsSigned, "This filing is not signed.");
+      Assertion.Assert(this.IsSigned, "This filing is not signed.");
 
       var userContext = EFilingUserContext.Current();
 

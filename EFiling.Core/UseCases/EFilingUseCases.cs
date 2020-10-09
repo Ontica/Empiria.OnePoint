@@ -55,7 +55,6 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-
     static public async Task<EFilingRequestDto> SubmitEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
