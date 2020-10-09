@@ -22,7 +22,7 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Constructors and parsers
 
-    public RequestSigner(EFilingRequest request) {
+    internal RequestSigner(EFilingRequest request) {
       _request = request;
 
       this.SecurityData = new SecurityData(request);
@@ -32,6 +32,27 @@ namespace Empiria.OnePoint.EFiling {
     #endregion Constructors and parsers
 
     #region Public members
+
+    public DateTime AuthorizationTime {
+      get {
+        return _request.ExtensionData.Get("authorizationTime", ExecutionServer.DateMaxValue);
+      }
+      private set {
+        if (value != ExecutionServer.DateMaxValue) {
+          _request.ExtensionData.Set("authorizationTime", value);
+        } else {
+          _request.ExtensionData.Remove("authorizationTime");
+        }
+      }
+    }
+
+
+    internal bool IsSigned {
+      get {
+        return this.SecurityData.ElectronicSign.Length != 0;
+      }
+    }
+
 
     internal SecurityData SecurityData {
       get;
@@ -49,6 +70,8 @@ namespace Empiria.OnePoint.EFiling {
 
       Cryptographer.AssertValidPrivateKeyPassword(securedPassword);
 
+      this.AuthorizationTime = ExecutionServer.DateMaxValue;
+
       _request.OnSignRevoked();
     }
 
@@ -58,7 +81,7 @@ namespace Empiria.OnePoint.EFiling {
 
       EnsureCanBeSigned();
 
-      _request.OnBeforeSign();
+      this.AuthorizationTime = DateTime.Now;
 
       JsonObject signData = this.GetESignData(credentials);
 

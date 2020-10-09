@@ -19,11 +19,23 @@ namespace Empiria.OnePoint.EFiling {
   /// <summary>Represents an electronic filing request typically submitted to a government agency.</summary>
   public class EFilingRequest : BaseObject {
 
+    #region Collaborators
+
+    private readonly EFilingExternalServicesInteractor _externalServicesHandler;
+
+    private readonly PaymentOrderHandler _paymentOrderHandler;
+
+    private readonly RequestSigner _requestSigner;
+
+    #endregion Collaborators
+
+
     #region Constructors and parsers
 
     private EFilingRequest() {
-      this.SecurityHandler = new RequestSigner(this);
-      this.ExternalServicesHandler = new EFilingExternalServicesInteractor(this);
+      _requestSigner = new RequestSigner(this);
+      _externalServicesHandler = new EFilingExternalServicesInteractor(this);
+      _paymentOrderHandler = new PaymentOrderHandler(this, _externalServicesHandler);
     }
 
 
@@ -52,7 +64,6 @@ namespace Empiria.OnePoint.EFiling {
 
     protected override void OnLoadObjectData(DataRow row) {
       this.LoadRequesterData();
-      this.LoadPaymentData();
     }
 
 
@@ -68,7 +79,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    [DataObject()]
+    [DataObject]
     public RequesterDto RequestedBy {
       get;
       private set;
@@ -184,32 +195,21 @@ namespace Empiria.OnePoint.EFiling {
 
     public DateTime AuthorizationTime {
       get {
-        return this.ExtensionData.Get("authorizationTime", ExecutionServer.DateMaxValue);
-      }
-      private set {
-        if (value != ExecutionServer.DateMaxValue) {
-          this.ExtensionData.Set("authorizationTime", value);
-        } else {
-          this.ExtensionData.Remove("authorizationTime");
-        }
+        return _requestSigner.AuthorizationTime;
       }
     }
 
     public bool IsSigned {
       get {
-        return this.SecurityData.ElectronicSign.Length != 0;
+        return _requestSigner.IsSigned;
       }
     }
+
 
     public SecurityData SecurityData {
       get {
-        return this.SecurityHandler.SecurityData;
+        return _requestSigner.SecurityData;
       }
-    }
-
-
-    private RequestSigner SecurityHandler {
-      get;
     }
 
 
@@ -220,17 +220,13 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    internal void OnBeforeSign() {
-      this.AuthorizationTime = DateTime.Now;
-    }
-
     internal void Sign(JsonObject signInputData) {
-      this.SecurityHandler.Sign(signInputData);
+      _requestSigner.Sign(signInputData);
     }
 
 
     internal void RevokeSign(JsonObject revokeSignData) {
-      this.SecurityHandler.RevokeSign(revokeSignData);
+      _requestSigner.RevokeSign(revokeSignData);
     }
 
 
@@ -243,8 +239,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void OnSignRevoked() {
-      this.AuthorizationTime = ExecutionServer.DateMaxValue;
-
       this.ExtensionData.Remove("esign");
 
       this.Status = RequestStatus.Pending;
@@ -263,7 +257,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    [DataObject()]
+    [DataObject]
     public EFilingTransaction Transaction {
       get;
       private set;
@@ -273,11 +267,11 @@ namespace Empiria.OnePoint.EFiling {
     internal async Task CreateTransaction() {
       Assertion.Assert(!this.HasTransaction, $"A transaction was already linked to this request.");
 
-      var createdTransaction = await this.ExternalServicesHandler.CreateTransaction();
+      var createdTransaction = await _externalServicesHandler.CreateTransaction();
 
       this.Transaction = new EFilingTransaction(createdTransaction.UID);
 
-      await this.Transaction.Synchronize(this.ExternalServicesHandler);
+      await this.Transaction.Synchronize(_externalServicesHandler);
     }
 
 
@@ -286,45 +280,33 @@ namespace Empiria.OnePoint.EFiling {
 
     #region Payment data
 
+
     public bool HasPaymentOrder {
       get {
-        return this.PaymentOrder.RouteNumber.Length != 0;
+        return _paymentOrderHandler.HasPaymentOrder;
       }
     }
 
 
     internal PaymentOrder PaymentOrder {
-      get;
-      private set;
-    } = PaymentOrder.Empty;
-
-
-    internal async Task CreatePaymentOrder() {
-      var dto = await this.ExternalServicesHandler.GeneratePaymentOrder();
-
-      this.PaymentOrder = new PaymentOrder(dto);
-    }
-
-
-    internal void SetPaymentReceipt(string receiptNo) {
-      Assertion.AssertObject(receiptNo, "receiptNo");
-
-      this.PaymentOrder.ReceiptNo = receiptNo;
-    }
-
-
-    private void LoadPaymentData() {
-      if (this.Transaction.ExtensionData.Contains("paymentData")) {
-        var paymentData = this.Transaction.ExtensionData.Slice("paymentData");
-
-        this.PaymentOrder = PaymentOrder.Parse(paymentData);
+      get {
+        return _paymentOrderHandler.PaymentOrder;
       }
     }
 
 
+    internal async Task CreatePaymentOrder() {
+      await _paymentOrderHandler.CreatePaymentOrder();
+    }
+
+
+    internal void SetPaymentReceipt(string receiptNo) {
+      _paymentOrderHandler.SetPaymentReceipt(receiptNo);
+    }
+
+
     private void SetPaymentData() {
-      this.Transaction.ExtensionData.SetIfValue("paymentData",
-                                                this.PaymentOrder.ToJson());
+      _paymentOrderHandler.SetPaymentData();
     }
 
     #endregion Payment data
@@ -373,9 +355,9 @@ namespace Empiria.OnePoint.EFiling {
     internal async Task Submit() {
       EnsureCanBeSubmitted();
 
-      await this.ExternalServicesHandler.SetPayment();
+      await _externalServicesHandler.SetPayment();
 
-      await this.ExternalServicesHandler.Submit();
+      await _externalServicesHandler.Submit();
 
       await this.UpdateStatus(RequestStatus.Submitted)
                 .ConfigureAwait(false);
@@ -384,10 +366,10 @@ namespace Empiria.OnePoint.EFiling {
 
     internal async Task Synchronize() {
       if (this.HasTransaction) {
-        await this.Transaction.Synchronize(this.ExternalServicesHandler);
+        await this.Transaction.Synchronize(_externalServicesHandler);
       }
-      if (this.HasTransaction || this.HasPaymentOrder) {
-        await this.PaymentOrder.Synchronize(this.ExternalServicesHandler);
+      if (this.HasPaymentOrder) {
+        await _paymentOrderHandler.Synchronize();
       }
     }
 
@@ -406,10 +388,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #region Private methods
-
-    private EFilingExternalServicesInteractor ExternalServicesHandler {
-      get;
-    }
 
 
     private void EnsureCanBeEdited() {
