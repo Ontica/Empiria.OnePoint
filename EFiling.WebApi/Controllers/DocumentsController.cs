@@ -12,6 +12,8 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
+using Empiria.OnePoint.EFiling.UseCases;
+
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web api controller that provides input and output e-documents for filing requests.</summary>

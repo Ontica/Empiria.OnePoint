@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-namespace Empiria.OnePoint.EFiling {
+namespace Empiria.OnePoint.EFiling.UseCases {
 
 
   public class EFilingRequestDto {
@@ -349,4 +349,4 @@ namespace Empiria.OnePoint.EFiling {
   }  // class PermissionsDto
 
 
-} // namespace Empiria.OnePoint.EFiling
+} // namespace Empiria.OnePoint.EFiling.UseCases

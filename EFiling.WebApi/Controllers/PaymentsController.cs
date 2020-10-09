@@ -14,6 +14,8 @@ using System.Web.Http;
 using Empiria.Json;
 using Empiria.WebApi;
 
+using Empiria.OnePoint.EFiling.UseCases;
+
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary> Web api provider for e-filing payment related processes.</summary>
@@ -25,10 +27,10 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/generate-payment-order")]
     public async Task<SingleObjectModel> GeneratePaymentOrder([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDto filingRequest =
-                          await EFilingUseCases.GeneratePaymentOrder(filingRequestUID);
+        EFilingRequestDto filingRequestDto =
+                await PaymentUseCases.GeneratePaymentOrder(filingRequestUID);
 
-        return new SingleObjectModel(this.Request, filingRequest);
+        return new SingleObjectModel(this.Request, filingRequestDto);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -43,10 +45,10 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         var json = JsonObject.Parse(paymentData);
 
-        EFilingRequestDto filingRequest =
-                      EFilingUseCases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
+        EFilingRequestDto filingRequestDto =
+                PaymentUseCases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
 
-        return new SingleObjectModel(this.Request, filingRequest);
+        return new SingleObjectModel(this.Request, filingRequestDto);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);

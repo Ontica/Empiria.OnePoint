@@ -8,10 +8,25 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.OnePoint.EFiling {
+namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Data mapping methods between electronic filing entities and their data transfer objects.</summary>
   static internal class EFilingMapper {
+
+
+    static internal EFilingRequest Map(string filingRequestUID) {
+      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
+
+      var request = EFilingRequest.TryParse(filingRequestUID);
+
+      if (request == null) {
+        throw new ResourceNotFoundException("ElectronicFilingRequest.UID.NotFound",
+                        $"No tenemos registrada ninguna solicitud con identificador {filingRequestUID}.");
+      }
+
+      return request;
+    }
+
 
     static internal FixedList<EFilingRequestDto> Map(FixedList<EFilingRequest> source) {
       return new FixedList<EFilingRequestDto>(source.Select((x) => Map(x)));
@@ -44,6 +59,7 @@ namespace Empiria.OnePoint.EFiling {
       return r;
     }
 
+
   }  // class EFilingMapper
 
-}  // namespace Empiria.OnePoint.ESign
+}  // namespace Empiria.OnePoint.ESign.UseCases

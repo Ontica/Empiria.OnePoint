@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.OnePoint.EFiling {
+namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implement documentation services for electronic filing requests.</summary>
   static public class EFilingDocumentsUseCases {
@@ -16,7 +16,7 @@ namespace Empiria.OnePoint.EFiling {
     #region Use cases
 
     static public FixedList<EFilingDocument> GetOutputDocuments(string filingRequestUID) {
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       var provider = ExternalProviders.GetFilingTransactionProvider(filingRequest.Procedure);
 
@@ -25,24 +25,6 @@ namespace Empiria.OnePoint.EFiling {
 
     #endregion Use cases
 
-    #region Utility methods
-
-    static private EFilingRequest ParseEFilingRequest(string filingRequestUID) {
-      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
-
-      var request = EFilingRequest.TryParse(filingRequestUID);
-
-      if (request == null) {
-        throw new ResourceNotFoundException("ElectronicFilingRequest.UID.NotFound",
-                                            $"No tenemos registrada ninguna solicitud con identificador {filingRequestUID}.");
-      }
-
-      return request;
-    }
-
-
-    #endregion Utility methods
-
   }  // class EFilingDocumentsUseCases
 
-}  // namespace Empiria.OnePoint.EFiling
+}  // namespace Empiria.OnePoint.EFiling.UseCases

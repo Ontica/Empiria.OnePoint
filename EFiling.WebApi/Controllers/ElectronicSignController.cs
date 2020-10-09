@@ -12,6 +12,8 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
+using Empiria.OnePoint.EFiling.UseCases;
+
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web services that provides electronic sign services.</summary>
@@ -22,13 +24,14 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/revoke-sign")]
     public SingleObjectModel RevokeEFilingRequestSign([FromUri] string filingRequestUID,
-                                                  [FromBody] object body) {
+                                                      [FromBody] object body) {
       try {
         var revokeSignData = base.GetJsonFromBody(body);
 
-        EFilingRequestDto filingRequest = EFilingUseCases.RevokeEFilingRequestSign(filingRequestUID, revokeSignData);
+        EFilingRequestDto filingRequestDto =
+              ElectronicSignUseCases.RevokeSign(filingRequestUID, revokeSignData);
 
-        return new SingleObjectModel(this.Request, filingRequest);
+        return new SingleObjectModel(this.Request, filingRequestDto);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -40,9 +43,9 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/send-to-sign")]
     public SingleObjectModel SendToSign([FromUri] string filingRequestUID) {
       try {
-        EFilingRequestDto filingRequest = EFilingUseCases.SendEFilingRequestToSign(filingRequestUID);
+        EFilingRequestDto filingRequestDto = ElectronicSignUseCases.SendToSign(filingRequestUID);
 
-        return new SingleObjectModel(this.Request, filingRequest);
+        return new SingleObjectModel(this.Request, filingRequestDto);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);
@@ -57,9 +60,9 @@ namespace Empiria.OnePoint.EFiling.WebApi {
       try {
         var signData = base.GetJsonFromBody(body);
 
-        EFilingRequestDto filingRequest = EFilingUseCases.SignEFilingRequest(filingRequestUID, signData);
+        EFilingRequestDto filingRequestDto = ElectronicSignUseCases.Sign(filingRequestUID, signData);
 
-        return new SingleObjectModel(this.Request, filingRequest);
+        return new SingleObjectModel(this.Request, filingRequestDto);
 
       } catch (Exception e) {
         throw base.CreateHttpException(e);

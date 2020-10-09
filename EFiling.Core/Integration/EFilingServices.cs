@@ -39,7 +39,8 @@ namespace Empiria.OnePoint.EFiling {
         case "TransactionReturned":
         case "TransactionArchived":
         case "TransactionReentered":
-          await ChangeTransactionStatus(filingRequestUID, eventName);
+          await ChangeTransactionStatus(filingRequestUID, eventName)
+               .ConfigureAwait(false);
           return;
 
         default:

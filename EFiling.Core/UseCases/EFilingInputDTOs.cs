@@ -8,20 +8,20 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.OnePoint.EFiling {
+namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Create electronic filing request data.</summary>
-  public class CreateEFilingRequestDTO {
+  public class CreateEFilingRequestDto {
 
-    public string procedureType {
+    public string ProcedureType {
       get; set;
     }
 
-    public RequesterDto requestedBy {
+    public RequesterDto RequestedBy {
       get; set;
     }
 
-  }  // class CreateEFilingRequestDTO
+  }  // class CreateEFilingRequestDto
 
 
-}  // namespace Empiria.OnePoint.EFiling
+}  // namespace Empiria.OnePoint.EFiling.UseCases

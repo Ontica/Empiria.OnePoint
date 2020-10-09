@@ -1,7 +1,6 @@
-﻿# About Empiria OnePoint
+﻿# Empiria OnePoint
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5b3ebddf0bce44188ad00877840a18f6)](https://www.codacy.com/gh/Ontica/Empiria.OnePoint/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ontica/Empiria.OnePoint&amp;utm_campaign=Badge_Grade) &nbsp; &nbsp; [![Maintainability](https://api.codeclimate.com/v1/badges/a66f2027efa4d2091661/maintainability)](https://codeclimate.com/github/Ontica/Empiria.OnePoint/maintainability)
-
 
 [Empiria OnePoint](http://www.ontica.org/) is a suite of software components that allow governments
 to provide services to people and organizations using a single point of contact.
@@ -15,51 +14,50 @@ This project is based on C# and .NET Framework and can be compiled using Visual 
 As other Empiria products, this backend runs over [Empiria Framework](https://github.com/Ontica/Empiria.Core)
 components and, as usual, needs some of the [Empiria Extensions](https://github.com/Ontica/Empiria.Extensions).
 
-# Modules
+## Modules
 
 Empiria OnePoint services are packaged into the following software modules:
 
-1. [**Core**](https://github.com/Ontica/Empiria.OnePoint/tree/master/OnePoint)
+1.  **Core**
 
-   Domain layer that provides services to perform procedure and document filing tasks.
+    Domain layer that provides services to perform procedure and document filing tasks.
 
-   Additionally offers services for payment orders issuance, record keeping of payment orders linked to each
-   provided service, and connectors to integrate it with treasury systems. However, this module neither executes
-   payments nor supplies an electronic payment infrastructure.
+    Additionally offers services for payment orders issuance, record keeping of payment orders linked to each
+    provided service, and connectors to integrate it with treasury systems. However, this module neither executes
+    payments nor supplies an electronic payment infrastructure.
 
-   Also contains components that describes and defines government's procedures, their data, rules and requirements.
+    Also contains components that describes and defines government's procedures, their data, rules and requirements.
 
-   Empiria OnePoint has a Services Integrator, which is a pluggable infrastructure to connect Empiria OnePoint
-   with external government's software systems and services that performs the actual services.
+    Empiria OnePoint has a Services Integrator, which is a pluggable infrastructure to connect Empiria OnePoint
+    with external government's software systems and services that performs the actual services.
 
-   Moreover, to control the workflow, it can be connected with Empiria Steps in a natural way or with third-party
-   workflow management systems to adequately control each task's process that may involve one or many public
-   dependencies.
+    Moreover, to control the workflow, it can be connected with Empiria Steps in a natural way or with third-party
+    workflow management systems to adequately control each task's process that may involve one or many public
+    dependencies.
 
-2. **Document Management**
+2.  **Document Management**
 
-   Infrastructure to securely manage documents and forms fulfilled by people, business and organizations.
+    Infrastructure to securely manage documents and forms fulfilled by people, business and organizations.
 
-   Provides electronic sign services to protect and sign documents.
+    Provides electronic sign services to protect and sign documents.
 
+3.  **Knowledge Base Management**
 
-3. **Knowledge Base Management**
-   Infrastructure used to build and manage a knowledge base about procedures and government services.
+    Infrastructure used to build and manage a knowledge base about procedures and government services.
 
-   Also contains components that provides help desk services connected to an issue tracking system.
+    Also contains components that provides help desk services connected to an issue tracking system.
 
+4.  **Application Services**
 
-4. **Application Services**
-   Application services layer with a general-purpose entry-level set of use-cases involved in
-   Empiria OnePoint-based solutions.
+    Application services layer with a general-purpose entry-level set of use-cases involved in
+    Empiria OnePoint-based solutions.
 
+5.  **Web API**
 
-5. **Web API**
-   Http/Json RESTful type web services interface used to communicate Empiria OnePoint-based solutions with
-   front-end applications and third-party systems.
+    Http/Json RESTful type web services interface used to communicate Empiria OnePoint-based solutions with
+    front-end applications and third-party systems.
 
-
-# Documentation
+## Documentation
 
 Folder [**docs**](https://github.com/Ontica/Empiria.OnePoint/tree/master/docs) contains a web site with
 the full code documentation. It can be downloaded and installed in the web server of your preference.
@@ -71,13 +69,13 @@ the full set of tables, views, functions and stored procedures.
 
 **components.pdf** file presents a general view map of the system.
 
-# License
+## License
 
 This system is distributed by the GNU AFFERO GENERAL PUBLIC LICENSE.
 
 Óntica always delivers **open source** information systems. We consider that this practice is specially
 important in the case of public utility or government systems.
 
-# Copyright
+## Copyright
 
 Copyright © 2017-2019. La Vía Óntica SC, Ontica LLC and colaborators.

@@ -2,28 +2,28 @@
 *                                                                                                            *
 *  Module   : Electronic Filing Services                 Component : Use cases Layer                         *
 *  Assembly : Empiria.OnePoint.EFiling.dll               Pattern   : Use Cases class                         *
-*  Type     : EFilingUseCases                            License   : Please read LICENSE.txt file            *
+*  Type     : EFilingRequestUseCases                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Use cases that implements electronic filing services.                                          *
+*  Summary  : Use cases that implements services for electronic filing requests.                             *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System.Threading.Tasks;
 
 using Empiria.Json;
 
-namespace Empiria.OnePoint.EFiling {
+namespace Empiria.OnePoint.EFiling.UseCases {
 
-  /// <summary>Use cases that implements electronic filing services.</summary>
-  static public class EFilingUseCases {
+  /// <summary>Use cases that implements services for electronic filing requests.</summary>
+  static public class EFilingRequestUseCases {
 
     #region Use cases
 
-    static public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDTO requestDTO) {
+    static public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDto requestDTO) {
       Assertion.AssertObject(requestDTO, "requestDTO");
 
-      var procedure = Procedure.Parse(requestDTO.procedureType);
+      var procedure = Procedure.Parse(requestDTO.ProcedureType);
 
-      var filingRequest = new EFilingRequest(procedure, requestDTO.requestedBy);
+      var filingRequest = new EFilingRequest(procedure, requestDTO.RequestedBy);
 
       filingRequest.Save();
 
@@ -32,7 +32,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static public void DeleteEFilingRequest(string filingRequestUID) {
-      var filingRequest = ParseEFilingRequest(filingRequestUID);
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       filingRequest.Delete();
 
@@ -40,49 +40,8 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public async Task SynchronizeExternalData() {
-      var list = EFilingRequest.GetList<EFilingRequest>();
-
-      foreach (var request in list) {
-        if (request.HasTransaction && request.Transaction.LastUpdate == ExecutionServer.DateMinValue) {
-          await SynchronizeExternalData(request.UID).ConfigureAwait(false);
-        }
-      }
-    }
-
-
-    static public async Task<EFilingRequestDto> SynchronizeExternalData(string filingRequestUID) {
-      var filingRequest = ParseEFilingRequest(filingRequestUID);
-
-      await filingRequest.Synchronize();
-
-      filingRequest.Save();
-
-      return EFilingMapper.Map(filingRequest);
-    }
-
-
-    static public async Task<EFilingRequestDto> GeneratePaymentOrder(string filingRequestUID) {
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-
-      if (!filingRequest.HasTransaction) {
-        await filingRequest.CreateTransaction();
-      } else {
-        await filingRequest.Synchronize();
-      }
-
-      if (!filingRequest.HasPaymentOrder) {
-        await filingRequest.CreatePaymentOrder();
-      }
-
-      filingRequest.Save();
-
-      return EFilingMapper.Map(filingRequest);
-    }
-
-
     static public EFilingRequestDto GetEFilingRequest(string filingRequestUID) {
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       return EFilingMapper.Map(filingRequest);
     }
@@ -96,61 +55,9 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static public EFilingRequestDto RevokeEFilingRequestSign(string filingRequestUID,
-                                                             JsonObject revokeSignData) {
-      Assertion.AssertObject(revokeSignData, "revokeSignData");
-
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-
-      filingRequest.RevokeSign(revokeSignData);
-
-      filingRequest.Save();
-
-      return EFilingMapper.Map(filingRequest);
-    }
-
-
-    static public EFilingRequestDto SendEFilingRequestToSign(string filingRequestUID) {
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-
-      filingRequest.SendToSign();
-
-      filingRequest.Save();
-
-      return EFilingMapper.Map(filingRequest);
-    }
-
-
-    static public EFilingRequestDto SetPaymentReceipt(string filingRequestUID,
-                                                      string receiptNo) {
-      Assertion.AssertObject(receiptNo, "receiptNo");
-
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-
-      filingRequest.SetPaymentReceipt(receiptNo);
-
-      filingRequest.Save();
-
-      return EFilingMapper.Map(filingRequest);
-    }
-
-
-    static public EFilingRequestDto SignEFilingRequest(string filingRequestUID,
-                                                       JsonObject signInputData) {
-      Assertion.AssertObject(signInputData, "signInputData");
-
-      EFilingRequest filingRequest = ParseEFilingRequest(filingRequestUID);
-
-      filingRequest.Sign(signInputData);
-
-      filingRequest.Save();
-
-      return EFilingMapper.Map(filingRequest);
-    }
-
 
     static public async Task<EFilingRequestDto> SubmitEFilingRequest(string filingRequestUID) {
-      var filingRequest = ParseEFilingRequest(filingRequestUID);
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       await filingRequest.Submit();
 
@@ -162,7 +69,7 @@ namespace Empiria.OnePoint.EFiling {
 
     static public EFilingRequestDto UpdateApplicationForm(string filingRequestUID,
                                                           JsonObject json) {
-      var filingRequest = ParseEFilingRequest(filingRequestUID);
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       filingRequest.SetApplicationForm(json);
 
@@ -176,7 +83,7 @@ namespace Empiria.OnePoint.EFiling {
                                                          RequesterDto requestedBy) {
       Assertion.AssertObject(requestedBy, "requestedBy");
 
-      var filingRequest = ParseEFilingRequest(filingRequestUID);
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       filingRequest.SetRequesterData(requestedBy);
 
@@ -189,26 +96,31 @@ namespace Empiria.OnePoint.EFiling {
     #endregion Use cases
 
 
-    #region Utility methods
+    #region Synchronization use cases
 
+    static public async Task SynchronizeAllExternalData() {
+      var list = EFilingRequest.GetList<EFilingRequest>();
 
-    static private EFilingRequest ParseEFilingRequest(string filingRequestUID) {
-      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
-
-      var request = EFilingRequest.TryParse(filingRequestUID);
-
-      if (request == null) {
-        throw new ResourceNotFoundException("ElectronicFilingRequest.UID.NotFound",
-                        $"No tenemos registrada ninguna solicitud con identificador {filingRequestUID}.");
+      foreach (var request in list) {
+        if (request.HasTransaction && request.Transaction.LastUpdate == ExecutionServer.DateMinValue) {
+          await SynchronizeExternalData(request.UID).ConfigureAwait(false);
+        }
       }
-
-      return request;
     }
 
 
-    #endregion Utility methods
+    static public async Task<EFilingRequestDto> SynchronizeExternalData(string filingRequestUID) {
+      EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
+      await filingRequest.Synchronize();
 
-  }  // class EFilingUseCases
+      filingRequest.Save();
 
-}  // namespace Empiria.OnePoint.EFiling
+      return EFilingMapper.Map(filingRequest);
+    }
+
+    #endregion Synchronization use cases
+
+  }  // class EFilingRequestUseCases
+
+}  // namespace Empiria.OnePoint.EFiling.UseCases

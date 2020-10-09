@@ -377,7 +377,8 @@ namespace Empiria.OnePoint.EFiling {
 
       await this.ExternalServicesHandler.Submit();
 
-      await this.UpdateStatus(RequestStatus.Submitted);
+      await this.UpdateStatus(RequestStatus.Submitted)
+                .ConfigureAwait(false);
     }
 
 
@@ -395,7 +396,8 @@ namespace Empiria.OnePoint.EFiling {
       this.Status = newStatus;
 
       if (StatusNeedsExternalDataSynchronization(newStatus)) {
-        await this.Synchronize();
+        await this.Synchronize()
+              .ConfigureAwait(false);
       }
     }
 

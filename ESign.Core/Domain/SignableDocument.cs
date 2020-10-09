@@ -111,7 +111,6 @@ namespace Empiria.OnePoint.ESign {
 
         } else {
           return $"{SignableDocumentsURL}/recording.seal.aspx?uid={DocumentNo}";
-          // throw Assertion.AssertNoReachThisCode("Unrecognized document type.");
 
         }
       }
