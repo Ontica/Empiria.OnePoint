@@ -65,6 +65,8 @@ namespace Empiria.OnePoint.EFiling {
 
     protected override void OnLoadObjectData(DataRow row) {
       this.LoadRequesterData();
+
+      _paymentOrderHandler.LoadPaymentOrder();
     }
 
 

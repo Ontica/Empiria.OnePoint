@@ -32,8 +32,6 @@ namespace Empiria.OnePoint.EFiling {
 
       _request = request;
       _externalServices = externalServices;
-
-      LoadPaymentOrder();
     }
 
     #endregion Constructors and parsers
@@ -65,7 +63,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private void LoadPaymentOrder() {
+    internal void LoadPaymentOrder() {
       if (_request.Transaction.ExtensionData.Contains("paymentData")) {
         var paymentData = _request.Transaction.ExtensionData.Slice("paymentData");
 
