@@ -7,7 +7,6 @@
 *  Summary  : Web services that provides electronic sign services.                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Web.Http;
 
 using Empiria.WebApi;
@@ -25,16 +24,13 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/revoke-sign")]
     public SingleObjectModel RevokeEFilingRequestSign([FromUri] string filingRequestUID,
                                                       [FromBody] object body) {
-      try {
+
+      using (var usecases = new ElectronicSignUseCases()) {
         var revokeSignData = base.GetJsonFromBody(body);
 
-        EFilingRequestDto filingRequestDto =
-              ElectronicSignUseCases.RevokeSign(filingRequestUID, revokeSignData);
+        EFilingRequestDto filingRequestDto = usecases.RevokeSign(filingRequestUID, revokeSignData);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -42,13 +38,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/send-to-sign")]
     public SingleObjectModel SendToSign([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequestDto = ElectronicSignUseCases.SendToSign(filingRequestUID);
+
+      using (var usecases = new ElectronicSignUseCases()) {
+        EFilingRequestDto filingRequestDto = usecases.SendToSign(filingRequestUID);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -57,15 +51,13 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/sign")]
     public SingleObjectModel SignEFilingRequest([FromUri] string filingRequestUID,
                                                 [FromBody] object body) {
-      try {
+
+      using (var usecases = new ElectronicSignUseCases()) {
         var signData = base.GetJsonFromBody(body);
 
-        EFilingRequestDto filingRequestDto = ElectronicSignUseCases.Sign(filingRequestUID, signData);
+        EFilingRequestDto filingRequestDto = usecases.Sign(filingRequestUID, signData);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 

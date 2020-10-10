@@ -7,7 +7,6 @@
 *  Summary  : Web api controller that provides input and output e-documents for filing requests.             *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Web.Http;
 
 using Empiria.WebApi;
@@ -24,13 +23,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpGet]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/output-documents")]
     public CollectionModel GetOutputDocuments([FromUri] string filingRequestUID) {
-      try {
-        FixedList<EFilingDocument> documents = EFilingDocumentsUseCases.GetOutputDocuments(filingRequestUID);
+
+      using (var usecases = new EFilingDocumentsUseCases()) {
+        FixedList<EFilingDocument> documents = usecases.GetOutputDocuments(filingRequestUID);
 
         return new CollectionModel(this.Request, documents);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 

@@ -8,16 +8,16 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using Empiria.Json;
+using Empiria.UseCases;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implements electronic signing of e-filing requests.</summary>
-  static public class ElectronicSignUseCases {
+  public class ElectronicSignUseCases : UseCasesBase {
 
     #region Use cases
 
-    static public EFilingRequestDto RevokeSign(string filingRequestUID,
-                                               JsonObject revokeSignData) {
+    public EFilingRequestDto RevokeSign(string filingRequestUID, JsonObject revokeSignData) {
       Assertion.AssertObject(revokeSignData, "revokeSignData");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
@@ -30,7 +30,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public EFilingRequestDto SendToSign(string filingRequestUID) {
+    public EFilingRequestDto SendToSign(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       filingRequest.SendToSign();
@@ -41,8 +41,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public EFilingRequestDto Sign(string filingRequestUID,
-                                         JsonObject signInputData) {
+    public EFilingRequestDto Sign(string filingRequestUID, JsonObject signInputData) {
       Assertion.AssertObject(signInputData, "signInputData");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
@@ -54,9 +53,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
       return EFilingMapper.Map(filingRequest);
     }
 
-
     #endregion Use cases
-
 
   }  // class ElectronicSignUseCases
 

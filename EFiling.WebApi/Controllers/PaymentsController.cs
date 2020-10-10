@@ -7,7 +7,6 @@
 *  Summary  : Web api provider for e-filing payment related processes.                                       *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -26,14 +25,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/generate-payment-order")]
     public async Task<SingleObjectModel> GeneratePaymentOrder([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequestDto =
-                await PaymentUseCases.GeneratePaymentOrder(filingRequestUID);
+
+      using (var usecases = new PaymentUseCases()) {
+        EFilingRequestDto filingRequestDto = await usecases.GeneratePaymentOrder(filingRequestUID);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -42,16 +38,13 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/set-payment-receipt")]
     public SingleObjectModel SetPaymentReceipt([FromUri] string filingRequestUID,
                                                [FromBody] object paymentData) {
-      try {
+
+      using (var usecases = new PaymentUseCases()) {
         var json = JsonObject.Parse(paymentData);
 
-        EFilingRequestDto filingRequestDto =
-                PaymentUseCases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
+        EFilingRequestDto filingRequestDto = usecases.SetPaymentReceipt(filingRequestUID, json.Get<string>("receiptNo"));
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 

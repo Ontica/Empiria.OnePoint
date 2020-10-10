@@ -10,15 +10,16 @@
 using System.Threading.Tasks;
 
 using Empiria.Json;
+using Empiria.UseCases;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implements services for electronic filing requests.</summary>
-  static public class EFilingRequestUseCases {
+  public class EFilingRequestUseCases: UseCasesBase {
 
-    #region Use cases
+    #region E-Filing Use cases
 
-    static public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDto requestDTO) {
+    public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDto requestDTO) {
       Assertion.AssertObject(requestDTO, "requestDTO");
 
       var procedure = Procedure.Parse(requestDTO.ProcedureType);
@@ -31,7 +32,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public void DeleteEFilingRequest(string filingRequestUID) {
+    public void DeleteEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       filingRequest.Delete();
@@ -40,22 +41,22 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public EFilingRequestDto GetEFilingRequest(string filingRequestUID) {
+    public EFilingRequestDto GetEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       return EFilingMapper.Map(filingRequest);
     }
 
 
-    static public FixedList<EFilingRequestDto> GetEFilingRequestListByStatus(RequestStatus status,
-                                                                             string keywords, int count) {
+    public FixedList<EFilingRequestDto> GetEFilingRequestListByStatus(RequestStatus status,
+                                                                      string keywords, int count) {
       var list = EFilingRequest.GetList(status, keywords, count);
 
       return EFilingMapper.Map(list);
     }
 
 
-    static public async Task<EFilingRequestDto> SubmitEFilingRequest(string filingRequestUID) {
+    public async Task<EFilingRequestDto> SubmitEFilingRequest(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       await filingRequest.Submit();
@@ -66,8 +67,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public EFilingRequestDto UpdateApplicationForm(string filingRequestUID,
-                                                          JsonObject json) {
+    public EFilingRequestDto UpdateApplicationForm(string filingRequestUID, JsonObject json) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       filingRequest.SetApplicationForm(json);
@@ -78,8 +78,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public EFilingRequestDto UpdateEFilingRequest(string filingRequestUID,
-                                                         RequesterDto requestedBy) {
+    public EFilingRequestDto UpdateEFilingRequest(string filingRequestUID, RequesterDto requestedBy) {
       Assertion.AssertObject(requestedBy, "requestedBy");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
@@ -92,12 +91,11 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    #endregion Use cases
-
+    #endregion E-Filing Use cases
 
     #region Synchronization use cases
 
-    static public async Task SynchronizeAllExternalData() {
+    public async Task SynchronizeAllExternalData() {
       var list = EFilingRequest.GetList<EFilingRequest>();
 
       foreach (var request in list) {
@@ -108,7 +106,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    static public async Task<EFilingRequestDto> SynchronizeExternalData(string filingRequestUID) {
+    public async Task<EFilingRequestDto> SynchronizeExternalData(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       await filingRequest.Synchronize();
@@ -117,6 +115,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
 
       return EFilingMapper.Map(filingRequest);
     }
+
 
     #endregion Synchronization use cases
 

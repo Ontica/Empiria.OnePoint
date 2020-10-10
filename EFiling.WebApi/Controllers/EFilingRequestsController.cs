@@ -7,7 +7,6 @@
 *  Summary  : Web api controller that provides filing request services.                                      *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -28,13 +27,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpGet]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public SingleObjectModel GetEFilingRequest([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequestDto = EFilingRequestUseCases.GetEFilingRequest(filingRequestUID);
+
+      using (var usecases = new EFilingRequestUseCases()) {
+        EFilingRequestDto filingRequestDto = usecases.GetEFilingRequest(filingRequestUID);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -43,30 +40,29 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests")]
     public PagedCollectionModel GetEFilingRequestList([FromUri] RequestStatus status = RequestStatus.Pending,
                                                       [FromUri] string keywords = "") {
-      try {
-        FixedList<EFilingRequestDto> list = EFilingRequestUseCases.GetEFilingRequestListByStatus(status, keywords, 50);
+      const int PAGE_SIZE = 50;
+
+      using (var usecases = new EFilingRequestUseCases()) {
+        FixedList<EFilingRequestDto> list = usecases.GetEFilingRequestListByStatus(status, keywords, PAGE_SIZE);
 
         return new PagedCollectionModel(this.Request, list);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
+
     #endregion Query services
+
 
     #region Command services
 
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests")]
     public SingleObjectModel CreateEFilingRequest([FromBody] CreateEFilingRequestDto createRequestDTO) {
-      try {
-        EFilingRequestDto filingRequestDto = EFilingRequestUseCases.CreateEFilingRequest(createRequestDTO);
+
+      using (var usecases = new EFilingRequestUseCases()) {
+        EFilingRequestDto filingRequestDto = usecases.CreateEFilingRequest(createRequestDTO);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -74,14 +70,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpDelete]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public NoDataModel DeleteEFilingRequest([FromUri] string filingRequestUID) {
-      try {
 
-        EFilingRequestUseCases.DeleteEFilingRequest(filingRequestUID);
+      using (var usecases = new EFilingRequestUseCases()) {
+        usecases.DeleteEFilingRequest(filingRequestUID);
 
         return new NoDataModel(this.Request);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -89,13 +82,11 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/submit")]
     public async Task<SingleObjectModel> SubmitEFilingRequest([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequestDto = await EFilingRequestUseCases.SubmitEFilingRequest(filingRequestUID);
+
+      using (var usecases = new EFilingRequestUseCases()) {
+        EFilingRequestDto filingRequestDto = await usecases.SubmitEFilingRequest(filingRequestUID);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -104,16 +95,13 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/update-application-form")]
     public SingleObjectModel UpdateApplicationForm([FromUri] string filingRequestUID,
                                                    [FromBody] object applicationForm) {
-      try {
+
+      using (var usecases = new EFilingRequestUseCases()) {
         var json = JsonObject.Parse(applicationForm);
 
-        EFilingRequestDto filingRequestDto =
-                EFilingRequestUseCases.UpdateApplicationForm(filingRequestUID, json);
+        EFilingRequestDto filingRequestDto = usecases.UpdateApplicationForm(filingRequestUID, json);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -122,33 +110,29 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}")]
     public SingleObjectModel UpdateEFilingRequest([FromUri] string filingRequestUID,
                                                   [FromBody] RequesterDto requestedBy) {
-      try {
 
-        EFilingRequestDto filingRequestDto =
-                EFilingRequestUseCases.UpdateEFilingRequest(filingRequestUID, requestedBy);
+      using (var usecases = new EFilingRequestUseCases()) {
+        EFilingRequestDto filingRequestDto = usecases.UpdateEFilingRequest(filingRequestUID, requestedBy);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
 
     #endregion Command services
 
+
     #region Synchronization services
+
 
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/synchronize")]
     public async Task<NoDataModel> SynchronizeAllExternalData() {
-      try {
-        await EFilingRequestUseCases.SynchronizeAllExternalData();
+
+      using (var usecases = new EFilingRequestUseCases()) {
+        await usecases.SynchronizeAllExternalData();
 
         return new NoDataModel(this.Request);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
 
@@ -156,16 +140,14 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [HttpPost]
     [Route("v2/electronic-filing/filing-requests/synchronize/{filingRequestUID:guid}")]
     public async Task<SingleObjectModel> SynchronizeRequestExternalData([FromUri] string filingRequestUID) {
-      try {
-        EFilingRequestDto filingRequestDto =
-                await EFilingRequestUseCases.SynchronizeExternalData(filingRequestUID);
+
+      using (var usecases = new EFilingRequestUseCases()) {
+        EFilingRequestDto filingRequestDto = await usecases.SynchronizeExternalData(filingRequestUID);
 
         return new SingleObjectModel(this.Request, filingRequestDto);
-
-      } catch (Exception e) {
-        throw base.CreateHttpException(e);
       }
     }
+
 
     #endregion Synchronization services
 

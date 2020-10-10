@@ -7,15 +7,16 @@
 *  Summary  : Use cases that implement documentation services for electronic filing requests.                *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
+using Empiria.UseCases;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implement documentation services for electronic filing requests.</summary>
-  static public class EFilingDocumentsUseCases {
+  public class EFilingDocumentsUseCases : UseCasesBase {
 
     #region Use cases
 
-    static public FixedList<EFilingDocument> GetOutputDocuments(string filingRequestUID) {
+    public FixedList<EFilingDocument> GetOutputDocuments(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       var provider = ExternalProviders.GetFilingTransactionProvider(filingRequest.Procedure);

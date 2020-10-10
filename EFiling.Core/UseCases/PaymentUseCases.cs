@@ -9,14 +9,16 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System.Threading.Tasks;
 
+using Empiria.UseCases;
+
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implements payment services for e-filing requests.</summary>
-  static public class PaymentUseCases {
+  public class PaymentUseCases : UseCasesBase {
 
     #region Use cases
 
-    static public async Task<EFilingRequestDto> GeneratePaymentOrder(string filingRequestUID) {
+    public async Task<EFilingRequestDto> GeneratePaymentOrder(string filingRequestUID) {
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
       if (!filingRequest.HasTransaction) {
@@ -34,8 +36,8 @@ namespace Empiria.OnePoint.EFiling.UseCases {
       return EFilingMapper.Map(filingRequest);
     }
 
-    static public EFilingRequestDto SetPaymentReceipt(string filingRequestUID,
-                                                      string receiptNo) {
+
+    public EFilingRequestDto SetPaymentReceipt(string filingRequestUID, string receiptNo) {
       Assertion.AssertObject(receiptNo, "receiptNo");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
@@ -48,7 +50,6 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
     #endregion Use cases
-
 
   }  // class PaymentUseCases
 
