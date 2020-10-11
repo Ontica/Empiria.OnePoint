@@ -59,7 +59,7 @@ namespace Empiria.OnePoint.EFiling.WebApi {
     [Route("v2/electronic-filing/filing-requests")]
     public SingleObjectModel CreateEFilingRequest([FromBody] CreateEFilingRequestDto createRequestDTO) {
 
-      using (var usecases = new EFilingRequestUseCases()) {
+      using (var usecases = EFilingRequestUseCases.CreateInstance()) {
         EFilingRequestDto filingRequestDto = usecases.CreateEFilingRequest(createRequestDTO);
 
         return new SingleObjectModel(this.Request, filingRequestDto);

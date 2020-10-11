@@ -17,7 +17,15 @@ namespace Empiria.OnePoint.EFiling.UseCases {
   /// <summary>Use cases that implements services for electronic filing requests.</summary>
   public class EFilingRequestUseCases: UseCasesBase {
 
-    #region E-Filing Use cases
+    #region Constructors and parsers
+
+    static public EFilingRequestUseCases CreateInstance() {
+      return UseCasesBase.CreateInstance<EFilingRequestUseCases>();
+    }
+
+    #endregion Constructors and parsers
+
+    #region E-filing use cases
 
     public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDto requestDTO) {
       Assertion.AssertObject(requestDTO, "requestDTO");
@@ -91,7 +99,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
 
-    #endregion E-Filing Use cases
+    #endregion E-filing use cases
 
     #region Synchronization use cases
 
