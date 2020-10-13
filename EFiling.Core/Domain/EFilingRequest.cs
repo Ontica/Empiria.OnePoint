@@ -31,7 +31,6 @@ namespace Empiria.OnePoint.EFiling {
 
     #endregion Collaborators
 
-
     #region Constructors and parsers
 
     private EFilingRequest() {
@@ -71,7 +70,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #endregion Constructors and parsers
-
 
     #region Public properties
 
@@ -114,7 +112,7 @@ namespace Empiria.OnePoint.EFiling {
     protected internal JsonObject ExtensionData {
       get;
       private set;
-    } = new JsonObject();
+    }
 
 
     public virtual string Keywords {
@@ -155,7 +153,7 @@ namespace Empiria.OnePoint.EFiling {
 
     public string StatusName {
       get {
-        return _statusHandler.StatusName;
+        return this.Status.GetName();
       }
     }
 
@@ -208,7 +206,6 @@ namespace Empiria.OnePoint.EFiling {
 
     #endregion Security members
 
-
     #region Transaction data
 
     public bool HasTransaction {
@@ -237,7 +234,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #endregion Transaction data
-
 
     #region Payment data
 
@@ -271,7 +267,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
     #endregion Payment data
-
 
     #region Methods
 
@@ -357,7 +352,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
     #endregion Methods
-
 
   } // class EFilingRequest
 

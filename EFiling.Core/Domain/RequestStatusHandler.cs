@@ -18,11 +18,9 @@ namespace Empiria.OnePoint.EFiling {
     #region Fields
 
     private readonly EFilingRequest _request;
-
     private readonly EFilingExternalServicesInteractor _externalServices;
 
     #endregion Fields
-
 
     #region Constructors and parsers
 
@@ -39,37 +37,6 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #region Properties
-
-    internal string StatusName {
-      get {
-        switch (_request.Status) {
-          case RequestStatus.Pending:
-            return "En elaboración";
-
-          case RequestStatus.OnSign:
-            return "En firma";
-
-          case RequestStatus.OnPayment:
-            return "Por pagar";
-
-          case RequestStatus.Submitted:
-            return "Ingresada";
-
-          case RequestStatus.Finished:
-            return "Finalizada";
-
-          case RequestStatus.Rejected:
-            return "Devuelta";
-
-          case RequestStatus.Deleted:
-            return "Eliminada";
-
-          default:
-            return $"Unknown status name for: {_request.Status}.";
-        }
-      }
-    }
-
 
     public bool IsClosed {
       get {
@@ -115,14 +82,6 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static private bool NewStatusNeedsExternalDataSynchronization(RequestStatus newStatus) {
-      return (newStatus == RequestStatus.Finished ||
-              newStatus == RequestStatus.Rejected ||
-              newStatus == RequestStatus.Submitted ||
-              newStatus == RequestStatus.OnPayment);
-    }
-
-
     internal void SendToSign() {
       this.EnsureCanBeEdited();
 
@@ -159,7 +118,7 @@ namespace Empiria.OnePoint.EFiling {
     internal async Task UpdateStatus(RequestStatus newStatus) {
       _request.OnStatusChanged(newStatus);
 
-      if (NewStatusNeedsExternalDataSynchronization(newStatus)) {
+      if (newStatus.RequiresExternalDataSynchronization()) {
         await _request.Synchronize()
                       .ConfigureAwait(false);
       }

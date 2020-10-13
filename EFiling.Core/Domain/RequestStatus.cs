@@ -29,6 +29,47 @@ namespace Empiria.OnePoint.EFiling {
 
     Deleted = 'X'
 
-  }  // RequestStatus
+  }  // enum RequestStatus
+
+
+  static public class RequestStatusExtensions {
+
+    static internal string GetName(this RequestStatus status) {
+      switch (status) {
+        case RequestStatus.Pending:
+          return "En elaboración";
+
+        case RequestStatus.OnSign:
+          return "En firma";
+
+        case RequestStatus.OnPayment:
+          return "Por pagar";
+
+        case RequestStatus.Submitted:
+          return "Ingresada";
+
+        case RequestStatus.Finished:
+          return "Finalizada";
+
+        case RequestStatus.Rejected:
+          return "Devuelta";
+
+        case RequestStatus.Deleted:
+          return "Eliminada";
+
+        default:
+          return $"Unknown status name for: {status}.";
+      }
+    }
+
+
+    static internal bool RequiresExternalDataSynchronization(this RequestStatus newStatus) {
+      return (newStatus == RequestStatus.Finished ||
+              newStatus == RequestStatus.Rejected ||
+              newStatus == RequestStatus.Submitted ||
+              newStatus == RequestStatus.OnPayment);
+    }
+
+  } // class RequestStatusExtensions
 
 } // namespace Empiria.OnePoint.EFiling
