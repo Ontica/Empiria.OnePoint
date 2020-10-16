@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 using Empiria.Contacts;
 using Empiria.Json;
+using Empiria.Storage.Documents;
 
 namespace Empiria.OnePoint.EFiling {
 
@@ -22,6 +23,8 @@ namespace Empiria.OnePoint.EFiling {
     #region Collaborators
 
     private readonly EFilingExternalServicesInteractor _externalServicesHandler;
+
+    private readonly DocumentationHandler _documentationHandler;
 
     private readonly PaymentOrderHandler _paymentOrderHandler;
 
@@ -35,6 +38,7 @@ namespace Empiria.OnePoint.EFiling {
 
     private EFilingRequest() {
       _externalServicesHandler = new EFilingExternalServicesInteractor(this);
+      _documentationHandler = new DocumentationHandler(this);
       _statusHandler = new RequestStatusHandler(this, _externalServicesHandler);
       _paymentOrderHandler = new PaymentOrderHandler(this, _externalServicesHandler);
       _requestSigner = new RequestSigner(this, _statusHandler);
@@ -166,6 +170,18 @@ namespace Empiria.OnePoint.EFiling {
 
 
     #endregion Public properties
+
+    #region Documents members
+
+
+    public Documentation Documentation {
+      get {
+        return _documentationHandler.Documentation;
+      }
+    }
+
+
+    #endregion Documents members
 
     #region Security members
 

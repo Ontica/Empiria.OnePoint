@@ -9,8 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-namespace Empiria.OnePoint.EFiling.UseCases {
+using Empiria.Storage.Documents;
 
+namespace Empiria.OnePoint.EFiling.UseCases {
 
   public class EFilingRequestDto {
 
@@ -89,18 +90,10 @@ namespace Empiria.OnePoint.EFiling.UseCases {
       internal set;
     }
 
-    public FixedList<EFilingDocument> InputDocuments {
+    public DocumentationDto Documentation {
       get;
-    } = new FixedList<EFilingDocument>();
-
-
-    public string InputDocumentsStatus {
-      get {
-        return "none";  // 'none' | 'optional' | 'required' | 'completed';
-        // 'protected' | 'readonly' | 'editable' | 'signed' | 'submitted' | 'verified' | 'returned' | 'rejected';
-      }
+      internal set;
     }
-
 
     public FixedList<EFilingDocument> OutputDocuments {
       get;
@@ -117,6 +110,26 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     }
 
   }  // class EFilingRequestDTO
+
+
+  /// <summary>E-filing request documentation DTO.</summary>
+  public class DocumentationDto {
+
+    private readonly Documentation documentation;
+
+
+    internal DocumentationDto(EFilingRequest request) {
+      this.documentation = request.Documentation;
+    }
+
+
+    public string Status {
+      get {
+        return this.documentation.Status.ToString();
+      }
+    }
+
+  }
 
 
 

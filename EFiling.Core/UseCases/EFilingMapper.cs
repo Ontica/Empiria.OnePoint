@@ -40,6 +40,8 @@ namespace Empiria.OnePoint.EFiling.UseCases {
         r.Form = new ApplicationFormDto(request);
       }
 
+      r.Documentation = new DocumentationDto(request);
+
       if (request.IsSigned) {
         r.Esign = new ESignDataDto(request);
       }
