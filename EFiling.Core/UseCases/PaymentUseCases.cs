@@ -9,12 +9,12 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System.Threading.Tasks;
 
-using Empiria.UseCases;
+using Empiria.Services;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implements payment services for e-filing requests.</summary>
-  public class PaymentUseCases : UseCasesBase {
+  public class PaymentUseCases : UseCase {
 
     #region Use cases
 

@@ -8,12 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using Empiria.Json;
-using Empiria.UseCases;
+using Empiria.Services;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implements electronic signing of e-filing requests.</summary>
-  public class ElectronicSignUseCases : UseCasesBase {
+  public class ElectronicSignUseCases : UseCase {
 
     #region Use cases
 

@@ -10,17 +10,17 @@
 using System.Threading.Tasks;
 
 using Empiria.Json;
-using Empiria.UseCases;
+using Empiria.Services;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implements services for electronic filing requests.</summary>
-  public class EFilingRequestUseCases: UseCasesBase {
+  public class EFilingRequestUseCases: UseCase {
 
     #region Constructors and parsers
 
     static public EFilingRequestUseCases CreateInstance() {
-      return UseCasesBase.CreateInstance<EFilingRequestUseCases>();
+      return UseCase.CreateInstance<EFilingRequestUseCases>();
     }
 
     #endregion Constructors and parsers

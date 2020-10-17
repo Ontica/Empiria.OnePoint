@@ -7,12 +7,12 @@
 *  Summary  : Use cases that implement documentation services for electronic filing requests.                *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using Empiria.UseCases;
+using Empiria.Services;
 
 namespace Empiria.OnePoint.EFiling.UseCases {
 
   /// <summary>Use cases that implement documentation services for electronic filing requests.</summary>
-  public class EFilingDocumentsUseCases : UseCasesBase {
+  public class EFilingDocumentsUseCases : UseCase {
 
     #region Use cases
 

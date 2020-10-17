@@ -54,13 +54,13 @@
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.Core" Version="7.0.0" />
     <PackageReference Include="Empiria.Storage" Version="2.0.0" />
-    <PackageReference Include="Empiria.UseCases" Version="1.0.0" />
+    <PackageReference Include="Empiria.Services" Version="1.0.0" />
     <PackageReference Include="Empiria.OnePoint.Integration" Version="2.0.0" />
     <PackageReference Include="Empiria.OnePoint.EPayments" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\core\Core\Empiria.Core.csproj" />
-    <ProjectReference Include="..\..\extensions\UseCases\Empiria.UseCases.csproj" />
+    <ProjectReference Include="..\..\extensions\Services\Empiria.Services.csproj" />
     <ProjectReference Include="..\..\extensions\Storage\Empiria.Storage.csproj" />
     <ProjectReference Include="..\Integration\Empiria.OnePoint.Integration.csproj" />
     <ProjectReference Include="..\EPayments.Core\Empiria.OnePoint.EPayments.csproj" />

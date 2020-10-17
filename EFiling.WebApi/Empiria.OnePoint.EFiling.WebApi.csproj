@@ -51,21 +51,12 @@
     <NoWarn />
     <WarningsAsErrors />
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="EArchive\**" />
-    <Compile Remove="EPayments\**" />
-    <EmbeddedResource Remove="EArchive\**" />
-    <EmbeddedResource Remove="EPayments\**" />
-    <None Remove="EArchive\**" />
-    <None Remove="EPayments\**" />
-  </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.WebApi" Version="2.0.0" />
+    <PackageReference Include="Empiria.OnePoint.EFiling" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\extensions\WebApi\Empiria.WebApi.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\EFiling.Core\Empiria.OnePoint.EFiling.csproj" />
   </ItemGroup>
 </Project>
