@@ -32,6 +32,8 @@ namespace Empiria.OnePoint.EFiling {
   }  // enum RequestStatus
 
 
+
+  /// <summary>Extension methods for RequestStatus enumeration.</summary>
   static public class RequestStatusExtensions {
 
     static internal string GetName(this RequestStatus status) {

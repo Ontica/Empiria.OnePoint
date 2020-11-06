@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Collections.Generic;
 
 using Empiria.Storage.Documents;
 
@@ -115,17 +116,51 @@ namespace Empiria.OnePoint.EFiling.UseCases {
   /// <summary>E-filing request documentation DTO.</summary>
   public class DocumentationDto {
 
-    private readonly Documentation documentation;
+    private readonly Documentation _documentation;
 
 
     internal DocumentationDto(EFilingRequest request) {
-      this.documentation = request.Documentation;
+      _documentation = request.Documentation;
+    }
+
+
+    public string OverallStatus {
+      get {
+        return _documentation.OverallStatus.ToString();
+      }
+    }
+
+
+    public FixedList<DocumentFulfillmentDto> Fulfillment {
+      get {
+        var fulfillment = _documentation.GetFulfillment();
+
+        List<DocumentFulfillmentDto> dtoList = new List<DocumentFulfillmentDto>(fulfillment.Count);
+
+        foreach (var item in fulfillment) {
+          var dto = new DocumentFulfillmentDto(item);
+
+          dtoList.Add(dto);
+        }
+
+        return dtoList.ToFixedList();
+      }
+    }
+  }
+
+
+  public class DocumentFulfillmentDto {
+
+    private readonly DocumentFulfillment _fulfillment;
+
+    public DocumentFulfillmentDto(DocumentFulfillment fulfillment) {
+      _fulfillment = fulfillment;
     }
 
 
     public string Status {
       get {
-        return this.documentation.Status.ToString();
+        return _fulfillment.Status.ToString();
       }
     }
 
