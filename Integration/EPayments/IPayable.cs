@@ -20,11 +20,9 @@ namespace Empiria.OnePoint.EPayments {
       get;
     }
 
+    void SetFormerPaymentOrderData(FormerPaymentOrderDTO paymentOrderData);
 
-    void SetPaymentOrderData(PaymentOrderDTO paymentOrderData);
-
-
-    PaymentOrderDTO TryGetPaymentOrderData();
+    FormerPaymentOrderDTO TryGetFormerPaymentOrderData();
 
 
   }  // interface IPayable

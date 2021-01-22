@@ -17,8 +17,8 @@ namespace Empiria.OnePoint.EPayments {
 
     #region Use cases
 
-    static public async Task<PaymentOrderDTO> RefreshPaymentOrder(IPayable payable) {
-      PaymentOrderDTO paymentOrderData = payable.TryGetPaymentOrderData();
+    static public async Task<FormerPaymentOrderDTO> RefreshPaymentOrder(IPayable payable) {
+      FormerPaymentOrderDTO paymentOrderData = payable.TryGetFormerPaymentOrderData();
 
       Assertion.AssertObject(paymentOrderData,
                              $"Transaction {payable.UID} doesn't have a registered payment order.");
@@ -33,15 +33,15 @@ namespace Empiria.OnePoint.EPayments {
                                        .ConfigureAwait(false);
 
       if (paymentOrderData.IsCompleted) {
-        payable.SetPaymentOrderData(paymentOrderData);
+        payable.SetFormerPaymentOrderData(paymentOrderData);
       }
 
       return paymentOrderData;
     }
 
 
-    static public async Task<PaymentOrderDTO> RequestPaymentOrderData(IPayable payable) {
-      PaymentOrderDTO paymentOrderData = payable.TryGetPaymentOrderData();
+    static public async Task<FormerPaymentOrderDTO> RequestPaymentOrderData(IPayable payable) {
+      FormerPaymentOrderDTO paymentOrderData = payable.TryGetFormerPaymentOrderData();
 
       if (paymentOrderData != null) {
         return paymentOrderData;
@@ -52,7 +52,7 @@ namespace Empiria.OnePoint.EPayments {
       paymentOrderData = await provider.GeneratePaymentOrder(payable)
                                        .ConfigureAwait(false);
 
-      payable.SetPaymentOrderData(paymentOrderData);
+      payable.SetFormerPaymentOrderData(paymentOrderData);
 
       return paymentOrderData;
     }

@@ -33,13 +33,13 @@ namespace Empiria.OnePoint.EFiling {
     IFilingTransaction SetPayment(string transactionUID, string receiptNo);
 
 
-    IFilingTransaction SetPaymentOrder(IPayable transaction, PaymentOrderDTO paymentOrderData);
+    IFilingTransaction SetPaymentOrder(IPayable transaction, FormerPaymentOrderDTO paymentOrderData);
 
 
     IFilingTransaction SubmitTransaction(string transactionUID);
 
 
-    PaymentOrderDTO TryGetPaymentOrderData(string transactionUID);
+    FormerPaymentOrderDTO TryGetPaymentOrderData(string transactionUID);
 
 
     IFilingTransaction UpdateTransaction(EFilingRequest filingRequest);

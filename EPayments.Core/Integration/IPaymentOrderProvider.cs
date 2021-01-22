@@ -16,10 +16,10 @@ namespace Empiria.OnePoint.EPayments {
   public interface IPaymentOrderProvider {
 
 
-    Task<PaymentOrderDTO> GeneratePaymentOrder(IPayable payableEntity);
+    Task<FormerPaymentOrderDTO> GeneratePaymentOrder(IPayable payableEntity);
 
 
-    Task<PaymentOrderDTO> RefreshPaymentOrder(PaymentOrderDTO paymentOrder);
+    Task<FormerPaymentOrderDTO> RefreshPaymentOrder(FormerPaymentOrderDTO paymentOrder);
 
 
   }  // interface IPaymentOrderProvider

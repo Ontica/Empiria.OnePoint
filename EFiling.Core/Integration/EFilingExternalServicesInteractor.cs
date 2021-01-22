@@ -111,7 +111,7 @@ namespace Empiria.OnePoint.EFiling {
     #region Payment Order methods
 
 
-    internal async Task<PaymentOrderDTO> GeneratePaymentOrder() {
+    internal async Task<FormerPaymentOrderDTO> GeneratePaymentOrder() {
       Assertion.Assert(FilingRequest.HasTransaction,
                        "This filing has not be linked to a transaction.");
       Assertion.Assert(!FilingRequest.HasPaymentOrder,
@@ -121,7 +121,7 @@ namespace Empiria.OnePoint.EFiling {
 
       IPayable transaction = provider.GetTransactionAsPayable(this.TransactionUID);
 
-      PaymentOrderDTO paymentOrder = await GeneratePaymentOrder(transaction).ConfigureAwait(false);
+      FormerPaymentOrderDTO paymentOrder = await GeneratePaymentOrder(transaction).ConfigureAwait(false);
 
       provider.SetPaymentOrder(transaction, paymentOrder);
 
@@ -129,7 +129,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    internal Task<PaymentOrderDTO> TryGetPaymentOrder() {
+    internal Task<FormerPaymentOrderDTO> TryGetPaymentOrder() {
       var provider = this.GetTransactionProvider();
 
       return Task.Run(() => {
@@ -153,7 +153,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static private async Task<PaymentOrderDTO> GeneratePaymentOrder(IPayable transaction) {
+    static private async Task<FormerPaymentOrderDTO> GeneratePaymentOrder(IPayable transaction) {
       try {
         bool USE_PAYMENT_ORDER_MOCK_SERVICE = ConfigurationData.Get("UsePaymentOrderMockService", false);
 
@@ -173,11 +173,11 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    static private PaymentOrderDTO PaymentOrderMockData() {
-      var routeNumber = EmpiriaString.BuildRandomString(16, 16);
-      var controlTag = EmpiriaString.BuildRandomString(6, 6);
+    static private FormerPaymentOrderDTO PaymentOrderMockData() {
+      var routeNumber = EmpiriaString.BuildRandomString(16);
+      var controlTag = EmpiriaString.BuildRandomString(6);
 
-      return new PaymentOrderDTO(routeNumber, DateTime.Today.AddDays(20), controlTag);
+      return new FormerPaymentOrderDTO(routeNumber, DateTime.Today.AddDays(20), controlTag);
     }
 
 

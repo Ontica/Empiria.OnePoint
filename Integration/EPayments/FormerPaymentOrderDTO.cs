@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Electronic Payment Services                Component : Integration Layer                       *
 *  Assembly : Empiria.OnePoint.Integration.dll           Pattern   : Adapter Interface                       *
-*  Type     : PaymentOrderDTO                            License   : Please read LICENSE.txt file            *
+*  Type     : FormerPaymentOrderDTO                      License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Holds payment order data used to interact with external systems.                               *
+*  Summary  : Holds payment order data used to interact with external systems (former version).              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -13,16 +13,16 @@ using Empiria.Json;
 
 namespace Empiria.OnePoint.EPayments {
 
-  /// <summary>Holds payment order data used to interact with external systems.</summary>
-  public class PaymentOrderDTO {
+  /// <summary>Holds payment order data used to interact with external systems (former version).</summary>
+  public class FormerPaymentOrderDTO {
 
     #region Constructors and parsers
 
-    protected PaymentOrderDTO() {
+    protected FormerPaymentOrderDTO() {
       // Public instance creation not allowed. Instances must be created using a derived class.
     }
 
-    public PaymentOrderDTO(string routeNumber, DateTime dueDate, string controlTag) {
+    public FormerPaymentOrderDTO(string routeNumber, DateTime dueDate, string controlTag) {
       Assertion.AssertObject(routeNumber, "routeNumber");
       Assertion.Assert(dueDate < DateTime.Today.AddYears(1),
                        "dueDate must be within one year starting today.");
@@ -34,19 +34,19 @@ namespace Empiria.OnePoint.EPayments {
     }
 
 
-    static public PaymentOrderDTO Empty {
+    static public FormerPaymentOrderDTO Empty {
       get;
-    } = new PaymentOrderDTO {
+    } = new FormerPaymentOrderDTO {
       IsEmptyInstance = true
     };
 
 
-    static public PaymentOrderDTO Parse(JsonObject jsonObject) {
+    static public FormerPaymentOrderDTO Parse(JsonObject jsonObject) {
       if (jsonObject.IsEmptyInstance) {
-        return PaymentOrderDTO.Empty;
+        return FormerPaymentOrderDTO.Empty;
       }
 
-      var paymentOrder = new PaymentOrderDTO();
+      var paymentOrder = new FormerPaymentOrderDTO();
 
       paymentOrder.RouteNumber = jsonObject.Get<string>("RouteNumber");
       paymentOrder.IssueTime = jsonObject.Get<DateTime>("IssueTime");
@@ -54,6 +54,7 @@ namespace Empiria.OnePoint.EPayments {
       paymentOrder.ControlTag = jsonObject.Get<string>("ControlTag");
 
       paymentOrder.IsCompleted = jsonObject.Get<bool>("IsCompleted", false);
+
       if (paymentOrder.IsCompleted) {
         paymentOrder.PaymentDate = jsonObject.Get<DateTime>("PaymentDate");
         paymentOrder.PaymentReference = jsonObject.Get<string>("PaymentRef");
@@ -133,9 +134,11 @@ namespace Empiria.OnePoint.EPayments {
 
     #region Methods
 
+
     public virtual void AssertIsValid() {
 
     }
+
 
     public virtual void SetPaymentData(DateTime paymentDate,
                                        decimal paymentTotal,
@@ -150,6 +153,7 @@ namespace Empiria.OnePoint.EPayments {
 
       this.IsCompleted = true;
     }
+
 
     public virtual JsonObject ToJson() {
       var json = new JsonObject();
@@ -168,12 +172,13 @@ namespace Empiria.OnePoint.EPayments {
       return json;
     }
 
+
     public override string ToString() {
       return this.ToJson().ToString();
     }
 
     #endregion Methods
 
-  }  // class PaymentOrderDTO
+  }  // class FormerPaymentOrderDTO
 
 }  // namespace Empiria.OnePoint.EPayments

@@ -24,7 +24,7 @@ namespace Empiria.OnePoint.EFiling {
 
     }
 
-    internal PaymentOrder(PaymentOrderDTO dto) {
+    internal PaymentOrder(FormerPaymentOrderDTO dto) {
       this.LoadFromDTO(dto);
     }
 
@@ -130,7 +130,7 @@ namespace Empiria.OnePoint.EFiling {
     }
 
 
-    private void LoadFromDTO(PaymentOrderDTO dto) {
+    private void LoadFromDTO(FormerPaymentOrderDTO dto) {
       this.RouteNumber = dto.RouteNumber;
       this.IssueTime = dto.IssueTime;
       this.DueDate = dto.DueDate;
