@@ -18,7 +18,7 @@ namespace Empiria.OnePoint.EFiling {
 
     static internal IFilingTransactionProvider GetFilingTransactionProvider(IProcedure procedure) {
       Type type = ObjectFactory.GetType("Empiria.Land.Registration",
-                                        "Empiria.Land.Integration.LandFilingTransactionProvider");
+                                        "Empiria.Land.Providers.LandFilingTransactionProvider");
 
       return (IFilingTransactionProvider) ObjectFactory.CreateObject(type);
     }
