@@ -1,6 +1,6 @@
-﻿# Empiria OnePoint Regulation Core
+﻿# Empiria OnePoint Regulation
 
-Empiria OnePoint(http://www.ontica.org/) Regulation is our technology solution for regulatory, supervisory and oversight authorities and agencies.
+[Empiria OnePoint](http://www.ontica.org/) Regulation is our technology solution for regulatory, supervisory and oversight authorities and agencies.
 
 As other Empiria products, this backend runs over [Empiria Framework](https://github.com/Ontica/Empiria.Core)
 components and, as usual, needs some of the [Empiria Extensions](https://github.com/Ontica/Empiria.Extensions).

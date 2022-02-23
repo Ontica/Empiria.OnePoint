@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Company>Ontica</Company>
+    <Product>Empiria OnePoint Regulation Core</Product>
+    <Description>Provides core types and services for regulation data, documents and rules.</Description>
+    <Copyright>(c) 2017-2022. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/Regulation/Core/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/Regulation/Core</PackageProjectUrl>
+    <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
+    <PackageTags>regulatory compliance, risk management, reporting, government, regulatory processes</PackageTags>
+    <RepositoryUrl>https://github.com/Ontica/Empiria.OnePoint</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Ontica</Authors>
+    <TargetFramework>net48</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NeutralLanguage></NeutralLanguage>
+    <Configurations>Debug;Release;Multisolutions</Configurations>
+    <AssemblyName>Empiria.OnePoint.Regulation.Core</AssemblyName>
+    <RootNamespace>Empiria.OnePoint.Regulation</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <NoWarn />
+    <WarningsAsErrors />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <NoWarn />
+    <WarningsAsErrors />
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
+    <PackageReference Include="Empiria.Core" Version="7.0.0" />
+    <PackageReference Include="Empiria.Services" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\core\Core.Services\Empiria.Core.Services.csproj" />
+    <ProjectReference Include="..\..\..\core\Core\Empiria.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Compliance\**" />
+    <Compile Remove="Processes\**" />
+    <Compile Remove="RecordsManager\**" />
+    <EmbeddedResource Remove="Compliance\**" />
+    <EmbeddedResource Remove="Processes\**" />
+    <EmbeddedResource Remove="RecordsManager\**" />
+    <None Remove="Compliance\**" />
+    <None Remove="Processes\**" />
+    <None Remove="RecordsManager\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commons\" />
+    <Folder Include="Obligations\Adapters\" />
+    <Folder Include="Obligations\Domain\" />
+    <Folder Include="Obligations\UseCases\" />
+  </ItemGroup>
+</Project>
