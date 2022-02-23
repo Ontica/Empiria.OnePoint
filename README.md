@@ -9,7 +9,7 @@ This repository contains the system's domain components, application services (u
 a web API interface to interact with the backend, and connectors to hook other systems and components
 to Empiria OnePoint.
 
-This project is based on C# and .NET Framework and can be compiled using Visual Studio 2017 Community Edition.
+This project is based on C# and .NET Framework and can be compiled using Visual Studio 2022 Community Edition.
 
 As other Empiria products, this backend runs over [Empiria Framework](https://github.com/Ontica/Empiria.Core)
 components and, as usual, needs some of the [Empiria Extensions](https://github.com/Ontica/Empiria.Extensions).
@@ -78,4 +78,4 @@ important in the case of public utility or government systems.
 
 ## Copyright
 
-Copyright © 2017-2020. La Vía Óntica SC, Ontica LLC and colaborators.
+Copyright © 2017-2022. La Vía Óntica SC, Ontica LLC and colaborators.
