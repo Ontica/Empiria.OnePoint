@@ -62,7 +62,9 @@
     <ProjectReference Include="..\..\core\Core\Empiria.Core.csproj" />
     <ProjectReference Include="..\..\extensions\Services\Empiria.Services.csproj" />
     <ProjectReference Include="..\..\extensions\Storage\Empiria.Storage.csproj" />
-    <ProjectReference Include="..\Integration\Empiria.OnePoint.Integration.csproj" />
     <ProjectReference Include="..\EPayments.Core\Empiria.OnePoint.EPayments.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Empiria.OnePoint.Core.csproj" />
   </ItemGroup>
 </Project>

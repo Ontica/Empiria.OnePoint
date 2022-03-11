@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : OnePoint Integration                       Component : Integration Layer                       *
-*  Assembly : Empiria.OnePoint.Integration.dll           Pattern   : Assembly Attributes File                *
-*  Type     : None                                       License   : Please read LICENSE.txt file            *
+*  Module   : OnePoint Core                       Component : Core Layer                                     *
+*  Assembly : Empiria.OnePoint.Core.dll           Pattern   : Assembly Attributes File                       *
+*  Type     : None                                License   : Please read LICENSE.txt file                   *
 *                                                                                                            *
-*  Summary  : Provides integration types and services for Empiria OnePoint solution.                         *
+*  Summary  : Core types and services of Empiria OnePoint.                                                   *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;

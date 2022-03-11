@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Company>Ontica</Company>
-    <Product>Empiria OnePoint</Product>
-    <Description>Empiria OnePoint Integration Services.</Description>
-    <Copyright>(c) 2017-2020. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
+    <Product>Empiria OnePoint Core</Product>
+    <Description>Core types and services of Empiria OnePoint.</Description>
+    <Copyright>(c) 2017-2022. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
     <Version>2.0.0</Version>
     <AssemblyVersion>2.0.0</AssemblyVersion>
     <FileVersion>2.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/Integration/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/Integration</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/Core/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/Core</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
     <PackageTags>e-government, gobierno electrónico, firma electrónica, e-sign, trámites en línea,
     electronic filing, procedures, pagos en línea, e-payments</PackageTags>
@@ -21,6 +21,8 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
+    <AssemblyName>Empiria.OnePoint.Core</AssemblyName>
+    <RootNamespace>Empiria.OnePoint</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
     <OutputPath>bin\</OutputPath>

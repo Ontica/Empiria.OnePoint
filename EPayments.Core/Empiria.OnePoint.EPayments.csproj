@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\core\Core\Empiria.Core.csproj" />
-    <ProjectReference Include="..\Integration\Empiria.OnePoint.Integration.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Empiria.OnePoint.Core.csproj" />
   </ItemGroup>
 </Project>
