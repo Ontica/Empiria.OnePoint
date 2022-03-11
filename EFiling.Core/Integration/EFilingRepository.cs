@@ -26,7 +26,7 @@ namespace Empiria.OnePoint.EFiling {
       string filter = String.Empty;
 
       if (status != RequestStatus.All) {
-        filter = $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}' AND RequestStatus <> 'X'";
+        filter = $"AgencyId = {agencyId} AND RequestStatus = '{(char) status}'";
       } else {
         filter = $"AgencyId = {agencyId} AND RequestStatus <> 'X'";
       }
