@@ -39,7 +39,7 @@ namespace Empiria.OnePoint.EFiling {
     #region Transaction Methods
 
     internal Task<IPayable> CreateTransaction() {
-      Assertion.Assert(!this.FilingRequest.HasTransaction,
+      Assertion.Ensure(!this.FilingRequest.HasTransaction,
                        "This filing already has a transaction.");
 
       var provider = this.GetTransactionProvider();
@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal Task<FixedList<EFilingDocument>> GetOutputDocuments() {
-      Assertion.Assert(this.FilingRequest.HasTransaction,
+      Assertion.Ensure(this.FilingRequest.HasTransaction,
                        "This filing has not been linked to a transaction.");
 
       var provider = this.GetTransactionProvider();
@@ -63,7 +63,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal Task<IFilingTransaction> GetTransaction() {
-      Assertion.Assert(this.FilingRequest.HasTransaction,
+      Assertion.Ensure(this.FilingRequest.HasTransaction,
                        "This filing has not been linked to a transaction.");
 
       var provider = this.GetTransactionProvider();
@@ -75,8 +75,8 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void InformEventProcessed(string transactionUID, string eventName) {
-      Assertion.AssertObject(transactionUID, "transactionUID");
-      Assertion.AssertObject(eventName, "eventName");
+      Assertion.Require(transactionUID, "transactionUID");
+      Assertion.Require(eventName, "eventName");
 
       var provider = this.GetTransactionProvider();
 
@@ -85,7 +85,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal Task<IFilingTransaction> Submit() {
-      Assertion.Assert(this.FilingRequest.HasTransaction,
+      Assertion.Ensure(this.FilingRequest.HasTransaction,
                        "This filing has not been linked to a transaction.");
 
       var provider = this.GetTransactionProvider();
@@ -112,9 +112,9 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal async Task<FormerPaymentOrderDTO> GeneratePaymentOrder() {
-      Assertion.Assert(FilingRequest.HasTransaction,
+      Assertion.Ensure(FilingRequest.HasTransaction,
                        "This filing has not be linked to a transaction.");
-      Assertion.Assert(!FilingRequest.HasPaymentOrder,
+      Assertion.Ensure(!FilingRequest.HasPaymentOrder,
                        $"This filing already has a payment order.");
 
       var provider = this.GetTransactionProvider();
@@ -139,10 +139,10 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal Task<IFilingTransaction> SetPayment() {
-      Assertion.Assert(this.FilingRequest.HasTransaction,
+      Assertion.Ensure(this.FilingRequest.HasTransaction,
                        "This filing has not been linked to a transaction.");
-      Assertion.AssertObject(this.FilingRequest.PaymentOrder.ReceiptNo,
-                             "This filing payment order has not a payment receipt.");
+      Assertion.Ensure(this.FilingRequest.PaymentOrder.ReceiptNo,
+                       "This filing payment order has not a payment receipt.");
 
       var provider = this.GetTransactionProvider();
 

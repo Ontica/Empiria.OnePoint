@@ -19,19 +19,19 @@ namespace Empiria.OnePoint.EFiling {
 
 
     public EFilingRequest GetEFilingRequest(string filingRequestUID) {
-      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
+      Assertion.Require(filingRequestUID, "filingRequestUID");
 
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
-      Assertion.AssertObject(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
+      Assertion.Ensure(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
       return filingRequest;
     }
 
 
     public async Task NotifyEvent(string filingRequestUID, string eventName) {
-      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
-      Assertion.AssertObject(eventName, "eventName");
+      Assertion.Require(filingRequestUID, "filingRequestUID");
+      Assertion.Require(eventName, "eventName");
 
       switch (eventName) {
         case "TransactionReceived":
@@ -44,7 +44,7 @@ namespace Empiria.OnePoint.EFiling {
           return;
 
         default:
-          throw Assertion.AssertNoReachThisCode($"Unrecognized external event with name {eventName}.");
+          throw Assertion.EnsureNoReachThisCode($"Unrecognized external event with name {eventName}.");
       }
     }
 
@@ -58,7 +58,7 @@ namespace Empiria.OnePoint.EFiling {
     private async Task ChangeTransactionStatus(string filingRequestUID, string eventName) {
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
-      Assertion.AssertObject(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
+      Assertion.Ensure(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
       var interactor = new EFilingExternalServicesInteractor(filingRequest);
 
@@ -90,7 +90,7 @@ namespace Empiria.OnePoint.EFiling {
           return RequestStatus.Submitted;
 
         default:
-          throw Assertion.AssertNoReachThisCode($"Unrecognized external event with name '{eventName}'");
+          throw Assertion.EnsureNoReachThisCode($"Unrecognized external event with name '{eventName}'");
       }
     }
 

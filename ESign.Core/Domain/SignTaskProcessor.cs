@@ -33,7 +33,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal FixedList<SignEvent> Execute(SignTask task) {
-      Assertion.AssertObject(task, "task");
+      Assertion.Require(task, "task");
 
       this.EnsureValidCredentials(task.SignCredentials);
 
@@ -84,7 +84,7 @@ namespace Empiria.OnePoint.ESign {
           return signRequest.Unrefuse();
 
         default:
-          throw Assertion.AssertNoReachThisCode();
+          throw Assertion.EnsureNoReachThisCode();
       }
     }
 

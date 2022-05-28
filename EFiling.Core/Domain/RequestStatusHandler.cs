@@ -26,8 +26,8 @@ namespace Empiria.OnePoint.EFiling {
 
     internal RequestStatusHandler(EFilingRequest request,
                                   EFilingExternalServicesInteractor externalServices) {
-      Assertion.AssertObject(request, "request");
-      Assertion.AssertObject(externalServices, "externalServices");
+      Assertion.Require(request, "request");
+      Assertion.Require(externalServices, "externalServices");
 
       _request = request;
       _externalServices = externalServices;
@@ -59,26 +59,26 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void EnsureCanBeEdited() {
-      Assertion.Assert(!_request.IsSigned, "This filing is already signed, so it can't be edited.");
+      Assertion.Ensure(!_request.IsSigned, "This filing is already signed, so it can't be edited.");
 
-      Assertion.Assert(_request.Status == RequestStatus.Pending,
+      Assertion.Ensure(_request.Status == RequestStatus.Pending,
                        "This filing is not in pending status, so it can't be edited.");
 
       var userContext = EFilingUserContext.Current();
 
-      Assertion.Assert(userContext.IsRegister, "Current user can't edit this filing.");
+      Assertion.Ensure(userContext.IsRegister, "Current user can't edit this filing.");
     }
 
 
     internal void EnsureCanBeSubmitted() {
-      Assertion.Assert(_request.Status == RequestStatus.OnPayment,
+      Assertion.Ensure(_request.Status == RequestStatus.OnPayment,
                        "Invalid status for submitting. Must be OnPayment");
 
-      Assertion.AssertObject(_request.PaymentOrder.ReceiptNo, "No receipt number provided.");
+      Assertion.Ensure(_request.PaymentOrder.ReceiptNo, "No receipt number provided.");
 
       var userContext = EFilingUserContext.Current();
 
-      Assertion.Assert(userContext.IsManager, "Current user can't submit this filing.");
+      Assertion.Ensure(userContext.IsManager, "Current user can't submit this filing.");
     }
 
 

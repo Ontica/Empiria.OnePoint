@@ -18,7 +18,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     #region Use cases
 
     public EFilingRequestDto RevokeSign(string filingRequestUID, JsonObject revokeSignData) {
-      Assertion.AssertObject(revokeSignData, "revokeSignData");
+      Assertion.Require(revokeSignData, "revokeSignData");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 
@@ -42,7 +42,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
 
 
     public EFilingRequestDto Sign(string filingRequestUID, JsonObject signInputData) {
-      Assertion.AssertObject(signInputData, "signInputData");
+      Assertion.Require(signInputData, "signInputData");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 

@@ -28,7 +28,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     #region E-filing use cases
 
     public EFilingRequestDto CreateEFilingRequest(CreateEFilingRequestDto requestDTO) {
-      Assertion.AssertObject(requestDTO, "requestDTO");
+      Assertion.Require(requestDTO, "requestDTO");
 
       var procedure = Procedure.Parse(requestDTO.ProcedureType);
 
@@ -87,7 +87,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
 
 
     public EFilingRequestDto UpdateEFilingRequest(string filingRequestUID, RequesterDto requestedBy) {
-      Assertion.AssertObject(requestedBy, "requestedBy");
+      Assertion.Require(requestedBy, "requestedBy");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 

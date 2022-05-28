@@ -38,7 +38,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
 
 
     public EFilingRequestDto SetPaymentReceipt(string filingRequestUID, string receiptNo) {
-      Assertion.AssertObject(receiptNo, "receiptNo");
+      Assertion.Require(receiptNo, "receiptNo");
 
       EFilingRequest filingRequest = EFilingMapper.Map(filingRequestUID);
 

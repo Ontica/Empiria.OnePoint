@@ -46,8 +46,8 @@ namespace Empiria.OnePoint.EFiling {
 
 
     public EFilingRequest(Procedure procedure, RequesterDto requestedBy) : this() {
-      Assertion.AssertObject(procedure, "procedure");
-      Assertion.AssertObject(requestedBy, "requestedBy");
+      Assertion.Require(procedure, "procedure");
+      Assertion.Require(requestedBy, "requestedBy");
 
       this.Procedure = procedure;
       this.SetRequesterData(requestedBy);
@@ -239,7 +239,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal async Task CreateTransaction() {
-      Assertion.Assert(!this.HasTransaction, "A transaction was already linked to this request.");
+      Assertion.Require(!this.HasTransaction, "A transaction was already linked to this request.");
 
       var createdTransaction = await _externalServicesHandler.CreateTransaction();
 
@@ -316,7 +316,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void SetApplicationForm(JsonObject json) {
-      Assertion.AssertObject(json, "json");
+      Assertion.Require(json, "json");
 
       _statusHandler.EnsureCanBeEdited();
 
@@ -325,7 +325,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void SetRequesterData(RequesterDto requester) {
-      Assertion.AssertObject(requester, "requester");
+      Assertion.Require(requester, "requester");
 
       _statusHandler.EnsureCanBeEdited();
 

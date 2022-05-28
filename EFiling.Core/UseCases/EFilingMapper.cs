@@ -15,7 +15,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
 
 
     static internal EFilingRequest Map(string filingRequestUID) {
-      Assertion.AssertObject(filingRequestUID, "filingRequestUID");
+      Assertion.Require(filingRequestUID, "filingRequestUID");
 
       var request = EFilingRequest.TryParse(filingRequestUID);
 

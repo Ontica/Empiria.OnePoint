@@ -135,18 +135,18 @@ namespace Empiria.OnePoint.ESign {
 
 
     static public void EnsureValidSignTaskDTO(SignTaskDTO signTaskDTO) {
-      Assertion.AssertObject(signTaskDTO, "signTaskDTO");
+      Assertion.Require(signTaskDTO, "signTaskDTO");
 
-      Assertion.AssertObject(signTaskDTO.credentials,
+      Assertion.Require(signTaskDTO.credentials,
                             "signTaskDTO.credentials");
 
-      Assertion.AssertObject(signTaskDTO.credentials.password,
+      Assertion.Require(signTaskDTO.credentials.password,
                              "signTaskDTO.credentials.password");
 
-      Assertion.AssertObject(signTaskDTO.signRequests,
+      Assertion.Require(signTaskDTO.signRequests,
                              "signTaskDTO.signRequests");
 
-      Assertion.Assert(signTaskDTO.signRequests.Count > 0,
+      Assertion.Require(signTaskDTO.signRequests.Count > 0,
                       "signTaskDTO.signRequests must be a non empty array");
     }
 

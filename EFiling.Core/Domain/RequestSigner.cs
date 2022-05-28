@@ -29,8 +29,8 @@ namespace Empiria.OnePoint.EFiling {
     #region Constructors and parsers
 
     internal RequestSigner(EFilingRequest request, RequestStatusHandler statusHandler) {
-      Assertion.AssertObject(request, "request");
-      Assertion.AssertObject(statusHandler, "statusHandler");
+      Assertion.Require(request, "request");
+      Assertion.Require(statusHandler, "statusHandler");
 
       _request = request;
       _statusHandler = statusHandler;
@@ -70,7 +70,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void RevokeSign(JsonObject credentials) {
-      Assertion.AssertObject(credentials, "credentials");
+      Assertion.Require(credentials, "credentials");
 
       EnsureCanRevokeSign();
 
@@ -89,7 +89,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void Sign(JsonObject credentials) {
-      Assertion.AssertObject(credentials, "credentials");
+      Assertion.Require(credentials, "credentials");
 
       EnsureCanBeSigned();
 
@@ -109,22 +109,22 @@ namespace Empiria.OnePoint.EFiling {
     #region Private methods
 
     private void EnsureCanBeSigned() {
-      Assertion.Assert(!this.IsSigned, "This filing was already signed.");
+      Assertion.Require(!this.IsSigned, "This filing was already signed.");
 
       var userContext = EFilingUserContext.Current();
 
-      Assertion.Assert(userContext.IsSigner, "Current user can't sign this filing.");
+      Assertion.Require(userContext.IsSigner, "Current user can't sign this filing.");
     }
 
 
     private void EnsureCanRevokeSign() {
-      Assertion.Assert(this.IsSigned, "This filing is not signed.");
+      Assertion.Require(this.IsSigned, "This filing is not signed.");
 
       var userContext = EFilingUserContext.Current();
 
-      Assertion.Assert(userContext.IsSigner, "Current user can't revoke sign.");
+      Assertion.Require(userContext.IsSigner, "Current user can't revoke sign.");
 
-      Assertion.Assert(userContext.User.Equals(_request.Agent),
+      Assertion.Require(userContext.User.Equals(_request.Agent),
                       "Current user is not the same as this filing signer.");
     }
 

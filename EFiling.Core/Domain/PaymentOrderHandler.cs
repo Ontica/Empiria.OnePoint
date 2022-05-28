@@ -27,8 +27,8 @@ namespace Empiria.OnePoint.EFiling {
 
     internal PaymentOrderHandler(EFilingRequest request,
                                  EFilingExternalServicesInteractor externalServices) {
-      Assertion.AssertObject(request, "request");
-      Assertion.AssertObject(externalServices, "externalServices");
+      Assertion.Require(request, "request");
+      Assertion.Require(externalServices, "externalServices");
 
       _request = request;
       _externalServices = externalServices;
@@ -78,7 +78,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void SetPaymentReceipt(string receiptNo) {
-      Assertion.AssertObject(receiptNo, "receiptNo");
+      Assertion.Require(receiptNo, "receiptNo");
 
       this.PaymentOrder.ReceiptNo = receiptNo;
     }

@@ -23,10 +23,10 @@ namespace Empiria.OnePoint.EPayments {
     }
 
     public FormerPaymentOrderDTO(string routeNumber, DateTime dueDate, string controlTag) {
-      Assertion.AssertObject(routeNumber, "routeNumber");
-      Assertion.Assert(dueDate < DateTime.Today.AddYears(1),
+      Assertion.Require(routeNumber, "routeNumber");
+      Assertion.Require(dueDate < DateTime.Today.AddYears(1),
                        "dueDate must be within one year starting today.");
-      Assertion.AssertObject(controlTag, "controlTag");
+      Assertion.Require(controlTag, "controlTag");
 
       this.RouteNumber = routeNumber;
       this.DueDate = dueDate;
@@ -143,9 +143,9 @@ namespace Empiria.OnePoint.EPayments {
     public virtual void SetPaymentData(DateTime paymentDate,
                                        decimal paymentTotal,
                                        string paymentReference) {
-      Assertion.Assert(paymentDate <= DateTime.Now, "Invalid payment date.");
-      Assertion.Assert(paymentTotal >= decimal.Zero, "Payment total must have a no negative value.");
-      Assertion.Assert(paymentReference != null, "Payment reference can't be null.");
+      Assertion.Require(paymentDate <= DateTime.Now, "Invalid payment date.");
+      Assertion.Require(paymentTotal >= decimal.Zero, "Payment total must have a no negative value.");
+      Assertion.Require(paymentReference != null, "Payment reference can't be null.");
 
       this.PaymentDate = paymentDate;
       this.PaymentTotal = paymentTotal;

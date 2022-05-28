@@ -18,7 +18,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal SignCredentials(string password) {
-      Assertion.AssertObject(password, "password");
+      Assertion.Require(password, "password");
 
       this.Password = password;
     }

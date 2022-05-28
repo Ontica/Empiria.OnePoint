@@ -30,7 +30,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static internal EFilingUserContext ParseFor(Person user) {
-      Assertion.AssertObject(user, "user");
+      Assertion.Require(user, "user");
 
       return new EFilingUserContext(user);
     }

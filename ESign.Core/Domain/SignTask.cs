@@ -58,16 +58,16 @@ namespace Empiria.OnePoint.ESign {
 
 
     private void EnsureIsValid() {
-      Assertion.Assert(this.EventType != SignEventType.Empty,
+      Assertion.Require(this.EventType != SignEventType.Empty,
                       "EventType can't have the empty value.");
 
-      Assertion.AssertObject(this.SignCredentials,
-                             "SignCredentials has a null value.");
+      Assertion.Require(this.SignCredentials,
+                        "SignCredentials has a null value.");
 
-      Assertion.AssertObject(this.SignRequests,
-                             "SignRequests has a null value.");
+      Assertion.Require(this.SignRequests,
+                       "SignRequests has a null value.");
 
-      Assertion.Assert(this.SignRequests.Count > 0,
+      Assertion.Require(this.SignRequests.Count > 0,
                        "SignRequests can't be an empty list.");
 
     }

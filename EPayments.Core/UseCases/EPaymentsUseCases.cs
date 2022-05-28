@@ -20,8 +20,8 @@ namespace Empiria.OnePoint.EPayments {
     static public async Task<FormerPaymentOrderDTO> RefreshPaymentOrder(IPayable payable) {
       FormerPaymentOrderDTO paymentOrderData = payable.TryGetFormerPaymentOrderData();
 
-      Assertion.AssertObject(paymentOrderData,
-                             $"Transaction {payable.UID} doesn't have a registered payment order.");
+      Assertion.Ensure(paymentOrderData,
+                       $"Transaction {payable.UID} doesn't have a registered payment order.");
 
       if (paymentOrderData.IsCompleted) {
         return paymentOrderData;
