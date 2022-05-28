@@ -16,9 +16,8 @@ using Empiria.OnePoint.EFiling.UseCases;
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web api controller that provides input and output e-documents for filing requests.</summary>
-  [WebApiAuthorizationFilter(WebApiClaimType.ClientApp_Controller, "Electronic.Filing.Client.Application")]
+  [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
   public class DocumentsController : WebApiController {
-
 
     [HttpGet]
     [Route("v2/electronic-filing/filing-requests/{filingRequestUID:guid}/output-documents")]

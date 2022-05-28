@@ -15,8 +15,8 @@ using Empiria.WebApi;
 namespace Empiria.OnePoint.ESign.WebApi {
 
   /// <summary>Web Api used to provide electronic sign services through sign tasks.</summary>
-  [WebApiAuthorizationFilter(WebApiClaimType.ClientApp_Controller, "Electronic.Sign.Client.Application")]
-  [WebApiAuthorizationFilter(WebApiClaimType.User_Role, "Electronic.Sign.Registered.User")]
+  [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Sign.Client.Application")]
+  [WebApiAuthorizationFilter(WebApiClaimType.AuthenticatedUserIsInRole, "ElectronicSign.Signer")]
   public class SignRequestsController : WebApiController {
 
     #region Query methods
@@ -173,7 +173,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
 
     static private SignStatus GetSignStatusFromRequest(string status) {
-      Assertion.AssertObject(status, "status");
+      Assertion.Require(status, "status");
 
       switch (status.ToLowerInvariant()) {
         case "pending":
