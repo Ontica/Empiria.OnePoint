@@ -59,26 +59,26 @@ namespace Empiria.OnePoint.EFiling {
 
 
     internal void EnsureCanBeEdited() {
-      Assertion.Ensure(!_request.IsSigned, "This filing is already signed, so it can't be edited.");
+      Assertion.Require(!_request.IsSigned, "This filing is already signed, so it can't be edited.");
 
-      Assertion.Ensure(_request.Status == RequestStatus.Pending,
+      Assertion.Require(_request.Status == RequestStatus.Pending,
                        "This filing is not in pending status, so it can't be edited.");
 
       var userContext = EFilingUserContext.Current();
 
-      Assertion.Ensure(userContext.IsRegister, "Current user can't edit this filing.");
+      Assertion.Require(userContext.IsRegister, "Current user can't edit this filing.");
     }
 
 
     internal void EnsureCanBeSubmitted() {
-      Assertion.Ensure(_request.Status == RequestStatus.OnPayment,
+      Assertion.Require(_request.Status == RequestStatus.OnPayment,
                        "Invalid status for submitting. Must be OnPayment");
 
-      Assertion.Ensure(_request.PaymentOrder.ReceiptNo, "No receipt number provided.");
+      Assertion.Require(_request.PaymentOrder.ReceiptNo, "No receipt number provided.");
 
       var userContext = EFilingUserContext.Current();
 
-      Assertion.Ensure(userContext.IsManager, "Current user can't submit this filing.");
+      Assertion.Require(userContext.IsManager, "Current user can't submit this filing.");
     }
 
 

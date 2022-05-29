@@ -154,7 +154,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal SignEvent Sign(string digitalSign) {
-      Assertion.Ensure(this.SignStatus == SignStatus.Pending || this.SignStatus == SignStatus.Revoked,
+      Assertion.Require(this.SignStatus == SignStatus.Pending || this.SignStatus == SignStatus.Revoked,
                        "Sign is allowed only to requests in pending or revoked status.");
 
       // ToDo: Ensure digitalSign is valid for RequestedTo user and Document.SignInputData
@@ -168,7 +168,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal SignEvent Revoke() {
-      Assertion.Ensure(this.SignStatus == SignStatus.Signed,
+      Assertion.Require(this.SignStatus == SignStatus.Signed,
                        "Revoke is allowed only to requests with signed status.");
 
       var signEvent = new SignEvent(SignEventType.Revoked, this);
@@ -180,7 +180,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal SignEvent Refuse() {
-      Assertion.Ensure(this.SignStatus == SignStatus.Pending,
+      Assertion.Require(this.SignStatus == SignStatus.Pending,
                        "Sign refuse is allowed only to requests with pending status.");
 
       var signEvent = new SignEvent(SignEventType.Refused, this);
@@ -192,7 +192,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     internal SignEvent Unrefuse() {
-      Assertion.Ensure(this.SignStatus == SignStatus.Refused,
+      Assertion.Require(this.SignStatus == SignStatus.Refused,
                        "Unrefuse is allowed only to requests with refused status.");
 
       var signEvent = new SignEvent(SignEventType.Unrefused, this);

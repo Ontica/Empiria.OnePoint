@@ -23,7 +23,7 @@ namespace Empiria.OnePoint.EFiling {
 
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
-      Assertion.Ensure(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
+      Assertion.Require(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
       return filingRequest;
     }
@@ -58,7 +58,7 @@ namespace Empiria.OnePoint.EFiling {
     private async Task ChangeTransactionStatus(string filingRequestUID, string eventName) {
       var filingRequest = EFilingRequest.TryParse(filingRequestUID);
 
-      Assertion.Ensure(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
+      Assertion.Require(filingRequest, $"Invalid filing request with UID {filingRequestUID}.");
 
       var interactor = new EFilingExternalServicesInteractor(filingRequest);
 
