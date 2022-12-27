@@ -1,19 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Company>Ontica</Company>
-    <Product>Empiria OnePoint</Product>
-    <Description>Empiria OnePoint Electronic Payment Services.</Description>
-    <Copyright>(c) 2017-2020. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
+    <Product>Empiria OnePoint Security</Product>
+    <Description>One point integrated security management services.</Description>
+    <Copyright>(c) 2017-2023. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
     <Version>2.0.0</Version>
     <AssemblyVersion>2.0.0</AssemblyVersion>
     <FileVersion>2.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/EPayments.Core/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/EPayments.Core</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/Security/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.OnePoint/tree/master/Security</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
-    <PackageTags>e-government, gobierno electrónico, pago electrónico, órdenes de pago, líneas de captura,
-    trámites en línea, e-payment, electronic filing, electronic payments</PackageTags>
+    <PackageTags>security management, user management, role-based security, roles, permission sets, features, profile</PackageTags>
     <RepositoryUrl>https://github.com/Ontica/Empiria.OnePoint</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Ontica</Authors>
@@ -21,6 +20,8 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
+    <AssemblyName>Empiria.OnePoint.Security</AssemblyName>
+    <RootNamespace>Empiria.OnePoint.Security</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -54,11 +55,10 @@
   </PropertyGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.Core" Version="7.0.0" />
+    <PackageReference Include="Empiria.Services" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\core\Core\Empiria.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Empiria.OnePoint.Core.csproj" />
+    <ProjectReference Include="..\..\extensions\Services\Empiria.Services.csproj" />
   </ItemGroup>
 </Project>

@@ -3,7 +3,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5b3ebddf0bce44188ad00877840a18f6)](https://www.codacy.com/gh/Ontica/Empiria.OnePoint/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ontica/Empiria.OnePoint&amp;utm_campaign=Badge_Grade) &nbsp; &nbsp; [![Maintainability](https://api.codeclimate.com/v1/badges/a66f2027efa4d2091661/maintainability)](https://codeclimate.com/github/Ontica/Empiria.OnePoint/maintainability)
 
 [Empiria OnePoint](http://www.ontica.org/) is a suite of software components that allow governments
-to provide services to people and organizations using a single point of contact.
+to provide services to people and organizations using a single point of contact. Also provides services
+for integrated security and organizations management.
 
 This repository contains the system's domain components, application services (uses cases),
 a web API interface to interact with the backend, and connectors to hook other systems and components
@@ -78,4 +79,4 @@ important in the case of public utility or government systems.
 
 ## Copyright
 
-Copyright © 2017-2022. La Vía Óntica SC, Ontica LLC and colaborators.
+Copyright © 2017-2023. La Vía Óntica SC, Ontica LLC and colaborators.
