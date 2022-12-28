@@ -4,9 +4,9 @@
     <Product>Empiria OnePoint Security</Product>
     <Description>One point integrated security management services.</Description>
     <Copyright>(c) 2017-2023. La Vía Óntica SC, Ontica LLC and contributors.</Copyright>
-    <Version>2.0.0</Version>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <FileVersion>2.0.0</FileVersion>
+    <Version>4.0.0</Version>
+    <AssemblyVersion>4.0.0</AssemblyVersion>
+    <FileVersion>4.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/Ontica/Empiria.OnePoint/blob/master/Security/LICENSE.txt</PackageLicenseUrl>
@@ -56,9 +56,11 @@
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.Core" Version="7.0.0" />
     <PackageReference Include="Empiria.Services" Version="1.0.0" />
+    <PackageReference Include="Empiria.Messaging" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\core\Core\Empiria.Core.csproj" />
     <ProjectReference Include="..\..\extensions\Services\Empiria.Services.csproj" />
+    <ProjectReference Include="..\..\extensions\Messaging\Empiria.Messaging.csproj" />
   </ItemGroup>
 </Project>
