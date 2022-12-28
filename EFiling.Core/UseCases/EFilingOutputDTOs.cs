@@ -44,8 +44,8 @@ namespace Empiria.OnePoint.EFiling.UseCases {
     public Preparer Preparer {
       get {
         return new Preparer {
-          Agency = request.Agency.Alias,
-          Agent = request.Agent.Alias,
+          Agency = request.Agency.ShortName,
+          Agent = request.Agent.ShortName,
         };
       }
     }
@@ -306,7 +306,7 @@ namespace Empiria.OnePoint.EFiling.UseCases {
 
     public string FilledOutBy {
       get {
-        return request.PostedBy.Alias;
+        return request.PostedBy.ShortName;
       }
     }
 

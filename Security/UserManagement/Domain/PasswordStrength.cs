@@ -93,8 +93,7 @@ namespace Empiria.OnePoint.Security.UserManagement {
 
     private void VerifyNoUserDataPortions() {
       if (EmpiriaString.ContainsSegment(_password, _user.UserName, 3) ||
-          EmpiriaString.ContainsSegment(_password, _user.FirstName, 3) ||
-          EmpiriaString.ContainsSegment(_password, _user.LastName, 3) ||
+          EmpiriaString.ContainsSegment(_password, _user.FullName, 3) ||
           EmpiriaString.ContainsSegment(_password, _user.EMail, 3)) {
 
         Validate.Fail("Passwords must not contain significant portions " +

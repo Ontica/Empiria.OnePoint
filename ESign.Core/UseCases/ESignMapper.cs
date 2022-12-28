@@ -38,7 +38,7 @@ namespace Empiria.OnePoint.ESign {
 
       return new SignRequestDTO {
         uid = request.UID,
-        requestedBy = request.RequestedBy.Alias,
+        requestedBy = request.RequestedBy.ShortName,
         requestedTime = request.RequestedTime,
         signStatus = request.SignStatus.ToString(),
         signatureKind = request.SignatureKind,
@@ -50,7 +50,7 @@ namespace Empiria.OnePoint.ESign {
           filingNo = document.TransactionNo,
           filingTime = document.RequestedTime,
           filedBy = document.RequestedBy,
-          postedBy = document.PostedBy.Alias,
+          postedBy = document.PostedBy.ShortName,
         },
       };
     }

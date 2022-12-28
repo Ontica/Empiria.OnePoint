@@ -55,7 +55,7 @@ namespace Empiria.OnePoint.Security.Providers {
 
 
     static private void SendEmail(EMailContent content, Person sendToPerson) {
-      var sendTo = new SendTo(sendToPerson.EMail, sendToPerson.Alias);
+      var sendTo = new SendTo(sendToPerson.EMail, sendToPerson.ShortName);
 
       EMail.Send(sendTo, content);
     }
