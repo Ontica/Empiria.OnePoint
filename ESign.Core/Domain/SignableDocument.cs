@@ -193,7 +193,7 @@ namespace Empiria.OnePoint.ESign {
 
     protected override void OnSave() {
       if (base.IsNew) {
-        this.PostedBy = Contact.Parse(ExecutionServer.CurrentUserId);
+        this.PostedBy = ExecutionServer.CurrentContact;
         this.PostingTime = DateTime.Now;
       }
       SignDataServices.WriteDocument(this);

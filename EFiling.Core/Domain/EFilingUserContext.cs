@@ -23,7 +23,7 @@ namespace Empiria.OnePoint.EFiling {
 
 
     static internal EFilingUserContext Current() {
-      Contact currentUser = Contact.Parse(ExecutionServer.CurrentUserId);
+      Contact currentUser = ExecutionServer.CurrentContact;
 
       return new EFilingUserContext(currentUser);
     }

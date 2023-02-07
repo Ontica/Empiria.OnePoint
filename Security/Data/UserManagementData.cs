@@ -19,15 +19,6 @@ namespace Empiria.OnePoint.Security.Data {
 
   static internal class UserManagementData {
 
-    static internal void ActivateUser(EmpiriaUser empiriaUser) {
-      string sql = "UPDATE Contacts " +
-                   "SET ContactStatus = 'A' " +
-                   $"WHERE ContactId = {empiriaUser.Id}";
-
-      DataWriter.Execute(DataOperation.Parse(sql));
-    }
-
-
     static internal FixedList<UserData> SearchUsers(string keywords) {
       string sql = "SELECT * FROM Contacts " +
                    "WHERE UserName IS NOT NULL OR UserName <> ''";

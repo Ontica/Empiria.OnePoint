@@ -133,7 +133,6 @@ namespace Empiria.OnePoint.ESign {
 
     #region Utility methods
 
-
     static public void EnsureValidSignTaskDTO(SignTaskDTO signTaskDTO) {
       Assertion.Require(signTaskDTO, "signTaskDTO");
 
@@ -168,7 +167,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     static private Contact GetCurrentUser() {
-      return EmpiriaUser.Current.AsContact();
+      return ExecutionServer.CurrentContact;
     }
 
 

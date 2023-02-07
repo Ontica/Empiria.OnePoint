@@ -92,7 +92,8 @@ namespace Empiria.OnePoint.ESign {
     private void EnsureValidCredentials(SignCredentials credentials) {
       SecureString securedPassword = Cryptographer.ConvertToSecureString(credentials.Password);
 
-      Cryptographer.AssertValidPrivateKeyPassword(securedPassword);    }
+      Cryptographer.AssertValidPrivateKeyPassword(securedPassword);
+    }
 
 
     static private string SignData(SignCredentials credentials, string inputData) {

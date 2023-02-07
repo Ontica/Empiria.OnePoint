@@ -60,8 +60,8 @@ namespace Empiria.OnePoint.Security.UserManagement.UseCases {
 
       var apiKey = ConfigurationData.GetString("Empiria.Security", "ChangePasswordKey");
 
-      var userName = EmpiriaPrincipal.Current.Identity.User.UserName;
-      var userEmail = EmpiriaPrincipal.Current.Identity.User.EMail;
+      var userName = ExecutionServer.CurrentUser.UserName;
+      var userEmail = ExecutionServer.CurrentUser.EMail;
 
       ChangePassword(apiKey, userName, userEmail, newPassword);
 

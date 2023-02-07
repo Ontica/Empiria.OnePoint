@@ -22,7 +22,7 @@ namespace Empiria.OnePoint.Security.Providers {
     #region Methods
 
     static internal void SendPasswordChangedWarningEMail() {
-      Person person = (Person) EmpiriaPrincipal.Current.Identity.User.AsContact();
+      Person person = (Person) ExecutionServer.CurrentContact;
 
       var body = GetTemplate("YourPasswordWasChanged");
 
