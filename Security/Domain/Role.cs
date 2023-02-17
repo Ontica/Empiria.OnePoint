@@ -16,7 +16,7 @@ using Empiria.OnePoint.Security.Data;
 namespace Empiria.OnePoint.Security {
 
   /// <summary>Represents an identity role that holds feature access permissions.</summary>
-  internal class Role : SecurityItem {
+  internal class Role : SecurityItem, INamedEntity {
 
     #region Constructors and parsers
 

@@ -16,7 +16,7 @@ using Empiria.OnePoint.Security.Data;
 namespace Empiria.OnePoint.Security {
 
   /// <summary>Holds information about a system feature.</summary>
-  internal class Feature : SecurityItem {
+  internal class Feature : SecurityItem, INamedEntity {
 
     #region Constructors and parsers
 
