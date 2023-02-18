@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.Security {
                                                                     SecurityItemType.SubjectFeature);
     }
 
-    public static Feature Empty => ParseEmpty<Feature>();
+    static public Feature Empty => ParseEmpty<Feature>();
 
     #endregion Constructors and parsers
 
@@ -78,18 +78,33 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    ObjectAccessRule[] _objectsGrants;
+
     public ObjectAccessRule[] ObjectsGrants {
       get {
-        return ExtensionData.GetList<ObjectAccessRule>("objectsGrants", false)
-                            .ToArray();
+        if (_objectsGrants == null) {
+          _objectsGrants = ExtensionData.GetList<ObjectAccessRule>("objectsGrants", false)
+                                        .ToArray();
+
+        }
+
+        return _objectsGrants;
       }
     }
 
 
+    Feature[] _requires;
+
     public Feature[] Requires {
       get {
-        return ExtensionData.GetList<Feature>("requires", false)
-                            .ToArray();
+
+        if (_requires == null) {
+          _requires = ExtensionData.GetList<Feature>("requires", false)
+                                   .ToArray();
+
+        }
+
+        return _requires;
       }
     }
 

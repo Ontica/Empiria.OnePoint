@@ -66,18 +66,29 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    Feature[] _grants;
+
     internal Feature[] Grants {
       get {
-        return ExtensionData.GetList<Feature>("grants", false)
-                            .ToArray();
+        if (_grants == null) {
+          _grants = ExtensionData.GetList<Feature>("grants", false)
+                                 .ToArray();
+        }
+
+        return _grants;
       }
     }
 
+    Feature[] _revokes;
 
     internal Feature[] Revokes {
       get {
-        return ExtensionData.GetList<Feature>("revokes", false)
-                            .ToArray();
+        if (_revokes == null) {
+          _revokes = ExtensionData.GetList<Feature>("revokes", false)
+                                  .ToArray();
+        }
+
+        return _revokes;
       }
     }
 
