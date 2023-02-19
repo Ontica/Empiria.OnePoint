@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : User Management                              Component : Domain Layer                          *
+*  Module   : Security Subjects Management                 Component : Domain Layer                          *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Service provider                      *
 *  Type     : PasswordStrength                             License   : Please read LICENSE.txt file          *
 *                                                                                                            *
@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using Empiria.Security;
 
-namespace Empiria.OnePoint.Security.UserManagement {
+namespace Empiria.OnePoint.Security.Subjects {
 
   /// <summary>Provides services to verify password strength.</summary>
   public class PasswordStrength {
@@ -107,4 +107,4 @@ namespace Empiria.OnePoint.Security.UserManagement {
 
   }  // class PasswordStrength
 
-}  // namespace Empiria.OnePoint.Security.UserManagement
+}  // namespace Empiria.OnePoint.Security.Subjects

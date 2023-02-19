@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Security Web Api                             Component : User Management                       *
+*  Module   : Security Subjects Management                 Component : Web Api                               *
 *  Assembly : Empiria.OnePoint.Security.WebApi.dll         Pattern   : Controller                            *
-*  Type     : UserCredentialsController                    License   : Please read LICENSE.txt file          *
+*  Type     : SubjectCredentialsController                 License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Web api methods used to change user credentials.                                               *
+*  Summary  : Web api methods used to change subject credentials.                                            *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -15,12 +15,12 @@ using Empiria.WebApi;
 
 using Empiria.Services.Authentication;
 
-using Empiria.OnePoint.Security.UserManagement.UseCases;
+using Empiria.OnePoint.Security.Subjects.UseCases;
 
 namespace Empiria.OnePoint.Security.WebApi {
 
-  /// <summary> Web api methods used to change user credentials.</summary>
-  public class UserCredentialsController : WebApiController {
+  /// <summary> Web api methods used to change subject credentials.</summary>
+  public class SubjectCredentialsController : WebApiController {
 
     #region Web Apis
 
@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.Security.WebApi {
       var currentPassword = formData.Get<string>("current");
       var newPassword = formData.Get<string>("new");
 
-      using (var usecases = UserCredentialsUseCases.UseCaseInteractor()) {
+      using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
         usecases.ChangeUserPassword(currentPassword, newPassword);
 
         return new NoDataModel(this.Request);
@@ -45,15 +45,15 @@ namespace Empiria.OnePoint.Security.WebApi {
 
 
     [HttpPost]
-    [Route("v1/security/change-password/{userEmail}")]
-    [Route("v3/security/change-password/{userEmail}")]
+    [Route("v1/security/change-password/{email}")]
+    [Route("v3/security/change-password/{email}")]
     public NoDataModel ChangePassword([FromBody] AuthenticationFields fields,
-                                      [FromUri] string userEmail) {
+                                      [FromUri] string email) {
       base.RequireBody(fields);
 
-      using (var usecases = UserCredentialsUseCases.UseCaseInteractor()) {
+      using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
         usecases.CreateUserPassword(fields.AppKey, fields.UserID,
-                                    userEmail, fields.Password);
+                                    email, fields.Password);
 
         return new NoDataModel(this.Request);
       }
@@ -61,6 +61,6 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     #endregion Web Apis
 
-  }  // class UserCredentialsController
+  }  // class SubjectCredentialsController
 
 }  // namespace Empiria.OnePoint.Security.WebApi

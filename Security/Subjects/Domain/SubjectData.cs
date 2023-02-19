@@ -1,22 +1,22 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : User Management                              Component : Domain Layer                          *
+*  Module   : Security Subjects Management                 Component : Domain Layer                          *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Information Holder                    *
-*  Type     : UserData                                     License   : Please read LICENSE.txt file          *
+*  Type     : SubjectData                                  License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Holds user data.                                                                               *
+*  Summary  : Holds subject's data.                                                                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
 using Empiria.StateEnums;
 
-using Empiria.OnePoint.Security.UserManagement.Adapters;
+using Empiria.OnePoint.Security.Subjects.Adapters;
 
-namespace Empiria.OnePoint.Security.UserManagement {
+namespace Empiria.OnePoint.Security.Subjects {
 
-  /// <summary>Holds user data.</summary>
-  internal class UserData : UserDto {
+  /// <summary>Holds subject's data.</summary>
+  internal class SubjectData : SubjectDto {
 
     [DataField("ContactId")]
     internal int Id {
@@ -93,6 +93,6 @@ namespace Empiria.OnePoint.Security.UserManagement {
       get; private set;
     }
 
-  }  // class UserData
+  }  // class SubjectData
 
-} // namespace Empiria.OnePoint.Security.UserManagement
+} // namespace Empiria.OnePoint.Security.Subjects

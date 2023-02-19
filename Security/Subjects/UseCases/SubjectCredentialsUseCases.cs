@@ -1,8 +1,8 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : User Management                              Component : Use cases Layer                       *
+*  Module   : Security Subjects Management                 Component : Use cases Layer                       *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Use case interactor                   *
-*  Type     : UserCredentialsUseCases                      License   : Please read LICENSE.txt file          *
+*  Type     : SubjectCredentialsUseCases                   License   : Please read LICENSE.txt file          *
 *                                                                                                            *
 *  Summary  : Use cases for update user's credentials.                                                       *
 *                                                                                                            *
@@ -17,19 +17,19 @@ using Empiria.OnePoint.Security.Data;
 
 using Empiria.OnePoint.Security.Providers;
 
-namespace Empiria.OnePoint.Security.UserManagement.UseCases {
+namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
   /// <summary>Use cases for update user's credentials.</summary>
-  public class UserCredentialsUseCases : UseCase {
+  public class SubjectCredentialsUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected UserCredentialsUseCases() {
+    protected SubjectCredentialsUseCases() {
       // no-op
     }
 
-    static public UserCredentialsUseCases UseCaseInteractor() {
-      return CreateInstance<UserCredentialsUseCases>();
+    static public SubjectCredentialsUseCases UseCaseInteractor() {
+      return CreateInstance<SubjectCredentialsUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -60,8 +60,8 @@ namespace Empiria.OnePoint.Security.UserManagement.UseCases {
 
       var apiKey = ConfigurationData.GetString("Empiria.Security", "ChangePasswordKey");
 
-      var userName = ExecutionServer.CurrentUser.UserName;
-      var userEmail = ExecutionServer.CurrentUser.EMail;
+      var userName = ExecutionServer.CurrentIdentity.Name;
+      var userEmail = ExecutionServer.CurrentContact.EMail;
 
       ChangePassword(apiKey, userName, userEmail, newPassword);
 
@@ -90,11 +90,11 @@ namespace Empiria.OnePoint.Security.UserManagement.UseCases {
 
       helper.VerifyStrength();
 
-      UserManagementData.ChangePassword(username, newPassword);
+      SubjectsData.ChangePassword(username, newPassword);
     }
 
     #endregion Helpers
 
-  }  // class UserCredentialsUseCases
+  }  // class SubjectCredentialsUseCases
 
-}  // namespace Empiria.OnePoint.Security.UserManagement.UseCases
+}  // namespace Empiria.OnePoint.Security.Subjects.UseCases

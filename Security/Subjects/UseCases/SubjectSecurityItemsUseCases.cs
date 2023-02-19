@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : User Management                              Component : Use cases Layer                       *
+*  Module   : Security Subjects Management                 Component : Use cases Layer                       *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Use case interactor                   *
-*  Type     : UserSecurityItemsUseCases                    License   : Please read LICENSE.txt file          *
+*  Type     : SubjectSecurityItemsUseCases                 License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Use cases for user's assigned security items.                                                  *
+*  Summary  : Use cases for subject's assigned security items.                                               *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -14,19 +14,19 @@ using Empiria.Services;
 
 using Empiria.Security;
 
-namespace Empiria.OnePoint.Security.UserManagement.UseCases {
+namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
-  /// <summary>Use cases for user's assigned security items.</summary>
-  public class UserSecurityItemsUseCases : UseCase {
+  /// <summary>Use cases for subject's assigned security items.</summary>
+  public class SubjectSecurityItemsUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected UserSecurityItemsUseCases() {
+    protected SubjectSecurityItemsUseCases() {
       // no-op
     }
 
-    static public UserSecurityItemsUseCases UseCaseInteractor() {
-      return CreateInstance<UserSecurityItemsUseCases>();
+    static public SubjectSecurityItemsUseCases UseCaseInteractor() {
+      return CreateInstance<SubjectSecurityItemsUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -60,6 +60,6 @@ namespace Empiria.OnePoint.Security.UserManagement.UseCases {
 
     #endregion Helpers
 
-  }  // class UserSecurityItemsUseCases
+  }  // class SubjectSecurityItemsUseCases
 
-}  // namespace Empiria.OnePoint.Security.UserManagement.UseCases
+}  // namespace Empiria.OnePoint.Security.Subjects.UseCases

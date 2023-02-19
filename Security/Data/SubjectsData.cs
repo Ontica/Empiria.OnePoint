@@ -1,8 +1,8 @@
-﻿/* Empiria Core **********************************************************************************************
+﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : User Management                            Component : Data Access Layer                       *
-*  Assembly : Empiria.Core.Services.dll                  Pattern   : Data Services                           *
-*  Type     : UserManagementData                         License   : Please read LICENSE.txt file            *
+*  Module   : Security Subjects Management               Component : Data Access Layer                       *
+*  Assembly : Empiria.OnePoint.Security.dll              Pattern   : Data Services                           *
+*  Type     : SubjectsData                               License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Data read and write methods for user management services.                                      *
 *                                                                                                            *
@@ -13,17 +13,17 @@ using Empiria.Data;
 
 using Empiria.Security;
 
-using Empiria.OnePoint.Security.UserManagement;
+using Empiria.OnePoint.Security.Subjects;
 
 namespace Empiria.OnePoint.Security.Data {
 
-  static internal class UserManagementData {
+  static internal class SubjectsData {
 
-    static internal FixedList<UserData> SearchUsers(string keywords) {
+    static internal FixedList<SubjectData> SearchSubjects(string keywords) {
       string sql = "SELECT * FROM Contacts " +
                    "WHERE UserName IS NOT NULL OR UserName <> ''";
 
-      return DataReader.GetPlainObjectFixedList<UserData>(DataOperation.Parse(sql));
+      return DataReader.GetPlainObjectFixedList<SubjectData>(DataOperation.Parse(sql));
     }
 
 
@@ -77,6 +77,6 @@ namespace Empiria.OnePoint.Security.Data {
 
     #endregion Helpers
 
-  } // class SecurityData
+  } // class SubjectsData
 
 } // namespace Empiria.OnePoint.Security.Data
