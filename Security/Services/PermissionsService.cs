@@ -17,11 +17,12 @@ namespace Empiria.OnePoint.Security.Services {
   /// <summary>Provides subject permissions read services.</summary>
   public class PermissionsService : IPermissionsProvider {
 
-    public FixedList<string> GetFeaturesPermissions(ClientApplication app, EmpiriaIdentity subject) {
-      Assertion.Require(app, nameof(app));
+    public FixedList<string> GetFeaturesPermissions(EmpiriaIdentity subject,
+                                                    ClientApplication context) {
       Assertion.Require(subject, nameof(subject));
+      Assertion.Require(context, nameof(context));
 
-      var permissionsBuilder = new PermissionsBuilder(app, subject);
+      var permissionsBuilder = new PermissionsBuilder(subject, context);
 
       return permissionsBuilder.BuildFeatures()
                                .Select(x => x.Key)
@@ -29,11 +30,12 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public FixedList<IObjectAccessRule> GetObjectAccessRules(ClientApplication app, EmpiriaIdentity subject) {
-      Assertion.Require(app, nameof(app));
+    public FixedList<IObjectAccessRule> GetObjectAccessRules(EmpiriaIdentity subject,
+                                                             ClientApplication context) {
       Assertion.Require(subject, nameof(subject));
+      Assertion.Require(context, nameof(context));
 
-      var permissionsBuilder = new PermissionsBuilder(app, subject);
+      var permissionsBuilder = new PermissionsBuilder(subject, context);
 
       return permissionsBuilder.BuildObjectAccessRules()
                                .Select(x => MapToObjectAccessRulesDto(x))
@@ -41,11 +43,11 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public FixedList<string> GetRoles(ClientApplication app, EmpiriaIdentity subject) {
-      Assertion.Require(app, nameof(app));
+    public FixedList<string> GetRoles(EmpiriaIdentity subject, ClientApplication context) {
       Assertion.Require(subject, nameof(subject));
+      Assertion.Require(context, nameof(context));
 
-      var permissionsBuilder = new PermissionsBuilder(app, subject);
+      var permissionsBuilder = new PermissionsBuilder(subject, context);
 
       return permissionsBuilder.BuildRoles()
                                .Select(x => x.Key)
@@ -53,12 +55,12 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public bool IsSubjectInRole(ClientApplication app, IIdentifiable subject, string role) {
-      Assertion.Require(app, nameof(app));
+    public bool IsSubjectInRole(IIdentifiable subject, ClientApplication context, string role) {
       Assertion.Require(subject, nameof(subject));
+      Assertion.Require(context, nameof(context));
       Assertion.Require(role, nameof(role));
 
-      return Role.IsSubjectInRole(app, subject, role);
+      return Role.IsSubjectInRole(subject, context, role);
     }
 
 

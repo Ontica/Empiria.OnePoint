@@ -32,16 +32,16 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
-    static internal FixedList<T> GetSubjectTargetItems<T>(IIdentifiable context,
-                                                          IIdentifiable subject,
+    static internal FixedList<T> GetSubjectTargetItems<T>(IIdentifiable subject,
+                                                          IIdentifiable context,
                                                           SecurityItemType itemType) where T : SecurityItem {
-      Assertion.Require(context, "context");
       Assertion.Require(subject, "subject");
+      Assertion.Require(context, "context");
       Assertion.Require(itemType, "itemType");
 
       string sql = $"SELECT TargetId FROM SecurityItems " +
-                   $"WHERE ContextId = {context.Id} AND " +
-                   $"SubjectId = {subject.Id} AND " +
+                   $"WHERE SubjectId = {subject.Id} AND " +
+                   $"ContextId = {context.Id} AND " +
                    $"SecurityItemTypeId = {itemType.Id} AND " +
                    $"SecurityItemStatus = 'A'";
 

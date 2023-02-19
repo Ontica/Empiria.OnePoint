@@ -18,15 +18,15 @@ namespace Empiria.OnePoint.Security {
   /// <summary>Builds a string permissions array for a given identity.</summary>
   internal class PermissionsBuilder {
 
-    private readonly ClientApplication _clientApp;
-    private readonly EmpiriaIdentity _identity;
+    private readonly EmpiriaIdentity _subject;
+    private readonly ClientApplication _context;
 
-    internal PermissionsBuilder(ClientApplication clientApp, EmpiriaIdentity identity) {
-      Assertion.Require(clientApp, nameof(clientApp));
-      Assertion.Require(identity, nameof(identity));
+    internal PermissionsBuilder(EmpiriaIdentity subject, ClientApplication context) {
+      Assertion.Require(subject, nameof(subject));
+      Assertion.Require(context, nameof(context));
 
-      _clientApp = clientApp;
-      _identity = identity;
+      _subject = subject;
+      _context = context;
     }
 
     #region Methods
@@ -36,11 +36,11 @@ namespace Empiria.OnePoint.Security {
 
       FillIdentityFeatures(features);
 
-      FixedList<Role> identityRoles = Role.GetList(_clientApp, _identity.User.Contact);
+      FixedList<Role> identityRoles = Role.GetList(_subject.User.Contact, _context);
 
-      FillGrantedFeatures(features, identityRoles);
+      FillRoleGrantedFeatures(features, identityRoles);
 
-      RemoveRevokedFeatures(features, identityRoles);
+      RemoveRoleRevokedFeatures(features, identityRoles);
 
       return features.Distinct()
                      .ToFixedList();
@@ -63,7 +63,7 @@ namespace Empiria.OnePoint.Security {
 
 
     internal FixedList<Role> BuildRoles() {
-      return Role.GetList(_clientApp, _identity.User.Contact);
+      return Role.GetList(_subject.User.Contact, _context);
     }
 
     #endregion Methods
@@ -72,8 +72,7 @@ namespace Empiria.OnePoint.Security {
 
     private void FillIdentityFeatures(List<Feature> list) {
 
-      FixedList<Feature> identityFeatures = Feature.GetList(_clientApp,
-                                                            _identity.User.Contact);
+      FixedList<Feature> identityFeatures = Feature.GetList(_subject.User.Contact, _context);
 
       list.AddRange(identityFeatures);
 
@@ -91,8 +90,8 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    private void FillGrantedFeatures(List<Feature> list,
-                                     FixedList<Role> roles) {
+    private void FillRoleGrantedFeatures(List<Feature> list,
+                                         FixedList<Role> roles) {
       foreach (var role in roles) {
         list.AddRange(role.Grants);
 
@@ -111,8 +110,8 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    private void RemoveRevokedFeatures(List<Feature> list,
-                                       FixedList<Role> roles) {
+    private void RemoveRoleRevokedFeatures(List<Feature> list,
+                                           FixedList<Role> roles) {
       foreach (var role in roles) {
         foreach (var revoke in role.Revokes) {
           list.Remove(revoke);

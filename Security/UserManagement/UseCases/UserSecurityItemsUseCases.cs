@@ -12,8 +12,6 @@ using System;
 using Empiria.Contacts;
 using Empiria.Services;
 
-using Empiria.OnePoint.Security.UserManagement.Adapters;
-
 using Empiria.Security;
 
 namespace Empiria.OnePoint.Security.UserManagement.UseCases {
@@ -35,24 +33,27 @@ namespace Empiria.OnePoint.Security.UserManagement.UseCases {
 
     #region Use cases
 
+    public FixedList<NamedEntityDto> GetSubjectFeatures(string subjectUID, string contextUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+      Assertion.Require(contextUID, nameof(contextUID));
 
-    public FixedList<NamedEntityDto> GetUserFeatures(string userUID) {
-      Assertion.Require(userUID, nameof(userUID));
+      var subject = Contact.Parse(subjectUID);
+      var context = ClientApplication.ParseActive(contextUID);
 
-      var subject = Contact.Parse(userUID);
-
-      FixedList<Feature> features = Feature.GetList(ClientApplication.Current, subject);
+      FixedList<Feature> features = Feature.GetList(subject, context);
 
       return features.MapToNamedEntityList();
     }
 
 
-    public FixedList<NamedEntityDto> GetUserRoles(string userUID) {
-      Assertion.Require(userUID, nameof(userUID));
+    public FixedList<NamedEntityDto> GetSubjectRoles(string subjectUID, string contextUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+      Assertion.Require(contextUID, nameof(contextUID));
 
-      var subject = Contact.Parse(userUID);
+      var subject = Contact.Parse(subjectUID);
+      var context = ClientApplication.ParseActive(contextUID);
 
-      FixedList<Role> roles = Role.GetList(ClientApplication.Current, subject);
+      FixedList<Role> roles = Role.GetList(subject, context);
 
       return roles.MapToNamedEntityList();
     }
