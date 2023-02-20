@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
 using Empiria.Data;
 
 namespace Empiria.OnePoint.Security.Data {
@@ -25,6 +24,19 @@ namespace Empiria.OnePoint.Security.Data {
                    $"WHERE ContextId = {context.Id} AND " +
                    $"SecurityItemTypeId = {itemType.Id} AND " +
                    $"SecurityItemStatus = 'A'";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<T>(op);
+    }
+
+
+    static internal FixedList<T> GetSecurityItems<T>(SecurityItemType itemType) where T : SecurityItem {
+      Assertion.Require(itemType, "itemType");
+
+      string sql = $"SELECT * FROM SecurityItems " +
+                   $"WHERE SecurityItemTypeId = {itemType.Id} AND " +
+                   $"SecurityItemStatus <> 'X'";
 
       var op = DataOperation.Parse(sql);
 

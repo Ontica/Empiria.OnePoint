@@ -42,6 +42,10 @@ namespace Empiria.OnePoint.Security {
                 => Parse("ObjectType.SecurityItem.Role.ClientAppRole");
 
 
+    static public SecurityItemType SecurityContext
+                => Parse("ObjectType.SecurityItem.SecurityContext");
+
+
     static public SecurityItemType SubjectCredentials
                 => Parse("ObjectType.SecurityItem.Claim.SubjectCredentials");
 
