@@ -34,6 +34,8 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    static public SecurityItemType Empty => Parse("ObjectType.SecurityItem");
+
     static public SecurityItemType ClientAppFeature
                 => Parse("ObjectType.SecurityItem.Feature.ClientAppFeature");
 

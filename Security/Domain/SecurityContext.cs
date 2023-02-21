@@ -30,6 +30,11 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    static internal SecurityContext Parse(string uid) {
+      return BaseObject.ParseKey<SecurityContext>(uid);
+    }
+
+
     static internal FixedList<SecurityContext> GetList() {
       var list = SecurityItemsDataReader.GetSecurityItems<SecurityContext>(SecurityItemType.SecurityContext);
 
@@ -42,6 +47,9 @@ namespace Empiria.OnePoint.Security {
       return SecurityItemsDataReader.GetSubjectTargetItems<SecurityContext>(subject, SecurityItem.Empty,
                                                                             SecurityItemType.SubjectContext);
     }
+
+
+    static internal new SecurityContext Empty => BaseObject.ParseEmpty<SecurityContext>();
 
     #endregion Constructors and parsers
 

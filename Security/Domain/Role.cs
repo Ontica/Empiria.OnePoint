@@ -30,6 +30,11 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    static internal Role Parse(string uid) {
+      return BaseObject.ParseKey<Role>(uid);
+    }
+
+
     static internal FixedList<Role> GetList(ClientApplication context) {
       return SecurityItemsDataReader.GetContextItems<Role>(context,
                                                            SecurityItemType.ClientAppRole);
@@ -42,8 +47,8 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal bool IsSubjectInRole(IIdentifiable subject, ClientApplication context,
-                                         string roleKey) {
+    static internal bool IsSubjectInRole(IIdentifiable subject,
+                                         ClientApplication context, string roleKey) {
       FixedList<Role> subjectRoles = GetList(subject, context);
 
       return subjectRoles.Contains(x => x.Key == roleKey);
