@@ -38,6 +38,11 @@ namespace Empiria.OnePoint.Security {
       return list;
     }
 
+    static internal FixedList<SecurityContext> GetList(IIdentifiable subject) {
+      return SecurityItemsDataReader.GetSubjectTargetItems<SecurityContext>(subject, SecurityItem.Empty,
+                                                                            SecurityItemType.SubjectContext);
+    }
+
     #endregion Constructors and parsers
 
     #region Properties

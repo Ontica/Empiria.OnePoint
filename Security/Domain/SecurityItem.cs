@@ -41,6 +41,9 @@ namespace Empiria.OnePoint.Security {
       return BaseObject.ParseKey<T>(uid);
     }
 
+    static public SecurityItem Empty => BaseObject.ParseEmpty<SecurityItem>();
+
+
     #region Properties
 
     public SecurityItemType SecurityItemType {
@@ -73,7 +76,7 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    [DataField("SecurityItemValue")]
+    [DataField("SecurityItemExtData")]
     protected JsonObject ExtensionData {
       get; private set;
     }

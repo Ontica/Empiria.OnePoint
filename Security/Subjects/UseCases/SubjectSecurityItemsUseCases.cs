@@ -13,6 +13,7 @@ using Empiria.Contacts;
 using Empiria.Services;
 
 using Empiria.Security;
+using System.Runtime.Remoting.Contexts;
 
 namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
@@ -29,9 +30,22 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       return CreateInstance<SubjectSecurityItemsUseCases>();
     }
 
+
     #endregion Constructors and parsers
 
     #region Use cases
+
+
+    public FixedList<NamedEntityDto> GetSubjectContexts(string subjectUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+
+      var subject = Contact.Parse(subjectUID);
+
+      FixedList<SecurityContext> contexts = SecurityContext.GetList(subject);
+
+      return contexts.MapToNamedEntityList();
+    }
+
 
     public FixedList<NamedEntityDto> GetSubjectFeatures(string subjectUID, string contextUID) {
       Assertion.Require(subjectUID, nameof(subjectUID));

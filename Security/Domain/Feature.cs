@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.Security {
                                                                     SecurityItemType.SubjectFeature);
     }
 
-    static public Feature Empty => ParseEmpty<Feature>();
+    static public new Feature Empty => ParseEmpty<Feature>();
 
     #endregion Constructors and parsers
 
