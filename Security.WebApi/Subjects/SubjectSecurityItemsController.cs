@@ -19,8 +19,7 @@ namespace Empiria.OnePoint.Security.WebApi {
   /// <summary>Web api methods for subjects assigned security items in a given execution context.</summary>
   public class SubjectSecurityItemsController : WebApiController {
 
-    #region Web Apis
-
+    #region Query apis
 
     [HttpGet]
     [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts")]
@@ -35,7 +34,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
 
     [HttpGet]
-    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID}/features")]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/features")]
     public CollectionModel GetSubjectFeatures([FromUri] string subjectUID, [FromUri] string contextUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
@@ -47,7 +46,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
 
     [HttpGet]
-    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID}/roles")]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/roles")]
     public CollectionModel GetSubjectRoles([FromUri] string subjectUID, [FromUri] string contextUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
@@ -57,7 +56,104 @@ namespace Empiria.OnePoint.Security.WebApi {
       }
     }
 
-    #endregion Web Apis
+    #endregion Query apis
+
+    #region Command apis
+
+    [HttpPost]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}")]
+    public CollectionModel AssignContextToSubject([FromUri] string subjectUID,
+                                                  [FromUri] string contextUID) {
+
+      using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+        usecases.AssignContext(subjectUID, contextUID);
+
+        FixedList<NamedEntityDto> contexts = usecases.GetSubjectContexts(subjectUID);
+
+        return new CollectionModel(base.Request, contexts);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/features/{featureUID}")]
+    public CollectionModel AssignFeatureToSubject([FromUri] string subjectUID,
+                                                  [FromUri] string contextUID,
+                                                  [FromUri] string featureUID) {
+
+      using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+        usecases.AssignFeature(subjectUID, contextUID, featureUID);
+
+        FixedList<NamedEntityDto> features = usecases.GetSubjectFeatures(subjectUID, contextUID);
+
+        return new CollectionModel(base.Request, features);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/roles/{roleUID:guid}")]
+    public CollectionModel AssignRoleToSubject([FromUri] string subjectUID,
+                                               [FromUri] string contextUID,
+                                               [FromUri] string roleUID) {
+
+      using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+        usecases.AssignRole(subjectUID, contextUID, roleUID);
+
+        FixedList<NamedEntityDto> roles = usecases.GetSubjectFeatures(subjectUID, contextUID);
+
+        return new CollectionModel(base.Request, roles);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}")]
+    public CollectionModel UnsassignSubjectContext([FromUri] string subjectUID,
+                                                   [FromUri] string contextUID) {
+
+      using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+        usecases.UnassignContext(subjectUID, contextUID);
+
+        FixedList<NamedEntityDto> contexts = usecases.GetSubjectContexts(subjectUID);
+
+        return new CollectionModel(base.Request, contexts);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/features/{featureUID}")]
+    public CollectionModel RemoveSubjectFeature([FromUri] string subjectUID,
+                                                [FromUri] string contextUID,
+                                                [FromUri] string featureUID) {
+
+      using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+        usecases.UnassignFeature(subjectUID, contextUID, featureUID);
+
+        FixedList<NamedEntityDto> features = usecases.GetSubjectFeatures(subjectUID, contextUID);
+
+        return new CollectionModel(base.Request, features);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/roles/{roleUID:guid}")]
+    public CollectionModel RemoveSubjectRole([FromUri] string subjectUID,
+                                             [FromUri] string contextUID,
+                                             [FromUri] string roleUID) {
+
+      using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+        usecases.UnassignRole(subjectUID, contextUID, roleUID);
+
+        FixedList<NamedEntityDto> roles = usecases.GetSubjectFeatures(subjectUID, contextUID);
+
+        return new CollectionModel(base.Request, roles);
+      }
+    }
+
+    #endregion Command apis
 
   }  // class SubjectSecurityItemsController
 

@@ -13,7 +13,6 @@ using Empiria.Contacts;
 using Empiria.Services;
 
 using Empiria.Security;
-using System.Runtime.Remoting.Contexts;
 
 namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
@@ -35,11 +34,40 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
+    public void AssignContext(string subjectUID, string contextUID) {
+      IIdentifiable subject = GetSubject(subjectUID);
+      SecurityContext context = GetContext(contextUID);
+
+      var subjectSecurity = new SubjectSecurityItemsEditor(subject);
+
+      subjectSecurity.AssignContext(context);
+    }
+
+
+    public void AssignFeature(string subjectUID, string contextUID, string featureUID) {
+      Assertion.Require(featureUID, nameof(featureUID));
+
+      var feature = Feature.Parse(featureUID);
+
+      SubjectSecurityItemsEditor subject = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
+
+      subject.AssignFeature(feature);
+    }
+
+
+    public void AssignRole(string subjectUID, string contextUID, string roleUID) {
+      Assertion.Require(roleUID, nameof(roleUID));
+
+      var role = Role.Parse(roleUID);
+
+      SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
+
+      subjectSecurity.AssignRole(role);
+    }
+
 
     public FixedList<NamedEntityDto> GetSubjectContexts(string subjectUID) {
-      Assertion.Require(subjectUID, nameof(subjectUID));
-
-      var subject = Contact.Parse(subjectUID);
+      IIdentifiable subject = GetSubject(subjectUID);
 
       FixedList<SecurityContext> contexts = SecurityContext.GetList(subject);
 
@@ -48,28 +76,85 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
 
     public FixedList<NamedEntityDto> GetSubjectFeatures(string subjectUID, string contextUID) {
-      Assertion.Require(subjectUID, nameof(subjectUID));
-      Assertion.Require(contextUID, nameof(contextUID));
+      IIdentifiable subject = GetSubject(subjectUID);
+      SecurityContext context = GetContext(contextUID);
 
-      var subject = Contact.Parse(subjectUID);
-      var context = ClientApplication.ParseActive(contextUID);
+      //FixedList<Feature> features = Feature.GetList(subject, context);
 
-      FixedList<Feature> features = Feature.GetList(subject, context);
+      //return features.MapToNamedEntityList();
 
-      return features.MapToNamedEntityList();
+      throw new NotImplementedException();
     }
 
 
+
     public FixedList<NamedEntityDto> GetSubjectRoles(string subjectUID, string contextUID) {
-      Assertion.Require(subjectUID, nameof(subjectUID));
+      IIdentifiable subject = GetSubject(subjectUID);
+      SecurityContext context = GetContext(contextUID);
+
+      //FixedList<Role> roles = Role.GetList(subject, context);
+
+      //return roles.MapToNamedEntityList();
+
+      throw new NotImplementedException();
+    }
+
+
+    public void UnassignContext(string subjectUID, string contextUID) {
+      IIdentifiable subject = GetSubject(subjectUID);
+      SecurityContext context = GetContext(contextUID);
+
+      var subjectSecurity = new SubjectSecurityItemsEditor(subject);
+
+      subjectSecurity.UnassignContext(context);
+    }
+
+
+    public void UnassignFeature(string subjectUID, string contextUID, string featureUID) {
+      Assertion.Require(featureUID, nameof(featureUID));
+
+      var feature = Feature.Parse(featureUID);
+
+      SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
+
+      subjectSecurity.UnassignFeature(feature);
+    }
+
+
+    public void UnassignRole(string subjectUID, string contextUID, string roleUID) {
+      Assertion.Require(roleUID, nameof(roleUID));
+
+      var role = Role.Parse(roleUID);
+
+      SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
+
+      subjectSecurity.UnassignRole(role);
+    }
+
+    #endregion Use cases
+
+    #region Helpers
+
+    private SecurityContext GetContext(string contextUID) {
       Assertion.Require(contextUID, nameof(contextUID));
 
-      var subject = Contact.Parse(subjectUID);
-      var context = ClientApplication.ParseActive(contextUID);
+      return SecurityContext.Parse(contextUID);
+    }
 
-      FixedList<Role> roles = Role.GetList(subject, context);
 
-      return roles.MapToNamedEntityList();
+    private IIdentifiable GetSubject(string subjectUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+
+      return Contact.Parse(subjectUID);
+    }
+
+
+    private SubjectSecurityItemsEditor GetSubjectSecurityItemsEditor(string subjectUID,
+                                                                     string contextUID) {
+      IIdentifiable subject = GetSubject(subjectUID);
+      SecurityContext context = GetContext(contextUID);
+
+      return new SubjectSecurityItemsEditor(subject, context);
     }
 
     #endregion Helpers
