@@ -26,9 +26,36 @@ namespace Empiria.OnePoint.Security.WebApi {
     public CollectionModel GetSecurityContextsList() {
 
       using (var usecases = SecurityContextsUseCases.UseCaseInteractor()) {
+
         FixedList<NamedEntityDto> contexts = usecases.SecurityContexts();
 
         return new CollectionModel(base.Request, contexts);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v4/onepoint/security/management/contexts/{contextUID:guid}/roles")]
+    public CollectionModel GetSecurityContextRoles([FromUri] string contextUID) {
+
+      using (var usecases = SecurityContextsUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> roles = usecases.SecurityContextRoles(contextUID);
+
+        return new CollectionModel(base.Request, roles);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v4/onepoint/security/management/contexts/{contextUID:guid}/features")]
+    public CollectionModel GetSecurityContextFeatures([FromUri] string contextUID) {
+
+      using (var usecases = SecurityContextsUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> features = usecases.SecurityContextFeatures(contextUID);
+
+        return new CollectionModel(base.Request, features);
       }
     }
 

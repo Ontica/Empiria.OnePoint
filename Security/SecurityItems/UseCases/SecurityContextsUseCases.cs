@@ -26,6 +26,7 @@ namespace Empiria.OnePoint.Security.SecurityItems.UseCases {
       return CreateInstance<SecurityContextsUseCases>();
     }
 
+
     #endregion Constructors and parsers
 
     #region Use cases
@@ -35,6 +36,27 @@ namespace Empiria.OnePoint.Security.SecurityItems.UseCases {
 
       return contexts.MapToNamedEntityList();
     }
+
+
+    public FixedList<NamedEntityDto> SecurityContextFeatures(string contextUID) {
+      Assertion.Require(contextUID, nameof(contextUID));
+
+      var context = SecurityContext.Parse(contextUID);
+
+      return Feature.GetList(context)
+                    .MapToNamedEntityList();
+    }
+
+
+    public FixedList<NamedEntityDto> SecurityContextRoles(string contextUID) {
+      Assertion.Require(contextUID, nameof(contextUID));
+
+      var context = SecurityContext.Parse(contextUID);
+
+      return Role.GetList(context)
+                 .MapToNamedEntityList();
+    }
+
 
     #endregion Helpers
 
