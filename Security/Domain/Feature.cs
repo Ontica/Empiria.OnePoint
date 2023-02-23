@@ -9,8 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-using Empiria.Security;
-
 using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security {
@@ -74,6 +72,22 @@ namespace Empiria.OnePoint.Security {
     public bool IsAssignable {
       get {
         return ExtensionData.Get("assignable", true);
+      }
+    }
+
+
+    public string Description {
+      get {
+        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+               "Phasellus feugiat velit non sem molestie commodo. Aliquam ut fermentum dolor, " +
+               "vel elementum enim. In hac habitasse platea dictumst.";
+      }
+    }
+
+
+    public string Group {
+      get {
+        return "Contabilidad";
       }
     }
 

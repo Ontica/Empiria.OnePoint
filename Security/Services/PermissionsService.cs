@@ -12,6 +12,8 @@ using System;
 using Empiria.Security;
 using Empiria.Security.Providers;
 
+using Empiria.OnePoint.Security.SecurityItems.Adapters;
+
 namespace Empiria.OnePoint.Security.Services {
 
   /// <summary>Provides subject permissions read services.</summary>
@@ -71,24 +73,6 @@ namespace Empiria.OnePoint.Security.Services {
       };
     }
 
-
   }  // class AuthenticationService
-
-
-
-  internal class ObjectAccessRuleDto : IObjectAccessRule {
-
-    public string TypeName {
-      get;
-      internal set;
-    }
-
-
-    public string[] ObjectsUIDs {
-      get;
-      internal set;
-    }
-
-  }  // class ObjectAccessRuleDto
 
 }  // namespace Empiria.OnePoint.Security.Services

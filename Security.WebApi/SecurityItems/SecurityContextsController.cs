@@ -12,7 +12,10 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
+using Empiria.OnePoint.Security.Subjects.Adapters;
+
 using Empiria.OnePoint.Security.SecurityItems.UseCases;
+using Empiria.OnePoint.Security.SecurityItems.Adapters;
 
 namespace Empiria.OnePoint.Security.WebApi {
 
@@ -53,7 +56,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
       using (var usecases = SecurityContextsUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> features = usecases.SecurityContextFeatures(contextUID);
+        FixedList<FeatureDto> features = usecases.SecurityContextFeatures(contextUID);
 
         return new CollectionModel(base.Request, features);
       }

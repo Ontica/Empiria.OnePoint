@@ -11,6 +11,8 @@ using System;
 
 using Empiria.Services;
 
+using Empiria.OnePoint.Security.SecurityItems.Adapters;
+
 namespace Empiria.OnePoint.Security.SecurityItems.UseCases {
 
   /// <summary>Use cases that retrieve security contexts information.</summary>
@@ -38,13 +40,16 @@ namespace Empiria.OnePoint.Security.SecurityItems.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> SecurityContextFeatures(string contextUID) {
+    public FixedList<FeatureDto> SecurityContextFeatures(string contextUID) {
       Assertion.Require(contextUID, nameof(contextUID));
 
       var context = SecurityContext.Parse(contextUID);
 
-      return Feature.GetList(context)
-                    .MapToNamedEntityList();
+      var features = Feature.GetList(context);
+
+      features = features.FindAll(x => x.IsAssignable);
+
+      return SecurityItemsMapper.Map(features);
     }
 
 
