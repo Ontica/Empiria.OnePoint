@@ -8,7 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
+using System.Data;
+using System.Runtime.Remoting.Contexts;
 using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security.Subjects {
@@ -44,9 +45,7 @@ namespace Empiria.OnePoint.Security.Subjects {
       Assertion.Require(context, nameof(context));
 
       var data = new SecurityItemDataDto(SecurityItemType.SubjectContext,
-                                         SecurityContext.Empty,
-                                        _subject,
-                                         context);
+                                         SecurityContext.Empty, _subject, context);
 
       SecurityItemsDataWriter.CreateSecurityItem(data);
     }
@@ -55,13 +54,20 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void AssignFeature(Feature feature) {
       Assertion.Require(feature, nameof(feature));
 
+      var data = new SecurityItemDataDto(SecurityItemType.SubjectFeature,
+                                         _context, _subject, feature);
+
+      SecurityItemsDataWriter.CreateSecurityItem(data);
     }
 
 
     internal void AssignRole(Role role) {
       Assertion.Require(role, nameof(role));
 
-      throw new NotImplementedException();
+      var data = new SecurityItemDataDto(SecurityItemType.SubjectRole,
+                                         _context, _subject, role);
+
+      SecurityItemsDataWriter.CreateSecurityItem(data);
     }
 
 
@@ -70,8 +76,7 @@ namespace Empiria.OnePoint.Security.Subjects {
 
       var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectContext,
                                            SecurityContext.Empty,
-                                           _subject,
-                                           target: context);
+                                           _subject, target: context);
 
       SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
@@ -80,14 +85,20 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void UnassignFeature(Feature feature) {
       Assertion.Require(feature, nameof(feature));
 
-      throw new NotImplementedException();
+      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectFeature,
+                                           _context, _subject, feature);
+
+      SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
 
 
     internal void UnassignRole(Role role) {
       Assertion.Require(role, nameof(role));
 
-      throw new NotImplementedException();
+      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectRole,
+                                           _context, _subject, role);
+
+      SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
 
   }  // class SubjectSecurityItemsEditor

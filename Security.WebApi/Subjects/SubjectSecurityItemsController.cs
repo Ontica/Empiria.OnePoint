@@ -26,6 +26,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     public CollectionModel GetSubjectContexts([FromUri] string subjectUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         FixedList<NamedEntityDto> contexts = usecases.GetSubjectContexts(subjectUID);
 
         return new CollectionModel(base.Request, contexts);
@@ -38,6 +39,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     public CollectionModel GetSubjectFeatures([FromUri] string subjectUID, [FromUri] string contextUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         FixedList<NamedEntityDto> features = usecases.GetSubjectFeatures(subjectUID, contextUID);
 
         return new CollectionModel(base.Request, features);
@@ -50,6 +52,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     public CollectionModel GetSubjectRoles([FromUri] string subjectUID, [FromUri] string contextUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         FixedList<NamedEntityDto> roles = usecases.GetSubjectRoles(subjectUID, contextUID);
 
         return new CollectionModel(base.Request, roles);
@@ -66,6 +69,7 @@ namespace Empiria.OnePoint.Security.WebApi {
                                                   [FromUri] string contextUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         usecases.AssignContext(subjectUID, contextUID);
 
         FixedList<NamedEntityDto> contexts = usecases.GetSubjectContexts(subjectUID);
@@ -82,6 +86,7 @@ namespace Empiria.OnePoint.Security.WebApi {
                                                   [FromUri] string featureUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         usecases.AssignFeature(subjectUID, contextUID, featureUID);
 
         FixedList<NamedEntityDto> features = usecases.GetSubjectFeatures(subjectUID, contextUID);
@@ -98,9 +103,10 @@ namespace Empiria.OnePoint.Security.WebApi {
                                                [FromUri] string roleUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         usecases.AssignRole(subjectUID, contextUID, roleUID);
 
-        FixedList<NamedEntityDto> roles = usecases.GetSubjectFeatures(subjectUID, contextUID);
+        FixedList<NamedEntityDto> roles = usecases.GetSubjectRoles(subjectUID, contextUID);
 
         return new CollectionModel(base.Request, roles);
       }
@@ -113,6 +119,7 @@ namespace Empiria.OnePoint.Security.WebApi {
                                                    [FromUri] string contextUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         usecases.UnassignContext(subjectUID, contextUID);
 
         FixedList<NamedEntityDto> contexts = usecases.GetSubjectContexts(subjectUID);
@@ -129,6 +136,7 @@ namespace Empiria.OnePoint.Security.WebApi {
                                                   [FromUri] string featureUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         usecases.UnassignFeature(subjectUID, contextUID, featureUID);
 
         FixedList<NamedEntityDto> features = usecases.GetSubjectFeatures(subjectUID, contextUID);
@@ -145,9 +153,10 @@ namespace Empiria.OnePoint.Security.WebApi {
                                                [FromUri] string roleUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
+
         usecases.UnassignRole(subjectUID, contextUID, roleUID);
 
-        FixedList<NamedEntityDto> roles = usecases.GetSubjectFeatures(subjectUID, contextUID);
+        FixedList<NamedEntityDto> roles = usecases.GetSubjectRoles(subjectUID, contextUID);
 
         return new CollectionModel(base.Request, roles);
       }
