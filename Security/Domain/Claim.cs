@@ -33,8 +33,10 @@ namespace Empiria.OnePoint.Security {
 
 
     static internal Claim TryParse(SecurityItemType claimType,
-                                   IIdentifiable context,
+                                   IIdentifiable app,
                                    int subjectId) {
+      var context = SecurityContext.Parse(52);
+
       return SecurityItemsDataReader.TryGetSubjectItemWithId<Claim>(context,
                                                                     claimType,
                                                                     subjectId);
@@ -42,8 +44,9 @@ namespace Empiria.OnePoint.Security {
 
 
     static internal Claim TryParseWithKey(SecurityItemType claimType,
-                                          IIdentifiable context,
+                                          IIdentifiable app,
                                           string securityKey) {
+      var context = SecurityContext.Parse(52);
 
       return SecurityItemsDataReader.TryGetSubjectItemWithKey<Claim>(context,
                                                                      claimType,

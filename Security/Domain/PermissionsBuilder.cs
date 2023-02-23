@@ -19,14 +19,14 @@ namespace Empiria.OnePoint.Security {
   internal class PermissionsBuilder {
 
     private readonly EmpiriaIdentity _subject;
-    private readonly ClientApplication _context;
+    private readonly SecurityContext _context;
 
     internal PermissionsBuilder(EmpiriaIdentity subject, ClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
       _subject = subject;
-      _context = context;
+      _context = SecurityContext.Parse(52);
     }
 
     #region Methods
@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.Security {
 
       FillIdentityFeatures(features);
 
-      FixedList<Role> identityRoles = Role.GetList(_subject.User.Contact, _context);
+      FixedList<Role> identityRoles = BuildRoles();
 
       FillRoleGrantedFeatures(features, identityRoles);
 

@@ -44,7 +44,7 @@ namespace Empiria.OnePoint.Security {
     }
 
     static internal FixedList<SecurityContext> GetList(IIdentifiable subject) {
-      return SecurityItemsDataReader.GetSubjectTargetItems<SecurityContext>(subject, SecurityItem.Empty,
+      return SecurityItemsDataReader.GetSubjectTargetItems<SecurityContext>(subject, SecurityContext.Empty,
                                                                             SecurityItemType.SubjectContext);
     }
 

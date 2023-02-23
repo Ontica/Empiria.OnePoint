@@ -41,13 +41,13 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal FixedList<Feature> GetList(ClientApplication app) {
-      return SecurityItemsDataReader.GetContextItems<Feature>(app, SecurityItemType.ClientAppFeature);
+    static internal FixedList<Feature> GetList(SecurityContext context) {
+      return SecurityItemsDataReader.GetContextItems<Feature>(context, SecurityItemType.ClientAppFeature);
     }
 
 
-    static internal FixedList<Feature> GetList(IIdentifiable subject, ClientApplication app) {
-      return SecurityItemsDataReader.GetSubjectTargetItems<Feature>(subject, app,
+    static internal FixedList<Feature> GetList(IIdentifiable subject, SecurityContext context) {
+      return SecurityItemsDataReader.GetSubjectTargetItems<Feature>(subject, context,
                                                                     SecurityItemType.SubjectFeature);
     }
 

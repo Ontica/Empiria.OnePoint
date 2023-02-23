@@ -16,7 +16,7 @@ namespace Empiria.OnePoint.Security.Data {
   /// <summary>Reads security items data.</summary>
   static internal class SecurityItemsDataReader {
 
-    static internal FixedList<T> GetContextItems<T>(IIdentifiable context,
+    static internal FixedList<T> GetContextItems<T>(SecurityContext context,
                                                     SecurityItemType itemType) where T : SecurityItem {
       Assertion.Require(context, "context");
       Assertion.Require(itemType, "itemType");
@@ -46,7 +46,7 @@ namespace Empiria.OnePoint.Security.Data {
 
 
     static internal FixedList<T> GetSubjectTargetItems<T>(IIdentifiable subject,
-                                                          IIdentifiable context,
+                                                          SecurityContext context,
                                                           SecurityItemType itemType) where T : SecurityItem {
       Assertion.Require(subject, "subject");
       Assertion.Require(context, "context");
@@ -85,7 +85,7 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
-    static internal T TryGetSubjectItemWithId<T>(IIdentifiable context,
+    static internal T TryGetSubjectItemWithId<T>(SecurityContext context,
                                                  SecurityItemType itemType,
                                                  int subjectId) where T : SecurityItem {
       Assertion.Require(context, "context");
@@ -104,7 +104,7 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
-    static internal T TryGetSubjectItemWithKey<T>(IIdentifiable context,
+    static internal T TryGetSubjectItemWithKey<T>(SecurityContext context,
                                                   SecurityItemType itemType,
                                                   string securityItemKey) where T : SecurityItem {
       Assertion.Require(context, "context");

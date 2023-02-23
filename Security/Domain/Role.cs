@@ -35,20 +35,22 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal FixedList<Role> GetList(ClientApplication context) {
+    static internal FixedList<Role> GetList(SecurityContext context) {
       return SecurityItemsDataReader.GetContextItems<Role>(context,
                                                            SecurityItemType.ClientAppRole);
     }
 
 
-    static internal FixedList<Role> GetList(IIdentifiable subject, ClientApplication context) {
+    static internal FixedList<Role> GetList(IIdentifiable subject, SecurityContext context) {
       return SecurityItemsDataReader.GetSubjectTargetItems<Role>(subject, context,
                                                                  SecurityItemType.SubjectRole);
     }
 
 
     static internal bool IsSubjectInRole(IIdentifiable subject,
-                                         ClientApplication context, string roleKey) {
+                                         ClientApplication app, string roleKey) {
+      var context = SecurityContext.Parse(52);
+
       FixedList<Role> subjectRoles = GetList(subject, context);
 
       return subjectRoles.Contains(x => x.Key == roleKey);
