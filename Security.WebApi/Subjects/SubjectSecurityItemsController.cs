@@ -124,9 +124,9 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     [HttpDelete]
     [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/features/{featureUID}")]
-    public CollectionModel RemoveSubjectFeature([FromUri] string subjectUID,
-                                                [FromUri] string contextUID,
-                                                [FromUri] string featureUID) {
+    public CollectionModel UnassignSubjectFeature([FromUri] string subjectUID,
+                                                  [FromUri] string contextUID,
+                                                  [FromUri] string featureUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
         usecases.UnassignFeature(subjectUID, contextUID, featureUID);
@@ -140,9 +140,9 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     [HttpDelete]
     [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/contexts/{contextUID:guid}/roles/{roleUID:guid}")]
-    public CollectionModel RemoveSubjectRole([FromUri] string subjectUID,
-                                             [FromUri] string contextUID,
-                                             [FromUri] string roleUID) {
+    public CollectionModel UnassignSubjectRole([FromUri] string subjectUID,
+                                               [FromUri] string contextUID,
+                                               [FromUri] string roleUID) {
 
       using (var usecases = SubjectSecurityItemsUseCases.UseCaseInteractor()) {
         usecases.UnassignRole(subjectUID, contextUID, roleUID);

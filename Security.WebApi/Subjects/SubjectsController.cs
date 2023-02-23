@@ -23,7 +23,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     #region Web Apis
 
     [HttpGet]
-    [Route("v3/onepoint/security/management/subjects")]
+    [Route("v4/onepoint/security/management/subjects")]
     public CollectionModel GetSubjects([FromUri] string keywords = "") {
 
       keywords = keywords ?? string.Empty;
@@ -37,7 +37,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
 
     [HttpPost]
-    [Route("v3/onepoint/security/management/subjects")]
+    [Route("v4/onepoint/security/management/subjects")]
     public NoDataModel CreateSubject([FromBody] SubjectFields fields) {
 
       base.RequireBody(fields);
@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
 
     [HttpDelete]
-    [Route("v3/onepoint/security/management/subjects/{subjectUID:guid}")]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}")]
     public NoDataModel RemoveSubject([FromUri] string subjectUID) {
 
       using (var usecases = SubjectUseCases.UseCaseInteractor()) {
@@ -63,7 +63,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v3/onepoint/security/management/subjects/{subjectUID:guid}")]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}")]
     public SingleObjectModel UpdateSubject([FromUri] string subjectUID,
                                            [FromBody] SubjectFields fields) {
 
