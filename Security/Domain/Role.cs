@@ -48,7 +48,7 @@ namespace Empiria.OnePoint.Security {
 
 
     static internal bool IsSubjectInRole(IIdentifiable subject,
-                                         ClientApplication app, string roleKey) {
+                                         IClientApplication app, string roleKey) {
       var context = SecurityContext.Parse(52);
 
       FixedList<Role> subjectRoles = GetList(subject, context);

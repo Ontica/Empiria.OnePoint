@@ -20,7 +20,7 @@ namespace Empiria.OnePoint.Security.Services {
   public class PermissionsService : IPermissionsProvider {
 
     public FixedList<string> GetFeaturesPermissions(EmpiriaIdentity subject,
-                                                    ClientApplication context) {
+                                                    IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
@@ -33,7 +33,7 @@ namespace Empiria.OnePoint.Security.Services {
 
 
     public FixedList<IObjectAccessRule> GetObjectAccessRules(EmpiriaIdentity subject,
-                                                             ClientApplication context) {
+                                                             IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
@@ -45,7 +45,7 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public FixedList<string> GetRoles(EmpiriaIdentity subject, ClientApplication context) {
+    public FixedList<string> GetRoles(EmpiriaIdentity subject, IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
@@ -57,7 +57,7 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public bool IsSubjectInRole(IIdentifiable subject, ClientApplication context, string role) {
+    public bool IsSubjectInRole(IIdentifiable subject, IClientApplication context, string role) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
       Assertion.Require(role, nameof(role));

@@ -11,13 +11,14 @@ using System;
 
 using Empiria.Security;
 using Empiria.Security.Providers;
+using Empiria.StateEnums;
 
 namespace Empiria.OnePoint.Security.Services {
 
   /// <summary>Provides user authentication services.</summary>
   public class AuthenticationService: IAuthenticationProvider {
 
-    public ISubjectClaim Authenticate(ClientApplication app, string username,
+    public ISubjectClaim Authenticate(IClientApplication app, string username,
                                       string password, string entropy) {
       Assertion.Require(app, nameof(app));
       Assertion.Require(username, nameof(username));
@@ -58,14 +59,35 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public ISubjectClaim TryGetUser(ClientApplication app, int userId) {
-      Assertion.Require(app, nameof(app));
+    public IClientApplication AuthenticateClientApp(string clientAppKey) {
+      Assertion.Require(clientAppKey, "clientAppKey");
 
-      return Claim.TryParse(SecurityItemType.SubjectCredentials, app, userId);
+      ClientApplication application = ClientApplication.TryParse(clientAppKey);
+
+      if (application == null) {
+        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, clientAppKey);
+      }
+      if (application.Status != EntityStatus.Active) {
+        throw new SecurityException(SecurityException.Msg.NotActiveClientAppKey, clientAppKey);
+      }
+      return application;
     }
 
 
-    public ISubjectClaim TryGetUserWithUserName(ClientApplication app, string username) {
+    public IClientApplication TEMP_AuthenticateClientApp(int clientAppId) {
+      return ClientApplication.Parse(clientAppId);
+    }
+
+
+    public ISubjectClaim TryGetUser(EmpiriaSession activeSession) {
+      var clientApp = ClientApplication.Parse(activeSession.ClientAppId);
+
+
+      return Claim.TryParse(SecurityItemType.SubjectCredentials, clientApp, activeSession.UserId);
+    }
+
+
+    public ISubjectClaim TryGetUserWithUserName(IClientApplication app, string username) {
       Assertion.Require(app, nameof(app));
       Assertion.Require(username, nameof(username));
 

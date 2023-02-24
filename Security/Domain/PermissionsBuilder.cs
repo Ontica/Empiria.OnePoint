@@ -21,7 +21,7 @@ namespace Empiria.OnePoint.Security {
     private readonly EmpiriaIdentity _subject;
     private readonly SecurityContext _context;
 
-    internal PermissionsBuilder(EmpiriaIdentity subject, ClientApplication context) {
+    internal PermissionsBuilder(EmpiriaIdentity subject, IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
