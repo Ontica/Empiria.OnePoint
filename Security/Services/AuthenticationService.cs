@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using Empiria.Json;
+
 using Empiria.Security;
 using Empiria.Security.Providers;
 using Empiria.StateEnums;
@@ -55,7 +55,7 @@ namespace Empiria.OnePoint.Security.Services {
     public IEmpiriaPrincipal Authenticate(IUserCredentials credentials) {
       Assertion.Require(credentials, nameof(credentials));
 
-      IClientApplication clientApplication = AuthenticateClientApp(credentials.ClientAppKey);
+      IClientApplication clientApplication = AuthenticateClientApp(credentials.AppKey);
 
       Claim userData = GetSubjectAuthenticationClaim(clientApplication, credentials);
 
@@ -110,37 +110,48 @@ namespace Empiria.OnePoint.Security.Services {
     private Claim GetSubjectAuthenticationClaim(IClientApplication context, IUserCredentials credentials) {
       var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
                                         context,
-                                        credentials.Username);
+                                        credentials.UserID);
 
       // No user found
       if (claim == null) {
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
 
-      bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
-
       var storedPassword = claim.GetAttribute<string>("password");
 
-      string p;
-
-      if (useSecurityModelV3) {
-        p = Cryptographer.Decrypt(storedPassword, credentials.Username);
-        p = Cryptographer.GetSHA256(p + credentials.Entropy);
-
-      } else if (!String.IsNullOrWhiteSpace(credentials.Entropy)) {
-        p = FormerCryptographer.Decrypt(storedPassword, credentials.Username);
-        p = FormerCryptographer.GetMD5HashCode(p + credentials.Entropy);
-
-      } else {
-        p = FormerCryptographer.Decrypt(storedPassword, credentials.Username);
-      }
+      string decryptedPassword = DecryptPassword(storedPassword, credentials);
 
       //Invalid password
-      if (p != credentials.Password) {
+      if (decryptedPassword != credentials.Password) {
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
 
       return claim;
+    }
+
+    private string DecryptPassword(string storedPassword,
+                                   IUserCredentials credentials) {
+      bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
+
+      string decrypted;
+
+      if (useSecurityModelV3) {
+
+        decrypted = Cryptographer.Decrypt(storedPassword, credentials.UserID);
+        decrypted = Cryptographer.GetSHA256(decrypted + credentials.Entropy);
+
+      } else if (!String.IsNullOrWhiteSpace(credentials.Entropy)) {
+
+        decrypted = FormerCryptographer.Decrypt(storedPassword, credentials.UserID);
+        decrypted = FormerCryptographer.GetMD5HashCode(decrypted + credentials.Entropy);
+
+      } else {
+
+        decrypted = FormerCryptographer.Decrypt(storedPassword, credentials.UserID);
+
+      }
+
+      return decrypted;
     }
 
     #endregion Helpers

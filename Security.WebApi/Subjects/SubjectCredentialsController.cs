@@ -13,9 +13,8 @@ using System.Web.Http;
 using Empiria.Json;
 using Empiria.WebApi;
 
-using Empiria.Services.Authentication;
-
 using Empiria.OnePoint.Security.Subjects.UseCases;
+using Empiria.Security;
 
 namespace Empiria.OnePoint.Security.WebApi {
 
@@ -47,13 +46,12 @@ namespace Empiria.OnePoint.Security.WebApi {
     [HttpPost]
     [Route("v1/security/change-password/{email}")]
     [Route("v3/security/change-password/{email}")]
-    public NoDataModel ChangePassword([FromBody] AuthenticationFields fields,
+    public NoDataModel ChangePassword([FromBody] UserCredentialsDto credentials,
                                       [FromUri] string email) {
-      base.RequireBody(fields);
+      base.RequireBody(credentials);
 
       using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
-        usecases.CreateUserPassword(fields.AppKey, fields.UserID,
-                                    email, fields.Password);
+        usecases.CreateUserPassword(credentials, email);
 
         return new NoDataModel(this.Request);
       }

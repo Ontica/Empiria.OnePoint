@@ -36,18 +36,15 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
-    public void CreateUserPassword(string apiKey,
-                                   string userName, string userEmail,
-                                   string newPassword) {
-      Assertion.Require(apiKey, nameof(apiKey));
-      Assertion.Require(userName, nameof(userName));
-      Assertion.Require(userEmail, nameof(userEmail));
-      Assertion.Require(newPassword, nameof(newPassword));
+    public void CreateUserPassword(UserCredentialsDto credentials, string email) {
 
-      ChangePassword(apiKey, userName, userEmail, newPassword);
+      Assertion.Require(credentials, nameof(credentials));
+      Assertion.Require(email, nameof(email));
+
+      ImplementsCreateUserPassword(credentials, email);
 
       var eventPayload = new {
-        userName
+        credentials.UserID
       };
 
       EventNotifier.Notify(MessagingEvents.UserPasswordCreated, eventPayload);
@@ -55,18 +52,25 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
 
     public void ChangeUserPassword(string currentPassword, string newPassword) {
+
       Assertion.Require(currentPassword, nameof(currentPassword));
       Assertion.Require(newPassword, nameof(newPassword));
 
       var apiKey = ConfigurationData.GetString("Empiria.Security", "ChangePasswordKey");
 
-      var userName = ExecutionServer.CurrentIdentity.Name;
+      var userID = ExecutionServer.CurrentIdentity.Name;
       var userEmail = ExecutionServer.CurrentContact.EMail;
 
-      ChangePassword(apiKey, userName, userEmail, newPassword);
+      var credentials = new UserCredentialsDto {
+        AppKey = apiKey,
+        UserID = userID,
+        Password = newPassword,
+      };
+
+      ImplementsCreateUserPassword(credentials, userEmail);
 
       var eventPayload = new {
-        userName
+        credentials.UserID
       };
 
       EventNotifier.Notify(MessagingEvents.UserPasswordChanged, eventPayload);
@@ -78,21 +82,22 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Helpers
 
-    static private void ChangePassword(string apiKey, string username,
-                                       string email, string newPassword) {
-      if (apiKey != ConfigurationData.GetString("ChangePasswordKey")) {
-        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, apiKey);
+
+    public void ImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
+
+      if (credentials.AppKey != ConfigurationData.GetString("ChangePasswordKey")) {
+        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, credentials.AppKey);
       }
 
       var service = new Services.AuthenticationService();
 
-      EmpiriaUser user = service.GetUserWithUserNameAndEMail(username, email);
+      EmpiriaUser user = service.GetUserWithUserNameAndEMail(credentials.UserID, email);
 
-      var helper = new PasswordStrength(user, newPassword);
+      var helper = new PasswordStrength(user, credentials.Password);
 
       helper.VerifyStrength();
 
-      SubjectsData.ChangePassword(username, newPassword);
+      SubjectsData.ChangePassword(credentials.UserID, credentials.Password);
     }
 
     #endregion Helpers
