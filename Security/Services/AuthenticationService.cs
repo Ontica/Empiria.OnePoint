@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
+using Empiria.Json;
 using Empiria.Security;
 using Empiria.Security.Providers;
 using Empiria.StateEnums;
@@ -74,14 +74,28 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
+    public IEmpiriaSession CreateSession(EmpiriaPrincipal principal, JsonObject contextData) {
+      Assertion.Require(principal, nameof(principal));
+
+
+      return EmpiriaSession.Create(principal, contextData);
+    }
+
+
+    public IEmpiriaSession RetrieveActiveSession(string sessionToken) {
+      Assertion.Require(sessionToken, nameof(sessionToken));
+
+      return EmpiriaSession.ParseActive(sessionToken);
+    }
+
+
     public IClientApplication TEMP_AuthenticateClientApp(int clientAppId) {
       return ClientApplication.Parse(clientAppId);
     }
 
 
-    public ISubjectClaim TryGetUser(EmpiriaSession activeSession) {
+    public ISubjectClaim TryGetUser(IEmpiriaSession activeSession) {
       var clientApp = ClientApplication.Parse(activeSession.ClientAppId);
-
 
       return Claim.TryParse(SecurityItemType.SubjectCredentials, clientApp, activeSession.UserId);
     }
