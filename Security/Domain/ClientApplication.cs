@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Security Items                               Component : Domain Layer                          *
+*  Module   : Security                                     Component : Authentication Services               *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Information holder                    *
 *  Type     : ClientApplication                            License   : Please read LICENSE.txt file          *
 *                                                                                                            *

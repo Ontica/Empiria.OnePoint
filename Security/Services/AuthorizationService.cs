@@ -1,10 +1,10 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Security Items                               Component : Services                              *
+*  Module   : Security                                     Component : Authorization services                *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Service provider                      *
-*  Type     : PermissionsService                           License   : Please read LICENSE.txt file          *
+*  Type     : AuthorizationService                         License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Provides subject permissions read services.                                                    *
+*  Summary  : Provides subject's authorization services.                                                     *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -16,11 +16,11 @@ using Empiria.OnePoint.Security.SecurityItems.Adapters;
 
 namespace Empiria.OnePoint.Security.Services {
 
-  /// <summary>Provides subject permissions read services.</summary>
-  public class PermissionsService : IPermissionsProvider {
+  /// <summary>Provides subject's authorization services.</summary>
+  public class AuthorizationService : IAuthorizationProvider {
 
-    public FixedList<string> GetFeaturesPermissions(EmpiriaIdentity subject,
-                                                    IClientApplication context) {
+    internal FixedList<string> GetFeaturesPermissions(EmpiriaIdentity subject,
+                                                      IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
@@ -32,8 +32,8 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public FixedList<IObjectAccessRule> GetObjectAccessRules(EmpiriaIdentity subject,
-                                                             IClientApplication context) {
+    internal FixedList<IObjectAccessRule> GetObjectAccessRules(EmpiriaIdentity subject,
+                                                               IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
@@ -45,7 +45,7 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public FixedList<string> GetRoles(EmpiriaIdentity subject, IClientApplication context) {
+    internal FixedList<string> GetRoles(EmpiriaIdentity subject, IClientApplication context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
@@ -73,6 +73,6 @@ namespace Empiria.OnePoint.Security.Services {
       };
     }
 
-  }  // class AuthenticationService
+  }  // class AuthorizationService
 
 }  // namespace Empiria.OnePoint.Security.Services

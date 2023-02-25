@@ -253,7 +253,7 @@ namespace Empiria.OnePoint.Security {
 
       internal SecurityObjects(EmpiriaPrincipal principal) {
 
-        var service = new OnePoint.Security.Services.PermissionsService();
+        var service = new OnePoint.Security.Services.AuthorizationService();
 
         this.Roles = service.GetRoles(principal.Identity, principal.ClientApp);
 

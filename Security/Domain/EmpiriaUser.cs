@@ -65,7 +65,7 @@ namespace Empiria.OnePoint.Security {
       Assertion.Require(user, nameof(user));
       Assertion.Require(role, nameof(role));
 
-      var service = new OnePoint.Security.Services.PermissionsService();
+      var service = new OnePoint.Security.Services.AuthorizationService();
 
       return service.IsSubjectInRole(user, EmpiriaPrincipal.Current.ClientApp, role);
     }

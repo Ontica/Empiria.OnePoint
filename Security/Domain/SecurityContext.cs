@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Security Items                               Component : Domain Layer                          *
+*  Module   : Security                                     Component : Authorization services                *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Information holder                    *
 *  Type     : SecurityContext                              License   : Please read LICENSE.txt file          *
 *                                                                                                            *
@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
-using Empiria.Security;
 
 using Empiria.OnePoint.Security.Data;
 

@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Security Items                               Component : Domain Layer                          *
+*  Module   : Security                                     Component : Authentication services               *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Information holder                    *
 *  Type     : Claim                                        License   : Please read LICENSE.txt file          *
 *                                                                                                            *
@@ -10,15 +10,13 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-using Empiria.Security.Providers;
-
 using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security {
 
   /// <summary>Contains attributes that identifies a subject, like a userID or password.
   /// Subjects are users, applications, systems, services or computers.</summary>
-  internal class Claim : SecurityItem, ISubjectClaim {
+  internal class Claim : SecurityItem {
 
     #region Constructors and parsers
 

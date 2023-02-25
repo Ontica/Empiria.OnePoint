@@ -18,8 +18,62 @@ namespace Empiria.OnePoint.Security.Services {
   /// <summary>Provides user authentication services.</summary>
   public class AuthenticationService: IAuthenticationProvider {
 
-    public ISubjectClaim Authenticate(IClientApplication app, string username,
-                                      string password, string entropy) {
+    public IEmpiriaPrincipal Authenticate(string sessionToken) {
+      Assertion.Require(sessionToken, nameof(sessionToken));
+
+      EmpiriaPrincipal principal = EmpiriaPrincipal.TryParseWithToken(sessionToken);
+
+      if (principal != null) {
+        return principal;
+      }
+
+      IEmpiriaSession session = RetrieveActiveSession(sessionToken);
+
+      IEmpiriaUser user = EmpiriaUser.Authenticate(session);
+
+      var identity = new EmpiriaIdentity(user, AuthenticationMode.Realm);
+
+      IClientApplication clientApplication = TEMP_AuthenticateClientApp(session.ClientAppId);
+
+      return new EmpiriaPrincipal(identity, clientApplication, session);
+    }
+
+
+    public IEmpiriaPrincipal Authenticate(IUserCredentials credentials) {
+      Assertion.Require(credentials, nameof(credentials));
+
+      IClientApplication clientApplication = AuthenticateClientApp(credentials.ClientAppKey);
+
+      IEmpiriaUser user = EmpiriaUser.Authenticate(clientApplication,
+                                                  credentials.Username, credentials.Password,
+                                                  credentials.Entropy);
+      Assertion.Require(user, "user");
+
+      var identity = new EmpiriaIdentity(user, AuthenticationMode.Basic);
+
+      return new EmpiriaPrincipal(identity, clientApplication, credentials.ContextData);
+    }
+
+
+    public IClientApplication AuthenticateClientApp(string clientAppKey) {
+      Assertion.Require(clientAppKey, clientAppKey);
+
+      ClientApplication application = ClientApplication.TryParse(clientAppKey);
+
+      if (application == null) {
+        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, clientAppKey);
+      }
+
+      if (application.Status != EntityStatus.Active) {
+        throw new SecurityException(SecurityException.Msg.NotActiveClientAppKey, clientAppKey);
+      }
+
+      return application;
+    }
+
+
+    internal Claim Authenticate(IClientApplication app, string username,
+                                string password, string entropy) {
       Assertion.Require(app, nameof(app));
       Assertion.Require(username, nameof(username));
       Assertion.Require(password, nameof(password));
@@ -59,22 +113,7 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public IClientApplication AuthenticateClientApp(string clientAppKey) {
-      Assertion.Require(clientAppKey, "clientAppKey");
-
-      ClientApplication application = ClientApplication.TryParse(clientAppKey);
-
-      if (application == null) {
-        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, clientAppKey);
-      }
-      if (application.Status != EntityStatus.Active) {
-        throw new SecurityException(SecurityException.Msg.NotActiveClientAppKey, clientAppKey);
-      }
-      return application;
-    }
-
-
-    public IEmpiriaSession CreateSession(EmpiriaPrincipal principal, JsonObject contextData) {
+    internal IEmpiriaSession CreateSession(EmpiriaPrincipal principal, JsonObject contextData) {
       Assertion.Require(principal, nameof(principal));
 
 
@@ -82,26 +121,26 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public IEmpiriaSession RetrieveActiveSession(string sessionToken) {
+    internal IEmpiriaSession RetrieveActiveSession(string sessionToken) {
       Assertion.Require(sessionToken, nameof(sessionToken));
 
       return EmpiriaSession.ParseActive(sessionToken);
     }
 
 
-    public IClientApplication TEMP_AuthenticateClientApp(int clientAppId) {
+    internal IClientApplication TEMP_AuthenticateClientApp(int clientAppId) {
       return ClientApplication.Parse(clientAppId);
     }
 
 
-    public ISubjectClaim TryGetUser(IEmpiriaSession activeSession) {
+    internal Claim TryGetUser(IEmpiriaSession activeSession) {
       var clientApp = ClientApplication.Parse(activeSession.ClientAppId);
 
       return Claim.TryParse(SecurityItemType.SubjectCredentials, clientApp, activeSession.UserId);
     }
 
 
-    public ISubjectClaim TryGetUserWithUserName(IClientApplication app, string username) {
+    internal Claim TryGetUserWithUserName(IClientApplication app, string username) {
       Assertion.Require(app, nameof(app));
       Assertion.Require(username, nameof(username));
 
