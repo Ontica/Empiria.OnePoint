@@ -27,13 +27,26 @@ namespace Empiria.OnePoint.Security.Services {
         return principal;
       }
 
-      IEmpiriaSession session = RetrieveActiveSession(sessionToken);
+      IEmpiriaSession session = EmpiriaSession.ParseActive(sessionToken);
 
-      IEmpiriaUser user = EmpiriaUser.Authenticate(session);
+      if (!session.IsStillActive) {
+        throw new SecurityException(SecurityException.Msg.ExpiredSessionToken,
+                                    session.Token);
+      }
+
+      var clientApp = ClientApplication.Parse(session.ClientAppId);
+
+      var userData = Claim.TryParse(SecurityItemType.SubjectCredentials, clientApp, session.UserId);
+
+      if (userData == null) {
+        throw new SecurityException(SecurityException.Msg.EnsureClaimFailed);
+      }
+
+      IEmpiriaUser user = EmpiriaUser.Authenticate(userData);
 
       var identity = new EmpiriaIdentity(user, AuthenticationMode.Realm);
 
-      IClientApplication clientApplication = TEMP_AuthenticateClientApp(session.ClientAppId);
+      IClientApplication clientApplication = ClientApplication.Parse(session.ClientAppId);
 
       return new EmpiriaPrincipal(identity, clientApplication, session);
     }
@@ -44,10 +57,9 @@ namespace Empiria.OnePoint.Security.Services {
 
       IClientApplication clientApplication = AuthenticateClientApp(credentials.ClientAppKey);
 
-      IEmpiriaUser user = EmpiriaUser.Authenticate(clientApplication,
-                                                  credentials.Username, credentials.Password,
-                                                  credentials.Entropy);
-      Assertion.Require(user, "user");
+      Claim userData = GetSubjectAuthenticationClaim(clientApplication, credentials);
+
+      IEmpiriaUser user = EmpiriaUser.Authenticate(userData);
 
       var identity = new EmpiriaIdentity(user, AuthenticationMode.Basic);
 
@@ -72,14 +84,33 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    internal Claim Authenticate(IClientApplication app, string username,
-                                string password, string entropy) {
-      Assertion.Require(app, nameof(app));
-      Assertion.Require(username, nameof(username));
-      Assertion.Require(password, nameof(password));
-      Assertion.Require(entropy, nameof(entropy));
+    internal EmpiriaUser GetUserWithUserNameAndEMail(string username, string email) {
 
-      var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials, app, username);
+      Assertion.Require(username, nameof(username));
+      Assertion.Require(email, nameof(email));
+
+      Claim userData = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
+                                             EmpiriaPrincipal.Current.ClientApp,
+                                             username);
+      if (userData == null) {
+        throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
+      }
+
+      var user = EmpiriaUser.Parse(userData);
+
+      if (user.EMail.Equals(email)) {
+        return user;
+      } else {
+        throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
+      }
+    }
+
+    #region Helpers
+
+    private Claim GetSubjectAuthenticationClaim(IClientApplication context, IUserCredentials credentials) {
+      var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
+                                        context,
+                                        credentials.Username);
 
       // No user found
       if (claim == null) {
@@ -93,59 +124,26 @@ namespace Empiria.OnePoint.Security.Services {
       string p;
 
       if (useSecurityModelV3) {
-        p = Cryptographer.Decrypt(storedPassword, username);
-        p = Cryptographer.GetSHA256(p + entropy);
+        p = Cryptographer.Decrypt(storedPassword, credentials.Username);
+        p = Cryptographer.GetSHA256(p + credentials.Entropy);
 
-      } else if (!String.IsNullOrWhiteSpace(entropy)) {
-        p = FormerCryptographer.Decrypt(storedPassword, username);
-        p = FormerCryptographer.GetMD5HashCode(p + entropy);
+      } else if (!String.IsNullOrWhiteSpace(credentials.Entropy)) {
+        p = FormerCryptographer.Decrypt(storedPassword, credentials.Username);
+        p = FormerCryptographer.GetMD5HashCode(p + credentials.Entropy);
 
       } else {
-        p = FormerCryptographer.Decrypt(storedPassword, username);
+        p = FormerCryptographer.Decrypt(storedPassword, credentials.Username);
       }
 
       //Invalid password
-      if (p != password) {
+      if (p != credentials.Password) {
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
 
       return claim;
     }
 
-
-    internal IEmpiriaSession CreateSession(EmpiriaPrincipal principal, JsonObject contextData) {
-      Assertion.Require(principal, nameof(principal));
-
-
-      return EmpiriaSession.Create(principal, contextData);
-    }
-
-
-    internal IEmpiriaSession RetrieveActiveSession(string sessionToken) {
-      Assertion.Require(sessionToken, nameof(sessionToken));
-
-      return EmpiriaSession.ParseActive(sessionToken);
-    }
-
-
-    internal IClientApplication TEMP_AuthenticateClientApp(int clientAppId) {
-      return ClientApplication.Parse(clientAppId);
-    }
-
-
-    internal Claim TryGetUser(IEmpiriaSession activeSession) {
-      var clientApp = ClientApplication.Parse(activeSession.ClientAppId);
-
-      return Claim.TryParse(SecurityItemType.SubjectCredentials, clientApp, activeSession.UserId);
-    }
-
-
-    internal Claim TryGetUserWithUserName(IClientApplication app, string username) {
-      Assertion.Require(app, nameof(app));
-      Assertion.Require(username, nameof(username));
-
-      return Claim.TryParseWithKey(SecurityItemType.SubjectCredentials, app, username);
-    }
+    #endregion Helpers
 
   }  // class AuthenticationService
 

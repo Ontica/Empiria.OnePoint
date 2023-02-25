@@ -158,7 +158,9 @@ namespace Empiria.OnePoint.Security {
 
     public void Logout() {
       try {
+
         this.Session.Close();
+
         principalsCache.Remove(this.Session.Token);
 
       } finally {
@@ -170,7 +172,7 @@ namespace Empiria.OnePoint.Security {
     public bool HasDataAccessTo<T>(T entity) where T : IIdentifiable {
 
       var rules = ObjectAccessRules.FindAll(x => x.TypeName == entity.GetType().Name &&
-                                            x.ObjectsUIDs.Contains(entity.UID));
+                                                 x.ObjectsUIDs.Contains(entity.UID));
       if (rules.Count != 0) {
         return true;
       }
@@ -210,11 +212,10 @@ namespace Empiria.OnePoint.Security {
       Assertion.Require(clientApp, nameof(clientApp));
 
       this.Identity = identity;
+
       this.ClientApp = clientApp;
 
-      var service = new OnePoint.Security.Services.AuthenticationService();
-
-      this.Session = service.CreateSession(this, contextData);
+      this.Session = EmpiriaSession.Create(this, contextData);
 
       principalsCache.Insert(this.Session.Token, this);
 
@@ -253,7 +254,7 @@ namespace Empiria.OnePoint.Security {
 
       internal SecurityObjects(EmpiriaPrincipal principal) {
 
-        var service = new OnePoint.Security.Services.AuthorizationService();
+        var service = new Services.AuthorizationService();
 
         this.Roles = service.GetRoles(principal.Identity, principal.ClientApp);
 

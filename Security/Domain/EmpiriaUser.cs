@@ -27,47 +27,15 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static private EmpiriaUser Parse(Claim userData) {
+    static internal EmpiriaUser Parse(Claim userData) {
       Assertion.Require(userData, nameof(userData));
 
       return new EmpiriaUser {
         Contact = Contact.Parse(userData.SubjectId),
         UserName = userData.Key,
         Status = userData.Status,
+        IsAuthenticated = false
       };
-    }
-
-
-    static public EmpiriaUser Parse(string username, string email) {
-      Assertion.Require(username, nameof(username));
-      Assertion.Require(email, nameof(email));
-
-      var service = new OnePoint.Security.Services.AuthenticationService();
-
-      Claim userData = service.TryGetUserWithUserName(EmpiriaPrincipal.Current.ClientApp, username);
-
-      if (userData == null) {
-        throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
-      }
-
-      var user = EmpiriaUser.Parse(userData);
-
-      if (user.EMail.Equals(email)) {
-        return user;
-      } else {
-        throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
-      }
-    }
-
-
-    /// <summary>Determines whether a contact belongs to the specified role.</summary>
-    static public bool IsInRole(Contact user, string role) {
-      Assertion.Require(user, nameof(user));
-      Assertion.Require(role, nameof(role));
-
-      var service = new OnePoint.Security.Services.AuthorizationService();
-
-      return service.IsSubjectInRole(user, EmpiriaPrincipal.Current.ClientApp, role);
     }
 
 
@@ -75,44 +43,8 @@ namespace Empiria.OnePoint.Security {
 
     #region Authenticate methods
 
-    static internal IEmpiriaUser Authenticate(IClientApplication app,
-                                              string username,
-                                              string password,
-                                              string entropy) {
-      Assertion.Require(app, nameof(app));
-      Assertion.Require(username, nameof(username));
-      Assertion.Require(password, nameof(password));
-      Assertion.Require(entropy, nameof(entropy));
-
-      var service = new OnePoint.Security.Services.AuthenticationService();
-
-      Claim userData = service.Authenticate(app, username, password, entropy);
-
-      var user = EmpiriaUser.Parse(userData);
-
-      user.EnsureCanAuthenticate();
-
-      user.IsAuthenticated = true;
-
-      return user;
-    }
-
-
-    static internal IEmpiriaUser Authenticate(IEmpiriaSession activeSession) {
-      Assertion.Require(activeSession, nameof(activeSession));
-
-      if (!activeSession.IsStillActive) {
-        throw new SecurityException(SecurityException.Msg.ExpiredSessionToken,
-                                    activeSession.Token);
-      }
-
-      var service = new OnePoint.Security.Services.AuthenticationService();
-
-      Claim userData = service.TryGetUser(activeSession);
-
-      if (userData == null) {
-        throw new SecurityException(SecurityException.Msg.EnsureClaimFailed);
-      }
+    static internal IEmpiriaUser Authenticate(Claim userData) {
+      Assertion.Require(userData, nameof(userData));
 
       var user = EmpiriaUser.Parse(userData);
 
@@ -184,6 +116,7 @@ namespace Empiria.OnePoint.Security {
     #region Private methods
 
     private void EnsureCanAuthenticate() {
+
       if (!this.IsActive) {
         throw new SecurityException(SecurityException.Msg.NotActiveUser, this.UserName);
       }

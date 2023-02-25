@@ -84,7 +84,9 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
         throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, apiKey);
       }
 
-      EmpiriaUser user = EmpiriaUser.Parse(username, email);
+      var service = new Services.AuthenticationService();
+
+      EmpiriaUser user = service.GetUserWithUserNameAndEMail(username, email);
 
       var helper = new PasswordStrength(user, newPassword);
 
