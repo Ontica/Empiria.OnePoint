@@ -56,15 +56,16 @@ namespace Empiria.OnePoint.Security {
     /// EmpiriaIdentity. Fails if identity represents a non authenticated EmpiriaIdentity.</summary>
     /// <param name="identity">Represents an authenticated Empiria user.</param>
     internal EmpiriaPrincipal(EmpiriaIdentity identity, IClientApplication clientApp,
-                              JsonObject contextData = null) {
+                              IUserCredentials credentials) {
       Assertion.Require(identity, nameof(identity));
       Assertion.Require(clientApp, nameof(clientApp));
+      Assertion.Require(credentials, nameof(credentials));
 
       if (!identity.IsAuthenticated) {
         throw new SecurityException(SecurityException.Msg.UnauthenticatedIdentity);
       }
 
-      this.Initialize(identity, clientApp, contextData);
+      this.Initialize(identity, clientApp, credentials);
 
       _securityObjects = new Lazy<SecurityObjects>(() => new SecurityObjects(this));
     }
@@ -207,15 +208,16 @@ namespace Empiria.OnePoint.Security {
     #region Helpers
 
     private void Initialize(EmpiriaIdentity identity, IClientApplication clientApp,
-                            JsonObject contextData = null) {
+                            IUserCredentials credentials) {
       Assertion.Require(identity, nameof(identity));
       Assertion.Require(clientApp, nameof(clientApp));
+      Assertion.Require(credentials, nameof(credentials));
 
       this.Identity = identity;
 
       this.ClientApp = clientApp;
 
-      this.Session = EmpiriaSession.Create(this, contextData);
+      this.Session = new EmpiriaSession(this, credentials);
 
       principalsCache.Insert(this.Session.Token, this);
 

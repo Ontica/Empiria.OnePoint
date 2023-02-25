@@ -26,14 +26,19 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    private EmpiriaSession(EmpiriaPrincipal principal, JsonObject contextData = null) {
+    internal EmpiriaSession(IEmpiriaPrincipal principal, IUserCredentials credentials) {
+      Assertion.Require(principal, nameof(principal));
+      Assertion.Require(credentials, nameof(credentials));
+
       this.ServerId = ExecutionServer.ServerId;
+
       this.ClientAppId = principal.ClientApp.Id;
+
       this.UserId = principal.Identity.User.Contact.Id;
 
-      if (contextData != null) {
-        this.ExtendedData = contextData;
-      }
+      this.UserHostAddress = credentials.UserHostAddress;
+
+      this.ExtendedData = credentials.ContextData;
 
       this.Token = this.CreateToken();
 
@@ -41,14 +46,8 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal IEmpiriaSession Create(EmpiriaPrincipal principal, JsonObject contextData = null) {
-      Assertion.Require(principal, "principal");
-
-      return new EmpiriaSession(principal, contextData);
-    }
-
-
     static internal IEmpiriaSession ParseActive(string sessionToken) {
+
       EmpiriaSession session = SessionData.GetSession(sessionToken);
 
       if (session.IsStillActive) {
@@ -111,6 +110,13 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    [DataField("UserHostAddress")]
+    public string UserHostAddress {
+      get;
+      private set;
+    } = string.Empty;
+
+
     [DataField("ExpiresIn")]
     public int ExpiresIn {
       get; private set;
@@ -144,6 +150,7 @@ namespace Empiria.OnePoint.Security {
       }
     }
 
+    [DataField("SessionExtData")]
     public JsonObject ExtendedData {
       get;
       private set;
@@ -167,19 +174,18 @@ namespace Empiria.OnePoint.Security {
 
     #region Helpers
 
-    private void Save() {
-      this.RefreshToken = Guid.NewGuid().ToString() + Guid.NewGuid().ToString();
-
-      this.Id = SessionData.CreateSession(this);
-    }
-
-
     private string CreateToken() {
       string token = $"|{UserId}|{ServerId}|{StartTime.ToString("yyyy-MM-dd_HH:mm:ss")}|{ExtendedData}|";
 
       return FormerCryptographer.CreateHashCode(token) + Guid.NewGuid().ToString();
     }
 
+
+    private void Save() {
+      this.RefreshToken = Guid.NewGuid().ToString() + Guid.NewGuid().ToString();
+
+      this.Id = SessionData.CreateSession(this);
+    }
 
     #endregion Helpers
 

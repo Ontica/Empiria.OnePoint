@@ -18,8 +18,9 @@ namespace Empiria.OnePoint.Security.Services {
   /// <summary>Provides user authentication services.</summary>
   public class AuthenticationService: IAuthenticationProvider {
 
-    public IEmpiriaPrincipal Authenticate(string sessionToken) {
+    public IEmpiriaPrincipal Authenticate(string sessionToken, string userHostAddress) {
       Assertion.Require(sessionToken, nameof(sessionToken));
+      Assertion.Require(userHostAddress, nameof(userHostAddress));
 
       EmpiriaPrincipal principal = EmpiriaPrincipal.TryParseWithToken(sessionToken);
 
@@ -33,6 +34,12 @@ namespace Empiria.OnePoint.Security.Services {
         throw new SecurityException(SecurityException.Msg.ExpiredSessionToken,
                                     session.Token);
       }
+
+      if (!session.UserHostAddress.Equals(userHostAddress)) {
+        throw new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
+                                    userHostAddress);
+      }
+
 
       var clientApp = ClientApplication.Parse(session.ClientAppId);
 
@@ -63,7 +70,7 @@ namespace Empiria.OnePoint.Security.Services {
 
       var identity = new EmpiriaIdentity(user, AuthenticationMode.Basic);
 
-      return new EmpiriaPrincipal(identity, clientApplication, credentials.ContextData);
+      return new EmpiriaPrincipal(identity, clientApplication, credentials);
     }
 
 
@@ -107,7 +114,9 @@ namespace Empiria.OnePoint.Security.Services {
 
     #region Helpers
 
-    private Claim GetSubjectAuthenticationClaim(IClientApplication context, IUserCredentials credentials) {
+    private Claim GetSubjectAuthenticationClaim(IClientApplication context,
+                                                IUserCredentials credentials) {
+
       var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
                                         context,
                                         credentials.UserID);
@@ -131,6 +140,7 @@ namespace Empiria.OnePoint.Security.Services {
 
     private string DecryptPassword(string storedPassword,
                                    IUserCredentials credentials) {
+
       bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
 
       string decrypted;

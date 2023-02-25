@@ -27,9 +27,10 @@ namespace Empiria.OnePoint.Security.Data {
 
     static internal int CreateSession(EmpiriaSession o) {
       var op = DataOperation.Parse("apdUserSession", o.Token, o.ServerId,
-                                    o.ClientAppId, o.UserId, o.ExpiresIn,
-                                    o.RefreshToken, o.ExtendedData.ToString(),
-                                    o.StartTime, o.EndTime);
+                        o.ClientAppId, o.UserId, o.ExpiresIn,
+                        o.RefreshToken, o.UserHostAddress,
+                        o.ExtendedData.ToString(), o.StartTime, o.EndTime);
+
       return DataWriter.Execute<int>(op);
     }
 
