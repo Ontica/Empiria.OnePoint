@@ -30,24 +30,32 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal Claim TryParse(SecurityItemType claimType,
-                                   IIdentifiable app,
-                                   int subjectId) {
-      var context = SecurityContext.Parse(52);
+    static internal Claim TryParse(SecurityItemType claimType, int subjectId) {
 
-      return SecurityItemsDataReader.TryGetSubjectItemWithId<Claim>(context,
-                                                                    claimType,
+      return SecurityItemsDataReader.TryGetSubjectItemWithId<Claim>(SecurityContext.Empty, claimType,
                                                                     subjectId);
     }
 
 
-    static internal Claim TryParseWithKey(SecurityItemType claimType,
-                                          IIdentifiable app,
-                                          string securityKey) {
-      var context = SecurityContext.Parse(52);
+    static internal Claim TryParse(SecurityItemType claimType, SecurityContext context,
+                                   int subjectId) {
 
-      return SecurityItemsDataReader.TryGetSubjectItemWithKey<Claim>(context,
-                                                                     claimType,
+      return SecurityItemsDataReader.TryGetSubjectItemWithId<Claim>(context, claimType,
+                                                                    subjectId);
+    }
+
+
+    static internal Claim TryParseWithKey(SecurityItemType claimType, string securityKey) {
+
+      return SecurityItemsDataReader.TryGetSubjectItemWithKey<Claim>(SecurityContext.Empty, claimType,
+                                                                     securityKey);
+    }
+
+
+    static internal Claim TryParseWithKey(SecurityItemType claimType, SecurityContext context,
+                                          string securityKey) {
+
+      return SecurityItemsDataReader.TryGetSubjectItemWithKey<Claim>(context, claimType,
                                                                      securityKey);
     }
 
@@ -74,6 +82,7 @@ namespace Empiria.OnePoint.Security {
 
       return base.ExtensionData.Get<T>(attributeName);
     }
+
 
     #endregion Properties
 

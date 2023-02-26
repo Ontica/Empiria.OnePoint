@@ -9,14 +9,20 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.StateEnums;
+
 using Empiria.Security;
 using Empiria.Security.Providers;
-using Empiria.StateEnums;
 
 namespace Empiria.OnePoint.Security.Services {
 
   /// <summary>Provides user authentication services.</summary>
   public class AuthenticationService: IAuthenticationProvider {
+
+    static readonly bool ENSURE_SIMILAR_USER_HOST_ADDRESS =
+                                ConfigurationData.Get("EnsureSimilarUserHostAddress", false);
+
+    #region Services
 
     public IEmpiriaPrincipal Authenticate(string sessionToken, string userHostAddress) {
       Assertion.Require(sessionToken, nameof(sessionToken));
@@ -35,15 +41,14 @@ namespace Empiria.OnePoint.Security.Services {
                                     session.Token);
       }
 
-      if (!session.UserHostAddress.Equals(userHostAddress)) {
+      if (ENSURE_SIMILAR_USER_HOST_ADDRESS &&
+          !session.UserHostAddress.Equals(userHostAddress)) {
         throw new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
                                     userHostAddress);
       }
 
 
-      var clientApp = ClientApplication.Parse(session.ClientAppId);
-
-      var userData = Claim.TryParse(SecurityItemType.SubjectCredentials, clientApp, session.UserId);
+      var userData = Claim.TryParse(SecurityItemType.SubjectCredentials, session.UserId);
 
       if (userData == null) {
         throw new SecurityException(SecurityException.Msg.EnsureClaimFailed);
@@ -53,7 +58,7 @@ namespace Empiria.OnePoint.Security.Services {
 
       var identity = new EmpiriaIdentity(user, AuthenticationMode.Realm);
 
-      IClientApplication clientApplication = ClientApplication.Parse(session.ClientAppId);
+      var clientApplication = ClientApplication.Parse(session.ClientAppId);
 
       return new EmpiriaPrincipal(identity, clientApplication, session);
     }
@@ -97,7 +102,6 @@ namespace Empiria.OnePoint.Security.Services {
       Assertion.Require(email, nameof(email));
 
       Claim userData = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
-                                             EmpiriaPrincipal.Current.ClientApp,
                                              username);
       if (userData == null) {
         throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
@@ -112,31 +116,9 @@ namespace Empiria.OnePoint.Security.Services {
       }
     }
 
+    #endregion Services
+
     #region Helpers
-
-    private Claim GetSubjectAuthenticationClaim(IClientApplication context,
-                                                IUserCredentials credentials) {
-
-      var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
-                                        context,
-                                        credentials.UserID);
-
-      // No user found
-      if (claim == null) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
-      }
-
-      var storedPassword = claim.GetAttribute<string>("password");
-
-      string decryptedPassword = DecryptPassword(storedPassword, credentials);
-
-      //Invalid password
-      if (decryptedPassword != credentials.Password) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
-      }
-
-      return claim;
-    }
 
     private string DecryptPassword(string storedPassword,
                                    IUserCredentials credentials) {
@@ -162,6 +144,30 @@ namespace Empiria.OnePoint.Security.Services {
       }
 
       return decrypted;
+    }
+
+
+    private Claim GetSubjectAuthenticationClaim(IClientApplication context,
+                                                IUserCredentials credentials) {
+
+      var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
+                                        credentials.UserID);
+
+      // No user found
+      if (claim == null) {
+        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      }
+
+      var storedPassword = claim.GetAttribute<string>("password");
+
+      string decryptedPassword = DecryptPassword(storedPassword, credentials);
+
+      //Invalid password
+      if (decryptedPassword != credentials.Password) {
+        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      }
+
+      return claim;
     }
 
     #endregion Helpers
