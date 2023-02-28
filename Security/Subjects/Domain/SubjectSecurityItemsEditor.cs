@@ -91,6 +91,17 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
+    internal void RemoveSubjectCredentials() {
+      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
+                                           SecurityContext.Empty, _subject,
+                                           SecurityItem.Empty);
+
+      data.ExtData.Set("password", string.Empty);
+
+      SecurityItemsDataWriter.RemoveSecurityItem(data);
+    }
+
+
     internal void UnassignContext(SecurityContext context) {
       Assertion.Require(context, nameof(context));
 

@@ -11,6 +11,7 @@ using System;
 
 using Empiria.Contacts;
 using Empiria.Services;
+using Empiria.StateEnums;
 
 using Empiria.OnePoint.Security.Data;
 
@@ -57,7 +58,15 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
     public void RemoveSubject(string subjectUID) {
       Assertion.Require(subjectUID, nameof(subjectUID));
 
-      throw new NotImplementedException();
+      var contact = Contact.Parse(subjectUID);
+
+      contact.ChangeStatus(EntityStatus.Deleted);
+
+      contact.Save();
+
+      var editor = new SubjectSecurityItemsEditor(contact);
+
+      editor.RemoveSubjectCredentials();
     }
 
 
