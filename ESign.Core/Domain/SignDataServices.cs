@@ -81,7 +81,7 @@ namespace Empiria.OnePoint.ESign {
                     o.DocumentType, o.TransactionNo, o.DocumentNo,
                     o.Description, o.RequestedBy, o.RequestedTime,
                     o.SignInputData, o.ExtensionData.ToString(),
-                    o.Keywords, o.PostingTime,  o.PostedBy.Id, (char) o.Status,
+                    o.Keywords, o.PostingTime, o.PostedBy.Id, (char) o.Status,
                     o.Integrity.GetUpdatedHashCode());
 
       DataWriter.Execute(op);
@@ -112,6 +112,39 @@ namespace Empiria.OnePoint.ESign {
       }
       return filter;
     }
+
+
+    static internal FixedList<SignedDocumentEntry> GetSignedDocuments(string esignStatus) {
+      Assertion.Require(esignStatus, nameof(esignStatus));
+
+      var sql = "SELECT * FROM ( " +
+                " SELECT tra.TransactionId, tra.InternalControlNo, " +
+                " tra.TransactionUID, sob.ObjectName AS DocumentType, " +
+                " sob2.ObjectName AS TransactionType, " +
+                " tra.RequestedBy, tra.TransactionStatus, " +
+                " MAX(tra.PresentationTime) AS PresentationTime " +
+
+                " FROM LRSTransactions tra " +
+                " INNER JOIN LRSDocuments doc on tra.DocumentId = doc.DocumentId " +
+
+                " INNER JOIN LRSInstruments ins on doc.InstrumentId = ins.InstrumentId " +
+
+                " INNER JOIN SimpleObjects sob on tra.DocumentTypeId = sob.ObjectId " +
+
+                " INNER JOIN SimpleObjects sob2 on tra.TransactionTypeId = sob2.ObjectId " +
+
+                $"  WHERE tra.TransactionStatus = '{esignStatus}' " +
+
+                " GROUP BY tra.TransactionId, tra.TransactionUID, sob.ObjectName, " +
+                "   sob2.ObjectName, tra.InternalControlNo, " +
+                "   tra.RequestedBy, tra.TransactionStatus " +
+                ") AS TRANSACTIONS ORDER BY PresentationTime DESC";
+
+      var dataOperation = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<SignedDocumentEntry>(dataOperation);
+    }
+
 
     #endregion Utility methods
 
