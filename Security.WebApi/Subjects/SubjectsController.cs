@@ -20,7 +20,7 @@ namespace Empiria.OnePoint.Security.WebApi {
   /// <summary>Web api methods for subjects management.</summary>
   public class SubjectsController : WebApiController {
 
-    #region Web Apis
+    #region Query apis
 
     [HttpPost]
     [Route("v4/onepoint/security/management/subjects/search")]
@@ -36,9 +36,24 @@ namespace Empiria.OnePoint.Security.WebApi {
     }
 
 
+    [HttpGet]
+    [Route("v4/onepoint/security/management/subjects/workareas")]
+    public CollectionModel GetWorkareas() {
+
+      using (var usecases = SubjectUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> workareas = usecases.Workareas();
+
+        return new CollectionModel(base.Request, workareas);
+      }
+    }
+
+    #endregion Query apis
+
+    #region Command apis
+
     [HttpPost]
     [Route("v4/onepoint/security/management/subjects")]
-    public NoDataModel CreateSubject([FromBody] SubjectFields fields) {
+    public NoDataModel Subject([FromBody] SubjectFields fields) {
 
       base.RequireBody(fields);
 
@@ -76,7 +91,7 @@ namespace Empiria.OnePoint.Security.WebApi {
       }
     }
 
-    #endregion Web Apis
+    #endregion Command apis
 
   }  // class SubjectsController
 

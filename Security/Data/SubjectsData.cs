@@ -67,6 +67,17 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
+    static internal FixedList<Organization> Workareas() {
+      string sql = "SELECT * FROM Contacts " +
+                   "WHERE ContactTypeId = 103 AND " +
+                   "ContactTags LIKE '%systems-users-org%' AND " +
+                   "ContactStatus <> 'X' " +
+                   "ORDER BY ContactFullName";
+
+      return DataReader.GetFixedList<Organization>(DataOperation.Parse(sql));
+    }
+
+
     #region Helpers
 
     static private void ChangePasswordUsingFormerEncryption(string username, string password) {

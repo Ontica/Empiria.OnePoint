@@ -69,6 +69,13 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
     }
 
 
+    public FixedList<NamedEntityDto> Workareas() {
+      FixedList<Organization> workareas = SubjectsData.Workareas();
+
+      return workareas.MapToNamedEntityList();
+    }
+
+
     #endregion Use cases
 
   }  // class SubjectUseCases
