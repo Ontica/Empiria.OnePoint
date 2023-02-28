@@ -60,6 +60,12 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
+    internal FixedList<SignedDocumentEntry> GetSignedDocuments(string status) {
+
+      return SignDataServices.GetSignedDocuments(status);
+    }
+
+
     #endregion Methods
 
 
