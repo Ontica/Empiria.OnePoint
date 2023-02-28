@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Contacts;
 using Empiria.Services;
 
 using Empiria.OnePoint.Security.Data;
@@ -48,12 +49,17 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
     }
 
 
-    public FixedList<SubjectDto> SearchSubjects(string keywords) {
-      var users = SubjectsData.SearchSubjects(keywords);
+    public FixedList<SubjectDto> SearchSubjects(SubjectsQuery query) {
+      Assertion.Require(query, nameof(query));
+
+      string filter = query.MapToFilterString();
+
+      FixedList<SubjectData> users = SubjectsData.SearchSubjects(filter);
 
       return users.Select(x => (SubjectDto) x)
                   .ToFixedList();
     }
+
 
     public SubjectDto UpdateSubject(string subjectUID, SubjectFields fields) {
       Assertion.Require(subjectUID, nameof(subjectUID));
@@ -62,7 +68,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       throw new NotImplementedException();
     }
 
-    #endregion Helpers
+
+    #endregion Use cases
 
   }  // class SubjectUseCases
 

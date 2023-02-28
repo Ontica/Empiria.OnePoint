@@ -9,8 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Contacts;
 using Empiria.Data;
-
 using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects;
@@ -18,14 +18,6 @@ using Empiria.OnePoint.Security.Subjects;
 namespace Empiria.OnePoint.Security.Data {
 
   static internal class SubjectsData {
-
-    static internal FixedList<SubjectData> SearchSubjects(string keywords) {
-      string sql = "SELECT * FROM Contacts " +
-                   "WHERE UserName IS NOT NULL OR UserName <> ''";
-
-      return DataReader.GetPlainObjectFixedList<SubjectData>(DataOperation.Parse(sql));
-    }
-
 
     static internal void ChangePassword(string username, string password) {
       if (ConfigurationData.Get("UseFormerPasswordEncryption", false)) {
@@ -57,6 +49,24 @@ namespace Empiria.OnePoint.Security.Data {
       DataWriter.Execute(DataOperation.Parse(sql));
     }
 
+
+    static internal FixedList<SubjectData> SearchSubjects(string filter) {
+      string sql = "SELECT * FROM " +
+                   "SecurityItems INNER JOIN Contacts " +
+                   "ON SecurityItems.SubjectId = Contacts.ContactId " +
+                   $"WHERE SecurityItemTypeId = {SecurityItemType.SubjectCredentials.Id}";
+
+
+      if (filter.Length != 0) {
+        sql += " AND " + filter;
+      }
+
+      sql += $" ORDER BY ContactFullName";
+
+      return DataReader.GetPlainObjectFixedList<SubjectData>(DataOperation.Parse(sql));
+    }
+
+
     #region Helpers
 
     static private void ChangePasswordUsingFormerEncryption(string username, string password) {
@@ -78,5 +88,6 @@ namespace Empiria.OnePoint.Security.Data {
     #endregion Helpers
 
   } // class SubjectsData
+
 
 } // namespace Empiria.OnePoint.Security.Data

@@ -12,6 +12,7 @@ using System;
 using Empiria.StateEnums;
 
 using Empiria.OnePoint.Security.Subjects.Adapters;
+using Empiria.Contacts;
 
 namespace Empiria.OnePoint.Security.Subjects {
 
@@ -19,13 +20,7 @@ namespace Empiria.OnePoint.Security.Subjects {
   internal class SubjectData : SubjectDto {
 
     [DataField("ContactId")]
-    internal int Id {
-      get; private set;
-    }
-
-
-    [DataField("ContactTypeId")]
-    internal int TypeId {
+    internal Contact Contact {
       get; private set;
     }
 
@@ -36,59 +31,74 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
-    [DataField("ContactFullName")]
     public string FullName {
-      get; private set;
-    }
-
-
-    [DataField("NickName")]
-    public string NickName {
-      get; private set;
-    }
-
-
-    public string BusinessID {
       get {
-        return Id.ToString("000000000");
+        return Contact.FullName;
+      }
+    }
+
+    public string EmployeeNo {
+      get {
+        if (Contact is Person p) {
+          return p.EmployeeNo;
+        }
+
+        return string.Empty;
       }
     }
 
 
-    public string Workplace {
+    public string JobPosition {
       get {
-        return "Subdirección de Registro Contable";
+        if (Contact is Person p) {
+          return p.JobPosition;
+        }
+
+        return string.Empty;
       }
     }
 
 
-    [DataField("UserName")]
+    public string Workarea {
+      get {
+        return Contact.Organization.FullName;
+      }
+    }
+
+
+    public string WorkareaUID {
+      get {
+        return Contact.Organization.UID;
+      }
+    }
+
+
+    [DataField("SecurityItemKey")]
     public string UserID {
       get; private set;
     }
 
 
-    [DataField("ContactEMail")]
     public string EMail {
+      get {
+        return Contact.EMail;
+      }
+    }
+
+
+    [DataField("LastUpdate")]
+    public DateTime CredentialsLastUpdate {
       get; private set;
     }
 
 
+    [DataField("LastUpdate")]
     public DateTime LastAccess {
-      get {
-        return DateTime.Today.AddDays(EmpiriaMath.GetRandom(-20, 0));
-      }
+      get; private set;
     }
 
 
-    public bool IsSystem {
-      get {
-        return TypeId == 103;
-      }
-    }
-
-
-    [DataField("ContactStatus", Default = EntityStatus.Suspended)]
+    [DataField("SecurityItemStatus", Default = EntityStatus.Suspended)]
     public EntityStatus Status {
       get; private set;
     }

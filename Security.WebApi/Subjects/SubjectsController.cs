@@ -22,14 +22,14 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     #region Web Apis
 
-    [HttpGet]
-    [Route("v4/onepoint/security/management/subjects")]
-    public CollectionModel GetSubjects([FromUri] string keywords = "") {
+    [HttpPost]
+    [Route("v4/onepoint/security/management/subjects/search")]
+    public CollectionModel GetSubjects([FromBody] SubjectsQuery query) {
 
-      keywords = keywords ?? string.Empty;
+      RequireBody(query);
 
       using (var usecases = SubjectUseCases.UseCaseInteractor()) {
-        FixedList<SubjectDto> subjects = usecases.SearchSubjects(keywords);
+        FixedList<SubjectDto> subjects = usecases.SearchSubjects(query);
 
         return new CollectionModel(base.Request, subjects);
       }
