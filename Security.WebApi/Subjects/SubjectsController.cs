@@ -53,14 +53,14 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     [HttpPost]
     [Route("v4/onepoint/security/management/subjects")]
-    public NoDataModel Subject([FromBody] SubjectFields fields) {
+    public SingleObjectModel CreateSubject([FromBody] SubjectFields fields) {
 
       base.RequireBody(fields);
 
       using (var usecases = SubjectUseCases.UseCaseInteractor()) {
-        usecases.CreateSubject(fields);
+        SubjectDto subject = usecases.CreateSubject(fields);
 
-        return new NoDataModel(base.Request);
+        return new SingleObjectModel(base.Request, subject);
       }
     }
 

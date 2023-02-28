@@ -8,9 +8,9 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Data;
-using System.Runtime.Remoting.Contexts;
+
 using Empiria.OnePoint.Security.Data;
+using Empiria.OnePoint.Security.Subjects.Adapters;
 
 namespace Empiria.OnePoint.Security.Subjects {
 
@@ -66,6 +66,26 @@ namespace Empiria.OnePoint.Security.Subjects {
 
       var data = new SecurityItemDataDto(SecurityItemType.SubjectRole,
                                          _context, _subject, role);
+
+      SecurityItemsDataWriter.CreateSecurityItem(data);
+    }
+
+
+    internal void CreateSubjectCredentials(SubjectFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var data = new SecurityItemDataDto(SecurityItemType.SubjectCredentials,
+                                         SecurityContext.Empty, _subject,
+                                         SecurityItem.Empty);
+
+      data.Key = fields.UserID;
+
+      data.ExtData.Set("contactName", fields.FullName);
+      data.ExtData.Set("password", string.Empty);
+
+      data.Keywords = EmpiriaString.BuildKeywords(fields.FullName, fields.EmployeeNo,
+                                                  fields.JobPosition, fields.EMail,
+                                                  fields.GetWorkarea().FullName);
 
       SecurityItemsDataWriter.CreateSecurityItem(data);
     }

@@ -35,10 +35,22 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
-    public void CreateSubject(SubjectFields fields) {
+    public SubjectDto CreateSubject(SubjectFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      throw new NotImplementedException();
+      fields.EnsureValid();
+
+      PersonFields personFields = MapToPersonFields(fields);
+
+      var person = new Person(personFields);
+
+      person.Save();
+
+      var editor = new SubjectSecurityItemsEditor(person);
+
+      editor.CreateSubjectCredentials(fields);
+
+      return (SubjectDto) SubjectsData.GetSubject(person);
     }
 
 
@@ -77,6 +89,21 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
 
     #endregion Use cases
+
+    #region Helpers
+
+    private PersonFields MapToPersonFields(SubjectFields fields) {
+      return new PersonFields {
+        FullName = fields.FullName,
+        ShortName = fields.FullName,
+        EMail = fields.EMail,
+        Organization = fields.GetWorkarea(),
+        JobPosition = fields.JobPosition,
+        EmployeeNo = fields.EmployeeNo,
+      };
+    }
+
+    #endregion Helpers
 
   }  // class SubjectUseCases
 

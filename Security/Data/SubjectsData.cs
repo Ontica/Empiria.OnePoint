@@ -14,6 +14,7 @@ using Empiria.Data;
 using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects;
+using Empiria.OnePoint.Security.Subjects.Adapters;
 
 namespace Empiria.OnePoint.Security.Data {
 
@@ -47,6 +48,17 @@ namespace Empiria.OnePoint.Security.Data {
       string sql = $"UPDATE Contacts SET UserPassword = '{p}' WHERE UserName = '{username}'";
 
       DataWriter.Execute(DataOperation.Parse(sql));
+    }
+
+
+    static internal SubjectData GetSubject(IIdentifiable contact) {
+      string sql = "SELECT * FROM " +
+                   "SecurityItems INNER JOIN Contacts " +
+                   "ON SecurityItems.SubjectId = Contacts.ContactId " +
+                   $"WHERE SecurityItemTypeId = {SecurityItemType.SubjectCredentials.Id} AND " +
+                   $"SubjectId = {contact.Id}";
+
+      return DataReader.GetPlainObject<SubjectData>(DataOperation.Parse(sql));
     }
 
 
