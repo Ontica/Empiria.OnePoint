@@ -60,6 +60,39 @@ namespace Empiria.OnePoint.ESign {
       return DataReader.GetObject<SignRequest>(op);
     }
 
+
+    static internal FixedList<SignedDocumentEntry> GetSignedDocuments(int recorderOfficeId) {
+      Assertion.Require(recorderOfficeId, nameof(recorderOfficeId));
+
+      var sql = "SELECT * FROM ( " +
+                " SELECT tra.TransactionId, tra.TransactionUID, sob.ObjectName AS DocumentType, " +
+                " sob2.ObjectName AS TransactionType, tra.InternalControlNo, tt.AssignedById, " +
+                " con.ContactFullName AS AssignedBy, tra.RequestedBy, tra.TransactionStatus, " +
+                " tra.RecorderOfficeId, MAX(tra.PresentationTime) AS PresentationTime " +
+
+                " FROM LRSTransactions tra " +
+                " INNER JOIN LRSDocuments doc on tra.DocumentId = doc.DocumentId " +
+                " INNER JOIN LRSInstruments ins on doc.InstrumentId = ins.InstrumentId " +
+                " INNER JOIN SimpleObjects sob on tra.DocumentTypeId = sob.ObjectId " +
+                " INNER JOIN SimpleObjects sob2 on tra.TransactionTypeId = sob2.ObjectId " +
+                " INNER JOIN LRSTransactionTrack tt on tra.TransactionId = tt.TransactionId " +
+                " INNER JOIN Contacts con on tt.AssignedById = ContactId " +
+
+                $" WHERE tra.TransactionStatus = 'S' AND tra.RecorderOfficeId = {recorderOfficeId} " +
+                "  and tt.TrackId = " +
+                " (select max (TrackId) from LRSTransactionTrack where TransactionId = tra.TransactionId) " +
+
+                " GROUP BY tra.TransactionId, tra.TransactionUID, sob.ObjectName, " +
+                "   sob2.ObjectName, tra.InternalControlNo, tt.AssignedById, " +
+                "   con.ContactFullName, tra.RequestedBy, tra.TransactionStatus, tra.RecorderOfficeId " +
+
+                ") AS TRANSACTIONS ORDER BY PresentationTime DESC";
+
+      var dataOperation = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<SignedDocumentEntry>(dataOperation);
+    }
+
     #endregion Query methods
 
 
@@ -111,38 +144,6 @@ namespace Empiria.OnePoint.ESign {
         filter = SearchExpression.ParseAndLike("Keywords", EmpiriaString.BuildKeywords(keywords));
       }
       return filter;
-    }
-
-
-    static internal FixedList<SignedDocumentEntry> GetSignedDocuments(string esignStatus) {
-      Assertion.Require(esignStatus, nameof(esignStatus));
-
-      var sql = "SELECT * FROM ( " +
-                " SELECT tra.TransactionId, tra.InternalControlNo, " +
-                " tra.TransactionUID, sob.ObjectName AS DocumentType, " +
-                " sob2.ObjectName AS TransactionType, " +
-                " tra.RequestedBy, tra.TransactionStatus, " +
-                " MAX(tra.PresentationTime) AS PresentationTime " +
-
-                " FROM LRSTransactions tra " +
-                " INNER JOIN LRSDocuments doc on tra.DocumentId = doc.DocumentId " +
-
-                " INNER JOIN LRSInstruments ins on doc.InstrumentId = ins.InstrumentId " +
-
-                " INNER JOIN SimpleObjects sob on tra.DocumentTypeId = sob.ObjectId " +
-
-                " INNER JOIN SimpleObjects sob2 on tra.TransactionTypeId = sob2.ObjectId " +
-
-                $"  WHERE tra.TransactionStatus = '{esignStatus}' " +
-
-                " GROUP BY tra.TransactionId, tra.TransactionUID, sob.ObjectName, " +
-                "   sob2.ObjectName, tra.InternalControlNo, " +
-                "   tra.RequestedBy, tra.TransactionStatus " +
-                ") AS TRANSACTIONS ORDER BY PresentationTime DESC";
-
-      var dataOperation = DataOperation.Parse(sql);
-
-      return DataReader.GetFixedList<SignedDocumentEntry>(dataOperation);
     }
 
 

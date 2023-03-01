@@ -19,13 +19,15 @@ namespace Empiria.OnePoint.ESign {
     #region Use cases
 
       
-    public FixedList<OPSignDocumentEntryDto> SignedDocuments(string status) {
+    public FixedList<OnePointSignDocumentDto> SignedDocuments(int recorderOfficeId) {
 
       var signTaskProcessor = new SignTaskProcessor();
 
-      FixedList<SignedDocumentEntry> signedDocuments = signTaskProcessor.GetSignedDocuments(status);
+      FixedList<SignedDocumentEntry> signedDocuments = signTaskProcessor.GetSignedDocuments(recorderOfficeId);
 
-      return new FixedList<OPSignDocumentEntryDto>();
+      //TODO MAP ENTRY INTO SIGNDOCUMENTDTO
+
+      return new FixedList<OnePointSignDocumentDto>();
       
     }
 

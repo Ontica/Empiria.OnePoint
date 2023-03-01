@@ -60,9 +60,9 @@ namespace Empiria.OnePoint.ESign {
     }
 
 
-    internal FixedList<SignedDocumentEntry> GetSignedDocuments(string status) {
+    internal FixedList<SignedDocumentEntry> GetSignedDocuments(int recorderOfficeId) {
 
-      return SignDataServices.GetSignedDocuments(status);
+      return SignDataServices.GetSignedDocuments(recorderOfficeId);
     }
 
 

@@ -33,31 +33,67 @@ namespace Empiria.OnePoint.ESign {
 
     [DataField("TransactionId")]
     public int TransactionId {
-      get; set;
-    }
-
-
-    [DataField("TrackId")]
-    public int TrackId {
-      get; set;
+      get; internal set;
     }
 
 
     [DataField("TransactionUID")]
     public string TransactionUID {
-      get; set;
+      get; internal set;
+    }
+
+
+    [DataField("DocumentType")]
+    public string DocumentType {
+      get; internal set;
+    }
+
+
+    [DataField("TransactionType")]
+    public string TransactionType {
+      get; internal set;
+    }
+
+
+    [DataField("InternalControlNo")]
+    public string InternalControlNo {
+      get; internal set;
+    }
+
+
+    [DataField("AssignedById")]
+    public string AssignedById {
+      get; internal set;
+    }
+
+
+    [DataField("AssignedBy")]
+    public string AssignedBy {
+      get; internal set;
     }
 
 
     [DataField("RequestedBy")]
     public string RequestedBy {
-      get; set;
+      get; internal set;
     }
 
 
-    [DataField("NextTransactionStatus")]
-    public string NextTransactionStatus {
-      get; set;
+    [DataField("TransactionStatus")]
+    public string TransactionStatus {
+      get; internal set;
+    }
+
+
+    [DataField("RecorderOfficeId")]
+    public int RecorderOfficeId {
+      get; internal set;
+    }
+
+
+    [DataField("PresentationTime")]
+    public DateTime PresentationTime {
+      get; internal set;
     }
 
 
