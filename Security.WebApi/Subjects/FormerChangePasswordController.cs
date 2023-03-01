@@ -19,7 +19,7 @@ using Empiria.Security;
 namespace Empiria.OnePoint.Security.WebApi {
 
   /// <summary> Web api methods used to change subject credentials.</summary>
-  public class SubjectCredentialsController : WebApiController {
+  public class FormerChangePasswordController : WebApiController {
 
     #region Web Apis
 
@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.Security.WebApi {
       var newPassword = formData.Get<string>("new");
 
       using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
-        usecases.ChangeUserPassword(currentPassword, newPassword);
+        usecases.FormerChangeUserPassword(currentPassword, newPassword);
 
         return new NoDataModel(this.Request);
       }
@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.Security.WebApi {
       base.RequireBody(credentials);
 
       using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
-        usecases.CreateUserPassword(credentials, email);
+        usecases.FormerCreateUserPassword(credentials, email);
 
         return new NoDataModel(this.Request);
       }

@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Security                                     Component : Data access layer                     *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Data service                          *
-*  Type     : SessionData                                  License   : Please read LICENSE.txt file          *
+*  Type     : SessionsDataService                          License   : Please read LICENSE.txt file          *
 *                                                                                                            *
 *  Summary  : Empiria sessions data service.                                                                 *
 *                                                                                                            *
@@ -16,7 +16,7 @@ using Empiria.Security;
 namespace Empiria.OnePoint.Security.Data {
 
   /// <summary>Empiria sessions data service.</summary>
-  static internal class SessionData {
+  static internal class SessionsDataService {
 
     static internal void CloseSession(EmpiriaSession o) {
       var op = DataOperation.Parse("doCloseUserSession", o.Token, o.EndTime);
@@ -47,6 +47,6 @@ namespace Empiria.OnePoint.Security.Data {
       return session;
     }
 
-  } // class SessionData
+  } // class SessionsDataService
 
 } // namespace Empiria.Security.Data

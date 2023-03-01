@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
 using Empiria.Data;
 
 namespace Empiria.OnePoint.Security.Data {
@@ -121,6 +120,7 @@ namespace Empiria.OnePoint.Security.Data {
 
       return DataReader.GetObject<T>(op, null);
     }
+
 
   }  // class SecurityItemsDataReader
 

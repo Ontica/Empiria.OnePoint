@@ -48,7 +48,7 @@ namespace Empiria.OnePoint.Security {
 
     static internal IEmpiriaSession ParseActive(string sessionToken) {
 
-      EmpiriaSession session = SessionData.GetSession(sessionToken);
+      EmpiriaSession session = SessionsDataService.GetSession(sessionToken);
 
       if (session.IsStillActive) {
         return session;
@@ -162,7 +162,7 @@ namespace Empiria.OnePoint.Security {
     #region Methods
 
     public void Close() {
-      SessionData.CloseSession(this);
+      SessionsDataService.CloseSession(this);
     }
 
 
@@ -184,7 +184,7 @@ namespace Empiria.OnePoint.Security {
     private void Save() {
       this.RefreshToken = Guid.NewGuid().ToString() + Guid.NewGuid().ToString();
 
-      this.Id = SessionData.CreateSession(this);
+      this.Id = SessionsDataService.CreateSession(this);
     }
 
     #endregion Helpers

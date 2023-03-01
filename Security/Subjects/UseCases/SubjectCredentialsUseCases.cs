@@ -43,7 +43,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var contact = Contact.Parse(subjectUID);
 
-      SubjectData subject = SubjectsData.GetSubject(contact);
+      SubjectData subject = SubjectsDataService.GetSubject(contact);
 
       string newPassword = GeneratePassword();
 
@@ -64,7 +64,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var contact = ExecutionServer.CurrentContact;
 
-      SubjectData subject = SubjectsData.GetSubject(contact);
+      SubjectData subject = SubjectsDataService.GetSubject(contact);
 
       Assertion.Require(fields.UserID.Equals(subject.UserID),
                         "Unrecognized UserID value");
@@ -160,7 +160,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       helper.VerifyStrength();
 
-      SubjectsData.ChangePassword(credentials.UserID, credentials.Password);
+      SubjectsDataService.ChangePassword(credentials.UserID, credentials.Password);
     }
 
 

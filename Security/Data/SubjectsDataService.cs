@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Security Subjects Management               Component : Data Access Layer                       *
 *  Assembly : Empiria.OnePoint.Security.dll              Pattern   : Data Services                           *
-*  Type     : SubjectsData                               License   : Please read LICENSE.txt file            *
+*  Type     : SubjectsDataService                        License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Data read and write methods for user management services.                                      *
 *                                                                                                            *
@@ -14,11 +14,10 @@ using Empiria.Data;
 using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects;
-using Empiria.OnePoint.Security.Subjects.Adapters;
 
 namespace Empiria.OnePoint.Security.Data {
 
-  static internal class SubjectsData {
+  static internal class SubjectsDataService {
 
     static internal void ChangePassword(string username, string password) {
       if (ConfigurationData.Get("UseFormerPasswordEncryption", false)) {
@@ -110,7 +109,7 @@ namespace Empiria.OnePoint.Security.Data {
 
     #endregion Helpers
 
-  } // class SubjectsData
+  } // class SubjectsDataService
 
 
 } // namespace Empiria.OnePoint.Security.Data

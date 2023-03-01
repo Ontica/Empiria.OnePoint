@@ -51,23 +51,18 @@ namespace Empiria.OnePoint.Security.Subjects.Adapters {
       get; set;
     } = string.Empty;
 
+
+    internal void EnsureValid() {
+      Assertion.Require(this.FullName, "fields.FullName");
+      Assertion.Require(this.UserID, "fields.UserID");
+      Assertion.Require(this.EMail, "fields.EMail");
+    }
+
+
+    internal Organization GetWorkarea() {
+      return Organization.Parse(this.WorkareaUID);
+    }
+
   }  // class SubjectFields
-
-
-
-  static internal class SubjectFieldsExtension {
-
-    static internal void EnsureValid(this SubjectFields fields) {
-      Assertion.Require(fields.FullName, "fields.FullName");
-      Assertion.Require(fields.UserID, "fields.UserID");
-      Assertion.Require(fields.EMail, "fields.EMail");
-    }
-
-
-    static internal Organization GetWorkarea(this SubjectFields fields) {
-      return Organization.Parse(fields.WorkareaUID);
-    }
-
-  }  // class SubjectFieldsExtension
 
 }  // namespace Empiria.OnePoint.Security.Subjects.Adapters

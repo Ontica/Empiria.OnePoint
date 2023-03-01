@@ -67,13 +67,13 @@ namespace Empiria.OnePoint.Security.Services {
     public IEmpiriaPrincipal Authenticate(IUserCredentials credentials) {
       Assertion.Require(credentials, nameof(credentials));
 
-      IClientApplication clientApplication = AuthenticateClientApp(credentials.AppKey);
-
-      Claim userData = GetSubjectAuthenticationClaim(clientApplication, credentials);
+      Claim userData = GetSubjectAuthenticationClaim(credentials);
 
       IEmpiriaUser user = EmpiriaUser.Authenticate(userData);
 
       var identity = new EmpiriaIdentity(user, AuthenticationMode.Basic);
+
+      IClientApplication clientApplication = AuthenticateClientApp(credentials.AppKey);
 
       return new EmpiriaPrincipal(identity, clientApplication, credentials);
     }
@@ -95,6 +95,10 @@ namespace Empiria.OnePoint.Security.Services {
       return application;
     }
 
+
+    internal void EnsureCurrentCredentials(string currentPassword) {
+
+    }
 
     internal EmpiriaUser GetUserWithUserNameAndEMail(string username, string email) {
 
@@ -147,8 +151,7 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    private Claim GetSubjectAuthenticationClaim(IClientApplication context,
-                                                IUserCredentials credentials) {
+    private Claim GetSubjectAuthenticationClaim(IUserCredentials credentials) {
 
       var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
                                         credentials.UserID);

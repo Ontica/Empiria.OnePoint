@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.CreateSubjectCredentials(fields);
 
-      return (SubjectDto) SubjectsData.GetSubject(person);
+      return (SubjectDto) SubjectsDataService.GetSubject(person);
     }
 
 
@@ -75,7 +75,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       string filter = query.MapToFilterString();
 
-      FixedList<SubjectData> users = SubjectsData.SearchSubjects(filter);
+      FixedList<SubjectData> users = SubjectsDataService.SearchSubjects(filter);
 
       return users.Select(x => (SubjectDto) x)
                   .ToFixedList();
@@ -91,11 +91,10 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
 
     public FixedList<NamedEntityDto> Workareas() {
-      FixedList<Organization> workareas = SubjectsData.Workareas();
+      FixedList<Organization> workareas = SubjectsDataService.Workareas();
 
       return workareas.MapToNamedEntityList();
     }
-
 
     #endregion Use cases
 
