@@ -79,6 +79,17 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
+    static internal SubjectData TryGetSubjectWithUserID(string userID) {
+      string sql = "SELECT * FROM " +
+                   "SecurityItems INNER JOIN Contacts " +
+                   "ON SecurityItems.SubjectId = Contacts.ContactId " +
+                   $"WHERE SecurityItemTypeId = {SecurityItemType.SubjectCredentials.Id} AND " +
+                   $"LOWER(SecurityItemKey) = '{userID.ToLower()}'";
+
+      return DataReader.GetPlainObject<SubjectData>(DataOperation.Parse(sql), null);
+    }
+
+
     static internal FixedList<Organization> Workareas() {
       string sql = "SELECT * FROM Contacts " +
                    "WHERE ContactTypeId = 103 AND " +
@@ -87,6 +98,20 @@ namespace Empiria.OnePoint.Security.Data {
                    "ORDER BY ContactFullName";
 
       return DataReader.GetFixedList<Organization>(DataOperation.Parse(sql));
+    }
+
+
+    #region Legacy MhParticipants integration
+
+    static internal int TryGetFormerParticipantId(string userID) {
+      if (!ExecutionServer.LicenseName.Equals("BANOBRAS")) {
+        return 0;
+      }
+
+      string sql = "SELECT ParticipantId FROM MHParticipants " +
+                  $"WHERE LOWER(ParticipantKey) = '{userID.ToLower()}'";
+
+      return Convert.ToInt32(DataReader.GetScalar<long>(DataOperation.Parse(sql), 0));
     }
 
 
@@ -105,6 +130,7 @@ namespace Empiria.OnePoint.Security.Data {
       DataWriter.Execute(op);
     }
 
+    #endregion Legacy MhParticipants integration
 
     #region Helpers
 

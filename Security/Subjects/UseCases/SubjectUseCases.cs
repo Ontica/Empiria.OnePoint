@@ -41,7 +41,14 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       fields.EnsureValid();
 
+      var existingUser = SubjectsDataService.TryGetSubjectWithUserID(fields.UserID);
+
+      Assertion.Require(existingUser == null,
+                        $"Ya existe otro usuario con el identificador proporcionado: '{fields.UserID}'");
+
       PersonFields personFields = MapToPersonFields(fields);
+
+      personFields.FormerId = SubjectsDataService.TryGetFormerParticipantId(fields.UserID);
 
       var person = new Person(personFields);
 
