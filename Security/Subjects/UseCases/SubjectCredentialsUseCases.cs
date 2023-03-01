@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Contacts;
 using Empiria.Messaging;
 using Empiria.Security;
 using Empiria.Services;
@@ -16,6 +17,7 @@ using Empiria.Services;
 using Empiria.OnePoint.Security.Data;
 
 using Empiria.OnePoint.Security.Providers;
+using Empiria.OnePoint.Security.Subjects.Adapters;
 
 namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
@@ -36,12 +38,59 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
-    public void CreateUserPassword(UserCredentialsDto credentials, string email) {
+    public void ResetCredentials(string subjectUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+
+      var contact = Contact.Parse(subjectUID);
+
+      SubjectData subject = SubjectsData.GetSubject(contact);
+
+      string newPassword = GeneratePassword();
+
+      newPassword = EncryptPassword(subject.UserID, newPassword);
+
+      var editor = new SubjectSecurityItemsEditor(contact);
+
+      editor.UpdateSubjectCredentials(newPassword);
+
+      // ToDo: send new password email
+    }
+
+
+    public void UpdateCredentials(UpdateCredentialsFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var contact = ExecutionServer.CurrentContact;
+
+      SubjectData subject = SubjectsData.GetSubject(contact);
+
+      Assertion.Require(fields.UserID.Equals(subject.UserID),
+                        "Unrecognized UserID value");
+
+      // ToDo: ensure valid current password
+
+      string newPassword = EncryptPassword(subject.UserID, fields.NewPassword);
+
+      var editor = new SubjectSecurityItemsEditor(contact);
+
+      editor.UpdateSubjectCredentials(newPassword);
+
+      // ToDo: send warning email
+    }
+
+    #endregion Use cases
+
+
+    #region Former use cases
+
+    public void FormerCreateUserPassword(UserCredentialsDto credentials, string email) {
 
       Assertion.Require(credentials, nameof(credentials));
       Assertion.Require(email, nameof(email));
 
-      ImplementsCreateUserPassword(credentials, email);
+      FormerImplementsCreateUserPassword(credentials, email);
 
       var eventPayload = new {
         credentials.UserID
@@ -51,7 +100,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
     }
 
 
-    public void ChangeUserPassword(string currentPassword, string newPassword) {
+    public void FormerChangeUserPassword(string currentPassword, string newPassword) {
 
       Assertion.Require(currentPassword, nameof(currentPassword));
       Assertion.Require(newPassword, nameof(newPassword));
@@ -67,7 +116,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
         Password = newPassword,
       };
 
-      ImplementsCreateUserPassword(credentials, userEmail);
+      FormerImplementsCreateUserPassword(credentials, userEmail);
 
       var eventPayload = new {
         credentials.UserID
@@ -78,12 +127,26 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       EMailServices.SendPasswordChangedWarningEMail();
     }
 
-    #endregion Use cases
+    #endregion Former use cases
 
     #region Helpers
 
+    private string EncryptPassword(string userID, string password) {
 
-    public void ImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
+      bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
+
+      if (useSecurityModelV3) {
+        return Cryptographer.Encrypt(EncryptionMode.EntropyKey,
+                                     Cryptographer.GetSHA256(password), userID);
+
+      } else {
+        return FormerCryptographer.Encrypt(EncryptionMode.EntropyKey,
+                                           FormerCryptographer.GetMD5HashCode(password), userID);
+      }
+    }
+
+
+    public void FormerImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
 
       if (credentials.AppKey != ConfigurationData.GetString("ChangePasswordKey")) {
         throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, credentials.AppKey);
@@ -98,6 +161,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       helper.VerifyStrength();
 
       SubjectsData.ChangePassword(credentials.UserID, credentials.Password);
+    }
+
+
+    private string GeneratePassword() {
+      return "s3Cret@2023";
     }
 
     #endregion Helpers

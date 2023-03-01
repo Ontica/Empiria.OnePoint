@@ -32,6 +32,10 @@ namespace Empiria.OnePoint.Security.Data {
       WriteSecurityItem(o);
     }
 
+    internal static void UpdateSecurityItem(SecurityItemDataDto o) {
+      WriteSecurityItem(o);
+    }
+
     #endregion Methods
 
     #region Helpers

@@ -77,6 +77,34 @@ namespace Empiria.OnePoint.Security.WebApi {
     }
 
 
+
+    [HttpPost]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/reset-credentials")]
+    public NoDataModel ResetCredentials([FromUri] string subjectUID) {
+
+      using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
+        usecases.ResetCredentials(subjectUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
+
+    [HttpPost]
+    [Route("v4/onepoint/security/management/update-my-credentials")]
+    public NoDataModel UpdateCredentials([FromBody] UpdateCredentialsFields fields) {
+
+      base.RequireBody(fields);
+
+      using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
+        usecases.UpdateCredentials(fields);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
     [HttpPut, HttpPatch]
     [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}")]
     public SingleObjectModel UpdateSubject([FromUri] string subjectUID,

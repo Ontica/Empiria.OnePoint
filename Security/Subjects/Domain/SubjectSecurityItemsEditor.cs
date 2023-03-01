@@ -132,6 +132,17 @@ namespace Empiria.OnePoint.Security.Subjects {
       SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
 
+
+    internal void UpdateSubjectCredentials(string userPassword) {
+      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
+                                           SecurityContext.Empty, _subject,
+                                           SecurityItem.Empty);
+
+      data.ExtData.Set("password", userPassword);
+
+      SecurityItemsDataWriter.UpdateSecurityItem(data);
+    }
+
   }  // class SubjectSecurityItemsEditor
 
 }  // namespace Empiria.OnePoint.Security.Subjects
