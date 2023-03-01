@@ -86,7 +86,17 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       Assertion.Require(subjectUID, nameof(subjectUID));
       Assertion.Require(fields, nameof(fields));
 
-      throw new NotImplementedException();
+      fields.EnsureValid();
+
+      PersonFields personFields = MapToPersonFields(fields);
+
+      var person = Person.Parse(subjectUID);
+
+      person.Update(personFields);
+
+      person.Save();
+
+      return (SubjectDto) SubjectsDataService.GetSubject(person);
     }
 
 
