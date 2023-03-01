@@ -51,7 +51,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.CreateSubjectCredentials(fields);
 
-      return (SubjectDto) SubjectsDataService.GetSubject(person);
+      var subject = SubjectsDataService.GetSubject(person);
+
+      SubjectsDataService.WriteAsParticipant(subject);
+
+      return subject;
     }
 
 
@@ -96,7 +100,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       person.Save();
 
-      return (SubjectDto) SubjectsDataService.GetSubject(person);
+      var subject = SubjectsDataService.GetSubject(person);
+
+      SubjectsDataService.WriteAsParticipant(subject);
+
+      return subject;
     }
 
 

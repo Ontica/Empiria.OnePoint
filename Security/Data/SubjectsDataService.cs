@@ -14,6 +14,7 @@ using Empiria.Data;
 using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects;
+using Empiria.OnePoint.Security.Subjects.Adapters;
 
 namespace Empiria.OnePoint.Security.Data {
 
@@ -89,6 +90,22 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
+    static internal void WriteAsParticipant(SubjectData subject) {
+      if (!ExecutionServer.LicenseName.Equals("BANOBRAS")) {
+        return;
+      }
+
+      var fullname = subject.Contact.FullName.Length <= 64 ?
+                     subject.Contact.FullName : subject.Contact.FullName.Substring(0, 64);
+
+      var op = DataOperation.Parse("write_mhparticipant", subject.Contact.Id,
+          fullname, subject.UserID, subject.Contact.FullName, 'U', 'A',
+          new DateTime(2022, 01, 01), new DateTime(2049, 12, 31));
+
+      DataWriter.Execute(op);
+    }
+
+
     #region Helpers
 
     static private void ChangePasswordUsingFormerEncryption(string username, string password) {
@@ -110,6 +127,5 @@ namespace Empiria.OnePoint.Security.Data {
     #endregion Helpers
 
   } // class SubjectsDataService
-
 
 } // namespace Empiria.OnePoint.Security.Data
