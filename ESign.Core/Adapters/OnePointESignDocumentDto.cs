@@ -12,7 +12,7 @@ using System;
 namespace Empiria.OnePoint.ESign.Adapters {
 
   /// <summary>DTO with OnePoint ESign document data.</summary>
-  public class OnePointSignDocumentDto {
+  public class OnePointESignDocumentDto {
 
 
     public int TransactionId {
