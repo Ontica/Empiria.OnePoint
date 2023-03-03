@@ -13,7 +13,7 @@ using System;
 namespace Empiria.OnePoint.ESign {
 
   /// <summary>Contains data for an electronic-sign operation.</summary>
-  public class SignedDocumentEntry : BaseObject {
+  public class SignedDocumentEntry {
 
     #region Constructors and parsers
 

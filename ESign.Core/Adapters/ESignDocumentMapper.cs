@@ -16,9 +16,9 @@ namespace Empiria.OnePoint.ESign.Adapters {
 
     #region Public methods
 
-    static internal FixedList<OnePointESignDocumentDto> Map(FixedList<SignedDocumentEntry> signedDocuments) {
+    static internal FixedList<object> Map(FixedList<object> signedDocuments) {
 
-      FixedList<OnePointESignDocumentDto> mappedDocuments = MapDocuments(signedDocuments);
+      FixedList<object> mappedDocuments = MapDocuments(signedDocuments);
 
       return mappedDocuments;
     }
@@ -30,29 +30,17 @@ namespace Empiria.OnePoint.ESign.Adapters {
     #region Private methods
 
 
-    static private FixedList<OnePointESignDocumentDto> MapDocuments(
-                    FixedList<SignedDocumentEntry> signedDocuments) {
+    static private FixedList<object> MapDocuments(
+                    FixedList<object> signedDocuments) {
 
       var requests = signedDocuments.Select((x) => MapDocument(x));
 
-      return new FixedList<OnePointESignDocumentDto>(requests);
+      return new FixedList<object>(requests);
     }
 
 
-    static private OnePointESignDocumentDto MapDocument(SignedDocumentEntry x) {
-      var dto = new OnePointESignDocumentDto();
-
-      dto.TransactionId = x.TransactionId;
-      dto.TransactionUID = x.TransactionUID;
-      dto.DocumentType = x.DocumentType;
-      dto.TransactionType = x.TransactionType;
-      dto.InternalControlNo = x.InternalControlNo;
-      dto.AssignedById = x.AssignedById;
-      dto.AssignedBy = x.AssignedBy;
-      dto.RequestedBy = x.RequestedBy;
-      dto.TransactionStatus = x.TransactionStatus;
-      dto.RecorderOfficeId = x.RecorderOfficeId;
-      dto.PresentationTime = x.PresentationTime;
+    static private object MapDocument(object x) {
+      var dto = new object();
 
       return dto;
     }
