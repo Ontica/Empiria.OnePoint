@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.Security;
+using Empiria.StateEnums;
 
 namespace Empiria.OnePoint.Security {
 
@@ -26,7 +27,7 @@ namespace Empiria.OnePoint.Security {
       Assertion.Require(context, nameof(context));
 
       _subject = subject;
-      _context = SecurityContext.Parse(52);
+      _context = SecurityContext.Parse(51);
     }
 
     #region Methods
@@ -43,7 +44,8 @@ namespace Empiria.OnePoint.Security {
       RemoveRoleRevokedFeatures(features, identityRoles);
 
       return features.Distinct()
-                     .ToFixedList();
+                     .ToFixedList()
+                     .FindAll(x => x.Status == EntityStatus.Active);
     }
 
 
