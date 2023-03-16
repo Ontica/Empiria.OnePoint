@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Web.Http;
-
+using Empiria.OnePoint.ESign.Services;
 using Empiria.WebApi;
 
 namespace Empiria.OnePoint.ESign.WebApi {
@@ -20,6 +20,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
   public class SignRequestsController : WebApiController {
 
     #region Query methods
+
 
     [AllowAnonymous]
     [HttpGet]
@@ -143,6 +144,7 @@ namespace Empiria.OnePoint.ESign.WebApi {
 
       }
     }
+
 
     #endregion Command methods
 

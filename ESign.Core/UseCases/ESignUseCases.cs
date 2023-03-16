@@ -10,6 +10,7 @@
 using System;
 
 using Empiria.Contacts;
+using Empiria.OnePoint.ESign.Services;
 using Empiria.Security;
 
 namespace Empiria.OnePoint.ESign {
