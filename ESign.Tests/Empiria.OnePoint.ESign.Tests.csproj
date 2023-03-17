@@ -85,6 +85,9 @@
     <ProjectReference Include="..\ESign.Core\Empiria.OnePoint.ESign.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESign.Providers\SeguriSignProvider\Empiria.OnePoint.ESign.Providers.SeguriSign.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="empiria.config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
