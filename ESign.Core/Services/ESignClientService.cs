@@ -16,7 +16,7 @@ namespace Empiria.OnePoint.ESign.Services {
   internal class ESignClientService {
 
 
-    internal FixedList<SignRequestDTO> SeguriSignService(SignTaskDTO signTaskDTO) {
+    internal FixedList<SignRequestDTO> SeguriSignService(SignRequestQuery requestQuery) {
 
 
       return new FixedList<SignRequestDTO>();
@@ -24,4 +24,5 @@ namespace Empiria.OnePoint.ESign.Services {
 
 
   }
+
 }
