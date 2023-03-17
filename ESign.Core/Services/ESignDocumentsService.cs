@@ -36,11 +36,13 @@ namespace Empiria.OnePoint.ESign.Services {
 
     static private FixedList<SignRequestDTO> ESignService(SignTaskDTO signTaskDTO) {
 
-      var eSignClientService = new ESignClientService();
+      throw new NotImplementedException();
 
-      SignRequestQuery requestQuery = MapToSignRequestQuery(signTaskDTO);
+      //var eSignClientService = new SeguriSignClient();
 
-      return eSignClientService.SeguriSignService(requestQuery);
+      //SignRequestQuery requestQuery = MapToSignRequestQuery(signTaskDTO);
+
+      //return eSignClientService.SeguriSignService(requestQuery);
 
     }
 
