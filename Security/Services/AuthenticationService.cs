@@ -13,14 +13,12 @@ using Empiria.StateEnums;
 
 using Empiria.Security;
 using Empiria.Security.Providers;
+using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security.Services {
 
   /// <summary>Provides user authentication services.</summary>
   public class AuthenticationService: IAuthenticationProvider {
-
-    static readonly bool ENSURE_SIMILAR_USER_HOST_ADDRESS =
-                                ConfigurationData.Get("EnsureSimilarUserHostAddress", false);
 
     #region Services
 
@@ -41,7 +39,7 @@ namespace Empiria.OnePoint.Security.Services {
                                     session.Token);
       }
 
-      if (ENSURE_SIMILAR_USER_HOST_ADDRESS &&
+      if (SecurityParameters.EnsureSimilarUserHostAddress &&
           !session.UserHostAddress.Equals(userHostAddress)) {
         throw new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
                                     userHostAddress);
@@ -96,10 +94,6 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    internal void EnsureCurrentCredentials(string currentPassword) {
-
-    }
-
     internal EmpiriaUser GetUserWithUserNameAndEMail(string username, string email) {
 
       Assertion.Require(username, nameof(username));
@@ -127,7 +121,7 @@ namespace Empiria.OnePoint.Security.Services {
     private string DecryptPassword(string storedPassword,
                                    IUserCredentials credentials) {
 
-      bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
+      bool useSecurityModelV3 = SecurityParameters.UseSecurityModelV3;
 
       string decrypted;
 

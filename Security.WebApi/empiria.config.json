@@ -1,0 +1,27 @@
+﻿{
+  "appName": "Empiria OnePoint Security Web Api Local Development.",
+  "version": "4.0",
+  "date": "2023-02-18",
+  "settings": [
+    {
+      "type": "",
+      "key": "ApplicationKey",
+      "value": "{{APPLICATION-KEY}}"
+    },
+    {
+      "type": "",
+      "key": "GlobalConfigurationFile",
+      "value": "{{GLOBAL-CONFIGURATION-FILE}}"
+    },
+    {
+      "type": "Data",
+      "key": "IsObjectIdGeneratorServer",
+      "value": true
+    },
+    {
+      "type": "WebApi",
+      "key": "IsPassThroughServer",
+      "value": false
+    }
+  ]
+}

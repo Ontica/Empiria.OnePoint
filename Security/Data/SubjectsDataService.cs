@@ -14,14 +14,13 @@ using Empiria.Data;
 using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects;
-using Empiria.OnePoint.Security.Subjects.Adapters;
 
 namespace Empiria.OnePoint.Security.Data {
 
   static internal class SubjectsDataService {
 
     static internal void ChangePassword(string username, string password) {
-      if (ConfigurationData.Get("UseFormerPasswordEncryption", false)) {
+      if (SecurityParameters.UseFormerPasswordEncryption) {
         ChangePasswordUsingFormerEncryption(username, password);
         return;
       }
@@ -34,7 +33,7 @@ namespace Empiria.OnePoint.Security.Data {
 
       string p;
 
-      bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
+      bool useSecurityModelV3 = SecurityParameters.UseSecurityModelV3;
 
       if (useSecurityModelV3) {
         p = Cryptographer.Encrypt(EncryptionMode.EntropyKey,
@@ -83,8 +82,8 @@ namespace Empiria.OnePoint.Security.Data {
       string sql = "SELECT * FROM " +
                    "SecurityItems INNER JOIN Contacts " +
                    "ON SecurityItems.SubjectId = Contacts.ContactId " +
-                   $"WHERE SecurityItemTypeId = {SecurityItemType.SubjectCredentials.Id} AND " +
-                   $"LOWER(SecurityItemKey) = '{userID.ToLower()}'";
+                  $"WHERE SecurityItemTypeId = {SecurityItemType.SubjectCredentials.Id} AND " +
+                  $"LOWER(SecurityItemKey) = '{userID.ToLower()}'";
 
       return DataReader.GetPlainObject<SubjectData>(DataOperation.Parse(sql), null);
     }
@@ -111,7 +110,8 @@ namespace Empiria.OnePoint.Security.Data {
       var formerUserID = userID.Length <= 24 ?
                          userID : userID.Substring(0, 24);
 
-      string sql = "SELECT ParticipantId FROM MHParticipants " +
+      string sql = "SELECT ParticipantId " +
+                   "FROM MHParticipants " +
                   $"WHERE LOWER(ParticipantKey) = '{formerUserID.ToLower()}'";
 
       return Convert.ToInt32(DataReader.GetScalar<long>(DataOperation.Parse(sql), 0));

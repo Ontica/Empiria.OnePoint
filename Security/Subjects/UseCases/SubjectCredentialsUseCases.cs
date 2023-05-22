@@ -11,6 +11,7 @@ using System;
 
 using Empiria.Contacts;
 using Empiria.Messaging;
+
 using Empiria.Security;
 using Empiria.Services;
 
@@ -25,10 +26,6 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
   public class SubjectCredentialsUseCases : UseCase {
 
     #region Constructors and parsers
-
-    protected SubjectCredentialsUseCases() {
-      // no-op
-    }
 
     static public SubjectCredentialsUseCases UseCaseInteractor() {
       return CreateInstance<SubjectCredentialsUseCases>();
@@ -47,13 +44,19 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       string newPassword = GeneratePassword();
 
-      newPassword = EncryptPassword(subject.UserID, newPassword);
-
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      editor.UpdateSubjectCredentials(newPassword);
+      editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword));
 
-      // ToDo: send new password email
+      if (SecurityParameters.SendPasswordsUsingEmail) {
+        EMailServices.SendPasswordChangedWarningEMail(contact, subject.UserID, newPassword);
+
+      } else {
+
+        throw new ServiceException("Servidor de correo electrónico no configurado",
+            $"El password asignado al usuario no pudo enviarse " +
+            $"por correo electrónico. Sin embargo este es el password: {newPassword}");
+      }
     }
 
 
@@ -77,11 +80,18 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.UpdateSubjectCredentials(newPassword);
 
-      // ToDo: send warning email
+      if (SecurityParameters.SendPasswordsUsingEmail) {
+        EMailServices.SendPasswordChangedWarningEMail();
+
+      } else {
+
+        throw new ServiceException("Servidor de correo electrónico no configurado",
+            $"El password asignado al usuario no pudo enviarse " +
+            $"por correo electrónico. Sin embargo este es el password: {newPassword}");
+      }
     }
 
     #endregion Use cases
-
 
     #region Former use cases
 
@@ -105,7 +115,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       Assertion.Require(currentPassword, nameof(currentPassword));
       Assertion.Require(newPassword, nameof(newPassword));
 
-      var apiKey = ConfigurationData.GetString("Empiria.Security", "ChangePasswordKey");
+      var apiKey = SecurityParameters.ChangePasswordKey;
 
       var userID = ExecutionServer.CurrentIdentity.Name;
       var userEmail = ExecutionServer.CurrentContact.EMail;
@@ -133,7 +143,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     private string EncryptPassword(string userID, string password) {
 
-      bool useSecurityModelV3 = ConfigurationData.Get("UseSecurityModel.V3", false);
+      bool useSecurityModelV3 = SecurityParameters.UseSecurityModelV3;
 
       if (useSecurityModelV3) {
         return Cryptographer.Encrypt(EncryptionMode.EntropyKey,
@@ -148,7 +158,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     public void FormerImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
 
-      if (credentials.AppKey != ConfigurationData.GetString("ChangePasswordKey")) {
+      if (credentials.AppKey != SecurityParameters.ChangePasswordKey) {
         throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, credentials.AppKey);
       }
 
@@ -165,7 +175,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
 
     private string GeneratePassword() {
-      return "s3Cret@2023";
+      var list = SecurityParameters.PasswordRandomNames;
+
+      int position = EmpiriaMath.GetRandom(0, list.Count - 1);
+
+      return $"{list[position]}@{EmpiriaMath.GetRandom(1000, 99999)}";
     }
 
     #endregion Helpers
