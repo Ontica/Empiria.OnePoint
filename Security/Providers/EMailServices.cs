@@ -10,7 +10,6 @@
 using System.IO;
 
 using Empiria.Contacts;
-using Empiria.Security;
 
 using Empiria.Messaging.EMailDelivery;
 
@@ -33,6 +32,19 @@ namespace Empiria.OnePoint.Security.Providers {
       SendEmail(content, person);
     }
 
+    static internal void SendPasswordChangedWarningEMail(Contact contact,
+                                                         string userID,
+                                                         string newPassword) {
+
+    var body = GetTemplate("YourPasswordWasChanged");
+
+    body = ParseGeneralFields(body, contact, userID, newPassword);
+
+    var content = new EMailContent($"Your password was changed", body, true);
+
+    SendEmail(content, contact);
+  }
+
 
     #endregion Methods
 
@@ -41,20 +53,28 @@ namespace Empiria.OnePoint.Security.Providers {
     static private string GetTemplate(string templateName) {
       string templatesPath = ConfigurationData.GetString("Templates.Path");
 
-      string fileName = Path.Combine(templatesPath, $"email.template.{templateName}.html");
+      string fileName = Path.Combine(templatesPath, $"template.email.{templateName}.html");
 
       return File.ReadAllText(fileName);
     }
 
 
-    static private string ParseGeneralFields(string body, Person contact) {
-      body = body.Replace("{{TO-NAME}}", contact.FirstName);
+    static private string ParseGeneralFields(string body, Contact contact) {
+      body = body.Replace("{{TO-NAME}}", contact.ShortName);
 
       return body;
     }
 
+    private static string ParseGeneralFields(string body, Contact contact,
+                                             string userID, string newPassword) {
+      body = body.Replace("{{TO_NAME}}", contact.ShortName);
+      body = body.Replace("{{USER_ID}}", userID);
+      body = body.Replace("{{PASSWORD}}", newPassword);
 
-    static private void SendEmail(EMailContent content, Person sendToPerson) {
+      return body;
+    }
+
+    static private void SendEmail(EMailContent content, Contact sendToPerson) {
       var sendTo = new SendTo(sendToPerson.EMail, sendToPerson.ShortName);
 
       EMail.Send(sendTo, content);
