@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Security Management                          Component : Providers                             *
 *  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Service provider                      *
-*  Types    : EMailServices                                License   : Please read LICENSE.txt file          *
+*  Types    : EmailServices                                License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Sends e-mail messages.                                                                         *
+*  Summary  : Sends email messages related with onepoint security services.                                  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System.IO;
@@ -15,8 +15,8 @@ using Empiria.Messaging.EMailDelivery;
 
 namespace Empiria.OnePoint.Security.Providers {
 
-  /// <summary>Sends e-mail messages.</summary>
-  static internal class EMailServices {
+  /// <summary>Sends email messages related with onepoint security services.</summary>
+  static internal class EmailServices {
 
     #region Methods
 
@@ -27,24 +27,23 @@ namespace Empiria.OnePoint.Security.Providers {
 
       body = ParseGeneralFields(body, person);
 
-      var content = new EMailContent($"Your password was changed", body, true);
+      var content = new EmailContent($"Su contraseña de acceso al sistema ha cambiado", body, true);
 
       SendEmail(content, person);
     }
 
+
     static internal void SendPasswordChangedWarningEMail(Contact contact,
                                                          string userID,
                                                          string newPassword) {
+      var body = GetTemplate("YourPasswordWasChanged");
 
-    var body = GetTemplate("YourPasswordWasChanged");
+      body = ParseGeneralFields(body, contact, userID, newPassword);
 
-    body = ParseGeneralFields(body, contact, userID, newPassword);
+      var content = new EmailContent($"Su contraseña de acceso al sistema ha cambiado", body, true);
 
-    var content = new EMailContent($"Your password was changed", body, true);
-
-    SendEmail(content, contact);
-  }
-
+      SendEmail(content, contact);
+    }
 
     #endregion Methods
 
@@ -65,7 +64,8 @@ namespace Empiria.OnePoint.Security.Providers {
       return body;
     }
 
-    private static string ParseGeneralFields(string body, Contact contact,
+
+    static private string ParseGeneralFields(string body, Contact contact,
                                              string userID, string newPassword) {
       body = body.Replace("{{TO_NAME}}", contact.ShortName);
       body = body.Replace("{{USER_ID}}", userID);
@@ -74,10 +74,12 @@ namespace Empiria.OnePoint.Security.Providers {
       return body;
     }
 
-    static private void SendEmail(EMailContent content, Contact sendToPerson) {
+    static private void SendEmail(EmailContent content, Contact sendToPerson) {
       var sendTo = new SendTo(sendToPerson.EMail, sendToPerson.ShortName);
 
-      EMail.Send(sendTo, content);
+      var sender = new EmailSender();
+
+      sender.Send(sendTo, content);
     }
 
 
