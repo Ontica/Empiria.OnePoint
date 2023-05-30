@@ -16,7 +16,7 @@ using Empiria.OnePoint.EFiling.UseCases;
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web services that provides electronic sign services.</summary>
-  [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
+  // [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
   public class ElectronicSignController : WebApiController {
 
 

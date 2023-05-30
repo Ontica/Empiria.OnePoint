@@ -16,7 +16,7 @@ using Empiria.OnePoint.EFiling.UseCases;
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary>Web api controller that provides input and output e-documents for filing requests.</summary>
-  [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
+  // [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
   public class DocumentsController : WebApiController {
 
     [HttpGet]

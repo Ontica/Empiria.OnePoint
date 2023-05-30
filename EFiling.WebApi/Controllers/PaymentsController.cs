@@ -18,7 +18,7 @@ using Empiria.OnePoint.EFiling.UseCases;
 namespace Empiria.OnePoint.EFiling.WebApi {
 
   /// <summary> Web api provider for e-filing payment related processes.</summary>
-  [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
+  // [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Filing.Client.Application")]
   public class PaymentsController : WebApiController {
 
 

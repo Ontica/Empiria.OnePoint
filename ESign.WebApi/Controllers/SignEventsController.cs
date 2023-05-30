@@ -15,8 +15,8 @@ using Empiria.WebApi;
 namespace Empiria.OnePoint.ESign.WebApi {
 
   /// <summary>Web Api used to get electronic sign events.</summary>
-  [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Sign.Client.Application")]
-  [WebApiAuthorizationFilter(WebApiClaimType.AuthenticatedUserIsInRole, "ElectronicSign.Signer")]
+  // [WebApiAuthorizationFilter(WebApiClaimType.ClientAppHasControllerAccess, "Electronic.Sign.Client.Application")]
+  // [WebApiAuthorizationFilter(WebApiClaimType.AuthenticatedUserIsInRole, "ElectronicSign.Signer")]
   public class SignEventsController : WebApiController {
 
 
