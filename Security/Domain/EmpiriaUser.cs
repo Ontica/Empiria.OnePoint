@@ -13,7 +13,6 @@ using Empiria.Contacts;
 using Empiria.StateEnums;
 
 using Empiria.Security;
-using Empiria.Security.Claims;
 
 namespace Empiria.OnePoint.Security {
 
@@ -93,14 +92,6 @@ namespace Empiria.OnePoint.Security {
         return this.Contact.EMail;
       }
     }
-
-
-    string IClaimsSubject.ClaimsToken {
-      get {
-        return this.Contact.UID;
-      }
-    }
-
 
     public Contact Contact {
       get; private set;
