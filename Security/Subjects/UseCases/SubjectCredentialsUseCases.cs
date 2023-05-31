@@ -35,10 +35,10 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
-    public void ResetCredentials(string subjectUID) {
-      Assertion.Require(subjectUID, nameof(subjectUID));
+    public void ResetCredentials(string contactUID) {
+      Assertion.Require(contactUID, nameof(contactUID));
 
-      var contact = Contact.Parse(subjectUID);
+      var contact = Contact.Parse(contactUID);
 
       SubjectData subject = SubjectsDataService.GetSubject(contact);
 
@@ -49,7 +49,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword));
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
-        EMailServices.SendPasswordChangedWarningEMail(contact, subject.UserID, newPassword);
+        EmailServices.SendPasswordChangedWarningEMail(contact, subject.UserID, newPassword);
 
       } else {
 
@@ -81,7 +81,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       editor.UpdateSubjectCredentials(newPassword);
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
-        EMailServices.SendPasswordChangedWarningEMail();
+        EmailServices.SendPasswordChangedWarningEMail();
 
       } else {
 
@@ -134,7 +134,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       EventNotifier.Notify(MessagingEvents.UserPasswordChanged, eventPayload);
 
-      EMailServices.SendPasswordChangedWarningEMail();
+      EmailServices.SendPasswordChangedWarningEMail();
     }
 
     #endregion Former use cases
