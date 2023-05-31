@@ -22,12 +22,12 @@ namespace Empiria.OnePoint.Security {
     private readonly EmpiriaIdentity _subject;
     private readonly SecurityContext _context;
 
-    internal PermissionsBuilder(EmpiriaIdentity subject, IClientApplication context) {
+    internal PermissionsBuilder(EmpiriaIdentity subject, SecurityContext context) {
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(context, nameof(context));
 
       _subject = subject;
-      _context = SecurityContext.Parse(51);
+      _context = context;
     }
 
     #region Methods
