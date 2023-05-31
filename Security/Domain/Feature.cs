@@ -78,9 +78,7 @@ namespace Empiria.OnePoint.Security {
 
     public string Description {
       get {
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-               "Phasellus feugiat velit non sem molestie commodo. Aliquam ut fermentum dolor, " +
-               "vel elementum enim. In hac habitasse platea dictumst.";
+        return ExtensionData.Get("description", "Sin descripción");
       }
     }
 
