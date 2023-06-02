@@ -12,8 +12,6 @@ using System;
 using Empiria.Contacts;
 using Empiria.Services;
 
-using Empiria.Security;
-
 namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
   /// <summary>Use cases for subject's assigned security items.</summary>

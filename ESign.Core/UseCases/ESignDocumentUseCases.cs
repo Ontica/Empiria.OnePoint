@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+
 using Empiria.OnePoint.ESign.Adapters;
 
 namespace Empiria.OnePoint.ESign {
@@ -15,12 +16,10 @@ namespace Empiria.OnePoint.ESign {
   /// <summary>namespace Empiria.OnePoint.ESign.UseCases</summary>
   public class ESignDocumentUseCases {
 
-
     #region Use cases
 
 
     #endregion Use cases
-
 
   } // class ESignDocumentUseCases
 

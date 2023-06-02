@@ -34,7 +34,6 @@ namespace Empiria.OnePoint.ESign {
 
     #endregion Properties
 
-
   }  // class SignCredentials
 
 } // namespace Empiria.OnePoint.ESign
