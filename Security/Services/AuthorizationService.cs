@@ -20,9 +20,11 @@ namespace Empiria.OnePoint.Security.Services {
   public class AuthorizationService : IAuthorizationProvider {
 
     internal FixedList<string> GetFeaturesPermissions(EmpiriaIdentity subject,
-                                                      IClientApplication context) {
+                                                      IClientApplication clientApp) {
       Assertion.Require(subject, nameof(subject));
-      Assertion.Require(context, nameof(context));
+      Assertion.Require(clientApp, nameof(clientApp));
+
+      var context = DetermineSecurityContext(clientApp);
 
       var permissionsBuilder = new PermissionsBuilder(subject, context);
 
@@ -33,9 +35,11 @@ namespace Empiria.OnePoint.Security.Services {
 
 
     internal FixedList<IObjectAccessRule> GetObjectAccessRules(EmpiriaIdentity subject,
-                                                               IClientApplication context) {
+                                                               IClientApplication clientApp) {
       Assertion.Require(subject, nameof(subject));
-      Assertion.Require(context, nameof(context));
+      Assertion.Require(clientApp, nameof(clientApp));
+
+      var context = DetermineSecurityContext(clientApp);
 
       var permissionsBuilder = new PermissionsBuilder(subject, context);
 
@@ -45,9 +49,12 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    internal FixedList<string> GetRoles(EmpiriaIdentity subject, IClientApplication context) {
+    internal FixedList<string> GetRoles(EmpiriaIdentity subject,
+                                        IClientApplication clientApp) {
       Assertion.Require(subject, nameof(subject));
-      Assertion.Require(context, nameof(context));
+      Assertion.Require(clientApp, nameof(clientApp));
+
+      var context = DetermineSecurityContext(clientApp);
 
       var permissionsBuilder = new PermissionsBuilder(subject, context);
 
@@ -57,12 +64,21 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    public bool IsSubjectInRole(IIdentifiable subject, IClientApplication context, string role) {
+    public bool IsSubjectInRole(IIdentifiable subject, IClientApplication clientApp, string role) {
       Assertion.Require(subject, nameof(subject));
-      Assertion.Require(context, nameof(context));
+      Assertion.Require(clientApp, nameof(clientApp));
       Assertion.Require(role, nameof(role));
 
+      var context = DetermineSecurityContext(clientApp);
+
       return Role.IsSubjectInRole(subject, context, role);
+    }
+
+    #region Helpers
+
+
+    private SecurityContext DetermineSecurityContext(IClientApplication clientApp) {
+      return SecurityContext.Parse(51);
     }
 
 
@@ -72,6 +88,9 @@ namespace Empiria.OnePoint.Security.Services {
         ObjectsUIDs = rule.ObjectsUIDs.ToArray()
       };
     }
+
+
+    #endregion Helpers
 
   }  // class AuthorizationService
 
