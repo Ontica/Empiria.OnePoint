@@ -45,7 +45,7 @@ namespace Empiria.OnePoint.Security.SecurityItems.UseCases {
 
       var context = SecurityContext.Parse(contextUID);
 
-      var features = Feature.GetList(context);
+      var features = Feature.GetList(context.SoftwareSystem);
 
       features = features.FindAll(x => x.IsAssignable);
 
@@ -53,12 +53,12 @@ namespace Empiria.OnePoint.Security.SecurityItems.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> SecurityContextRoles(string contextUID) {
+    public FixedList<NamedEntityDto> SoftwareSystemRoles(string contextUID) {
       Assertion.Require(contextUID, nameof(contextUID));
 
       var context = SecurityContext.Parse(contextUID);
 
-      return Role.GetList(context)
+      return Role.GetList(context.SoftwareSystem)
                  .MapToNamedEntityList();
     }
 

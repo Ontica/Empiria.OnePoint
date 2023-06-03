@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+
 using Empiria.Data;
 
 namespace Empiria.OnePoint.Security.Data {
@@ -17,8 +18,8 @@ namespace Empiria.OnePoint.Security.Data {
 
     static internal FixedList<T> GetContextItems<T>(SecurityContext context,
                                                     SecurityItemType itemType) where T : SecurityItem {
-      Assertion.Require(context, "context");
-      Assertion.Require(itemType, "itemType");
+      Assertion.Require(context, nameof(context));
+      Assertion.Require(itemType, nameof(itemType));
 
       string sql = $"SELECT * FROM SecurityItems " +
                    $"WHERE ContextId = {context.Id} AND " +
@@ -32,7 +33,7 @@ namespace Empiria.OnePoint.Security.Data {
 
 
     static internal FixedList<T> GetSecurityItems<T>(SecurityItemType itemType) where T : SecurityItem {
-      Assertion.Require(itemType, "itemType");
+      Assertion.Require(itemType, nameof(itemType));
 
       string sql = $"SELECT * FROM SecurityItems " +
                    $"WHERE SecurityItemTypeId = {itemType.Id} AND " +
@@ -44,12 +45,28 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
+    static internal FixedList<T> GetSoftwareSystemItems<T>(SoftwareSystem softwareSystem,
+                                                           SecurityItemType itemType) where T : SecurityItem {
+      Assertion.Require(softwareSystem, nameof(softwareSystem));
+      Assertion.Require(itemType, nameof(itemType));
+
+      string sql = $"SELECT * FROM SecurityItems " +
+                   $"WHERE SecurityItemTypeId = {itemType.Id} AND " +
+                   $"TargetId = {softwareSystem.Id} AND " +
+                   $"SecurityItemStatus <> 'X'";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<T>(op);
+    }
+
+
     static internal FixedList<T> GetSubjectTargetItems<T>(IIdentifiable subject,
                                                           SecurityContext context,
                                                           SecurityItemType itemType) where T : SecurityItem {
-      Assertion.Require(subject, "subject");
-      Assertion.Require(context, "context");
-      Assertion.Require(itemType, "itemType");
+      Assertion.Require(subject, nameof(subject));
+      Assertion.Require(context, nameof(context));
+      Assertion.Require(itemType, nameof(itemType));
 
       string sql = $"SELECT TargetId FROM SecurityItems " +
                    $"WHERE SubjectId = {subject.Id} AND " +

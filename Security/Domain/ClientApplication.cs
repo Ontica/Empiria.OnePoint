@@ -64,9 +64,17 @@ namespace Empiria.OnePoint.Security {
       }
     }
 
+
     public string Name {
       get {
         return ExtensionData.Get("clientAppName", base.BaseKey);
+      }
+    }
+
+
+    internal SecurityContext SecurityContext {
+      get {
+        return SecurityContext.Parse(base.TargetId);
       }
     }
 

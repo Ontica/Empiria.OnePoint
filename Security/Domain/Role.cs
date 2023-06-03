@@ -9,8 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-using Empiria.Security;
-
 using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security {
@@ -35,9 +33,9 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal FixedList<Role> GetList(SecurityContext context) {
-      return SecurityItemsDataReader.GetContextItems<Role>(context,
-                                                           SecurityItemType.ClientAppRole);
+    static internal FixedList<Role> GetList(SoftwareSystem softwareSystem) {
+      return SecurityItemsDataReader.GetSoftwareSystemItems<Role>(softwareSystem,
+                                                                  SecurityItemType.SoftwareSystemRole);
     }
 
 
@@ -48,7 +46,8 @@ namespace Empiria.OnePoint.Security {
 
 
     static internal bool IsSubjectInRole(IIdentifiable subject,
-                                         SecurityContext context, string roleKey) {
+                                         SecurityContext context,
+                                         string roleKey) {
 
       FixedList<Role> subjectRoles = GetList(subject, context);
 

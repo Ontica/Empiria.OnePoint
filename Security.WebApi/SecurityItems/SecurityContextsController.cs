@@ -12,8 +12,6 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.OnePoint.Security.Subjects.Adapters;
-
 using Empiria.OnePoint.Security.SecurityItems.UseCases;
 using Empiria.OnePoint.Security.SecurityItems.Adapters;
 
@@ -43,7 +41,7 @@ namespace Empiria.OnePoint.Security.WebApi {
 
       using (var usecases = SecurityContextsUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> roles = usecases.SecurityContextRoles(contextUID);
+        FixedList<NamedEntityDto> roles = usecases.SoftwareSystemRoles(contextUID);
 
         return new CollectionModel(base.Request, roles);
       }
