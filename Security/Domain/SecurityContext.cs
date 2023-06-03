@@ -9,6 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Security;
+
 using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security {
@@ -18,7 +20,7 @@ namespace Empiria.OnePoint.Security {
 
     #region Constructors and parsers
 
-    private SecurityContext(SecurityItemType powerType) : base(powerType) {
+    protected SecurityContext(SecurityItemType powerType) : base(powerType) {
       // Required by Empiria Framework for all partitioned types.
     }
 
@@ -33,6 +35,11 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    static internal SecurityContext ParseWith(IClientApplication clientApp) {
+      return ((ClientApplication) clientApp).SecurityContext;
+    }
+
+
     static internal FixedList<SecurityContext> GetList() {
       var list = SecurityItemsDataReader.GetSecurityItems<SecurityContext>(SecurityItemType.SecurityContext);
 
@@ -40,6 +47,7 @@ namespace Empiria.OnePoint.Security {
 
       return list;
     }
+
 
     static internal FixedList<SecurityContext> GetList(IIdentifiable subject) {
       return SecurityItemsDataReader.GetSubjectTargetItems<SecurityContext>(subject, SecurityContext.Empty,
@@ -67,30 +75,9 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    ClientApplication[] _clients;
-
-    public ClientApplication[] Clients {
+    internal SoftwareSystem SoftwareSystem {
       get {
-        if (_clients == null) {
-          _clients = ExtensionData.GetList<ClientApplication>("clients", false)
-                                  .ToArray();
-        }
-
-        return _clients;
-      }
-    }
-
-
-    WebServer[] _servers;
-
-    public WebServer[] Servers {
-      get {
-        if (_servers == null) {
-          _servers = ExtensionData.GetList<WebServer>("servers", false)
-                                  .ToArray();
-        }
-
-        return _servers;
+        return SoftwareSystem.Parse(base.TargetId);
       }
     }
 

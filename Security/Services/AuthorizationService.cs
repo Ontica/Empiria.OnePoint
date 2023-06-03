@@ -78,7 +78,7 @@ namespace Empiria.OnePoint.Security.Services {
 
 
     private SecurityContext DetermineSecurityContext(IClientApplication clientApp) {
-      return SecurityContext.Parse(51);
+      return SecurityContext.ParseWith(clientApp);
     }
 
 
