@@ -77,11 +77,9 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       IIdentifiable subject = GetSubject(subjectUID);
       SecurityContext context = GetContext(contextUID);
 
-      FixedList<Feature> features = Feature.GetList(subject, context);
+      FixedList<Feature> features = Feature.GetSubjectFeatures(subject, context);
 
       return features.MapToNamedEntityList();
-
-      throw new NotImplementedException();
     }
 
 
@@ -90,11 +88,9 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       IIdentifiable subject = GetSubject(subjectUID);
       SecurityContext context = GetContext(contextUID);
 
-      FixedList<Role> roles = Role.GetList(subject, context);
+      FixedList<Role> roles = Role.GetSubjectRoles(subject, context);
 
       return roles.MapToNamedEntityList();
-
-      throw new NotImplementedException();
     }
 
 
@@ -102,7 +98,19 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       IIdentifiable subject = GetSubject(subjectUID);
       SecurityContext context = GetContext(contextUID);
 
-      var subjectSecurity = new SubjectSecurityItemsEditor(subject);
+      SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
+
+      FixedList<Role> roles = Role.GetSubjectRoles(subject, context);
+
+      foreach (var role in roles) {
+        subjectSecurity.UnassignRole(role);
+      }
+
+      FixedList<Feature> features = Feature.GetSubjectFeatures(subject, context);
+
+      foreach (var feature in features) {
+        subjectSecurity.UnassignFeature(feature);
+      }
 
       subjectSecurity.UnassignContext(context);
     }
