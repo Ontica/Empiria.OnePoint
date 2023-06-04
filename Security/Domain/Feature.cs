@@ -38,13 +38,17 @@ namespace Empiria.OnePoint.Security {
       return Feature.Empty;
     }
 
+
     static internal FixedList<Feature> GetList(SoftwareSystem softwareSystem) {
+
       return SecurityItemsDataReader.GetSoftwareSystemItems<Feature>(softwareSystem,
                                                                      SecurityItemType.SoftwareSystemFeature);
-     }
+    }
 
 
-    static internal FixedList<Feature> GetList(IIdentifiable subject, SecurityContext context) {
+    static internal FixedList<Feature> GetSubjectFeatures(IIdentifiable subject,
+                                                          SecurityContext context) {
+
       return SecurityItemsDataReader.GetSubjectTargetItems<Feature>(subject, context,
                                                                     SecurityItemType.SubjectFeature);
     }

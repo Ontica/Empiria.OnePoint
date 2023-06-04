@@ -34,12 +34,15 @@ namespace Empiria.OnePoint.Security {
 
 
     static internal FixedList<Role> GetList(SoftwareSystem softwareSystem) {
+
       return SecurityItemsDataReader.GetSoftwareSystemItems<Role>(softwareSystem,
                                                                   SecurityItemType.SoftwareSystemRole);
     }
 
 
-    static internal FixedList<Role> GetList(IIdentifiable subject, SecurityContext context) {
+    static internal FixedList<Role> GetSubjectRoles(IIdentifiable subject,
+                                                    SecurityContext context) {
+
       return SecurityItemsDataReader.GetSubjectTargetItems<Role>(subject, context,
                                                                  SecurityItemType.SubjectRole);
     }
@@ -49,7 +52,7 @@ namespace Empiria.OnePoint.Security {
                                          SecurityContext context,
                                          string roleKey) {
 
-      FixedList<Role> subjectRoles = GetList(subject, context);
+      FixedList<Role> subjectRoles = GetSubjectRoles(subject, context);
 
       return subjectRoles.Contains(x => x.Key == roleKey);
     }

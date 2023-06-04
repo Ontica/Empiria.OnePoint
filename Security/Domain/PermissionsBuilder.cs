@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Empiria.Security;
 using Empiria.StateEnums;
 
 namespace Empiria.OnePoint.Security {
@@ -65,7 +64,7 @@ namespace Empiria.OnePoint.Security {
 
 
     internal FixedList<Role> BuildRoles() {
-      return Role.GetList(_subject.User.Contact, _context);
+      return Role.GetSubjectRoles(_subject.User.Contact, _context);
     }
 
     #endregion Methods
@@ -74,7 +73,7 @@ namespace Empiria.OnePoint.Security {
 
     private void FillIdentityFeatures(List<Feature> list) {
 
-      FixedList<Feature> identityFeatures = Feature.GetList(_subject.User.Contact, _context);
+      FixedList<Feature> identityFeatures = Feature.GetSubjectFeatures(_subject.User.Contact, _context);
 
       list.AddRange(identityFeatures);
 
