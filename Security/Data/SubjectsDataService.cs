@@ -20,10 +20,6 @@ namespace Empiria.OnePoint.Security.Data {
   static internal class SubjectsDataService {
 
     static internal void ChangePassword(string username, string password) {
-      if (SecurityParameters.UseFormerPasswordEncryption) {
-        ChangePasswordUsingFormerEncryption(username, password);
-        return;
-      }
 
       var dataRow = DataReader.GetDataRow(DataOperation.Parse("getContactWithUserName", username));
 
@@ -31,18 +27,9 @@ namespace Empiria.OnePoint.Security.Data {
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
 
-      string p;
+      string p = Cryptographer.Encrypt(EncryptionMode.EntropyKey,
+                                       Cryptographer.GetSHA256(password), username);
 
-      bool useSecurityModelV3 = SecurityParameters.UseSecurityModelV3;
-
-      if (useSecurityModelV3) {
-        p = Cryptographer.Encrypt(EncryptionMode.EntropyKey,
-                                  Cryptographer.GetSHA256(password), username);
-
-      } else {
-        p = FormerCryptographer.Encrypt(EncryptionMode.EntropyKey,
-                                        FormerCryptographer.GetMD5HashCode(password), username);
-      }
 
       string sql = $"UPDATE Contacts SET UserPassword = '{p}' WHERE UserName = '{username}'";
 
@@ -137,26 +124,6 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
     #endregion Legacy MhParticipants integration
-
-    #region Helpers
-
-    static private void ChangePasswordUsingFormerEncryption(string username, string password) {
-      var dataRow = DataReader.GetDataRow(DataOperation.Parse("getContactWithUserName", username));
-      if (dataRow == null) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
-      }
-
-      password = FormerCryptographer.Encrypt(EncryptionMode.EntropyHashCode, password, username);
-      password = FormerCryptographer.Decrypt(password, username);
-
-      password = FormerCryptographer.Encrypt(EncryptionMode.EntropyKey, password, username);
-
-      string sql = "UPDATE Contacts SET UserPassword = '{0}' WHERE UserName = '{1}'";
-
-      DataWriter.Execute(DataOperation.Parse(string.Format(sql, password, username)));
-    }
-
-    #endregion Helpers
 
   } // class SubjectsDataService
 

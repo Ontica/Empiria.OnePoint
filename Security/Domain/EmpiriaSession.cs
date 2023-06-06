@@ -177,7 +177,7 @@ namespace Empiria.OnePoint.Security {
     private string CreateToken() {
       string token = $"|{UserId}|{ServerId}|{StartTime.ToString("yyyy-MM-dd_HH:mm:ss")}|{ExtendedData}|";
 
-      return FormerCryptographer.CreateHashCode(token) + Guid.NewGuid().ToString();
+      return Cryptographer.CreateHashCode(token) + Guid.NewGuid().ToString();
     }
 
 

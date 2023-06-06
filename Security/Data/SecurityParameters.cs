@@ -40,8 +40,6 @@ namespace Empiria.OnePoint.Security.Data {
     static internal bool UseFormerPasswordEncryption => _config.Get("useFormerPasswordEncryption", false);
 
 
-    static internal bool UseSecurityModelV3 => _config.Get("useSecurityModelV3", true);
-
   } // class SecurityParameters
 
 } // namespace Empiria.OnePoint.Security.Data

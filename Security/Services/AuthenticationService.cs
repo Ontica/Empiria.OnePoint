@@ -121,25 +121,9 @@ namespace Empiria.OnePoint.Security.Services {
     private string DecryptPassword(string storedPassword,
                                    IUserCredentials credentials) {
 
-      bool useSecurityModelV3 = SecurityParameters.UseSecurityModelV3;
+      string decrypted = Cryptographer.Decrypt(storedPassword, credentials.UserID);
 
-      string decrypted;
-
-      if (useSecurityModelV3) {
-
-        decrypted = Cryptographer.Decrypt(storedPassword, credentials.UserID);
-        decrypted = Cryptographer.GetSHA256(decrypted + credentials.Entropy);
-
-      } else if (!String.IsNullOrWhiteSpace(credentials.Entropy)) {
-
-        decrypted = FormerCryptographer.Decrypt(storedPassword, credentials.UserID);
-        decrypted = FormerCryptographer.GetMD5HashCode(decrypted + credentials.Entropy);
-
-      } else {
-
-        decrypted = FormerCryptographer.Decrypt(storedPassword, credentials.UserID);
-
-      }
+      decrypted = Cryptographer.GetSHA256(decrypted + credentials.Entropy);
 
       return decrypted;
     }

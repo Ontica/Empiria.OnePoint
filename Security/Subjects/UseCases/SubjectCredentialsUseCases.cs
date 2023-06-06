@@ -143,16 +143,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     private string EncryptPassword(string userID, string password) {
 
-      bool useSecurityModelV3 = SecurityParameters.UseSecurityModelV3;
-
-      if (useSecurityModelV3) {
-        return Cryptographer.Encrypt(EncryptionMode.EntropyKey,
-                                     Cryptographer.GetSHA256(password), userID);
-
-      } else {
-        return FormerCryptographer.Encrypt(EncryptionMode.EntropyKey,
-                                           FormerCryptographer.GetMD5HashCode(password), userID);
-      }
+      return Cryptographer.Encrypt(EncryptionMode.EntropyKey,
+                                   Cryptographer.GetSHA256(password), userID);
     }
 
 
