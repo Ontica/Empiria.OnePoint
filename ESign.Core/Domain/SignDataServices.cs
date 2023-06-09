@@ -106,7 +106,7 @@ namespace Empiria.OnePoint.ESign {
 
 
     static private string GetSignRequestKeywordsFilter(string keywords) {
-      string filter = GeneralDataOperations.AllRecordsFilter;
+      string filter = SearchExpression.AllRecordsFilter;
 
       if (!String.IsNullOrWhiteSpace(keywords)) {
         filter = SearchExpression.ParseAndLike("Keywords", EmpiriaString.BuildKeywords(keywords));
