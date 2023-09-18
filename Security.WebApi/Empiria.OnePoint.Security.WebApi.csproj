@@ -64,7 +64,6 @@
     <PackageReference Include="Empiria.OnePoint.Security" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\extensions\Data.Oracle\Empiria.Data.Oracle.csproj" />
     <ProjectReference Include="..\..\extensions\WebApi\Empiria.WebApi.csproj" />
     <ProjectReference Include="..\Security\Empiria.OnePoint.Security.csproj" />
   </ItemGroup>
