@@ -15,7 +15,6 @@ using System.Linq;
 using System.Security.Principal;
 
 using Empiria.Collections;
-using Empiria.Json;
 
 using Empiria.Security;
 using Empiria.Security.Providers;
@@ -87,6 +86,11 @@ namespace Empiria.OnePoint.Security {
       }
 
       return principal;
+    }
+
+
+    static internal void RemoveFromCache(IEmpiriaUser user) {
+      principalsCache.Remove((x) => x.Identity.User.Contact.Id == user.Contact.Id);
     }
 
     #endregion Constructors and parsers

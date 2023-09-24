@@ -13,6 +13,7 @@ using Empiria.StateEnums;
 
 using Empiria.Security;
 using Empiria.Security.Providers;
+
 using Empiria.OnePoint.Security.Data;
 
 namespace Empiria.OnePoint.Security.Services {
@@ -73,6 +74,8 @@ namespace Empiria.OnePoint.Security.Services {
 
       IClientApplication clientApplication = AuthenticateClientApp(credentials.AppKey);
 
+      CloseActiveUserSessions(user);
+
       return new EmpiriaPrincipal(identity, clientApplication, credentials);
     }
 
@@ -118,6 +121,13 @@ namespace Empiria.OnePoint.Security.Services {
 
     #region Helpers
 
+
+    private void CloseActiveUserSessions(IEmpiriaUser user) {
+      SessionsDataService.CloseAllSessions(user);
+      EmpiriaPrincipal.RemoveFromCache(user);
+    }
+
+
     private string DecryptPassword(string storedPassword,
                                    IUserCredentials credentials) {
 
@@ -150,6 +160,7 @@ namespace Empiria.OnePoint.Security.Services {
 
       return claim;
     }
+
 
     #endregion Helpers
 

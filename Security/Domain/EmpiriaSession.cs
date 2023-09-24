@@ -146,9 +146,10 @@ namespace Empiria.OnePoint.Security {
 
     public bool IsStillActive {
       get {
-        return true;
+        return EndTime == ExecutionServer.DateMaxValue;
       }
     }
+
 
     [DataField("SessionExtData")]
     public JsonObject ExtendedData {

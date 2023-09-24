@@ -18,6 +18,13 @@ namespace Empiria.OnePoint.Security.Data {
   /// <summary>Empiria sessions data service.</summary>
   static internal class SessionsDataService {
 
+    static internal void CloseAllSessions(IEmpiriaUser user) {
+      var op = DataOperation.Parse("doCloseAllUserSessions", user.Contact.Id, DateTime.Now);
+
+      DataWriter.Execute(op);
+    }
+
+
     static internal void CloseSession(EmpiriaSession o) {
       var op = DataOperation.Parse("doCloseUserSession", o.Token, o.EndTime);
 
