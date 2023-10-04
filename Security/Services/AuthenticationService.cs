@@ -123,6 +123,9 @@ namespace Empiria.OnePoint.Security.Services {
 
 
     private void CloseActiveUserSessions(IEmpiriaUser user) {
+      if (!ConfigurationData.Get("OneActiveSessionPerUser", false)) {
+        return;
+      }
       SessionsDataService.CloseAllSessions(user);
       EmpiriaPrincipal.RemoveFromCache(user);
     }
