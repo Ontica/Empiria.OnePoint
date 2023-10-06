@@ -10,6 +10,8 @@
 using System;
 
 using Empiria.Contacts;
+using Empiria.OnePoint.Security.Data;
+
 using Empiria.Services;
 
 namespace Empiria.OnePoint.Security.Subjects.UseCases {
@@ -39,6 +41,10 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       var subjectSecurity = new SubjectSecurityItemsEditor(subject);
 
       subjectSecurity.AssignContext(context);
+
+      var subjectData = GetSubjectData(subjectUID);
+
+      EmpiriaLog.PermissionsLog(subjectData.Contact, "Alta de aplicación", context.Name);
     }
 
 
@@ -50,6 +56,10 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       SubjectSecurityItemsEditor subject = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
 
       subject.AssignFeature(feature);
+
+      var subjectData = GetSubjectData(subjectUID);
+
+      EmpiriaLog.PermissionsLog(subjectData.Contact, "Alta de permiso", feature.Name);
     }
 
 
@@ -61,6 +71,10 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
 
       subjectSecurity.AssignRole(role);
+
+      var subjectData = GetSubjectData(subjectUID);
+
+      EmpiriaLog.PermissionsLog(subjectData.Contact, "Alta de rol", role.Name);
     }
 
 
@@ -113,6 +127,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       }
 
       subjectSecurity.UnassignContext(context);
+
+      var subjectData = GetSubjectData(subjectUID);
+
+      EmpiriaLog.PermissionsLog(subjectData.Contact, "Baja de aplicación", context.Name);
+
     }
 
 
@@ -123,7 +142,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
 
+      var subject = GetSubjectData(subjectUID);
+
       subjectSecurity.UnassignFeature(feature);
+
+      EmpiriaLog.PermissionsLog(subject.Contact, "Baja de permiso", feature.Name);
     }
 
 
@@ -134,7 +157,11 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       SubjectSecurityItemsEditor subjectSecurity = GetSubjectSecurityItemsEditor(subjectUID, contextUID);
 
+      var subject = GetSubjectData(subjectUID);
+
       subjectSecurity.UnassignRole(role);
+
+      EmpiriaLog.PermissionsLog(subject.Contact, "Baja de rol", role.Name);
     }
 
     #endregion Use cases
@@ -154,6 +181,13 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       return Contact.Parse(subjectUID);
     }
 
+    private SubjectData GetSubjectData(string subjectUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+
+      var contact = Contact.Parse(subjectUID);
+
+      return SubjectsDataService.GetSubject(contact);
+    }
 
     private SubjectSecurityItemsEditor GetSubjectSecurityItemsEditor(string subjectUID,
                                                                      string contextUID) {

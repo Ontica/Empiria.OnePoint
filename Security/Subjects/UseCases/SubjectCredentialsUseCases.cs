@@ -48,14 +48,16 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword));
 
+      EmpiriaLog.UserManagementLog(subject.Contact, "Reseteo de contraseña");
+
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail(contact, subject.UserID, newPassword);
 
       } else {
 
-        throw new ServiceException("Servidor de correo electrónico no configurado",
-            $"El password asignado al usuario no pudo enviarse " +
-            $"por correo electrónico. Sin embargo este es el password: {newPassword}");
+        throw new ServiceException("El servidor de correo no está configurado.",
+            $"La contraseña asignada al usuario no pudo enviarse por correo electrónico." +
+            $"Sin embargo, esta es la contraseña que le fue asignada: {newPassword}");
       }
     }
 
@@ -80,14 +82,16 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.UpdateSubjectCredentials(newPassword);
 
+      EmpiriaLog.UserManagementLog(subject.Contact, "Modificación de contraseña");
+
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail();
 
       } else {
 
-        throw new ServiceException("Servidor de correo electrónico no configurado",
-            $"El password asignado al usuario no pudo enviarse " +
-            $"por correo electrónico. Sin embargo este es el password: {newPassword}");
+        throw new ServiceException("El servidor de correo no está configurado.",
+           $"La contraseña asignada al usuario no pudo enviarse por correo electrónico." +
+           $"Sin embargo, esta es la contraseña que le fue asignada: {newPassword}");
       }
     }
 
@@ -148,7 +152,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
     }
 
 
-    public void FormerImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
+    private void FormerImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
 
       if (credentials.AppKey != SecurityParameters.ChangePasswordKey) {
         throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, credentials.AppKey);

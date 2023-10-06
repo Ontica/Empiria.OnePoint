@@ -62,6 +62,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       SubjectsDataService.WriteAsParticipant(subject);
 
+      EmpiriaLog.UserManagementLog(subject.Contact, "Alta de usuario");
+
       return subject;
     }
 
@@ -78,6 +80,10 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       var editor = new SubjectSecurityItemsEditor(contact);
 
       editor.RemoveSubjectCredentials();
+
+      var subject = SubjectsDataService.GetSubject(contact);
+
+      EmpiriaLog.UserManagementLog(subject.Contact, "Baja de usuario");
     }
 
 
@@ -110,6 +116,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       var subject = SubjectsDataService.GetSubject(person);
 
       SubjectsDataService.WriteAsParticipant(subject);
+
+      EmpiriaLog.UserManagementLog(subject.Contact, "Modificación de usuario");
 
       return subject;
     }
