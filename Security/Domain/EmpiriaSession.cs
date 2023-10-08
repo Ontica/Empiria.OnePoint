@@ -53,7 +53,10 @@ namespace Empiria.OnePoint.Security {
       if (session.IsStillActive) {
         return session;
       } else {
-        throw new SecurityException(SecurityException.Msg.ExpiredSessionToken, sessionToken);
+        var exception = new SecurityException(SecurityException.Msg.ExpiredSessionToken);
+        EmpiriaLog.Operation(session, "Authentication",
+                            "Esta sesión de trabajo ya expiró.", exception);
+        throw exception;
       }
     }
 

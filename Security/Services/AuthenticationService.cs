@@ -35,11 +35,6 @@ namespace Empiria.OnePoint.Security.Services {
 
       IEmpiriaSession session = EmpiriaSession.ParseActive(sessionToken);
 
-      if (!session.IsStillActive) {
-        throw new SecurityException(SecurityException.Msg.ExpiredSessionToken,
-                                    session.Token);
-      }
-
       if (SecurityParameters.EnsureSimilarUserHostAddress &&
           !session.UserHostAddress.Equals(userHostAddress)) {
         throw new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
