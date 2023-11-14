@@ -58,6 +58,12 @@ namespace Empiria.OnePoint.Security {
         objectRules.AddRange(feature.ObjectsGrants);
       }
 
+      var roles = BuildRoles();
+
+      foreach (var role in roles) {
+        objectRules.AddRange(role.ObjectsGrants);
+      }
+
       return objectRules.Distinct()
                         .ToFixedList();
     }

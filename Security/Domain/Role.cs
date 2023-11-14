@@ -99,6 +99,20 @@ namespace Empiria.OnePoint.Security {
       }
     }
 
+    ObjectAccessRule[] _objectsGrants;
+
+    public ObjectAccessRule[] ObjectsGrants {
+      get {
+        if (_objectsGrants == null) {
+          _objectsGrants = ExtensionData.GetList<ObjectAccessRule>("objectsGrants", false)
+                                        .ToArray();
+
+        }
+
+        return _objectsGrants;
+      }
+    }
+
   }  // class Role
 
 }  // namespace Empiria.OnePoint.Security
