@@ -182,7 +182,33 @@ namespace Empiria.OnePoint.Security {
         return true;
       }
 
+      rules = ObjectAccessRules.FindAll(x => x.TypeName == entity.GetType().BaseType.Name &&
+                                             x.ObjectsUIDs.Contains(entity.UID));
+      if (rules.Count != 0) {
+        return true;
+      }
+
+      rules = ObjectAccessRules.FindAll(x => x.TypeName == entity.GetType().BaseType.BaseType.Name &&
+                                             x.ObjectsUIDs.Contains(entity.UID));
+      if (rules.Count != 0) {
+        return true;
+      }
+
       rules = ObjectAccessRules.FindAll(x => x.TypeName == entity.GetType().Name &&
+                                            !x.ObjectsUIDs.Contains(entity.UID));
+
+      if (rules.Count != 0) {
+        return false;
+      }
+
+      rules = ObjectAccessRules.FindAll(x => x.TypeName == entity.GetType().BaseType.Name &&
+                                            !x.ObjectsUIDs.Contains(entity.UID));
+
+      if (rules.Count != 0) {
+        return false;
+      }
+
+      rules = ObjectAccessRules.FindAll(x => x.TypeName == entity.GetType().BaseType.BaseType.Name &&
                                             !x.ObjectsUIDs.Contains(entity.UID));
 
       if (rules.Count != 0) {
