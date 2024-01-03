@@ -79,4 +79,4 @@ important in the case of public utility or government systems.
 
 ## Copyright
 
-Copyright © 2017-2023. La Vía Óntica SC, Ontica LLC and colaborators.
+Copyright © 2017-2024. La Vía Óntica SC, Ontica LLC and colaborators.
