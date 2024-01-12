@@ -63,7 +63,4 @@
     <ProjectReference Include="..\..\extensions\Services\Empiria.Services.csproj" />
     <ProjectReference Include="..\..\extensions\Messaging\Empiria.Messaging.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\extensions\Office\Empiria.Office.csproj" />
-  </ItemGroup>
 </Project>
