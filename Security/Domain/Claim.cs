@@ -84,6 +84,12 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    internal T GetAttribute<T>(string attributeName, T defaultValue) {
+      Assertion.Require(attributeName, nameof(attributeName));
+
+      return base.ExtensionData.Get<T>(attributeName, defaultValue);
+    }
+
     #endregion Properties
 
   }  // class Claim

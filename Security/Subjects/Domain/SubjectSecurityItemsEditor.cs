@@ -133,12 +133,15 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
-    internal void UpdateSubjectCredentials(string userPassword) {
+    internal void UpdateSubjectCredentials(string userPassword, bool mustChangePassword) {
+
       var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
                                            SecurityContext.Empty, _subject,
                                            SecurityItem.Empty);
 
       data.ExtData.Set("password", userPassword);
+      data.ExtData.Set("passwordUpdatedDate", DateTime.Now);
+      data.ExtData.Set("mustChangePassword", mustChangePassword);
 
       SecurityItemsDataWriter.UpdateSecurityItem(data);
     }

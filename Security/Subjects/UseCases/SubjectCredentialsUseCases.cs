@@ -46,7 +46,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword));
+      editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword), false);
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Reseteo de contraseña");
 
@@ -71,7 +71,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       SubjectData subject = SubjectsDataService.GetSubject(contact);
 
-      Assertion.Require(fields.UserID.Equals(subject.UserID),
+      Assertion.Require(fields.UserID == subject.UserID,
                         "Unrecognized UserID value");
 
       // ToDo: ensure valid current password
@@ -80,18 +80,12 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      editor.UpdateSubjectCredentials(newPassword);
+      editor.UpdateSubjectCredentials(newPassword, true);
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Modificación de contraseña");
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail();
-
-      } else {
-
-        throw new ServiceException("El servidor de correo no está configurado.",
-           $"La contraseña asignada al usuario no pudo enviarse por correo electrónico." +
-           $"Sin embargo, esta es la contraseña que le fue asignada: {newPassword}");
       }
     }
 

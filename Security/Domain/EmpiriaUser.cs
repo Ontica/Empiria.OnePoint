@@ -33,7 +33,9 @@ namespace Empiria.OnePoint.Security {
         Contact = Contact.Parse(userData.SubjectId),
         UserName = userData.Key,
         Status = userData.Status,
-        IsAuthenticated = false
+        IsAuthenticated = false,
+        MustChangePassword = userData.GetAttribute("mustChangePassword", false),
+        PasswordUpdatedDate = userData.GetAttribute("passwordUpdatedDate", DateTime.Now.AddDays(-31)),
       };
     }
 
@@ -69,7 +71,19 @@ namespace Empiria.OnePoint.Security {
       private set;
     }
 
+    public bool MustChangePassword {
+      get;
+      private set;
+    }
+
+
     public bool PasswordExpired {
+      get {
+        return PasswordUpdatedDate.AddDays(60) < DateTime.Now;
+      }
+    }
+
+    public DateTime PasswordUpdatedDate {
       get;
       private set;
     }
@@ -102,6 +116,7 @@ namespace Empiria.OnePoint.Security {
       get; set;
     }
 
+
     #endregion Public properties
 
     #region Private methods
@@ -114,6 +129,10 @@ namespace Empiria.OnePoint.Security {
 
       if (this.PasswordExpired) {
         throw new SecurityException(SecurityException.Msg.UserPasswordExpired, this.UserName);
+      }
+
+      if (this.MustChangePassword) {
+        throw new SecurityException(SecurityException.Msg.MustChangePassword, this.UserName);
       }
     }
 
