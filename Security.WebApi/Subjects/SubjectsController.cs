@@ -51,6 +51,19 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     #region Command apis
 
+
+    [HttpPut, HttpPatch]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/activate")]
+    public SingleObjectModel ActivateSubject([FromUri] string subjectUID) {
+
+      using (var usecases = SubjectUseCases.UseCaseInteractor()) {
+        SubjectDto subject = usecases.ActivateSubject(subjectUID);
+
+        return new SingleObjectModel(base.Request, subject);
+      }
+    }
+
+
     [HttpPost]
     [Route("v4/onepoint/security/management/subjects")]
     public SingleObjectModel CreateSubject([FromBody] SubjectFields fields) {
@@ -89,6 +102,17 @@ namespace Empiria.OnePoint.Security.WebApi {
       }
     }
 
+
+    [HttpPut, HttpPatch]
+    [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/suspend")]
+    public SingleObjectModel SuspendSubject([FromUri] string subjectUID) {
+
+      using (var usecases = SubjectUseCases.UseCaseInteractor()) {
+        SubjectDto subject = usecases.SuspendSubject(subjectUID);
+
+        return new SingleObjectModel(base.Request, subject);
+      }
+    }
 
 
     [HttpPost]

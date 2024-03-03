@@ -36,6 +36,27 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
+    public SubjectDto ActivateSubject(string subjectUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+
+      var contact = Contact.Parse(subjectUID);
+
+      contact.ChangeStatus(EntityStatus.Active);
+
+      contact.Save();
+
+      var editor = new SubjectSecurityItemsEditor(contact);
+
+      editor.ActivateSubjectCredentials();
+
+      var subject = SubjectsDataService.GetSubject(contact);
+
+      EmpiriaLog.UserManagementLog(subject.Contact, "Activación de la cuenta de usuario");
+
+      return subject;
+    }
+
+
     public SubjectDto CreateSubject(SubjectFields fields) {
       Assertion.Require(fields, nameof(fields));
 
@@ -96,6 +117,27 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       return users.Select(x => (SubjectDto) x)
                   .ToFixedList();
+    }
+
+
+    public SubjectDto SuspendSubject(string subjectUID) {
+      Assertion.Require(subjectUID, nameof(subjectUID));
+
+      var contact = Contact.Parse(subjectUID);
+
+      contact.ChangeStatus(EntityStatus.Suspended);
+
+      contact.Save();
+
+      var editor = new SubjectSecurityItemsEditor(contact);
+
+      editor.SuspendSubjectCredentials();
+
+      var subject = SubjectsDataService.GetSubject(contact);
+
+      EmpiriaLog.UserManagementLog(subject.Contact, "Suspensión de la cuenta de usuario");
+
+      return subject;
     }
 
 

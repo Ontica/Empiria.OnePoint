@@ -9,6 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.StateEnums;
+
 using Empiria.OnePoint.Security.Data;
 using Empiria.OnePoint.Security.Subjects.Adapters;
 
@@ -40,6 +42,20 @@ namespace Empiria.OnePoint.Security.Subjects {
 
 
     #endregion Constructors and parsers
+
+    internal void ActivateSubjectCredentials() {
+      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
+                                           SecurityContext.Empty, _subject,
+                                           SecurityItem.Empty);
+
+      Assertion.Require(data.Status == EntityStatus.Suspended,
+                        $"User account can't be activated. Its current status is {data.Status}.");
+
+      data.Status = EntityStatus.Active;
+
+      SecurityItemsDataWriter.UpdateSecurityItem(data);
+    }
+
 
     internal void AssignContext(SecurityContext context) {
       Assertion.Require(context, nameof(context));
@@ -99,6 +115,20 @@ namespace Empiria.OnePoint.Security.Subjects {
       data.ExtData.Set("password", string.Empty);
 
       SecurityItemsDataWriter.RemoveSecurityItem(data);
+    }
+
+
+    internal void SuspendSubjectCredentials() {
+      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
+                                           SecurityContext.Empty, _subject,
+                                           SecurityItem.Empty);
+
+      Assertion.Require(data.Status == EntityStatus.Active,
+                        $"User account can't be suspended. Its current status is {data.Status}.");
+
+      data.Status = EntityStatus.Suspended;
+
+      SecurityItemsDataWriter.UpdateSecurityItem(data);
     }
 
 
