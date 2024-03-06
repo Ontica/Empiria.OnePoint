@@ -1,0 +1,28 @@
+﻿{
+  "appName": "Empiria OnePoint Security Tests suite",
+  "description": "Tests suite for OnePoint security services module.",
+  "version": "4.0",
+  "date": "2024-03-06",
+  "settings": [
+    {
+      "type": "",
+      "key": "ApplicationKey",
+      "value": "{{APPLICATION-KEY}}"
+    },
+    {
+      "type": "",
+      "key": "GlobalConfigurationFile",
+      "value": "{{GLOBAL-CONFIGURATION-FILE}}"
+    },
+    {
+      "type": "Tests",
+      "key": "SessionToken",
+      "value": "{{TESTING-SESSION-TOKEN}}"
+    },
+    {
+      "type": "Data",
+      "key": "IsObjectIdGeneratorServer",
+      "value": false
+    }
+  ]
+}
