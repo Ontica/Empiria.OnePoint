@@ -84,10 +84,10 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
-    static internal SecurityItemDataDto ParseSecurityItemDataDto(SecurityItemType itemType,
-                                                                 SecurityContext context,
-                                                                 IIdentifiable subject,
-                                                                 IIdentifiable target) {
+    static internal SecurityItemData ParseSecurityItemData(SecurityItemType itemType,
+                                                           SecurityContext context,
+                                                           IIdentifiable subject,
+                                                           IIdentifiable target) {
       string sql = $"SELECT * FROM SecurityItems " +
                    $"WHERE SecurityItemTypeId = {itemType.Id} AND " +
                    $"SubjectId = {subject.Id} AND " +
@@ -97,7 +97,7 @@ namespace Empiria.OnePoint.Security.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetPlainObject<SecurityItemDataDto>(op);
+      return DataReader.GetPlainObject<SecurityItemData>(op);
     }
 
 

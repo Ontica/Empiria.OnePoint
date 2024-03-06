@@ -44,9 +44,9 @@ namespace Empiria.OnePoint.Security.Subjects {
     #endregion Constructors and parsers
 
     internal void ActivateSubjectCredentials() {
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
-                                           SecurityContext.Empty, _subject,
-                                           SecurityItem.Empty);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
+                                        SecurityContext.Empty, _subject,
+                                        SecurityItem.Empty);
 
       Assertion.Require(data.Status == EntityStatus.Suspended,
                         $"User account can't be activated. Its current status is {data.Status}.");
@@ -60,8 +60,8 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void AssignContext(SecurityContext context) {
       Assertion.Require(context, nameof(context));
 
-      var data = new SecurityItemDataDto(SecurityItemType.SubjectContext,
-                                         SecurityContext.Empty, _subject, context);
+      var data = new SecurityItemData(SecurityItemType.SubjectContext,
+                                      SecurityContext.Empty, _subject, context);
 
       SecurityItemsDataWriter.CreateSecurityItem(data);
     }
@@ -70,8 +70,8 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void AssignFeature(Feature feature) {
       Assertion.Require(feature, nameof(feature));
 
-      var data = new SecurityItemDataDto(SecurityItemType.SubjectFeature,
-                                         _context, _subject, feature);
+      var data = new SecurityItemData(SecurityItemType.SubjectFeature,
+                                      _context, _subject, feature);
 
       SecurityItemsDataWriter.CreateSecurityItem(data);
     }
@@ -80,8 +80,8 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void AssignRole(Role role) {
       Assertion.Require(role, nameof(role));
 
-      var data = new SecurityItemDataDto(SecurityItemType.SubjectRole,
-                                         _context, _subject, role);
+      var data = new SecurityItemData(SecurityItemType.SubjectRole,
+                                      _context, _subject, role);
 
       SecurityItemsDataWriter.CreateSecurityItem(data);
     }
@@ -90,9 +90,9 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void CreateSubjectCredentials(SubjectFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      var data = new SecurityItemDataDto(SecurityItemType.SubjectCredentials,
-                                         SecurityContext.Empty, _subject,
-                                         SecurityItem.Empty);
+      var data = new SecurityItemData(SecurityItemType.SubjectCredentials,
+                                      SecurityContext.Empty, _subject,
+                                      SecurityItem.Empty);
 
       data.Key = fields.UserID;
 
@@ -108,9 +108,9 @@ namespace Empiria.OnePoint.Security.Subjects {
 
 
     internal void RemoveSubjectCredentials() {
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
-                                           SecurityContext.Empty, _subject,
-                                           SecurityItem.Empty);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
+                                        SecurityContext.Empty, _subject,
+                                        SecurityItem.Empty);
 
       data.ExtData.Set("password", string.Empty);
 
@@ -119,9 +119,9 @@ namespace Empiria.OnePoint.Security.Subjects {
 
 
     internal void SuspendSubjectCredentials() {
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
-                                           SecurityContext.Empty, _subject,
-                                           SecurityItem.Empty);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
+                                        SecurityContext.Empty, _subject,
+                                        SecurityItem.Empty);
 
       Assertion.Require(data.Status == EntityStatus.Active,
                         $"User account can't be suspended. Its current status is {data.Status}.");
@@ -135,9 +135,9 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void UnassignContext(SecurityContext context) {
       Assertion.Require(context, nameof(context));
 
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectContext,
-                                           SecurityContext.Empty,
-                                           _subject, target: context);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectContext,
+                                        SecurityContext.Empty,
+                                        _subject, target: context);
 
       SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
@@ -146,8 +146,8 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void UnassignFeature(Feature feature) {
       Assertion.Require(feature, nameof(feature));
 
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectFeature,
-                                           _context, _subject, feature);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectFeature,
+                                        _context, _subject, feature);
 
       SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
@@ -156,8 +156,8 @@ namespace Empiria.OnePoint.Security.Subjects {
     internal void UnassignRole(Role role) {
       Assertion.Require(role, nameof(role));
 
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectRole,
-                                           _context, _subject, role);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectRole,
+                                        _context, _subject, role);
 
       SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
@@ -165,9 +165,9 @@ namespace Empiria.OnePoint.Security.Subjects {
 
     internal void UpdateSubjectCredentials(string userPassword, bool mustChangePassword) {
 
-      var data = SecurityItemDataDto.Parse(SecurityItemType.SubjectCredentials,
-                                           SecurityContext.Empty, _subject,
-                                           SecurityItem.Empty);
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
+                                        SecurityContext.Empty, _subject,
+                                        SecurityItem.Empty);
 
       data.ExtData.Set("password", userPassword);
       data.ExtData.Set("passwordUpdatedDate", DateTime.Now);

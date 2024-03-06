@@ -1,29 +1,32 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Security Items                               Component : Integration layer                     *
-*  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Data service adapter                  *
-*  Type     : SecurityItemDataDto                          License   : Please read LICENSE.txt file          *
+*  Module   : Security Items                               Component : Domain layer                          *
+*  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Information Holder                    *
+*  Type     : SecurityItemData                             License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Data adapter used for write operations over SecurityItem instances.                            *
+*  Summary  : Holds data about a security item.                                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+
 using Empiria.Json;
 using Empiria.StateEnums;
 
-namespace Empiria.OnePoint.Security.Data {
+using Empiria.OnePoint.Security.Data;
 
-  /// <summary>Data adapter used for write operations over SecurityItem instances.</summary>
-  internal class SecurityItemDataDto {
+namespace Empiria.OnePoint.Security {
 
-    private SecurityItemDataDto() {
+  /// <summary>Holds data about a security item.</summary>
+  internal class SecurityItemData {
+
+    private SecurityItemData() {
       // Required by Empiria Framework.
     }
 
-    internal SecurityItemDataDto(SecurityItemType itemType,
-                                 SecurityContext context,
-                                 IIdentifiable subject,
-                                 IIdentifiable target) {
+    internal SecurityItemData(SecurityItemType itemType,
+                              SecurityContext context,
+                              IIdentifiable subject,
+                              IIdentifiable target) {
       Assertion.Require(itemType, nameof(itemType));
       Assertion.Require(context, nameof(context));
       Assertion.Require(subject, nameof(subject));
@@ -35,16 +38,16 @@ namespace Empiria.OnePoint.Security.Data {
       this.TargetId = target.Id;
     }
 
-    static internal SecurityItemDataDto Parse(SecurityItemType itemType,
-                                              SecurityContext context,
-                                              IIdentifiable subject,
-                                              IIdentifiable target) {
+    static internal SecurityItemData Parse(SecurityItemType itemType,
+                                           SecurityContext context,
+                                           IIdentifiable subject,
+                                           IIdentifiable target) {
       Assertion.Require(itemType, nameof(itemType));
       Assertion.Require(context, nameof(context));
       Assertion.Require(subject, nameof(subject));
       Assertion.Require(target, nameof(target));
 
-      return SecurityItemsDataReader.ParseSecurityItemDataDto(itemType, context, subject, target);
+      return SecurityItemsDataReader.ParseSecurityItemData(itemType, context, subject, target);
     }
 
 
@@ -142,6 +145,6 @@ namespace Empiria.OnePoint.Security.Data {
       get; private set;
     } = string.Empty;
 
-  }  // class SecurityItemDataDto
+  }  // class SecurityItemData
 
-}  // namespace Empiria.OnePoint.Security.Data
+}  // namespace Empiria.OnePoint.Security
