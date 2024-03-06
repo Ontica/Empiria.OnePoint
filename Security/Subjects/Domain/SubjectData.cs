@@ -11,13 +11,12 @@ using System;
 
 using Empiria.StateEnums;
 
-using Empiria.OnePoint.Security.Subjects.Adapters;
 using Empiria.Contacts;
 
 namespace Empiria.OnePoint.Security.Subjects {
 
   /// <summary>Holds subject's data.</summary>
-  internal class SubjectData : SubjectDto {
+  internal class SubjectData {
 
     [DataField("ContactId")]
     internal Contact Contact {
@@ -59,16 +58,9 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
-    public string Workarea {
+    public Organization Workarea {
       get {
-        return Contact.Organization.FullName;
-      }
-    }
-
-
-    public string WorkareaUID {
-      get {
-        return Contact.Organization.UID;
+        return Contact.Organization;
       }
     }
 
