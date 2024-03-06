@@ -1,68 +1,59 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Security Subjects Management                 Component : Interface adapters                    *
-*  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Data Transfer Object                  *
-*  Types    : SubjectDto, SubjectFields                    License   : Please read LICENSE.txt file          *
+*  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Output Data Transfer Object           *
+*  Types    : SubjectDto                                   License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Data transfer objects for subjects information.                                                *
+*  Summary  : Output data transfer object for subject information.                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
-using Empiria.Contacts;
-
 namespace Empiria.OnePoint.Security.Subjects.Adapters {
 
+  /// <summary>Output data transfer object for subject information.</summary>
   public class SubjectDto {
 
-  }  // class SubjectDto
-
-
-
-  /// <summary>Fields for create or update subjects.</summary>
-  public class SubjectFields {
+    public string UID {
+      get; internal set;
+    }
 
     public string FullName {
-      get; set;
-    } = string.Empty;
-
-
-    public string UserID {
-      get; set;
-    } = string.Empty;
-
-
-    public string EMail {
-      get; set;
-    } = string.Empty;
-
-
-    public string WorkareaUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string JobPosition {
-      get; set;
-    } = string.Empty;
-
+      get; internal set;
+    }
 
     public string EmployeeNo {
-      get; set;
-    } = string.Empty;
-
-
-    internal void EnsureValid() {
-      Assertion.Require(this.FullName, "fields.FullName");
-      Assertion.Require(this.UserID, "fields.UserID");
-      Assertion.Require(this.EMail, "fields.EMail");
+      get; internal set;
     }
 
-
-    internal Organization GetWorkarea() {
-      return Organization.Parse(this.WorkareaUID);
+    public string JobPosition {
+      get; internal set;
     }
 
-  }  // class SubjectFields
+    public NamedEntityDto Workarea {
+      get; internal set;
+    }
+
+    public string UserID {
+      get; internal set;
+    }
+
+    public string EMail {
+      get; internal set;
+    }
+
+    public DateTime CredentialsLastUpdate {
+      get; internal set;
+    }
+
+    public DateTime LastAccess {
+      get; internal set;
+    }
+
+    public NamedEntityDto Status {
+      get; internal set;
+    }
+
+  }  // class SubjectDto
 
 }  // namespace Empiria.OnePoint.Security.Subjects.Adapters
