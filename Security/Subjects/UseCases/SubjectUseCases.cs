@@ -53,7 +53,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Activación de la cuenta de usuario");
 
-      return subject;
+      return SubjectMapper.Map(subject);
     }
 
 
@@ -85,7 +85,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Alta de usuario");
 
-      return subject;
+      return SubjectMapper.Map(subject);
     }
 
 
@@ -115,8 +115,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       FixedList<SubjectData> users = SubjectsDataService.SearchSubjects(filter);
 
-      return users.Select(x => (SubjectDto) x)
-                  .ToFixedList();
+      return SubjectMapper.Map(users);
     }
 
 
@@ -137,7 +136,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Suspensión de la cuenta de usuario");
 
-      return subject;
+      return SubjectMapper.Map(subject);
     }
 
 
@@ -161,7 +160,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Modificación de usuario");
 
-      return subject;
+      return SubjectMapper.Map(subject);
     }
 
 
