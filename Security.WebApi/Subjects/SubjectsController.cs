@@ -12,6 +12,9 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
+using Empiria.Security;
+using Empiria.Services.Authentication;
+
 using Empiria.OnePoint.Security.Subjects.Adapters;
 using Empiria.OnePoint.Security.Subjects.UseCases;
 
@@ -21,6 +24,21 @@ namespace Empiria.OnePoint.Security.WebApi {
   public class SubjectsController : WebApiController {
 
     #region Query apis
+
+
+    [HttpPost, AllowAnonymous]
+    [Route("v4/onepoint/security/management/new-credentials-token")]
+    public SingleObjectModel GenerateNewCredentialsToken([FromBody] UserCredentialsDto credentials) {
+
+      PrepareAuthenticationFields(credentials);
+
+      using (var usecases = AuthenticationUseCases.UseCaseInteractor()) {
+        string token = usecases.GenerateNewCredentialsToken(credentials);
+
+        return new SingleObjectModel(base.Request, token);
+      }
+    }
+
 
     [HttpPost]
     [Route("v4/onepoint/security/management/subjects/search")]
@@ -52,7 +70,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     #region Command apis
 
 
-    [HttpPut, HttpPatch]
+    [HttpPost]
     [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/activate")]
     public SingleObjectModel ActivateSubject([FromUri] string subjectUID) {
 
@@ -103,7 +121,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     }
 
 
-    [HttpPut, HttpPatch]
+    [HttpPost]
     [Route("v4/onepoint/security/management/subjects/{subjectUID:guid}/suspend")]
     public SingleObjectModel SuspendSubject([FromUri] string subjectUID) {
 
@@ -115,7 +133,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     }
 
 
-    [HttpPost]
+    [HttpPost, AllowAnonymous]
     [Route("v4/onepoint/security/management/update-my-credentials")]
     public NoDataModel UpdateCredentials([FromBody] UpdateCredentialsFields fields) {
 
@@ -144,6 +162,19 @@ namespace Empiria.OnePoint.Security.WebApi {
     }
 
     #endregion Command apis
+
+
+    #region Helpers
+
+    private void PrepareAuthenticationFields(UserCredentialsDto credentials) {
+      base.RequireHeader("User-Agent");
+      base.RequireBody(credentials);
+
+      credentials.AppKey = base.GetRequestHeader<string>("ApplicationKey");
+      credentials.UserHostAddress = base.GetClientIpAddress();
+    }
+
+    #endregion Helpers
 
   }  // class SubjectsController
 
