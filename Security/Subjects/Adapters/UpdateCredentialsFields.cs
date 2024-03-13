@@ -9,12 +9,24 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Security;
+
 namespace Empiria.OnePoint.Security.Subjects.Adapters {
 
   /// <summary>Fields used for update subject's credentials.</summary>
-  public class UpdateCredentialsFields {
+  public class UpdateCredentialsFields : ISecurityTokenData {
+
+    public string AppKey {
+      get; set;
+    } = string.Empty;
+
 
     public string UserID {
+      get; set;
+    } = string.Empty;
+
+
+    public string UserHostAddress {
       get; set;
     } = string.Empty;
 
@@ -30,7 +42,9 @@ namespace Empiria.OnePoint.Security.Subjects.Adapters {
 
 
     internal void EnsureValid() {
+      Assertion.Require(this.AppKey, "fields.AppKey");
       Assertion.Require(this.UserID, "fields.UserID");
+      Assertion.Require(this.UserHostAddress, "fields.UserHostAddress");
       Assertion.Require(this.CurrentPassword, "fields.CurrentPassword");
       Assertion.Require(this.NewPassword, "fields.NewPassword");
     }

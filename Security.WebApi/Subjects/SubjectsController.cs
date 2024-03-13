@@ -16,6 +16,7 @@ using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects.Adapters;
 using Empiria.OnePoint.Security.Subjects.UseCases;
+using System.Net;
 
 namespace Empiria.OnePoint.Security.WebApi {
 
@@ -135,7 +136,7 @@ namespace Empiria.OnePoint.Security.WebApi {
     [Route("v4/onepoint/security/management/update-my-credentials")]
     public NoDataModel UpdateCredentials([FromBody] UpdateCredentialsFields fields) {
 
-      base.RequireBody(fields);
+      PrepareUpdateCredentialsFields(fields);
 
       using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
         usecases.UpdateCredentials(fields);
@@ -171,6 +172,14 @@ namespace Empiria.OnePoint.Security.WebApi {
       credentials.AppKey = base.GetRequestHeader<string>("ApplicationKey");
       credentials.UserHostAddress = base.GetClientIpAddress();
     }
+
+    private void PrepareUpdateCredentialsFields(UpdateCredentialsFields fields) {
+      base.RequireBody(fields);
+
+      fields.AppKey = base.GetRequestHeader<string>("ApplicationKey");
+      fields.UserHostAddress = base.GetClientIpAddress();
+    }
+
 
     #endregion Helpers
 
