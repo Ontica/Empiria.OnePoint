@@ -36,7 +36,7 @@ namespace Empiria.OnePoint.Security.Services {
       IEmpiriaSession session = EmpiriaSession.ParseActive(sessionToken);
 
       if (SecurityParameters.EnsureSimilarUserHostAddress &&
-          !session.UserHostAddress.Equals(userHostAddress)) {
+          session.UserHostAddress != userHostAddress) {
         throw new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
                                     userHostAddress);
       }
@@ -61,7 +61,9 @@ namespace Empiria.OnePoint.Security.Services {
     public IEmpiriaPrincipal Authenticate(IUserCredentials credentials) {
       Assertion.Require(credentials, nameof(credentials));
 
-      Claim userData = GetSubjectAuthenticationClaim(credentials);
+      Claim userData = GetSubjectAuthenticationClaim(credentials.UserID,
+                                                     credentials.Password,
+                                                     credentials.Entropy);
 
       IEmpiriaUser user = EmpiriaUser.Authenticate(userData);
 
@@ -89,6 +91,31 @@ namespace Empiria.OnePoint.Security.Services {
       }
 
       return application;
+    }
+
+
+    internal Claim GetSubjectAuthenticationClaim(string userID, string password, string entropy) {
+      Assertion.Require(userID, nameof(userID));
+      Assertion.Require(password, nameof(password));
+      Assertion.Require(entropy, nameof(entropy));
+
+      var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials, userID);
+
+      // User not found
+      if (claim == null) {
+        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      }
+
+      var storedPassword = claim.GetAttribute<string>("password");
+
+      string decryptedPassword = DecryptPassword(userID, storedPassword, entropy);
+
+      //Invalid password
+      if (decryptedPassword != password) {
+        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      }
+
+      return claim;
     }
 
 
@@ -126,37 +153,13 @@ namespace Empiria.OnePoint.Security.Services {
     }
 
 
-    private string DecryptPassword(string storedPassword,
-                                   IUserCredentials credentials) {
+    private string DecryptPassword(string userID, string storedPassword, string entropy) {
 
-      string decrypted = Cryptographer.Decrypt(storedPassword, credentials.UserID);
+      string decrypted = Cryptographer.Decrypt(storedPassword, userID);
 
-      decrypted = Cryptographer.GetSHA256(decrypted + credentials.Entropy);
+      decrypted = Cryptographer.GetSHA256(decrypted + entropy);
 
       return decrypted;
-    }
-
-
-    private Claim GetSubjectAuthenticationClaim(IUserCredentials credentials) {
-
-      var claim = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
-                                        credentials.UserID);
-
-      // No user found
-      if (claim == null) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
-      }
-
-      var storedPassword = claim.GetAttribute<string>("password");
-
-      string decryptedPassword = DecryptPassword(storedPassword, credentials);
-
-      //Invalid password
-      if (decryptedPassword != credentials.Password) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
-      }
-
-      return claim;
     }
 
 
