@@ -13,7 +13,6 @@ using System.Web.Http;
 using Empiria.WebApi;
 
 using Empiria.Security;
-using Empiria.Services.Authentication;
 
 using Empiria.OnePoint.Security.Subjects.Adapters;
 using Empiria.OnePoint.Security.Subjects.UseCases;
@@ -25,14 +24,13 @@ namespace Empiria.OnePoint.Security.WebApi {
 
     #region Query apis
 
-
     [HttpPost, AllowAnonymous]
     [Route("v4/onepoint/security/management/new-credentials-token")]
     public SingleObjectModel GenerateNewCredentialsToken([FromBody] UserCredentialsDto credentials) {
 
       PrepareAuthenticationFields(credentials);
 
-      using (var usecases = AuthenticationUseCases.UseCaseInteractor()) {
+      using (var usecases = SubjectCredentialsUseCases.UseCaseInteractor()) {
         string token = usecases.GenerateNewCredentialsToken(credentials);
 
         return new SingleObjectModel(base.Request, token);

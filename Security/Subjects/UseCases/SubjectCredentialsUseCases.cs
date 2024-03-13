@@ -35,6 +35,13 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #region Use cases
 
+    public string GenerateNewCredentialsToken(UserCredentialsDto credentials) {
+      Assertion.Require(credentials, nameof(credentials));
+
+      return SecurityTokenGenerator.GenerateToken(credentials, SecurityTokenType.UpdateCredentials);
+    }
+
+
     public void ResetCredentials(string contactUID) {
       Assertion.Require(contactUID, nameof(contactUID));
 
