@@ -53,7 +53,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword), false);
+      editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword), true);
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Reseteo de contraseña");
 
@@ -74,22 +74,23 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       fields.EnsureValid();
 
-      var contact = ExecutionServer.CurrentContact;
+      var service = new Services.AuthenticationService();
 
-      SubjectData subject = SubjectsDataService.GetSubject(contact);
+      service.AuthenticateClientApp(fields.AppKey);
 
-      Assertion.Require(fields.UserID == subject.UserID,
-                        "Unrecognized UserID value");
+      var entropy = SecurityTokenGenerator.PopToken(fields, SecurityTokenType.UpdateCredentials);
 
-      // ToDo: ensure valid current password
+      Claim claim = service.GetSubjectAuthenticationClaim(fields.UserID, fields.CurrentPassword, entropy);
 
-      string newPassword = EncryptPassword(subject.UserID, fields.NewPassword);
+      var contact = Contact.Parse(claim.SubjectId);
 
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      editor.UpdateSubjectCredentials(newPassword, true);
+      fields.NewPassword = Cryptographer.Decrypt(fields.NewPassword, entropy, true);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Modificación de contraseña");
+      editor.UpdateSubjectCredentials(EncryptPassword(fields.UserID, fields.NewPassword), false);
+
+      EmpiriaLog.UserManagementLog(contact, "Modificación de contraseña");
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail();
