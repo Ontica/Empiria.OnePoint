@@ -12,6 +12,7 @@ using System;
 using Empiria.StateEnums;
 
 using Empiria.Contacts;
+
 using Empiria.Security;
 using Empiria.Security.Providers;
 
@@ -184,7 +185,7 @@ namespace Empiria.OnePoint.Security.Services {
         editor.SuspendSubjectCredentials();
       }
 
-      EmpiriaLog.UserManagementLog(contact, "La cuenta de usuario fue suspendida por intentos de acceso fallidos");
+      EmpiriaLog.UserManagementLog(contact, "La cuenta de la persona usuaria fue suspendida por intentos de acceso fallidos");
 
       return new SecurityException(SecurityException.Msg.UserAccountHasBeenBlocked);
     }

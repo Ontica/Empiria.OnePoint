@@ -14,6 +14,7 @@ using Empiria.Messaging;
 
 using Empiria.Security;
 using Empiria.Services;
+using Empiria.StateEnums;
 
 using Empiria.OnePoint.Security.Data;
 
@@ -55,7 +56,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.UpdateSubjectCredentials(EncryptPassword(subject.UserID, newPassword), true);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Reseteo de contraseña");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se reseteó la contraseña de acceso al sistema");
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail(contact, subject.UserID, newPassword);
@@ -63,7 +64,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       } else {
 
         throw new ServiceException("El servidor de correo no está configurado.",
-            $"La contraseña asignada al usuario no pudo enviarse por correo electrónico." +
+            $"La contraseña asignada a la persona usuaria no pudo enviarse por correo electrónico." +
             $"Sin embargo, esta es la contraseña que le fue asignada: {newPassword}");
       }
     }
@@ -82,15 +83,26 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       Claim claim = service.GetSubjectAuthenticationClaim(fields.UserID, fields.CurrentPassword, entropy);
 
+      Assertion.Require(ExecutionServer.IsAuthenticated ||
+                        claim.GetAttribute<bool>(ClaimAttributeNames.MustChangePassword, false),
+                        "La contraseña no se puede modificar si no se está dentro de una sesión de trabajo.");
+
       var contact = Contact.Parse(claim.SubjectId);
 
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      fields.NewPassword = Cryptographer.Decrypt(fields.NewPassword, entropy, true);
+      Assertion.Require(editor.GetCredentialsStatus() == EntityStatus.Active,
+                        "La cuenta de acceso al sistema está suspendida. Por motivos de seguridad, " +
+                        "no es posible actualizar la contraseña.");
 
-      editor.UpdateSubjectCredentials(EncryptPassword(fields.UserID, fields.NewPassword), false);
+      string newPassword = EncryptPassword(fields.UserID, Cryptographer.Decrypt(fields.NewPassword, entropy, true));
 
-      EmpiriaLog.UserManagementLog(contact, "Modificación de contraseña");
+      Assertion.Require(claim.GetAttribute<string>(ClaimAttributeNames.Password) != newPassword,
+                        "La nueva contraseña debe ser distinta a la contraseña actual.");
+
+      editor.UpdateSubjectCredentials(newPassword, false);
+
+      EmpiriaLog.UserManagementLog(contact, "La persona usuaria modificó su contraseña de acceso al sistema");
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail();
