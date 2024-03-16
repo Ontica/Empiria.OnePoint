@@ -90,7 +90,7 @@ namespace Empiria.OnePoint.Security.Services {
       }
 
       if (application.Status != EntityStatus.Active) {
-        throw new SecurityException(SecurityException.Msg.NotActiveClientAppKey, clientAppKey);
+        throw new SecurityException(SecurityException.Msg.ClientAppKeyIsSuspended, clientAppKey);
       }
 
       return application;
@@ -107,6 +107,10 @@ namespace Empiria.OnePoint.Security.Services {
       // User not found
       if (claim == null) {
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      }
+
+      if (claim.Status == EntityStatus.Suspended) {
+        throw new SecurityException(SecurityException.Msg.UserAccountIsSuspended, userID);
       }
 
       var storedPassword = claim.GetAttribute<string>(ClaimAttributeNames.Password);

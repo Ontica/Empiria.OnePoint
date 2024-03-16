@@ -128,7 +128,7 @@ namespace Empiria.OnePoint.Security {
     private void EnsureCanAuthenticate() {
 
       if (!this.IsActive) {
-        throw new SecurityException(SecurityException.Msg.NotActiveUser, this.UserName);
+        throw new SecurityException(SecurityException.Msg.UserAccountIsSuspended, this.UserName);
       }
 
       if (this.PasswordExpired) {
