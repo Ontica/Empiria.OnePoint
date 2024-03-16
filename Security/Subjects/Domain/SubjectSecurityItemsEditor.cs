@@ -107,6 +107,15 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
+    internal EntityStatus CredentialsStatus() {
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
+                                        SecurityContext.Empty, _subject,
+                                        SecurityItem.Empty);
+
+      return data.Status;
+    }
+
+
     internal void RemoveSubjectCredentials() {
       var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
                                         SecurityContext.Empty, _subject,

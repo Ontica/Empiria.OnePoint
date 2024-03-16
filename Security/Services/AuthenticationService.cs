@@ -11,10 +11,12 @@ using System;
 
 using Empiria.StateEnums;
 
+using Empiria.Contacts;
 using Empiria.Security;
 using Empiria.Security.Providers;
 
 using Empiria.OnePoint.Security.Data;
+using Empiria.OnePoint.Security.Subjects;
 
 namespace Empiria.OnePoint.Security.Services {
 
@@ -110,12 +112,22 @@ namespace Empiria.OnePoint.Security.Services {
 
       string decryptedPassword = DecryptPassword(userID, storedPassword, entropy);
 
-      //Invalid password
-      if (decryptedPassword != password) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      if (decryptedPassword == password) {
+
+        AuthenticationAttemptsRegister.Remove(userID);
+
+        return claim;
       }
 
-      return claim;
+      //Invalid password
+
+      AuthenticationAttemptsRegister.Add(userID);
+
+      if (AuthenticationAttemptsRegister.MaxAttemptsReached(userID)) {
+        throw SuspendUserAccount(claim);
+      } else {
+        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+      }
     }
 
 
@@ -162,6 +174,20 @@ namespace Empiria.OnePoint.Security.Services {
       return decrypted;
     }
 
+
+    private SecurityException SuspendUserAccount(Claim claim) {
+      var contact = Contact.Parse(claim.SubjectId);
+
+      var editor = new SubjectSecurityItemsEditor(contact);
+
+      if (editor.CredentialsStatus() == EntityStatus.Active) {
+        editor.SuspendSubjectCredentials();
+      }
+
+      EmpiriaLog.UserManagementLog(contact, "La cuenta de usuario fue suspendida por intentos de acceso fallidos");
+
+      return new SecurityException(SecurityException.Msg.UserAccountHasBeenBlocked);
+    }
 
     #endregion Helpers
 
