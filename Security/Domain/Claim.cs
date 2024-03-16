@@ -37,27 +37,12 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal Claim TryParse(SecurityItemType claimType, SecurityContext context,
-                                   int subjectId) {
-
-      return SecurityItemsDataReader.TryGetSubjectItemWithId<Claim>(context, claimType,
-                                                                    subjectId);
-    }
-
-
     static internal Claim TryParseWithKey(SecurityItemType claimType, string securityKey) {
 
       return SecurityItemsDataReader.TryGetSubjectItemWithKey<Claim>(SecurityContext.Empty, claimType,
                                                                      securityKey);
     }
 
-
-    static internal Claim TryParseWithKey(SecurityItemType claimType, SecurityContext context,
-                                          string securityKey) {
-
-      return SecurityItemsDataReader.TryGetSubjectItemWithKey<Claim>(context, claimType,
-                                                                     securityKey);
-    }
 
     #endregion Constructors and parsers
 
