@@ -112,7 +112,7 @@ namespace Empiria.OnePoint.Security.Data {
                    $"WHERE ContextId = {context.Id} AND " +
                    $"SecurityItemTypeId = {itemType.Id} AND " +
                    $"SubjectId = {subjectId} AND " +
-                   $"SecurityItemStatus = 'A'";
+                   $"SecurityItemStatus <> 'X'";
 
       var op = DataOperation.Parse(sql);
 
@@ -131,7 +131,7 @@ namespace Empiria.OnePoint.Security.Data {
                    $"WHERE ContextId = {context.Id} AND " +
                    $"SecurityItemTypeId = {itemType.Id} AND " +
                    $"SecurityItemKey = '{securityItemKey}' AND " +
-                   $"SecurityItemStatus = 'A'";
+                   $"SecurityItemStatus <> 'X'";
 
       var op = DataOperation.Parse(sql);
 
