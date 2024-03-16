@@ -34,8 +34,8 @@ namespace Empiria.OnePoint.Security {
         UserName = userData.Key,
         Status = userData.Status,
         IsAuthenticated = false,
-        MustChangePassword = userData.GetAttribute("mustChangePassword", false),
-        PasswordUpdatedDate = userData.GetAttribute("passwordUpdatedDate", DateTime.Now.AddDays(-31)),
+        MustChangePassword = userData.GetAttribute(ClaimAttributeNames.MustChangePassword, false),
+        PasswordUpdatedDate = userData.GetAttribute(ClaimAttributeNames.PasswordUpdatedDate, DateTime.Now.AddDays(-31)),
       };
     }
 
@@ -71,6 +71,7 @@ namespace Empiria.OnePoint.Security {
       private set;
     }
 
+
     public bool MustChangePassword {
       get;
       private set;
@@ -83,10 +84,12 @@ namespace Empiria.OnePoint.Security {
       }
     }
 
+
     public DateTime PasswordUpdatedDate {
       get;
       private set;
     }
+
 
     public string UserName {
       get;
@@ -106,6 +109,7 @@ namespace Empiria.OnePoint.Security {
         return this.Contact.EMail;
       }
     }
+
 
     public Contact Contact {
       get; private set;

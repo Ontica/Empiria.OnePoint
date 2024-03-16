@@ -40,7 +40,6 @@ namespace Empiria.OnePoint.Security.Subjects {
       _context = context;
     }
 
-
     #endregion Constructors and parsers
 
     internal void ActivateSubjectCredentials() {
@@ -96,8 +95,8 @@ namespace Empiria.OnePoint.Security.Subjects {
 
       data.Key = fields.UserID;
 
-      data.ExtData.Set("contactName", fields.FullName);
-      data.ExtData.Set("password", string.Empty);
+      data.ExtData.Set(ClaimAttributeNames.ContactName, fields.FullName);
+      data.ExtData.Set(ClaimAttributeNames.Password, string.Empty);
 
       data.Keywords = EmpiriaString.BuildKeywords(fields.FullName, fields.EmployeeNo,
                                                   fields.JobPosition, fields.EMail,
@@ -107,7 +106,7 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
-    internal EntityStatus CredentialsStatus() {
+    internal EntityStatus GetCredentialsStatus() {
       var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
                                         SecurityContext.Empty, _subject,
                                         SecurityItem.Empty);
@@ -121,7 +120,7 @@ namespace Empiria.OnePoint.Security.Subjects {
                                         SecurityContext.Empty, _subject,
                                         SecurityItem.Empty);
 
-      data.ExtData.Set("password", string.Empty);
+      data.ExtData.Set(ClaimAttributeNames.Password, string.Empty);
 
       SecurityItemsDataWriter.RemoveSecurityItem(data);
     }
@@ -178,9 +177,9 @@ namespace Empiria.OnePoint.Security.Subjects {
                                         SecurityContext.Empty, _subject,
                                         SecurityItem.Empty);
 
-      data.ExtData.Set("password", userPassword);
-      data.ExtData.Set("passwordUpdatedDate", DateTime.Now);
-      data.ExtData.Set("mustChangePassword", mustChangePassword);
+      data.ExtData.Set(ClaimAttributeNames.Password, userPassword);
+      data.ExtData.Set(ClaimAttributeNames.PasswordUpdatedDate, DateTime.Now);
+      data.ExtData.Set(ClaimAttributeNames.MustChangePassword, mustChangePassword);
 
       SecurityItemsDataWriter.UpdateSecurityItem(data);
     }

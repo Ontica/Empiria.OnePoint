@@ -108,7 +108,7 @@ namespace Empiria.OnePoint.Security.Services {
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
 
-      var storedPassword = claim.GetAttribute<string>("password");
+      var storedPassword = claim.GetAttribute<string>(ClaimAttributeNames.Password);
 
       string decryptedPassword = DecryptPassword(userID, storedPassword, entropy);
 
@@ -180,7 +180,7 @@ namespace Empiria.OnePoint.Security.Services {
 
       var editor = new SubjectSecurityItemsEditor(contact);
 
-      if (editor.CredentialsStatus() == EntityStatus.Active) {
+      if (editor.GetCredentialsStatus() == EntityStatus.Active) {
         editor.SuspendSubjectCredentials();
       }
 
