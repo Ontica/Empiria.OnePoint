@@ -58,6 +58,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Se reseteó la contraseña de acceso al sistema");
 
+      EmpiriaPrincipal.CloseAllSessions(contact);
+
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail(contact, subject.UserID, newPassword);
 

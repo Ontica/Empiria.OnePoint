@@ -14,10 +14,14 @@ using System.Linq;
 
 using System.Security.Principal;
 
+using Empiria.Contacts;
 using Empiria.Collections;
 
 using Empiria.Security;
 using Empiria.Security.Providers;
+
+using Empiria.OnePoint.Security.Data;
+
 
 namespace Empiria.OnePoint.Security {
 
@@ -89,8 +93,10 @@ namespace Empiria.OnePoint.Security {
     }
 
 
-    static internal void RemoveFromCache(IEmpiriaUser user) {
-      principalsCache.Remove((x) => x.Identity.User.Contact.Id == user.Contact.Id);
+    static internal void CloseAllSessions(Contact user) {
+      principalsCache.Remove((x) => x.Identity.User.Contact.Id == user.Id);
+
+      SessionsDataService.CloseAllSessions(user);
     }
 
     #endregion Constructors and parsers

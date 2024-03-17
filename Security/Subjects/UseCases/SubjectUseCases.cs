@@ -132,6 +132,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.SuspendSubjectCredentials();
 
+      EmpiriaPrincipal.CloseAllSessions(contact);
+
       var subject = SubjectsDataService.GetSubject(contact);
 
       EmpiriaLog.UserManagementLog(subject.Contact, "Suspensión de la cuenta de usuario");

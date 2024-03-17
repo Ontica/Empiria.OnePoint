@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.Contacts;
 using Empiria.Data;
 
 using Empiria.Security;
@@ -18,8 +19,8 @@ namespace Empiria.OnePoint.Security.Data {
   /// <summary>Empiria sessions data service.</summary>
   static internal class SessionsDataService {
 
-    static internal void CloseAllSessions(IEmpiriaUser user) {
-      var op = DataOperation.Parse("doCloseAllUserSessions", user.Contact.Id, DateTime.Now);
+    static internal void CloseAllSessions(Contact user) {
+      var op = DataOperation.Parse("doCloseAllUserSessions", user.Id, DateTime.Now);
 
       DataWriter.Execute(op);
     }
