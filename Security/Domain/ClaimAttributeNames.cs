@@ -20,6 +20,8 @@ namespace Empiria.OnePoint.Security {
 
     static internal string Password => "password";
 
+    static internal string PasswordNeverExpires => "passwordNeverExpires";
+
     static internal string PasswordUpdatedDate => "passwordUpdatedDate";
 
   }  // class ClaimAttributeNames

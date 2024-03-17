@@ -179,7 +179,12 @@ namespace Empiria.OnePoint.Security.Subjects {
 
       data.ExtData.Set(ClaimAttributeNames.Password, userPassword);
       data.ExtData.Set(ClaimAttributeNames.PasswordUpdatedDate, DateTime.Now);
-      data.ExtData.Set(ClaimAttributeNames.MustChangePassword, mustChangePassword);
+
+      if (data.ExtData.Get<bool>(ClaimAttributeNames.PasswordNeverExpires)) {
+        data.ExtData.Set(ClaimAttributeNames.MustChangePassword, false);
+      } else {
+        data.ExtData.Set(ClaimAttributeNames.MustChangePassword, mustChangePassword);
+      }
 
       SecurityItemsDataWriter.UpdateSecurityItem(data);
     }

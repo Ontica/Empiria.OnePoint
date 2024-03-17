@@ -36,6 +36,7 @@ namespace Empiria.OnePoint.Security {
         IsAuthenticated = false,
         MustChangePassword = userData.GetAttribute(ClaimAttributeNames.MustChangePassword, false),
         PasswordUpdatedDate = userData.GetAttribute(ClaimAttributeNames.PasswordUpdatedDate, DateTime.Now.AddDays(-31)),
+        PasswordNeverExpires = userData.GetAttribute(ClaimAttributeNames.PasswordNeverExpires, false)
       };
     }
 
@@ -80,10 +81,14 @@ namespace Empiria.OnePoint.Security {
 
     public bool PasswordExpired {
       get {
-        return PasswordUpdatedDate.AddDays(60) < DateTime.Now;
+        return PasswordNeverExpires == false && PasswordUpdatedDate.AddDays(60) < DateTime.Now;
       }
     }
 
+    private bool PasswordNeverExpires {
+      get;
+      set;
+    }
 
     public DateTime PasswordUpdatedDate {
       get;
