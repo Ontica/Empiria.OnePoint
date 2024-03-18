@@ -10,7 +10,6 @@
 using System;
 
 using Empiria.Contacts;
-using Empiria.Messaging;
 
 using Empiria.Security;
 using Empiria.Services;
@@ -113,76 +112,12 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
     #endregion Use cases
 
-    #region Former use cases
-
-    public void FormerCreateUserPassword(UserCredentialsDto credentials, string email) {
-
-      Assertion.Require(credentials, nameof(credentials));
-      Assertion.Require(email, nameof(email));
-
-      FormerImplementsCreateUserPassword(credentials, email);
-
-      var eventPayload = new {
-        credentials.UserID
-      };
-
-      EventNotifier.Notify(MessagingEvents.UserPasswordCreated, eventPayload);
-    }
-
-
-    public void FormerChangeUserPassword(string currentPassword, string newPassword) {
-
-      Assertion.Require(currentPassword, nameof(currentPassword));
-      Assertion.Require(newPassword, nameof(newPassword));
-
-      var apiKey = SecurityParameters.ChangePasswordKey;
-
-      var userID = ExecutionServer.CurrentIdentity.Name;
-      var userEmail = ExecutionServer.CurrentContact.EMail;
-
-      var credentials = new UserCredentialsDto {
-        AppKey = apiKey,
-        UserID = userID,
-        Password = newPassword,
-      };
-
-      FormerImplementsCreateUserPassword(credentials, userEmail);
-
-      var eventPayload = new {
-        credentials.UserID
-      };
-
-      EventNotifier.Notify(MessagingEvents.UserPasswordChanged, eventPayload);
-
-      EmailServices.SendPasswordChangedWarningEMail();
-    }
-
-    #endregion Former use cases
-
     #region Helpers
 
     private string EncryptPassword(string userID, string password) {
 
       return Cryptographer.Encrypt(EncryptionMode.EntropyKey,
                                    Cryptographer.GetSHA256(password), userID);
-    }
-
-
-    private void FormerImplementsCreateUserPassword(UserCredentialsDto credentials, string email) {
-
-      if (credentials.AppKey != SecurityParameters.ChangePasswordKey) {
-        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, credentials.AppKey);
-      }
-
-      var service = new Services.AuthenticationService();
-
-      EmpiriaUser user = service.GetUserWithUserNameAndEMail(credentials.UserID, email);
-
-      var helper = new PasswordStrength(user, credentials.Password);
-
-      helper.VerifyStrength();
-
-      SubjectsDataService.ChangePassword(credentials.UserID, credentials.Password);
     }
 
 

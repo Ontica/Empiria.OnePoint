@@ -135,31 +135,9 @@ namespace Empiria.OnePoint.Security.Services {
       }
     }
 
-
-    internal EmpiriaUser GetUserWithUserNameAndEMail(string username, string email) {
-
-      Assertion.Require(username, nameof(username));
-      Assertion.Require(email, nameof(email));
-
-      Claim userData = Claim.TryParseWithKey(SecurityItemType.SubjectCredentials,
-                                             username);
-      if (userData == null) {
-        throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
-      }
-
-      var user = EmpiriaUser.Parse(userData);
-
-      if (user.EMail.Equals(email)) {
-        return user;
-      } else {
-        throw new SecurityException(SecurityException.Msg.UserWithEMailNotFound, username, email);
-      }
-    }
-
     #endregion Services
 
     #region Helpers
-
 
     private void CloseActiveUserSessions(IEmpiriaUser user) {
       if (!ConfigurationData.Get("OneActiveSessionPerUser", false)) {

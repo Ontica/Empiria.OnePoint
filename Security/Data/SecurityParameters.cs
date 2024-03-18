@@ -25,9 +25,6 @@ namespace Empiria.OnePoint.Security.Data {
     }
 
 
-    static public string ChangePasswordKey => _config.Get<string>("changePasswordKey");
-
-
     static internal bool EnsureSimilarUserHostAddress => _config.Get<bool>("ensureSimilarUserHostAddress", false);
 
 
@@ -35,9 +32,6 @@ namespace Empiria.OnePoint.Security.Data {
 
 
     static internal bool SendPasswordsUsingEmail => _config.Get<bool>("sendPasswordsUsingEmail", true);
-
-
-    static internal bool UseFormerPasswordEncryption => _config.Get("useFormerPasswordEncryption", false);
 
 
   } // class SecurityParameters

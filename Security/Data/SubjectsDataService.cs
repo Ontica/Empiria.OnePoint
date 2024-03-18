@@ -11,31 +11,12 @@ using System;
 
 using Empiria.Contacts;
 using Empiria.Data;
-using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects;
 
 namespace Empiria.OnePoint.Security.Data {
 
   static internal class SubjectsDataService {
-
-    static internal void ChangePassword(string username, string password) {
-
-      var dataRow = DataReader.GetDataRow(DataOperation.Parse("getContactWithUserName", username));
-
-      if (dataRow == null) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
-      }
-
-      string p = Cryptographer.Encrypt(EncryptionMode.EntropyKey,
-                                       Cryptographer.GetSHA256(password), username);
-
-
-      string sql = $"UPDATE Contacts SET UserPassword = '{p}' WHERE UserName = '{username}'";
-
-      DataWriter.Execute(DataOperation.Parse(sql));
-    }
-
 
     static internal SubjectData GetSubject(IIdentifiable contact) {
       string sql = "SELECT * FROM " +
