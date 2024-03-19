@@ -230,6 +230,11 @@ namespace Empiria.OnePoint.Security {
     }
 
 
+    public bool HasPermission(string permissionID) {
+      return this.Permissions.Contains(permissionID);
+    }
+
+
     /// <summary>Determines whether the current principal belongs to the specified role.</summary>
     /// <param name="role">The name of the role for which to check membership.</param>
     /// <returns>true if the current principal is a member of the specified role in the current domain;
