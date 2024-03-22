@@ -1,10 +1,10 @@
-﻿/* Empiria Core  *********************************************************************************************
+﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Security                                     Component : Security Providers                    *
-*  Assembly : Empiria.Core.dll                             Pattern   : Static class                          *
+*  Assembly : Empiria.OnePoint.Security.dll                Pattern   : Service provider                      *
 *  Type     : RSAProvider                                  License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Builds instances of RSACryptoServiceProvider using a private key file and a password.          *
+*  Summary  : Provides subject's authorization services.                                                     *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -14,7 +14,9 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Cryptography;
 
-namespace Empiria.Security.Providers {
+using Empiria.Security;
+
+namespace Empiria.OnePoint.Security.Providers {
 
   /// <summary>Builds instances of RSACryptoServiceProvider using a private key file and a password.</summary>
   static internal class RSAProvider {
@@ -26,7 +28,7 @@ namespace Empiria.Security.Providers {
     static internal RSACryptoServiceProvider GetProvider(string privateKeyFilePath,
                                                          SecureString password) {
       if (!File.Exists(privateKeyFilePath)) {
-        throw new SecurityException(SecurityException.Msg.PrivateKeyFileNotExists,
+        throw new Empiria.Security.SecurityException(Empiria.Security.SecurityException.Msg.PrivateKeyFileNotExists,
                                     privateKeyFilePath);
       }
 
@@ -36,7 +38,7 @@ namespace Empiria.Security.Providers {
                                                                       password);
 
       if (rsa == null) {
-        throw new SecurityException(SecurityException.Msg.CantDecodeEncryptedPrivateKey,
+        throw new Empiria.Security.SecurityException(Empiria.Security.SecurityException.Msg.CantDecodeEncryptedPrivateKey,
                                     privateKeyFilePath);
       }
 
@@ -186,13 +188,13 @@ namespace Empiria.Security.Providers {
 
           pkcs8 = TryDecryptPBDK2(encryptedpkcs8, salt, IV, password, iterations);
           if (pkcs8 == null) {          // probably a bad pswd entered.
-            throw new SecurityException(SecurityException.Msg.InvalidPrivateKeyFilePassword);
+            throw new Empiria.Security.SecurityException(Empiria.Security.SecurityException.Msg.InvalidPrivateKeyFilePassword);
           }
 
           //----- With a decrypted pkcs #8 PrivateKeyInfo blob, decode it to an RSA ---
           return DecodePrivateKeyInfo(pkcs8);
 
-        } catch (SecurityException) {
+        } catch (Empiria.Security.SecurityException) {
           throw;
 
         } catch (Exception) {
@@ -414,14 +416,14 @@ namespace Empiria.Security.Providers {
 
 
       static private SecureString GetSystemPrivateKeyFilePassword() {
-        string s = ConfigurationData.GetString("§RSACryptoFilePwd");
+        string s = ConfigurationData.GetString("RSACryptoFilePwd");
 
         return Cryptographer.ConvertToSecureString(s);
       }
 
 
       static private string GetSystemPrivateKeyFilePath() {
-        string privateKeyFilePath = ConfigurationData.GetString("§RSACryptoFile");
+        string privateKeyFilePath = ConfigurationData.GetString("RSACryptoFile");
 
         if (privateKeyFilePath.StartsWith("~")) {
           privateKeyFilePath = ExecutionServer.GetFullFileNameFromCurrentExecutionPath(privateKeyFilePath.Substring(1));
@@ -433,5 +435,4 @@ namespace Empiria.Security.Providers {
 
   } // class RSACryptoServices
 
-} //namespace Empiria.Security
-
+} // namespace Empiria.OnePoint.Security.Providers
