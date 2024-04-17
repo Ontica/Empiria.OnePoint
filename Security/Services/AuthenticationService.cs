@@ -40,8 +40,13 @@ namespace Empiria.OnePoint.Security.Services {
 
       if (SecurityParameters.EnsureSimilarUserHostAddress &&
           session.UserHostAddress != userHostAddress) {
-        throw new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
-                                    userHostAddress);
+
+        var exception = new SecurityException(SecurityException.Msg.InvalidUserHostAddress,
+                                              userHostAddress);
+
+        EmpiriaLog.FailedOperationLog(session, "Authentication", exception.Message);
+
+        throw exception;
       }
 
 
@@ -86,11 +91,20 @@ namespace Empiria.OnePoint.Security.Services {
       ClientApplication application = ClientApplication.TryParse(clientAppKey);
 
       if (application == null) {
-        throw new SecurityException(SecurityException.Msg.InvalidClientAppKey, clientAppKey);
+
+        var exception = new SecurityException(SecurityException.Msg.InvalidClientAppKey, clientAppKey);
+
+        EmpiriaLog.FailedOperationLog("AuthenticateClientApp", exception);
+
+        throw exception;
       }
 
       if (application.Status != EntityStatus.Active) {
-        throw new SecurityException(SecurityException.Msg.ClientAppKeyIsSuspended, clientAppKey);
+        var exception = new SecurityException(SecurityException.Msg.ClientAppKeyIsSuspended, clientAppKey);
+
+        EmpiriaLog.FailedOperationLog("AuthenticateClientApp", exception);
+
+        throw exception;
       }
 
       return application;
@@ -106,11 +120,23 @@ namespace Empiria.OnePoint.Security.Services {
 
       // User not found
       if (claim == null) {
+
+        EmpiriaLog.FailedOperationLog("Authentication",
+                                      $"Se intentó ingresar al sistema con credenciales inválidas. " +
+                                      $"La cuenta de acceso fue: '{userID}'");
+
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
 
+      var contact = Contact.Parse(claim.SubjectId);
+
       if (claim.Status == EntityStatus.Suspended) {
-        throw new SecurityException(SecurityException.Msg.UserAccountIsSuspended, userID);
+
+        var exception = new SecurityException(SecurityException.Msg.UserAccountIsSuspended, userID);
+
+        EmpiriaLog.FailedOperationLog(contact, "Authentication", exception.Message);
+
+        throw exception;
       }
 
       var storedPassword = claim.GetAttribute<string>(ClaimAttributeNames.Password);
@@ -131,7 +157,11 @@ namespace Empiria.OnePoint.Security.Services {
       if (AuthenticationAttemptsRegister.MaxAttemptsReached(userID)) {
         throw SuspendUserAccount(claim);
       } else {
-        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+        var exception = new SecurityException(SecurityException.Msg.InvalidUserCredentials);
+
+        EmpiriaLog.FailedOperationLog(contact, "Authentication", exception.Message);
+
+        throw exception;
       }
     }
 
@@ -166,9 +196,12 @@ namespace Empiria.OnePoint.Security.Services {
         editor.SuspendSubjectCredentials();
       }
 
-      EmpiriaLog.UserManagementLog(contact, "La cuenta de la persona usuaria fue suspendida por intentos de acceso fallidos");
+      var exception = new SecurityException(SecurityException.Msg.UserAccountHasBeenBlocked);
 
-      return new SecurityException(SecurityException.Msg.UserAccountHasBeenBlocked);
+      EmpiriaLog.UserManagementLog(contact, "Authentication", exception.Message);
+      EmpiriaLog.FailedOperationLog(contact, "Authentication", exception.Message);
+
+      return exception;
     }
 
     #endregion Helpers

@@ -131,18 +131,30 @@ namespace Empiria.OnePoint.Security {
     #region Private methods
 
     private void EnsureCanAuthenticate() {
-
       if (!this.IsActive) {
-        throw new SecurityException(SecurityException.Msg.UserAccountIsSuspended, this.UserName);
+        var securityException = new SecurityException(SecurityException.Msg.UserAccountIsSuspended, this.UserName);
+
+        EmpiriaLog.FailedOperationLog(this.Contact, "Authentication", securityException.Message);
+
+        throw securityException;
       }
 
       if (this.PasswordExpired) {
-        throw new SecurityException(SecurityException.Msg.UserPasswordExpired, this.UserName);
+        var securityException = new SecurityException(SecurityException.Msg.UserPasswordExpired, this.UserName);
+
+        EmpiriaLog.FailedOperationLog(this.Contact, "Authentication", securityException.Message);
+
+        throw securityException;
       }
 
       if (this.MustChangePassword) {
-        throw new SecurityException(SecurityException.Msg.MustChangePassword, this.UserName);
+        var securityException = new SecurityException(SecurityException.Msg.MustChangePassword, this.UserName);
+
+        EmpiriaLog.FailedOperationLog(this.Contact, "Authentication", securityException.Message);
+
+        throw securityException;
       }
+
     }
 
     #endregion Private methods

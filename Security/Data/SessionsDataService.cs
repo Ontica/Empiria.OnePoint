@@ -49,7 +49,11 @@ namespace Empiria.OnePoint.Security.Data {
       var session = DataReader.GetPlainObject<EmpiriaSession>(op, null);
 
       if (session == null) {
-        throw new SecurityException(SecurityException.Msg.SessionTokenNotFound, sessionToken);
+        var exception = new SecurityException(SecurityException.Msg.SessionTokenNotFound, sessionToken);
+
+        EmpiriaLog.FailedOperationLog("Authentication", exception);
+
+        throw exception;
       }
 
       return session;
