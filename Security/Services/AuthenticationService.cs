@@ -122,8 +122,7 @@ namespace Empiria.OnePoint.Security.Services {
       if (claim == null) {
 
         EmpiriaLog.FailedOperationLog("Authentication",
-                                      $"Se intentó ingresar al sistema con credenciales inválidas. " +
-                                      $"La cuenta de acceso fue: '{userID}'");
+                                      $"Se intentó ingresar al sistema con una cuenta que no existe: '{userID}'");
 
         throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
@@ -157,11 +156,11 @@ namespace Empiria.OnePoint.Security.Services {
       if (AuthenticationAttemptsRegister.MaxAttemptsReached(userID)) {
         throw SuspendUserAccount(claim);
       } else {
-        var exception = new SecurityException(SecurityException.Msg.InvalidUserCredentials);
 
-        EmpiriaLog.FailedOperationLog(contact, "Authentication", exception.Message);
 
-        throw exception;
+        EmpiriaLog.FailedOperationLog(contact, "Authentication", "La contraseña proporcionada no es correcta.");
+
+        throw new SecurityException(SecurityException.Msg.InvalidUserCredentials);
       }
     }
 

@@ -65,7 +65,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       } else {
 
         throw new ServiceException("El servidor de correo no está configurado.",
-            $"La contraseña asignada a la persona usuaria no pudo enviarse por correo electrónico." +
+            $"La contraseña asignada a '{subject.UserID}' no pudo enviarse por correo electrónico." +
             $"Sin embargo, esta es la contraseña que le fue asignada: {newPassword}");
       }
     }
