@@ -51,7 +51,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var subject = SubjectsDataService.GetSubject(contact);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Activación de la cuenta de usuario");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se reactivó la cuenta de acceso al sistema");
 
       return SubjectMapper.Map(subject);
     }
@@ -65,7 +65,8 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
       var existingUser = SubjectsDataService.TryGetSubjectWithUserID(fields.UserID);
 
       Assertion.Require(existingUser == null,
-                        $"Ya existe otro usuario con el identificador proporcionado: '{fields.UserID}'");
+                        $"Ya existe otra cuenta de acceso al sistema con el " +
+                        $"identificador proporcionado: '{fields.UserID}'");
 
       PersonFields personFields = MapToPersonFields(fields);
 
@@ -83,7 +84,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       SubjectsDataService.WriteAsParticipant(subject);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Alta de usuario");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se dio de alta la cuenta de acceso al sistema");
 
       return SubjectMapper.Map(subject);
     }
@@ -104,7 +105,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var subject = SubjectsDataService.GetSubject(contact);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Baja de usuario");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se dio de baja la cuenta de acceso al sistema");
     }
 
 
@@ -136,7 +137,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var subject = SubjectsDataService.GetSubject(contact);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Suspensión de la cuenta de usuario");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se suspendió la cuenta de acceso al sistema");
 
       return SubjectMapper.Map(subject);
     }
@@ -160,7 +161,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       SubjectsDataService.WriteAsParticipant(subject);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Modificación de usuario");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se modificó la cuenta de acceso al sistema");
 
       return SubjectMapper.Map(subject);
     }

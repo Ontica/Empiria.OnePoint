@@ -103,7 +103,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       editor.UpdateSubjectCredentials(newPassword, false);
 
-      EmpiriaLog.UserManagementLog(contact, "La persona usuaria modificó su contraseña de acceso al sistema");
+      EmpiriaLog.UserManagementLog(contact, "La persona usuaria modificó su propia contraseña de acceso al sistema");
 
       if (SecurityParameters.SendPasswordsUsingEmail) {
         EmailServices.SendPasswordChangedWarningEMail();
