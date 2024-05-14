@@ -16,7 +16,6 @@ using Empiria.Security;
 
 using Empiria.OnePoint.Security.Subjects.Adapters;
 using Empiria.OnePoint.Security.Subjects.UseCases;
-using System.Net;
 
 namespace Empiria.OnePoint.Security.WebApi {
 

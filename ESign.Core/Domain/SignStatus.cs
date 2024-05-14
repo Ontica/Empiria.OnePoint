@@ -26,7 +26,7 @@ namespace Empiria.OnePoint.ESign {
     /// <summary>The signer revoke the document sign.</summary>
     Revoked = 'K',
 
-    /// <summary>The document or sign request were marked as deleted.</summary>
+    /// <summary>The document or sign request is marked as deleted.</summary>
     Deleted = 'X',
 
     /// <summary>Use to control unassigned values.</summary>

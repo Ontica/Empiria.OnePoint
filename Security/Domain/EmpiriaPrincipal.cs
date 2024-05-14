@@ -41,7 +41,10 @@ namespace Empiria.OnePoint.Security {
 
     #region Constructors and parsers
 
-    internal EmpiriaPrincipal(EmpiriaIdentity identity, IClientApplication clientApp, IEmpiriaSession session) {
+    internal EmpiriaPrincipal(EmpiriaIdentity identity,
+                              IClientApplication clientApp,
+                              IEmpiriaSession session) {
+
       Assertion.Require(identity, nameof(identity));
       Assertion.Require(clientApp, nameof(clientApp));
       Assertion.Require(session, nameof(session));
@@ -60,6 +63,7 @@ namespace Empiria.OnePoint.Security {
     /// <param name="identity">Represents an authenticated Empiria user.</param>
     internal EmpiriaPrincipal(EmpiriaIdentity identity, IClientApplication clientApp,
                               IUserCredentials credentials) {
+
       Assertion.Require(identity, nameof(identity));
       Assertion.Require(clientApp, nameof(clientApp));
       Assertion.Require(credentials, nameof(credentials));
@@ -221,6 +225,7 @@ namespace Empiria.OnePoint.Security {
         return false;
       }
 
+      // ToDo: Remove this hard-coded rule
       if (entity.UID == "NivelacionCuentasCompraventa") {
 
         return EmpiriaMath.IsMemberOf(ExecutionServer.CurrentUserId, new[] { 135, 1002, 1003, 2006, 3512, 3548 });
