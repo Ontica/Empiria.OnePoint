@@ -84,10 +84,6 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       Claim claim = service.GetSubjectAuthenticationClaim(fields.UserID, fields.CurrentPassword, entropy);
 
-      Assertion.Require(ExecutionServer.IsAuthenticated ||
-                        claim.GetAttribute<bool>(ClaimAttributeNames.MustChangePassword, false),
-                        "La contraseña no se puede modificar si no se está dentro de una sesión de trabajo.");
-
       var contact = Contact.Parse(claim.SubjectId);
 
       var editor = new SubjectSecurityItemsEditor(contact);
