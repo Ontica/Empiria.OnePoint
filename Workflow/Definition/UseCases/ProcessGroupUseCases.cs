@@ -12,6 +12,8 @@ using System;
 using Empiria.Parties;
 using Empiria.Services;
 
+using Empiria.Workflow.Definition.Adapters;
+
 namespace Empiria.Workflow.Definition.UseCases {
 
   /// <summary>Use cases for retrieve information for a process group.</summary>
@@ -44,14 +46,14 @@ namespace Empiria.Workflow.Definition.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> OrganizationalUnitProcessTypes(string processGroupUID,
+    public FixedList<ProcessTypeDto> OrganizationalUnitProcessTypes(string processGroupUID,
                                                                     string organizationalUnitUID) {
       Assertion.Require(processGroupUID, nameof(processGroupUID));
       Assertion.Require(organizationalUnitUID, nameof(organizationalUnitUID));
 
       var processGroup = ProcessGroup.Parse(processGroupUID);
 
-      return processGroup.Processes.MapToNamedEntityList();
+      return ProcessTypeMapper.Map(processGroup.Processes);
     }
 
     #endregion Use cases

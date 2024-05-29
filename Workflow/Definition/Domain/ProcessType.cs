@@ -21,6 +21,12 @@ namespace Empiria.Workflow.Definition {
       return BaseObject.ParseKey<ProcessType>(uid);
     }
 
+    public FixedList<DataField> InputData {
+      get {
+        return base.ExtendedDataField.GetFixedList<DataField>("inputData", false);
+      }
+    }
+
   }  // class ProcessType
 
 }  // namespace Empiria.Workflow.Definition

@@ -9,8 +9,10 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Web.Http;
+
 using Empiria.WebApi;
 
+using Empiria.Workflow.Definition.Adapters;
 using Empiria.Workflow.Definition.UseCases;
 
 namespace Empiria.Workflow.Definition.WebApi {
@@ -39,7 +41,7 @@ namespace Empiria.Workflow.Definition.WebApi {
                                                               [FromUri] string organizationalUnitUID) {
 
       using (var usecases = ProcessGroupUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> processTypes = usecases.OrganizationalUnitProcessTypes(processGroup,
+        FixedList<ProcessTypeDto> processTypes = usecases.OrganizationalUnitProcessTypes(processGroup,
                                                                                          organizationalUnitUID);
 
         return new CollectionModel(base.Request, processTypes);
