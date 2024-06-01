@@ -1,15 +1,15 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Workflow Definition                        Component : Domain Layer                            *
+*  Module   : Workflow Common Objects                    Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Information Holder                      *
 *  Type     : DataField                                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Describes a workflow process data field.                                                       *
+*  Summary  : Describes a workflow data field.                                                               *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using Empiria.Json;
 
-namespace Empiria.Workflow.Definition {
+namespace Empiria.Workflow {
 
   /// <summary>Describes a workflow process data field.</summary>
   public class DataField {
@@ -41,4 +41,4 @@ namespace Empiria.Workflow.Definition {
 
   }  // public class DataField
 
-}  // namespace Empiria.Workflow.Definition
+}  // namespace Empiria.Workflow
