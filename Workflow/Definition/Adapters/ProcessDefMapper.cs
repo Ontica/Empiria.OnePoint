@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Workflow Definition                        Component : Adapters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Mapper                                  *
-*  Type     : ProcessTypeMapper                          License   : Please read LICENSE.txt file            *
+*  Type     : ProcessDefMapper                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Mapping methods for ProcessType instances.                                                      *
+*  Summary  : Mapping methods for Process definition instances.                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
@@ -12,20 +12,20 @@ using System;
 namespace Empiria.Workflow.Definition.Adapters {
 
   /// <summary>Mapping methods for ProcessType instances.</summary>
-  static internal class ProcessTypeMapper {
+  static internal class ProcessDefMapper {
 
-    static internal FixedList<ProcessTypeDto> Map(FixedList<ProcessType> processes) {
+    static internal FixedList<ProcessDefDto> Map(FixedList<ProcessDef> processes) {
       return processes.Select(x => Map(x)).ToFixedList();
     }
 
-    static private ProcessTypeDto Map(ProcessType processType) {
-      return new ProcessTypeDto {
+    static private ProcessDefDto Map(ProcessDef processType) {
+      return new ProcessDefDto {
         UID = processType.UID,
         Name = processType.Name,
         InputData = processType.InputData,
       };
     }
 
-  }  // class ProcessTypeMapper
+  }  // class ProcessDefMapper
 
 }  // namespace Empiria.Workflow.Definition.Adapters

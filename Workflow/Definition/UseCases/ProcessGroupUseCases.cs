@@ -33,8 +33,8 @@ namespace Empiria.Workflow.Definition.UseCases {
 
     #region Use cases
 
-    public FixedList<NamedEntityDto> OrganizationalUnits(string processGroupUID) {
-      Assertion.Require(processGroupUID, nameof(processGroupUID));
+    public FixedList<NamedEntityDto> OrganizationalUnits(string processGroupCode) {
+      Assertion.Require(processGroupCode, nameof(processGroupCode));
 
       FixedList<OrganizationalUnit> list = Party.GetList<OrganizationalUnit>(DateTime.Today);
 
@@ -46,14 +46,16 @@ namespace Empiria.Workflow.Definition.UseCases {
     }
 
 
-    public FixedList<ProcessTypeDto> OrganizationalUnitProcessTypes(string processGroupUID,
-                                                                    string organizationalUnitUID) {
-      Assertion.Require(processGroupUID, nameof(processGroupUID));
+    public FixedList<ProcessDefDto> OrganizationalUnitProcessTypes(string processGroupCode,
+                                                                   string organizationalUnitUID) {
+      Assertion.Require(processGroupCode, nameof(processGroupCode));
       Assertion.Require(organizationalUnitUID, nameof(organizationalUnitUID));
 
-      var processGroup = ProcessGroup.Parse(processGroupUID);
+      var processGroup = WorkflowObjectsGroup.ParseWithCode(processGroupCode);
 
-      return ProcessTypeMapper.Map(processGroup.Processes);
+      var processes = processGroup.GetItems<ProcessDef>(WorkflowObjectLinkType.ProcessesGroupType);
+
+      return ProcessDefMapper.Map(processes);
     }
 
     #endregion Use cases

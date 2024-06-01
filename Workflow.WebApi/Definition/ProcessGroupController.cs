@@ -23,11 +23,11 @@ namespace Empiria.Workflow.Definition.WebApi {
     #region Web Apis
 
     [HttpGet]
-    [Route("v4/workflow/process-groups/{processGroup}/organizational-units")]
-    public CollectionModel GetOrganizationalUnits([FromUri] string processGroup) {
+    [Route("v4/workflow/process-groups/{processGroupCode}/organizational-units")]
+    public CollectionModel GetOrganizationalUnits([FromUri] string processGroupCode) {
 
       using (var usecases = ProcessGroupUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> orgUnits = usecases.OrganizationalUnits(processGroup);
+        FixedList<NamedEntityDto> orgUnits = usecases.OrganizationalUnits(processGroupCode);
 
         return new CollectionModel(base.Request, orgUnits);
       }
@@ -35,14 +35,14 @@ namespace Empiria.Workflow.Definition.WebApi {
 
 
     [HttpGet]
-    [Route("v4/workflow/process-groups/{processGroup}/organizational-units/" +
+    [Route("v4/workflow/process-groups/{processGroupCode}/organizational-units/" +
            "{organizationalUnitUID:guid}/process-types")]
-    public CollectionModel GetOrganizationalUnitsProcessTypes([FromUri] string processGroup,
+    public CollectionModel GetOrganizationalUnitsProcessTypes([FromUri] string processGroupCode,
                                                               [FromUri] string organizationalUnitUID) {
 
       using (var usecases = ProcessGroupUseCases.UseCaseInteractor()) {
-        FixedList<ProcessTypeDto> processTypes = usecases.OrganizationalUnitProcessTypes(processGroup,
-                                                                                         organizationalUnitUID);
+        FixedList<ProcessDefDto> processTypes = usecases.OrganizationalUnitProcessTypes(processGroupCode,
+                                                                                        organizationalUnitUID);
 
         return new CollectionModel(base.Request, processTypes);
       }
