@@ -21,7 +21,7 @@
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
     <AssemblyName>Empiria.OnePoint.Workflow</AssemblyName>
-    <RootNamespace>Empiria.OnePoint.Workflow</RootNamespace>
+    <RootNamespace>Empiria.Workflow</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
     <OutputPath>bin\</OutputPath>

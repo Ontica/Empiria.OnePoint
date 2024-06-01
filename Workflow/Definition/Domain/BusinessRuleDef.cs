@@ -2,29 +2,27 @@
 *                                                                                                            *
 *  Module   : Workflow Definition                        Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Information Holder                      *
-*  Type     : ProcessGroup                               License   : Please read LICENSE.txt file            *
+*  Type     : BusinessRuleDef                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Holds a list of workflow processes types.                                                      *
+*  Summary  : Represents a workflow task definition used to model the evaluation                             *
+*             of a business rule using a decision model engine.                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 namespace Empiria.Workflow.Definition {
 
-  /// <summary>Holds a list of workflow processes types</summary>
-  public class ProcessGroup : GeneralObject {
+  /// <summary>Represents a workflow task definition used to model the evaluation
+  ///  of a business rule using a decision model engine.</summary>
+  public class BusinessRuleDef : ActivityDef {
 
-    static public ProcessGroup Parse(string uid) {
-      return BaseObject.ParseKey<ProcessGroup>(uid);
+    static internal new BusinessRuleDef Parse(int id) {
+      return BaseObject.ParseId<BusinessRuleDef>(id);
     }
 
-
-    public FixedList<ProcessType> Processes {
-      get {
-        return base.ExtendedDataField.GetFixedList<ProcessType>("processes")
-                                     .Sort((x, y) => x.Name.CompareTo(y.Name));
-      }
+    static internal new BusinessRuleDef Parse(string uid) {
+      return BaseObject.ParseKey<BusinessRuleDef>(uid);
     }
 
-  }  // class ProcessGroup
+  }  // class BusinessRuleDef
 
 }  // namespace Empiria.Workflow.Definition
