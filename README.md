@@ -19,32 +19,23 @@ components and, as usual, needs some of the [Empiria Extensions](https://github.
 
 Empiria OnePoint services are packaged into the following software modules:
 
-1.  **Document Management**
+1.  **Requests Management**  
 
-    Infrastructure to securely manage documents and forms fulfilled by people, business and organizations.
+    Infrastructure to securely manage documents and forms fulfilled by people, business and organizations.  
 
-    Provides electronic sign services to protect and sign documents.
+2.  **Knowledge Base Management**  
 
-2.  **Knowledge Base Management**
+    Infrastructure used to build and manage a knowledge base about procedures and government services.  
 
-    Infrastructure used to build and manage a knowledge base about procedures and government services.
+    Also contains components that provides help desk services connected to an issue tracking system.  
 
-    Also contains components that provides help desk services connected to an issue tracking system.
+3.  **Security Management**  
 
-3.  **Security Management**
+    Infrastructure used to manage authentication and security in a centralized way.  
 
-    Infrastructure used to manage authentication and security in a centralized way.
+4.  **Workflow Management**  
 
-4.  **Workflow Management**
-
-    Infrastructure used to manage centralized workflow and services requests.
-
-    Also contains components used to manage organizations structure and their parties relationships.
-
-5.  **Web API**
-
-    Http/Json RESTful type web services interface used to communicate Empiria OnePoint-based solutions with
-    front-end applications and third-party systems.
+    Infrastructure used to manage centralized workflow and services requests.  
 
 ## License
 
