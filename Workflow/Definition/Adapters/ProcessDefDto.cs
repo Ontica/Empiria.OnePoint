@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.DataObjects;
+
 namespace Empiria.Workflow.Definition.Adapters {
 
   /// <summary>Output data transfer object for Process definition instances.</summary>

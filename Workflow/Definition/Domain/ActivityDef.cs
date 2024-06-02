@@ -9,6 +9,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.DataObjects;
+
 namespace Empiria.Workflow.Definition {
 
   /// <summary>Abstract class that represents a workflow activity definition.
