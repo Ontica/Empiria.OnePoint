@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Company>Ontica</Company>
-    <Product>Empiria OnePoint Security Web Api</Product>
+    <Product>Empiria OnePoint Workflow Web Api</Product>
     <Description>
       Web api interface for OnePoint workflow, organizations and requests management services.
     </Description>
@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.WebApi" Version="2.0.0" />
-    <PackageReference Include="Empiria.Workflow.Security" Version="4.0.0" />
+    <PackageReference Include="Empiria.OnePoint.Workflow" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\extensions\WebApi\Empiria.WebApi.csproj" />

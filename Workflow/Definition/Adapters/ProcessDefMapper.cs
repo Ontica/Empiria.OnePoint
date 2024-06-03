@@ -7,7 +7,6 @@
 *  Summary  : Mapping methods for Process definition instances.                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 
 namespace Empiria.Workflow.Definition.Adapters {
 
