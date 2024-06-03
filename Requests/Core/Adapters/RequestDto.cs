@@ -35,15 +35,19 @@ namespace Empiria.OnePoint.Requests.Adapters {
       get; internal set;
     }
 
+    public string Description {
+      get; internal set;
+    }
+
+    public string Notes {
+      get; internal set;
+    }
+
     public NamedEntityDto RequesterOrgUnit {
       get; internal set;
     }
 
     public NamedEntityDto ResponsibleOrgUnit {
-      get; internal set;
-    }
-
-    public string Notes {
       get; internal set;
     }
 

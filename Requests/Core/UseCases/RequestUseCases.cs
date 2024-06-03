@@ -49,7 +49,10 @@ namespace Empiria.OnePoint.Requests.UseCases {
     public FixedList<RequestDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 
-      throw new NotImplementedException();
+      var requests = Request.GetFullList<Request>()
+                            .ToFixedList();
+
+      return RequestMapper.Map(requests);
     }
 
     #endregion Use cases

@@ -20,8 +20,8 @@ namespace Empiria.OnePoint.Requests.Data {
       var op = DataOperation.Parse("write_EOP_Request", o.Id, o.UID, o.RequestType.Id,
             o.UniqueID, o.ControlID, o.RequesterName, o.Description, o.Notes,
             o.RequesterOrgUnit.Id, o.Requester.Id, o.ResponsibleOrgUnit.Id,
-            o.FilingTime, o.FiledBy.Id, o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords,
-            o.PostingTime, o.PostedBy.Id, (char) o.Status);
+            o.FiledBy.Id, o.FilingTime, o.ClosedBy.Id, o.ClosingTime, extensionData, o.Keywords,
+            o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

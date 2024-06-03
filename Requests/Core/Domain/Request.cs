@@ -18,11 +18,10 @@ using Empiria.StateEnums;
 using Empiria.OnePoint.Requests.Data;
 using Empiria.OnePoint.Requests.Adapters;
 
-namespace Empiria.OnePoint.Requests
-{
+namespace Empiria.OnePoint.Requests {
 
-    /// <summary>Abstract partitioned type that represents a request that can be filed.</summary>
-    [PartitionedType(typeof(RequestType))]
+  /// <summary>Abstract partitioned type that represents a request that can be filed.</summary>
+  [PartitionedType(typeof(RequestType))]
   public abstract class Request : BaseObject {
 
     #region Constructors and parsers
@@ -80,7 +79,7 @@ namespace Empiria.OnePoint.Requests
     }
 
 
-    [DataField("REQ_REQUESTER_AREA_ID")]
+    [DataField("REQ_REQUESTER_ORG_UNIT_ID")]
     public OrganizationalUnit RequesterOrgUnit {
       get; protected set;
     }
@@ -92,14 +91,9 @@ namespace Empiria.OnePoint.Requests
     }
 
 
-    [DataField("REQ_RESPONSIBLE_AREA_ID")]
+    [DataField("REQ_RESPONSIBLE_ORG_UNIT_ID")]
     public OrganizationalUnit ResponsibleOrgUnit {
       get; protected set;
-    }
-
-    [DataField("REQ_FILING_TIME")]
-    public DateTime FilingTime {
-      get; private set;
     }
 
 
@@ -109,10 +103,10 @@ namespace Empiria.OnePoint.Requests
     }
 
 
-    [DataField("REQ_CLOSING_TIME")]
-    public DateTime ClosingTime {
+    [DataField("REQ_FILING_TIME")]
+    public DateTime FilingTime {
       get; private set;
-    }
+    } = ExecutionServer.DateMaxValue;
 
 
     [DataField("REQ_CLOSED_BY_ID")]
@@ -121,20 +115,26 @@ namespace Empiria.OnePoint.Requests
     }
 
 
+    [DataField("REQ_CLOSING_TIME")]
+    public DateTime ClosingTime {
+      get; private set;
+    } = ExecutionServer.DateMaxValue;
+
+
     [DataField("REQ_EXT_DATA")]
     protected JsonObject ExtensionData {
       get; private set;
     }
 
 
-    [DataField("REQ_POSTING_TIME")]
-    public DateTime PostingTime {
+    [DataField("REQ_POSTED_BY_ID")]
+    public Contacts.Contact PostedBy {
       get; private set;
     }
 
 
-    [DataField("REQ_POSTED_BY_ID")]
-    public Contacts.Contact PostedBy {
+    [DataField("REQ_POSTING_TIME")]
+    public DateTime PostingTime {
       get; private set;
     }
 
@@ -177,6 +177,7 @@ namespace Empiria.OnePoint.Requests
 
 
     protected virtual internal void Update(RequestFieldsDto fields) {
+      this.Description = RequestType.DisplayName;
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
     }
 

@@ -7,16 +7,21 @@
 *  Summary  : Maps Requests instances to their DTOs.                                                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 
 using Empiria.StateEnums;
 
 namespace Empiria.OnePoint.Requests.Adapters {
 
+  /// <summary>Maps Requests instances to their DTOs.</summary>
   static internal class RequestMapper {
 
     static internal FixedList<RequestTypeDto> Map(FixedList<RequestType> requestsTypes) {
       return requestsTypes.Select(x => Map(x)).ToFixedList();
+    }
+
+
+    static internal FixedList<RequestDto> Map(FixedList<Request> requests) {
+      return requests.Select(x => Map(x)).ToFixedList();
     }
 
 
@@ -27,9 +32,10 @@ namespace Empiria.OnePoint.Requests.Adapters {
         UniqueID = request.UniqueID,
         ControlID = request.ControlID,
         RequesterName = request.RequesterName,
+        Description = request.Description,
+        Notes = request.Notes,
         RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
         ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
-        Notes = request.Notes,
         FiledBy = request.FiledBy.MapToNamedEntity(),
         FilingTime = request.FilingTime,
         ClosedBy = request.ClosedBy.MapToNamedEntity(),
@@ -40,6 +46,7 @@ namespace Empiria.OnePoint.Requests.Adapters {
       };
     }
 
+
     static private RequestTypeDto Map(RequestType requestType) {
       return new RequestTypeDto {
         UID = requestType.UID,
@@ -47,8 +54,6 @@ namespace Empiria.OnePoint.Requests.Adapters {
         InputData = requestType.InputData,
       };
     }
-
-
 
   }  // class RequestMapper
 
