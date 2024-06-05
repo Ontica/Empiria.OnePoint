@@ -44,7 +44,10 @@ namespace Empiria.OnePoint.Security.Data {
 
 
     static internal EmpiriaSession GetSession(string sessionToken) {
-      var op = DataOperation.Parse("getUserSession", sessionToken);
+      var sql = "SELECT * FROM UserSessions " +
+                $"WHERE SessionToken = '{sessionToken}'";
+
+      var op = DataOperation.Parse(sql);
 
       var session = DataReader.GetPlainObject<EmpiriaSession>(op, null);
 
