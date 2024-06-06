@@ -49,8 +49,14 @@ namespace Empiria.OnePoint.Requests.UseCases {
     public FixedList<RequestDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 
-      var requests = Request.GetFullList<Request>()
-                            .ToFixedList();
+      query.EnsureIsValid();
+
+      string filter = query.MapToFilterString();
+      string sort = query.MapToSortString();
+
+      EmpiriaLog.Debug(filter);
+
+      FixedList<Request> requests = Request.GetList(filter, sort, 200);
 
       return RequestMapper.Map(requests);
     }

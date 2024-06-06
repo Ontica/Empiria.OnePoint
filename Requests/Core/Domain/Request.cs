@@ -38,6 +38,11 @@ namespace Empiria.OnePoint.Requests {
       return BaseObject.ParseKey<Request>(uid);
     }
 
+    static internal FixedList<Request> GetList(string filter, string sort, int pageSize) {
+      return BaseObject.GetFullList<Request>(filter, sort)
+                       .ToFixedList();
+    }
+
     #endregion Constructors and parsers
 
     #region Properties
