@@ -34,6 +34,18 @@ namespace Empiria.OnePoint.Requests.WebApi {
     }
 
 
+    [HttpDelete]
+    [Route("v4/requests/{requestUID}")]
+    public NoDataModel DeleteRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        usecases.DeleteRequest(requestUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
     [HttpPost]
     [Route("v4/requests/search")]
     public CollectionModel SearchRequests([FromBody] RequestsQuery query) {

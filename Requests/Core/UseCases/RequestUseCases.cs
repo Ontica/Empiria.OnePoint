@@ -46,6 +46,17 @@ namespace Empiria.OnePoint.Requests.UseCases {
     }
 
 
+    public void DeleteRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Delete();
+
+      request.Save();
+    }
+
+
     public FixedList<RequestDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 

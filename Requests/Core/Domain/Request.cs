@@ -166,6 +166,19 @@ namespace Empiria.OnePoint.Requests {
     }
 
 
+    public void Cancel() {
+      Assertion.Require(Status == ActivityStatus.Active,
+                        "No se puede eliminar una solicitud que no está en status de activa.");
+      this.Status = ActivityStatus.Canceled;
+    }
+
+    public void Delete() {
+      Assertion.Require(Status == ActivityStatus.Pending,
+                        "No se puede eliminar una solicitud que no está pendiente.");
+      this.Status = ActivityStatus.Deleted;
+    }
+
+
     public void File() {
       FilingTime = EmpiriaDateTime.NowWithCentiseconds;
       FiledBy = ExecutionServer.CurrentContact;
@@ -185,6 +198,7 @@ namespace Empiria.OnePoint.Requests {
       this.Description = RequestType.DisplayName;
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
     }
+
 
     #endregion Methods
 
