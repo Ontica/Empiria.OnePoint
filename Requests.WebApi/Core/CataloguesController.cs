@@ -40,13 +40,23 @@ namespace Empiria.OnePoint.Requests.WebApi {
                                             [FromUri] string requesterOrgUnitUID) {
 
       using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
-        FixedList<RequestTypeDto> processTypes = usecases.RequestTypes(requestsList,
-                                                                       requesterOrgUnitUID);
+        FixedList<RequestTypeDto> requestsTypes = usecases.RequestTypes(requestsList,
+                                                                        requesterOrgUnitUID);
 
-        return new CollectionModel(base.Request, processTypes);
+        return new CollectionModel(base.Request, requestsTypes);
       }
     }
 
+    [HttpGet]
+    [Route("v4/requests/catalogues/requests-types")]
+    public CollectionModel GetRequestsTypes([FromUri] string requestsList) {
+
+      using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
+        FixedList<RequestTypeDto> requestsTypes = usecases.RequestTypes(requestsList);
+
+        return new CollectionModel(base.Request, requestsTypes);
+      }
+    }
 
     [HttpGet]
     [Route("v4/requests/catalogues/responsible-list")]

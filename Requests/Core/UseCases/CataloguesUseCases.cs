@@ -44,7 +44,17 @@ namespace Empiria.OnePoint.Requests.UseCases {
 
       list = base.RestrictUserDataAccessTo(list);
 
-      return list.MapToNamedEntityList();
+      return list.Select(x => new NamedEntityDto(x.UID, $"{x.Code} - {x.Name}"))
+                 .ToFixedList();
+    }
+
+
+    public FixedList<RequestTypeDto> RequestTypes(string requestsList) {
+      Assertion.Require(requestsList, nameof(requestsList));
+
+      FixedList<RequestType> requestTypes = RequestType.GetList(requestsList);
+
+      return RequestMapper.Map(requestTypes);
     }
 
 
@@ -58,6 +68,7 @@ namespace Empiria.OnePoint.Requests.UseCases {
 
       return RequestMapper.Map(requestTypes);
     }
+
 
 
     public FixedList<NamedEntityDto> ResponsibleList(string workitemTypeUID) {
