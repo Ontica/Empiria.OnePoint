@@ -45,7 +45,7 @@ namespace Empiria.OnePoint.Security.Data {
 
     static internal EmpiriaSession GetSession(string sessionToken) {
       var sql = "SELECT * FROM UserSessions " +
-                $"WHERE SessionToken = '{EmpiriaString.Truncate(sessionToken, 128)}'";
+                $"WHERE SessionToken = '{EmpiriaString.Truncate(sessionToken, 255)}'";
 
       var op = DataOperation.Parse(sql);
 
