@@ -87,7 +87,7 @@ namespace Empiria.OnePoint.Requests.UseCases {
       var list = new List<NamedEntityDto> {
         new NamedEntityDto(ActivityStatus.All.ToString(), ActivityStatus.All.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Pending.ToString(), ActivityStatus.Pending.GetPluralName()),
-        new NamedEntityDto(ActivityStatus.Review.ToString(), ActivityStatus.Review.GetPluralName()),
+        new NamedEntityDto(ActivityStatus.Active.ToString(), ActivityStatus.Active.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Suspended.ToString(), ActivityStatus.Suspended.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Completed.ToString(), ActivityStatus.Completed.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Canceled.ToString(), ActivityStatus.Canceled.GetPluralName()),

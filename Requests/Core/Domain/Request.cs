@@ -156,6 +156,12 @@ namespace Empiria.OnePoint.Requests {
       }
     }
 
+    public int WorkflowInstanceId {
+      get {
+        return -1;
+      }
+    }
+
     #endregion Properties
 
     #region Methods
