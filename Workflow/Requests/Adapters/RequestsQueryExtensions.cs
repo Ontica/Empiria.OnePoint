@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Adapters Layer                          *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Type Extension methods                  *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Type Extension methods                  *
 *  Type     : RequestsQueryExtensions                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Extension methods for RequestsQuery interface adapter.                                         *
@@ -12,7 +12,7 @@ using Empiria.Data;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
-namespace Empiria.OnePoint.Requests.Adapters {
+namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Extension methods for RequestsQuery interface adapter.</summary>
   static internal class RequestsQueryExtensions {
@@ -127,4 +127,4 @@ namespace Empiria.OnePoint.Requests.Adapters {
 
   }  // class RequestsQueryExtensions
 
-}  // namespace Empiria.OnePoint.Requests.Adapters
+}  // namespace Empiria.Workflow.Requests.Adapters

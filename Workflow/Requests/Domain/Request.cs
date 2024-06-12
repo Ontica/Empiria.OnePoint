@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Information Holder                      *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Information Holder                      *
 *  Type     : Request                                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Abstract partitioned type that represents a request that can be filed.                         *
@@ -15,10 +15,10 @@ using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
-using Empiria.OnePoint.Requests.Data;
-using Empiria.OnePoint.Requests.Adapters;
+using Empiria.Workflow.Requests.Data;
+using Empiria.Workflow.Requests.Adapters;
 
-namespace Empiria.OnePoint.Requests {
+namespace Empiria.Workflow.Requests {
 
   /// <summary>Abstract partitioned type that represents a request that can be filed.</summary>
   [PartitionedType(typeof(RequestType))]
@@ -210,4 +210,4 @@ namespace Empiria.OnePoint.Requests {
 
   }  // class Request
 
-}  // namespace Empiria.OnePoint.Requests
+}  // namespace Empiria.Workflow.Requests

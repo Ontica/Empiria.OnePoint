@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Adpaters Layer                          *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Mapper                                  *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Mapper                                  *
 *  Type     : RequestMapper                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Maps Requests instances to their DTOs.                                                         *
@@ -10,7 +10,7 @@
 
 using Empiria.StateEnums;
 
-namespace Empiria.OnePoint.Requests.Adapters {
+namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Maps Requests instances to their DTOs.</summary>
   static internal class RequestMapper {
@@ -57,4 +57,4 @@ namespace Empiria.OnePoint.Requests.Adapters {
 
   }  // class RequestMapper
 
-}  // namespace Empiria.OnePoint.Requests.Adapters
+}  // namespace Empiria.Workflow.Requests.Adapters

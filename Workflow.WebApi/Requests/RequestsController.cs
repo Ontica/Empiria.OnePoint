@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                          Component : Web Api                               *
-*  Assembly : Empiria.OnePoint.Requests.WebApi.dll         Pattern   : Web api Controller                    *
+*  Assembly : Empiria.Workflow.WebApi.dll                  Pattern   : Web api Controller                    *
 *  Type     : RequestsController                           License   : Please read LICENSE.txt file          *
 *                                                                                                            *
 *  Summary  : Web API used to create, update and manage requests.                                            *
@@ -12,10 +12,10 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.OnePoint.Requests.Adapters;
-using Empiria.OnePoint.Requests.UseCases;
+using Empiria.Workflow.Requests.Adapters;
+using Empiria.Workflow.Requests.UseCases;
 
-namespace Empiria.OnePoint.Requests.WebApi {
+namespace Empiria.Workflow.Requests.WebApi {
 
   /// <summary>Web API used to create, update and manage requests.</summary>
   public class RequestsController : WebApiController {
@@ -61,4 +61,4 @@ namespace Empiria.OnePoint.Requests.WebApi {
 
   }  // class RequestsController
 
-}  // namespace Empiria.OnePoint.Requests.WebApi
+}  // namespace Empiria.Workflow.Requests.WebApi

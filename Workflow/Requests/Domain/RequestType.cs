@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Power type                              *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Power type                              *
 *  Type     : RequestType                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Power type that describes a Request partitioned type.                                          *
@@ -11,9 +11,9 @@
 using Empiria.DataObjects;
 using Empiria.Ontology;
 
-using Empiria.OnePoint.Requests.Adapters;
+using Empiria.Workflow.Requests.Adapters;
 
-namespace Empiria.OnePoint.Requests {
+namespace Empiria.Workflow.Requests {
 
   /// <summary>Power type that describes a Request partitioned type.</summary>
   [Powertype(typeof(Request))]
@@ -69,4 +69,4 @@ namespace Empiria.OnePoint.Requests {
 
   } // class RequestType
 
-} // namespace Empiria.OnePoint.Requests
+} // namespace Empiria.Workflow.Requests

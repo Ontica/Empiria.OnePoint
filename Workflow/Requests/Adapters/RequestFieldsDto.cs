@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Adapters Layer                          *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Fields Input DTO                        *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Fields Input DTO                        *
 *  Type     : RequestFieldsDto                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Input fields DTO used to create or update a request.                                           *
@@ -10,7 +10,7 @@
 
 using Empiria.DataObjects;
 
-namespace Empiria.OnePoint.Requests.Adapters {
+namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Input fields DTO used to create or update a request.</summary>
   public class RequestFieldsDto {
@@ -30,4 +30,4 @@ namespace Empiria.OnePoint.Requests.Adapters {
 
   }  // class RequestFieldsDto
 
-}  // namespace Empiria.OnePoint.Requests.Adapters
+}  // namespace Empiria.Workflow.Requests.Adapters

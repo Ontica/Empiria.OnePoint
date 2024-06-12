@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Data Layer                              *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Data Service                            *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Data Service                            *
 *  Type     : RequestData                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Provides data read and write services for Request instances.                                   *
@@ -11,7 +11,7 @@ using System;
 
 using Empiria.Data;
 
-namespace Empiria.OnePoint.Requests.Data {
+namespace Empiria.Workflow.Requests.Data {
 
   /// <summary>Provides data read and write services for Request instances.</summary>
   static internal class RequestData {
@@ -28,4 +28,4 @@ namespace Empiria.OnePoint.Requests.Data {
 
   }  // class RequestData
 
-}  // namespace Empiria.OnePoint.Requests.Data
+}  // namespace Empiria.Workflow.Requests.Data

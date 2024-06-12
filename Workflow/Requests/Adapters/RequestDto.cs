@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Adpaters Layer                          *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Output DTO                              *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Output DTO                              *
 *  Type     : RequestDto                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Output DTO for Request instances.                                                              *
@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Empiria.OnePoint.Requests.Adapters {
+namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Output DTO for Request instances.</summary>
   public class RequestDto {
@@ -81,4 +81,4 @@ namespace Empiria.OnePoint.Requests.Adapters {
 
   }  // class RequestDto
 
-}  // namespace Empiria.OnePoint.Requests.Adapters
+}  // namespace Empiria.Workflow.Requests.Adapters

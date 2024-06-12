@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Adapters Layer                          *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Query DTO                               *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Query DTO                               *
 *  Type     : RequestsQuery                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Input DTO used for search requests.                                                            *
@@ -12,7 +12,7 @@ using System;
 
 using Empiria.StateEnums;
 
-namespace Empiria.OnePoint.Requests.Adapters {
+namespace Empiria.Workflow.Requests.Adapters {
 
   public enum DateSearchField {
 
@@ -76,4 +76,4 @@ namespace Empiria.OnePoint.Requests.Adapters {
 
   }  // class RequestsQuery
 
-}  // namespace Empiria.OnePoint.Requests.Adapters
+}  // namespace Empiria.Workflow.Requests.Adapters

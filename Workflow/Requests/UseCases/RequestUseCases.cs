@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Use cases Layer                         *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Use case interactor class               *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Use case interactor class               *
 *  Type     : RequestUseCases                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Use cases for create, update and search requests.                                              *
@@ -11,9 +11,9 @@ using System;
 
 using Empiria.Services;
 
-using Empiria.OnePoint.Requests.Adapters;
+using Empiria.Workflow.Requests.Adapters;
 
-namespace Empiria.OnePoint.Requests.UseCases {
+namespace Empiria.Workflow.Requests.UseCases {
 
   /// <summary>Use cases for create, update and search requests.</summary>
   public class RequestUseCases : UseCase {
@@ -76,4 +76,4 @@ namespace Empiria.OnePoint.Requests.UseCases {
 
   }  // class RequestUseCases
 
-}  // namespace Empiria.OnePoint.Requests.UseCases
+}  // namespace Empiria.Workflow.Requests.UseCases

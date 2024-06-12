@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Requessts Management                         Component : Web Api                               *
-*  Assembly : Empiria.OnePoint.Requests.WebApi.dll         Pattern   : Web api Controller                    *
+*  Module   : Requests Management                          Component : Web Api                               *
+*  Assembly : Empiria.Workflow.WebApi.dll                  Pattern   : Web api Controller                    *
 *  Type     : CataloguesController                         License   : Please read LICENSE.txt file          *
 *                                                                                                            *
 *  Summary  : Web API used to retrive requests related catalogues.                                           *
@@ -12,10 +12,10 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.OnePoint.Requests.UseCases;
-using Empiria.OnePoint.Requests.Adapters;
+using Empiria.Workflow.Requests.UseCases;
+using Empiria.Workflow.Requests.Adapters;
 
-namespace Empiria.OnePoint.Requests.WebApi {
+namespace Empiria.Workflow.Requests.WebApi {
 
   /// <summary>Web API used to retrive requests related catalogues.</summary>
   public class CataloguesController : WebApiController {
@@ -85,4 +85,4 @@ namespace Empiria.OnePoint.Requests.WebApi {
 
   }  // class CataloguesController
 
-}  // namespace Empiria.OnePoint.Requests.WebApi
+}  // namespace Empiria.Workflow.Requests.WebApi

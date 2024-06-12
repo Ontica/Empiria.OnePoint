@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Adapters Layer                          *
-*  Assembly : Empiria.OnePoint.Requests.dll              Pattern   : Output DTO                              *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Output DTO                              *
 *  Type     : RequestTypeDto                             License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Output data transfer object for RequestType instances.                                         *
@@ -10,7 +10,7 @@
 
 using Empiria.DataObjects;
 
-namespace Empiria.OnePoint.Requests.Adapters {
+namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Output data transfer object for RequestType instances.</summary>
   public class RequestTypeDto {
@@ -30,4 +30,4 @@ namespace Empiria.OnePoint.Requests.Adapters {
 
   }  // class RequestTypeDto
 
-}  // namespace Empiria.OnePoint.Requests.Adapters
+}  // namespace Empiria.Workflow.Requests.Adapters
