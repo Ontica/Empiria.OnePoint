@@ -19,6 +19,8 @@ namespace Empiria.OnePoint.Security {
   /// <summary>Represents a system's user.</summary>
   internal sealed class EmpiriaUser : IEmpiriaUser {
 
+    private int PASSWORD_EXPIRATION_DAYS = ConfigurationData.Get("PasswordExpirationDays", 60);
+
     #region Constructors and parsers
 
     private EmpiriaUser() {
@@ -35,7 +37,7 @@ namespace Empiria.OnePoint.Security {
         Status = userData.Status,
         IsAuthenticated = false,
         MustChangePassword = userData.GetAttribute(ClaimAttributeNames.MustChangePassword, false),
-        PasswordUpdatedDate = userData.GetAttribute(ClaimAttributeNames.PasswordUpdatedDate, DateTime.Now.AddDays(-31)),
+        PasswordUpdatedDate = userData.GetAttribute(ClaimAttributeNames.PasswordUpdatedDate, DateTime.Today),
         PasswordNeverExpires = userData.GetAttribute(ClaimAttributeNames.PasswordNeverExpires, false)
       };
     }
@@ -81,7 +83,7 @@ namespace Empiria.OnePoint.Security {
 
     public bool PasswordExpired {
       get {
-        return PasswordNeverExpires == false && PasswordUpdatedDate.AddDays(60) < DateTime.Now;
+        return PasswordNeverExpires == false && PasswordUpdatedDate.AddDays(PASSWORD_EXPIRATION_DAYS) < DateTime.Now;
       }
     }
 
@@ -154,6 +156,7 @@ namespace Empiria.OnePoint.Security {
 
         throw securityException;
       }
+
 
     }
 

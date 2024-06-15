@@ -115,6 +115,17 @@ namespace Empiria.OnePoint.Security.Subjects {
     }
 
 
+    internal void MarkCredentialsAsExpired() {
+      var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
+                                        SecurityContext.Empty, _subject,
+                                        SecurityItem.Empty);
+
+      data.ExtData.Set(ClaimAttributeNames.MustChangePassword, true);
+
+      SecurityItemsDataWriter.UpdateSecurityItem(data);
+    }
+
+
     internal void RemoveSubjectCredentials() {
       var data = SecurityItemData.Parse(SecurityItemType.SubjectCredentials,
                                         SecurityContext.Empty, _subject,

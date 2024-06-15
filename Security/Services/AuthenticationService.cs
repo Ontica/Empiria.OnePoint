@@ -81,6 +81,8 @@ namespace Empiria.OnePoint.Security.Services {
 
       CloseActiveUserSessions(user);
 
+      MarkCredentialsAsExpiredIfNeeded(userData);
+
       return new EmpiriaPrincipal(identity, clientApplication, credentials);
     }
 
@@ -183,6 +185,19 @@ namespace Empiria.OnePoint.Security.Services {
       decrypted = Cryptographer.GetSHA256(decrypted + entropy);
 
       return decrypted;
+    }
+
+
+    private void MarkCredentialsAsExpiredIfNeeded(Claim userData) {
+      if (userData.HasAttribute(ClaimAttributeNames.MustChangePassword) ||
+          userData.HasAttribute(ClaimAttributeNames.PasswordUpdatedDate) ||
+          userData.HasAttribute(ClaimAttributeNames.PasswordNeverExpires)) {
+        return;
+      }
+
+      var editor = new SubjectSecurityItemsEditor(Contact.Parse(userData.SubjectId));
+
+      editor.MarkCredentialsAsExpired();
     }
 
 
