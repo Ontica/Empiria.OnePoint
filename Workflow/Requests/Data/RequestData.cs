@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Data Layer                              *
-*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Data Service                            *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Data Services                           *
 *  Type     : RequestData                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Provides data read and write services for Request instances.                                   *
@@ -20,8 +20,8 @@ namespace Empiria.Workflow.Requests.Data {
       var op = DataOperation.Parse("write_WKF_Request", o.Id, o.UID, o.RequestType.Id,
             o.UniqueID, o.ControlID, o.RequesterName, o.Description, o.Notes,
             o.RequesterOrgUnit.Id, o.Requester.Id, o.ResponsibleOrgUnit.Id,
-            o.WorkflowInstanceId, o.FiledBy.Id, o.FilingTime, o.ClosedBy.Id, o.ClosingTime, extensionData, o.Keywords,
-            o.PostedBy.Id, o.PostingTime, (char) o.Status);
+            o.WorkflowInstance.Id, o.FiledBy.Id, o.FilingTime, o.ClosedBy.Id, o.ClosingTime,
+            extensionData, o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

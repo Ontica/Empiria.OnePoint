@@ -1,7 +1,7 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Information Holder                      *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Abstract Partitioned Type               *
 *  Type     : Request                                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Abstract partitioned type that represents a request that can be filed.                         *
@@ -17,6 +17,7 @@ using Empiria.StateEnums;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
+using Empiria.Workflow.Execution;
 
 namespace Empiria.Workflow.Requests {
 
@@ -156,10 +157,10 @@ namespace Empiria.Workflow.Requests {
       }
     }
 
-    public int WorkflowInstanceId {
-      get {
-        return -1;
-      }
+    [DataField("REQ_WKF_INSTANCE_ID")]
+    public WorkflowInstance WorkflowInstance {
+      get;
+      private set;
     }
 
     #endregion Properties
