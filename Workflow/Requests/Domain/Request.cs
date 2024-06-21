@@ -15,9 +15,10 @@ using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Workflow.Execution;
+
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
-using Empiria.Workflow.Execution;
 
 namespace Empiria.Workflow.Requests {
 
@@ -43,6 +44,8 @@ namespace Empiria.Workflow.Requests {
       return BaseObject.GetFullList<Request>(filter, sort)
                        .ToFixedList();
     }
+
+    static internal Request Empty => ParseEmpty<Request>();
 
     #endregion Constructors and parsers
 
@@ -158,9 +161,14 @@ namespace Empiria.Workflow.Requests {
     }
 
     [DataField("REQ_WKF_INSTANCE_ID")]
+    private int _workflowInstanceId = -1;
+
     public WorkflowInstance WorkflowInstance {
-      get;
-      private set;
+      get {
+        return WorkflowInstance.Parse(_workflowInstanceId);
+      } set {
+        _workflowInstanceId = value.Id;
+      }
     }
 
     #endregion Properties

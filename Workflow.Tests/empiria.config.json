@@ -18,11 +18,6 @@
       "type": "Tests",
       "key": "SessionToken",
       "value": "{{TESTING-SESSION-TOKEN}}"
-    },
-    {
-      "type": "Data",
-      "key": "IsObjectIdGeneratorServer",
-      "value": false
     }
   ]
 }

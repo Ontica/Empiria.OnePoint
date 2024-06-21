@@ -21,6 +21,8 @@ namespace Empiria.Workflow.Definition {
       return BaseObject.ParseKey<ProcessDef>(uid);
     }
 
+    static internal ProcessDef Empty => ParseEmpty<ProcessDef>();
+
   }  // class ProcessDef
 
 }  // namespace Empiria.Workflow.Definition
