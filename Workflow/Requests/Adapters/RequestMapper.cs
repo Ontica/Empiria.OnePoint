@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.StateEnums;
+using Empiria.Storage;
 
 namespace Empiria.Workflow.Requests.Adapters {
 
@@ -17,6 +18,59 @@ namespace Empiria.Workflow.Requests.Adapters {
 
     static internal FixedList<RequestTypeDto> Map(FixedList<RequestType> requestsTypes) {
       return requestsTypes.Select(x => Map(x)).ToFixedList();
+    }
+
+
+    static internal FixedList<RequestHolderDto> Map(FixedList<Request> requests) {
+      return requests.Select(x => Map(x)).ToFixedList();
+    }
+
+
+    static internal RequestHolderDto Map(Request request) {
+      return new RequestHolderDto {
+        Request = MapRequest(request),
+        Tasks = MapRequestTasks(request),
+        Actions = MapRequestActions(request),
+        Files = MapRequestFiles(request),
+        WorkflowHistory = MapRequestWorkflowHistory(request),
+      };
+    }
+
+    private static FixedList<WorkflowHistoryItemDto> MapRequestWorkflowHistory(Request request) {
+      return new FixedList<WorkflowHistoryItemDto>();
+    }
+
+    private static FixedList<FileDto> MapRequestFiles(Request request) {
+      return new FixedList<FileDto>();
+    }
+
+    private static RequestActionsDto MapRequestActions(Request request) {
+      return new RequestActionsDto {
+        CanActivate = true,
+        CanDelete = true,
+        CanStart = true,
+        CanSuspend = true,
+      };
+    }
+
+    private static FixedList<TaskDto> MapRequestTasks(Request request) {
+      return new FixedList<TaskDto>();
+    }
+
+    private static RequestDto MapRequest(Request request) {
+      return new RequestDto {
+        UID = request.UID,
+        RequestType = new NamedEntityDto(request.RequestType.UID, request.RequestType.DisplayName),
+        UniqueID = request.UniqueID,
+        ControlID = request.ControlID,
+        Requester = request.RequesterName,
+        Description = request.Description,
+        RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
+        ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
+        FiledBy = request.FiledBy.MapToNamedEntity(),
+        FilingTime = request.FilingTime,
+        Status = request.Status.GetName()
+      };
     }
 
 
