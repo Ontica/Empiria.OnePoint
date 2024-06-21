@@ -27,7 +27,7 @@ namespace Empiria.Workflow.Requests.WebApi {
     public SingleObjectModel CreateRequest([FromBody] RequestFieldsDto fields) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        RequestDto request = usecases.CreateRequest(fields);
+        RequestDescriptorDto request = usecases.CreateRequest(fields);
 
         return new SingleObjectModel(base.Request, request);
       }
@@ -51,7 +51,7 @@ namespace Empiria.Workflow.Requests.WebApi {
     public CollectionModel SearchRequests([FromBody] RequestsQuery query) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        FixedList<RequestDto> requests = usecases.SearchRequests(query);
+        FixedList<RequestDescriptorDto> requests = usecases.SearchRequests(query);
 
         return new CollectionModel(base.Request, requests);
       }

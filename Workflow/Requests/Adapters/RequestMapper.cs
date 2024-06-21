@@ -20,28 +20,23 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
 
-    static internal FixedList<RequestDto> Map(FixedList<Request> requests) {
-      return requests.Select(x => Map(x)).ToFixedList();
+    static internal FixedList<RequestDescriptorDto> MapToDescriptor(FixedList<Request> requests) {
+      return requests.Select(x => MapToDescriptor(x)).ToFixedList();
     }
 
 
-    static internal RequestDto Map(Request request) {
-      return new RequestDto {
+    static internal RequestDescriptorDto MapToDescriptor(Request request) {
+      return new RequestDescriptorDto {
         UID = request.UID,
-        RequestType = new NamedEntityDto(request.RequestType.Name, request.RequestType.DisplayName),
+        RequestTypeName = request.RequestType.DisplayName,
         UniqueID = request.UniqueID,
         ControlID = request.ControlID,
         RequesterName = request.RequesterName,
         Description = request.Description,
-        Notes = request.Notes,
-        RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
-        ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
-        FiledBy = request.FiledBy.MapToNamedEntity(),
+        RequesterOrgUnitName = request.RequesterOrgUnit.FullName,
+        ResponsibleOrgUnitName = request.ResponsibleOrgUnit.FullName,
+        FiledByName = request.FiledBy.FullName,
         FilingTime = request.FilingTime,
-        ClosedBy = request.ClosedBy.MapToNamedEntity(),
-        ClosingTime = request.ClosingTime,
-        PostedBy = request.PostedBy.MapToNamedEntity(),
-        PostingTime = request.PostingTime,
         Status = request.Status.GetName()
       };
     }

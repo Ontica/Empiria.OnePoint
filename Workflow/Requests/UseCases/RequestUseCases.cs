@@ -33,7 +33,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
     #region Use cases
 
-    public RequestDto CreateRequest(RequestFieldsDto fields) {
+    public RequestDescriptorDto CreateRequest(RequestFieldsDto fields) {
       Assertion.Require(fields, nameof(fields));
 
       var requestType = RequestType.Parse(fields.RequestTypeUID);
@@ -42,7 +42,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       request.Save();
 
-      return RequestMapper.Map(request);
+      return RequestMapper.MapToDescriptor(request);
     }
 
 
@@ -57,7 +57,7 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
-    public FixedList<RequestDto> SearchRequests(RequestsQuery query) {
+    public FixedList<RequestDescriptorDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 
       query.EnsureIsValid();
@@ -69,7 +69,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       FixedList<Request> requests = Request.GetList(filter, sort, 200);
 
-      return RequestMapper.Map(requests);
+      return RequestMapper.MapToDescriptor(requests);
     }
 
     #endregion Use cases

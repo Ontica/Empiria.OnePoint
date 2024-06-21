@@ -44,7 +44,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       list = base.RestrictUserDataAccessTo(list);
 
-      return list.Select(x => new NamedEntityDto(x.UID, $"{x.Code} - {x.Name}"))
+      return list.Select(x => new NamedEntityDto(x.UID, x.FullName))
                  .ToFixedList();
     }
 

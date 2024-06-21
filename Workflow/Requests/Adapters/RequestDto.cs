@@ -12,14 +12,14 @@ using System;
 
 namespace Empiria.Workflow.Requests.Adapters {
 
-  /// <summary>Output DTO for Request instances.</summary>
-  public class RequestDto {
+  /// <summary>Output DTO for Request instances for use in lists.</summary>
+  public class RequestDescriptorDto {
 
     public string UID {
       get; internal set;
     }
 
-    public NamedEntityDto RequestType {
+    public string RequestTypeName {
       get; internal set;
     }
 
@@ -39,19 +39,15 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public string Notes {
+    public string RequesterOrgUnitName {
       get; internal set;
     }
 
-    public NamedEntityDto RequesterOrgUnit {
+    public string ResponsibleOrgUnitName {
       get; internal set;
     }
 
-    public NamedEntityDto ResponsibleOrgUnit {
-      get; internal set;
-    }
-
-    public NamedEntityDto FiledBy {
+    public string FiledByName {
       get; internal set;
     }
 
@@ -59,26 +55,10 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto ClosedBy {
-      get; internal set;
-    }
-
-    public DateTime ClosingTime {
-      get; internal set;
-    }
-
-    public NamedEntityDto PostedBy {
-      get; internal set;
-    }
-
-    public DateTime PostingTime {
-      get; internal set;
-    }
-
     public string Status {
       get; internal set;
     }
 
-  }  // class RequestDto
+  }  // class RequestDescriptorDto
 
 }  // namespace Empiria.Workflow.Requests.Adapters
