@@ -57,6 +57,15 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
+    public RequestHolderDto GetRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      return RequestMapper.Map(request);
+    }
+
+
     public FixedList<RequestDescriptorDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 

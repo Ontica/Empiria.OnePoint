@@ -33,7 +33,6 @@ namespace Empiria.Workflow.Requests.WebApi {
       }
     }
 
-
     [HttpDelete]
     [Route("v4/requests/{requestUID}")]
     public NoDataModel DeleteRequest([FromUri] string requestUID) {
@@ -42,6 +41,17 @@ namespace Empiria.Workflow.Requests.WebApi {
         usecases.DeleteRequest(requestUID);
 
         return new NoDataModel(base.Request);
+      }
+    }
+
+    [HttpGet]
+    [Route("v4/requests/{requestUID}")]
+    public SingleObjectModel GetRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.GetRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
       }
     }
 
