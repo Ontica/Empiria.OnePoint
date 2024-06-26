@@ -20,29 +20,7 @@ namespace Empiria.Workflow.Requests.WebApi {
   /// <summary>Web API used to create, update and manage requests.</summary>
   public class RequestsController : WebApiController {
 
-    #region Web Apis
-
-    [HttpPost]
-    [Route("v4/requests/create")]
-    public SingleObjectModel CreateRequest([FromBody] RequestFieldsDto fields) {
-
-      using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        RequestDescriptorDto request = usecases.CreateRequest(fields);
-
-        return new SingleObjectModel(base.Request, request);
-      }
-    }
-
-    [HttpDelete]
-    [Route("v4/requests/{requestUID}")]
-    public NoDataModel DeleteRequest([FromUri] string requestUID) {
-
-      using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        usecases.DeleteRequest(requestUID);
-
-        return new NoDataModel(base.Request);
-      }
-    }
+    #region Query web apis
 
     [HttpGet]
     [Route("v4/requests/{requestUID}")]
@@ -67,7 +45,93 @@ namespace Empiria.Workflow.Requests.WebApi {
       }
     }
 
-    #endregion Web Apis
+    #endregion Query web apis
+
+    #region Command web apis
+
+    [HttpPost]
+    [Route("v4/requests/{requestUID}/activate")]
+    public SingleObjectModel ActivateRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.ActivateRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/requests/{requestUID}/cancel")]
+    public SingleObjectModel CancelRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.CancelRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/requests/{requestUID}/close")]
+    public SingleObjectModel CloseRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.CloseRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+    [HttpPost]
+    [Route("v4/requests/create")]
+    public SingleObjectModel CreateRequest([FromBody] RequestFieldsDto fields) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.CreateRequest(fields);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v4/requests/{requestUID}")]
+    public NoDataModel DeleteRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        usecases.DeleteRequest(requestUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/requests/{requestUID}/start")]
+    public SingleObjectModel StartRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.StartRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/requests/{requestUID}/suspend")]
+    public SingleObjectModel SuspendRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.SuspendRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+    #endregion Command web apis
 
   }  // class RequestsController
 

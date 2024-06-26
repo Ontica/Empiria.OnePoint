@@ -33,7 +33,20 @@ namespace Empiria.Workflow.Requests.UseCases {
 
     #region Use cases
 
-    public RequestDescriptorDto CreateRequest(RequestFieldsDto fields) {
+    public RequestHolderDto ActivateRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Activate();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
+    }
+
+
+    public RequestHolderDto CreateRequest(RequestFieldsDto fields) {
       Assertion.Require(fields, nameof(fields));
 
       var requestType = RequestType.Parse(fields.RequestTypeUID);
@@ -42,7 +55,33 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       request.Save();
 
-      return RequestMapper.MapToDescriptor(request);
+      return RequestMapper.Map(request);
+    }
+
+
+    public RequestHolderDto CancelRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Cancel();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
+    }
+
+
+    public RequestHolderDto CloseRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Close();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
     }
 
 
@@ -79,6 +118,32 @@ namespace Empiria.Workflow.Requests.UseCases {
       FixedList<Request> requests = Request.GetList(filter, sort, 200);
 
       return RequestMapper.MapToDescriptor(requests);
+    }
+
+
+    public RequestHolderDto StartRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Start();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
+    }
+
+
+    public RequestHolderDto SuspendRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Suspend();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
     }
 
     #endregion Use cases

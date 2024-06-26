@@ -175,21 +175,89 @@ namespace Empiria.Workflow.Requests {
 
     #region Methods
 
+    internal void Activate() {
+      Assertion.Require(CanActivate(),
+                        $"Can not activate this request because its status is {Status.GetName()}.");
+
+      Status = ActivityStatus.Active;
+    }
+
+
+    internal bool CanActivate() {
+      if (Status == ActivityStatus.Suspended) {
+        return true;
+      }
+      return false;
+    }
+
+
+    public bool CanCancel() {
+      if (Status == ActivityStatus.Active || Status == ActivityStatus.Suspended) {
+        return true;
+      }
+      return false;
+    }
+
+
+    public bool CanClose() {
+      if (Status == ActivityStatus.Active) {
+        return true;
+      }
+      return false;
+    }
+
+
+    public bool CanDelete() {
+      if (Status == ActivityStatus.Pending) {
+        return true;
+      }
+      return false;
+    }
+
+
+    public bool CanStart() {
+      if (Status == ActivityStatus.Pending) {
+        return true;
+      }
+      return false;
+    }
+
+
+    public bool CanSuspend() {
+      if (Status == ActivityStatus.Active) {
+        return true;
+      }
+      return false;
+    }
+
+
+    protected virtual internal bool CanUpdate() {
+      if (Status == ActivityStatus.Pending) {
+        return true;
+      }
+      return false;
+    }
+
+
+    public void Cancel() {
+      Assertion.Require(CanCancel(),
+                        $"Can not cancel this request because its status is {Status.GetName()}, " +
+                        $"or because has one or more completed tasks that are not reversible.");
+
+      Status = ActivityStatus.Canceled;
+    }
+
+
     public void Close() {
       ClosingTime = EmpiriaDateTime.NowWithCentiseconds;
       ClosedBy = ExecutionServer.CurrentContact;
     }
 
 
-    public void Cancel() {
-      Assertion.Require(Status == ActivityStatus.Active,
-                        "No se puede eliminar una solicitud que no está en status de activa.");
-      this.Status = ActivityStatus.Canceled;
-    }
-
     public void Delete() {
-      Assertion.Require(Status == ActivityStatus.Pending,
-                        "No se puede eliminar una solicitud que no está pendiente.");
+      Assertion.Require(CanDelete(),
+                        $"Can not delete this request because its status is {Status.GetName()}.");
+
       this.Status = ActivityStatus.Deleted;
     }
 
@@ -209,11 +277,29 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    internal void Start() {
+      Assertion.Require(CanStart(),
+                        $"Can not start this request because its status is {Status.GetName()}.");
+
+      Status = ActivityStatus.Active;
+    }
+
+
+    internal void Suspend() {
+      Assertion.Require(CanSuspend(),
+                        $"Can not suspend this request because its status is {Status.GetName()}.");
+
+      Status = ActivityStatus.Suspended;
+    }
+
+
     protected virtual internal void Update(RequestFieldsDto fields) {
+      Assertion.Require(CanUpdate(),
+                       $"Can not update this request because its status is {Status.GetName()}.");
+
       this.Description = RequestType.DisplayName;
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
     }
-
 
     #endregion Methods
 

@@ -98,7 +98,15 @@ namespace Empiria.Workflow.Requests.Adapters {
   /// <summary>Inner output DTO with a request actions flags.</summary>
   public class RequestActionsDto {
 
-    public bool CanStart {
+    public bool CanActivate {
+      get; internal set;
+    }
+
+    public bool CanCancel {
+      get; internal set;
+    }
+
+    public bool CanClose {
       get; internal set;
     }
 
@@ -106,11 +114,15 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
+    public bool CanStart {
+      get; internal set;
+    }
+
     public bool CanSuspend {
       get; internal set;
     }
 
-    public bool CanActivate {
+    public bool CanUpdate {
       get; internal set;
     }
 

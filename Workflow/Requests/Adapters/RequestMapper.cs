@@ -46,10 +46,13 @@ namespace Empiria.Workflow.Requests.Adapters {
 
     private static RequestActionsDto MapRequestActions(Request request) {
       return new RequestActionsDto {
-        CanActivate = true,
-        CanDelete = true,
-        CanStart = true,
-        CanSuspend = true,
+        CanActivate = request.CanActivate(),
+        CanCancel = request.CanCancel(),
+        CanClose = request.CanClose(),
+        CanDelete = request.CanDelete(),
+        CanStart = request.CanStart(),
+        CanSuspend = request.CanSuspend(),
+        CanUpdate = request.CanUpdate(),
       };
     }
 
