@@ -117,7 +117,7 @@ namespace Empiria.Workflow.Requests.Adapters {
 
     static private string BuildRequestStatusFilter(RequestsQuery query) {
       if (query.RequestStatus == ActivityStatus.All) {
-        return string.Empty;
+        return $"REQ_STATUS <> 'X'";
       }
 
       return $"REQ_STATUS = '{(char) query.RequestStatus}'";
