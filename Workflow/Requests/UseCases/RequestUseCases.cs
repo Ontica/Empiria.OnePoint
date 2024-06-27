@@ -105,6 +105,19 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
+    public RequestHolderDto RejectRequest(string requestUID) {
+      Assertion.Require(requestUID, nameof(requestUID));
+
+      var request = Request.Parse(requestUID);
+
+      request.Reject();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
+    }
+
+
     public FixedList<RequestDescriptorDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 
@@ -140,6 +153,20 @@ namespace Empiria.Workflow.Requests.UseCases {
       var request = Request.Parse(requestUID);
 
       request.Suspend();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
+    }
+
+
+    public RequestHolderDto UpdateRequest(string requestUID, RequestFieldsDto fields) {
+      Assertion.Require(requestUID, nameof(requestUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var request = Request.Parse(requestUID);
+
+      request.Update(fields);
 
       request.Save();
 

@@ -215,6 +215,14 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    public bool CanReject() {
+      if (Status == ActivityStatus.Active) {
+        return true;
+      }
+      return false;
+    }
+
+
     public bool CanStart() {
       if (Status == ActivityStatus.Pending) {
         return true;
@@ -232,7 +240,7 @@ namespace Empiria.Workflow.Requests {
 
 
     protected virtual internal bool CanUpdate() {
-      if (Status == ActivityStatus.Pending) {
+      if (Status == ActivityStatus.Pending || Status == ActivityStatus.Active) {
         return true;
       }
       return false;
@@ -251,6 +259,8 @@ namespace Empiria.Workflow.Requests {
     public void Close() {
       ClosingTime = EmpiriaDateTime.NowWithCentiseconds;
       ClosedBy = ExecutionServer.CurrentContact;
+
+      Status = ActivityStatus.Completed;
     }
 
 
@@ -274,6 +284,14 @@ namespace Empiria.Workflow.Requests {
         PostedBy = ExecutionServer.CurrentContact;
       }
       RequestData.Write(this, this.ExtensionData.ToString());
+    }
+
+
+    public void Reject() {
+      Assertion.Require(CanReject(),
+                        $"Can not reject this request because its status is {Status.GetName()}.");
+
+      this.Status = ActivityStatus.Rejected;
     }
 
 

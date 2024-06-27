@@ -91,6 +91,7 @@ namespace Empiria.Workflow.Requests.UseCases {
         new NamedEntityDto(ActivityStatus.Suspended.ToString(), ActivityStatus.Suspended.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Completed.ToString(), ActivityStatus.Completed.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Canceled.ToString(), ActivityStatus.Canceled.GetPluralName()),
+        new NamedEntityDto(ActivityStatus.Rejected.ToString(), ActivityStatus.Rejected.GetPluralName()),
         new NamedEntityDto(ActivityStatus.Deleted.ToString(), ActivityStatus.Deleted.GetPluralName()),
       };
 

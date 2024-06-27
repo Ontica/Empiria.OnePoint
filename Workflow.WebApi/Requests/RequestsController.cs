@@ -88,6 +88,8 @@ namespace Empiria.Workflow.Requests.WebApi {
     [Route("v4/requests/create")]
     public SingleObjectModel CreateRequest([FromBody] RequestFieldsDto fields) {
 
+      base.RequireBody(fields);
+
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
         RequestHolderDto request = usecases.CreateRequest(fields);
 
@@ -104,6 +106,18 @@ namespace Empiria.Workflow.Requests.WebApi {
         usecases.DeleteRequest(requestUID);
 
         return new NoDataModel(base.Request);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v4/requests/{requestUID}/reject")]
+    public SingleObjectModel RejectRequest([FromUri] string requestUID) {
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.RejectRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
       }
     }
 
@@ -126,6 +140,21 @@ namespace Empiria.Workflow.Requests.WebApi {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
         RequestHolderDto request = usecases.SuspendRequest(requestUID);
+
+        return new SingleObjectModel(base.Request, request);
+      }
+    }
+
+
+    [HttpPatch, HttpPut]
+    [Route("v4/requests/{requestUID}")]
+    public SingleObjectModel UpdateRequest([FromUri] string requestUID,
+                                           [FromBody] RequestFieldsDto fields) {
+
+      base.RequireBody(fields);
+
+      using (var usecases = RequestUseCases.UseCaseInteractor()) {
+        RequestHolderDto request = usecases.UpdateRequest(requestUID, fields);
 
         return new SingleObjectModel(base.Request, request);
       }
