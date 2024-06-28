@@ -64,16 +64,23 @@ namespace Empiria.Workflow.Requests.Adapters {
     private static RequestDto MapRequest(Request request) {
       return new RequestDto {
         UID = request.UID,
-        RequestType = new NamedEntityDto(request.RequestType.UID, request.RequestType.DisplayName),
+        RequestType = Map(request.RequestType),
         UniqueID = request.UniqueID,
         ControlID = request.ControlID,
-        Requester = request.RequesterName,
+        RequesterName = request.RequesterName,
         Description = request.Description,
+        Notes = request.Notes,
+        RequestTypeFields = request.RequestTypeFields,
         RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
         ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
         FiledBy = request.FiledBy.MapToNamedEntity(),
         FilingTime = request.FilingTime,
-        Status = request.Status.GetName()
+        ClosedBy = request.ClosedBy.MapToNamedEntity(),
+        ClosingTime = request.ClosingTime,
+        PostedBy = request.PostedBy.MapToNamedEntity(),
+        PostingTime = request.PostingTime,
+        Status = request.Status.GetName(),
+
       };
     }
 

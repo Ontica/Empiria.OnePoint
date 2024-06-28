@@ -9,8 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 
+using Empiria.DataObjects;
 using Empiria.Json;
-
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
@@ -19,6 +19,7 @@ using Empiria.Workflow.Execution;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
+
 
 namespace Empiria.Workflow.Requests {
 
@@ -169,6 +170,10 @@ namespace Empiria.Workflow.Requests {
       } set {
         _workflowInstanceId = value.Id;
       }
+    }
+
+    public abstract FixedList<FieldValue> RequestTypeFields {
+      get;
     }
 
     #endregion Properties

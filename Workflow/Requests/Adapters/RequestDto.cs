@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-
+using Empiria.DataObjects;
 using Empiria.Storage;
 
 namespace Empiria.Workflow.Requests.Adapters {
@@ -18,6 +18,10 @@ namespace Empiria.Workflow.Requests.Adapters {
   public class RequestHolderDto {
 
     public RequestDto Request {
+      get; internal set;
+    }
+
+    public RequestActionsDto Actions {
       get; internal set;
     }
 
@@ -33,9 +37,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public RequestActionsDto Actions {
-      get; internal set;
-    }
 
   }  // RequestHolderDto
 
@@ -47,7 +48,7 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto RequestType {
+    public RequestTypeDto RequestType {
       get; internal set;
     }
 
@@ -59,7 +60,7 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public string Requester {
+    public string RequesterName {
       get; internal set;
     }
 
@@ -68,6 +69,10 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     public string Notes {
+      get; internal set;
+    }
+
+    public FixedList<FieldValue> RequestTypeFields {
       get; internal set;
     }
 
@@ -84,6 +89,22 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     public DateTime FilingTime {
+      get; internal set;
+    }
+
+    public NamedEntityDto ClosedBy {
+      get; internal set;
+    }
+
+    public DateTime ClosingTime {
+      get; internal set;
+    }
+
+    public NamedEntityDto PostedBy {
+      get; internal set;
+    }
+
+    public DateTime PostingTime {
       get; internal set;
     }
 
