@@ -53,7 +53,8 @@ namespace Empiria.OnePoint.Security.Services {
       var userData = Claim.TryParse(SecurityItemType.SubjectCredentials, session.UserId);
 
       if (userData == null) {
-        throw new SecurityException(SecurityException.Msg.EnsureClaimFailed);
+        throw new SecurityException(SecurityException.Msg.EnsureClaimFailed,
+          "No se encontró la cuenta de acceso al sistema. Posiblemente dicha cuenta ya fue eliminada.");
       }
 
       IEmpiriaUser user = EmpiriaUser.Authenticate(userData);
