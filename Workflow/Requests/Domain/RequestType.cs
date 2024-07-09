@@ -11,6 +11,8 @@
 using Empiria.DataObjects;
 using Empiria.Ontology;
 
+using Empiria.Workflow.Definition;
+
 using Empiria.Workflow.Requests.Adapters;
 
 namespace Empiria.Workflow.Requests {
@@ -44,6 +46,13 @@ namespace Empiria.Workflow.Requests {
     #endregion Constructors and parsers
 
     #region Properties
+
+    public ProcessDef ProcessDefinition {
+      get {
+        return base.ExtensionData.Get<ProcessDef>("processDefinitionId");
+      }
+    }
+
 
     public FixedList<DataField> InputData {
       get {

@@ -11,6 +11,9 @@ using System;
 
 using Empiria.Services;
 
+using Empiria.Workflow.Definition;
+using Empiria.Workflow.Execution;
+
 using Empiria.Workflow.Requests.Adapters;
 
 namespace Empiria.Workflow.Requests.UseCases {
@@ -46,19 +49,6 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
-    public RequestHolderDto CreateRequest(RequestFieldsDto fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      var requestType = RequestType.Parse(fields.RequestTypeUID);
-
-      Request request = requestType.CreateRequest(fields);
-
-      request.Save();
-
-      return RequestMapper.Map(request);
-    }
-
-
     public RequestHolderDto CancelRequest(string requestUID) {
       Assertion.Require(requestUID, nameof(requestUID));
 
@@ -78,6 +68,19 @@ namespace Empiria.Workflow.Requests.UseCases {
       var request = Request.Parse(requestUID);
 
       request.Close();
+
+      request.Save();
+
+      return RequestMapper.Map(request);
+    }
+
+
+    public RequestHolderDto CreateRequest(RequestFieldsDto fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var requestType = RequestType.Parse(fields.RequestTypeUID);
+
+      Request request = requestType.CreateRequest(fields);
 
       request.Save();
 
@@ -139,7 +142,9 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       var request = Request.Parse(requestUID);
 
-      request.Start();
+      ProcessDef processDefinition = request.RequestType.ProcessDefinition;
+
+      request.Start(processDefinition);
 
       request.Save();
 

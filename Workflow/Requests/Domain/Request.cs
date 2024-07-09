@@ -19,7 +19,7 @@ using Empiria.Workflow.Execution;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
-
+using Empiria.Workflow.Definition;
 
 namespace Empiria.Workflow.Requests {
 
@@ -161,15 +161,11 @@ namespace Empiria.Workflow.Requests {
       }
     }
 
-    [DataField("REQ_WKF_INSTANCE_ID")]
-    private int _workflowInstanceId = -1;
 
+    [DataField("REQ_WKF_INSTANCE_ID")]
     public WorkflowInstance WorkflowInstance {
-      get {
-        return WorkflowInstance.Parse(_workflowInstanceId);
-      } set {
-        _workflowInstanceId = value.Id;
-      }
+      get;
+      private set;
     }
 
     public abstract FixedList<FieldValue> RequestTypeFields {
@@ -277,12 +273,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    public void File() {
-      FilingTime = EmpiriaDateTime.NowWithCentiseconds;
-      FiledBy = ExecutionServer.CurrentContact;
-    }
-
-
     protected override void OnSave() {
       if (base.IsNew) {
         PostingTime = EmpiriaDateTime.NowWithCentiseconds;
@@ -300,11 +290,18 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal void Start() {
+    internal void Start(ProcessDef processDefinition) {
+      Assertion.Require(processDefinition, nameof(processDefinition));
+
       Assertion.Require(CanStart(),
                         $"Can not start this request because its status is {Status.GetName()}.");
 
-      Status = ActivityStatus.Active;
+      this.WorkflowInstance = new WorkflowInstance(processDefinition, this);
+
+      this.WorkflowInstance.Start();
+
+      this.FilingTime = this.WorkflowInstance.StartTime;
+      this.FiledBy = ExecutionServer.CurrentContact;
     }
 
 
