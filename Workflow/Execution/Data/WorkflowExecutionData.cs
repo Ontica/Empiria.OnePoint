@@ -17,7 +17,7 @@ namespace Empiria.Workflow.Execution.Data {
 
     static internal void Write(WorkflowInstance o) {
       var op = DataOperation.Parse("write_WKF_Instance", o.Id, o.UID,
-                                  o.Model.Id, o.Request.Id, o.Parent.Id,
+                                  o.ProcessDefinition.Id, o.Request.Id, o.Parent.Id,
                                   o.ExtensionData.ToString(), o.Keywords,
                                   o.StartTime, o.CloseTime, (char) o.Status);
 

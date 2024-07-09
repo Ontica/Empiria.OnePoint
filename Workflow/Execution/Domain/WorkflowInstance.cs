@@ -15,6 +15,7 @@ using Empiria.StateEnums;
 
 using Empiria.Workflow.Requests;
 using Empiria.Workflow.Definition;
+
 using Empiria.Workflow.Execution.Data;
 
 namespace Empiria.Workflow.Execution {
@@ -23,6 +24,18 @@ namespace Empiria.Workflow.Execution {
   public class WorkflowInstance : BaseObject {
 
     #region Constructors and parsers
+
+    private WorkflowInstance() {
+      // Required by Empiria Framework.
+    }
+
+    public WorkflowInstance(ProcessDef processDefinition, Request request) {
+      Assertion.Require(processDefinition, nameof(processDefinition));
+      Assertion.Require(request, nameof(request));
+
+      this.ProcessDefinition = processDefinition;
+      this.Request = request;
+    }
 
     static internal WorkflowInstance Parse(int id) {
       return BaseObject.ParseId<WorkflowInstance>(id);
@@ -39,13 +52,21 @@ namespace Empiria.Workflow.Execution {
     #region Properties
 
     [DataField("WKF_INSTANCE_MODEL_ID")]
-    public ProcessDef Model {
+    public ProcessDef ProcessDefinition {
       get; private set;
     }
 
+
     [DataField("WKF_INSTANCE_REQUEST_ID")]
+    private int _requestId = -1;
+
     public Request Request {
-      get; private set;
+      get {
+        return Request.Parse(_requestId);
+      }
+      private set {
+        _requestId = value.Id;
+      }
     }
 
     [DataField("WKF_INSTANCE_PARENT_ID")]
@@ -99,11 +120,16 @@ namespace Empiria.Workflow.Execution {
     #region Methods
 
     protected override void OnSave() {
-      if (base.IsNew) {
-        StartTime = EmpiriaDateTime.NowWithCentiseconds;
-        Status = ActivityStatus.Active;
-      }
       WorkflowExecutionData.Write(this);
+    }
+
+    internal void Start() {
+      Assertion.Require(StartTime != ExecutionServer.DateMaxValue,
+                        "Workflow instance was already started");
+
+      StartTime = EmpiriaDateTime.NowWithCentiseconds;
+      Status = ActivityStatus.Active;
+
     }
 
     #endregion Methods
