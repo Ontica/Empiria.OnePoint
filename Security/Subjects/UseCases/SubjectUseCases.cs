@@ -137,7 +137,7 @@ namespace Empiria.OnePoint.Security.Subjects.UseCases {
 
       var subject = SubjectsDataService.GetSubject(contact);
 
-      EmpiriaLog.UserManagementLog(subject.Contact, "Se suspendió la cuenta de acceso al sistema");
+      EmpiriaLog.UserManagementLog(subject.Contact, "Se bloqueó (suspendió) la cuenta de acceso al sistema");
 
       return SubjectMapper.Map(subject);
     }
