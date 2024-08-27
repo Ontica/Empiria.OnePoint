@@ -19,7 +19,7 @@ namespace Empiria.OnePoint.Security {
   /// <summary>Represents a system's user.</summary>
   internal sealed class EmpiriaUser : IEmpiriaUser {
 
-    private int PASSWORD_EXPIRATION_DAYS = ConfigurationData.Get("PasswordExpirationDays", 60);
+    private int PASSWORD_EXPIRATION_DAYS = ConfigurationData.Get("PasswordExpirationDays", 45);
 
     #region Constructors and parsers
 
