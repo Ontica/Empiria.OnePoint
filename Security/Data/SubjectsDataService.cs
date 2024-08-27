@@ -18,6 +18,8 @@ namespace Empiria.OnePoint.Security.Data {
 
   static internal class SubjectsDataService {
 
+    static private readonly bool USES_LEGACY_MH_PARTICIPANTS = ConfigurationData.Get("UsesLegacyMHParticipants", false);
+
     static internal SubjectData GetSubject(IIdentifiable contact) {
       string sql = "SELECT * FROM " +
                    "SecurityItems INNER JOIN Contacts " +
@@ -70,7 +72,7 @@ namespace Empiria.OnePoint.Security.Data {
     #region Legacy MhParticipants integration
 
     static internal int TryGetFormerParticipantId(string userID) {
-      if (!ExecutionServer.LicenseName.Equals("BANOBRAS")) {
+      if (!USES_LEGACY_MH_PARTICIPANTS) {
         return 0;
       }
 
@@ -86,7 +88,7 @@ namespace Empiria.OnePoint.Security.Data {
 
 
     static internal void WriteAsParticipant(SubjectData subject) {
-      if (!ExecutionServer.LicenseName.Equals("BANOBRAS")) {
+      if (!USES_LEGACY_MH_PARTICIPANTS) {
         return;
       }
 
