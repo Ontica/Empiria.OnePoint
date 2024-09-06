@@ -1,0 +1,27 @@
+﻿{
+  "appName": "Empiria OnePoint Reporting Web Api Local Development.",
+  "version": "4.0",
+  "date": "2024-09-06",
+  "settings": [
+    {
+      "type": "",
+      "key": "ApplicationKey",
+      "value": "{{APPLICATION-KEY}}"
+    },
+    {
+      "type": "",
+      "key": "GlobalConfigurationFile",
+      "value": "{{GLOBAL-CONFIGURATION-FILE}}"
+    },
+    {
+      "type": "Data",
+      "key": "IsObjectIdGeneratorServer",
+      "value": false
+    },
+    {
+      "type": "WebApi",
+      "key": "IsPassThroughServer",
+      "value": false
+    }
+  ]
+}
