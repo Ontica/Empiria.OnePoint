@@ -47,9 +47,9 @@ namespace Empiria.Workflow.Requests {
 
     #region Properties
 
-    public ProcessDef ProcessDefinition {
+    public ProcessDef DefaultProcessDefinition {
       get {
-        return base.ExtensionData.Get<ProcessDef>("processDefinitionId");
+        return base.ExtensionData.Get<ProcessDef>("defaultProcessDefinitionId");
       }
     }
 
