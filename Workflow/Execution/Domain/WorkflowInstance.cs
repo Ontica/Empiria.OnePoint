@@ -123,13 +123,13 @@ namespace Empiria.Workflow.Execution {
       WorkflowExecutionData.Write(this);
     }
 
+
     internal void Start() {
-      Assertion.Require(StartTime != ExecutionServer.DateMaxValue,
-                        "Workflow instance was already started");
+      Assertion.Require(StartTime == ExecutionServer.DateMaxValue && Status == ActivityStatus.Pending,
+                        $"Workflow instance was already started and has status {Status.GetName()}");
 
       StartTime = EmpiriaDateTime.NowWithCentiseconds;
       Status = ActivityStatus.Active;
-
     }
 
     #endregion Methods
