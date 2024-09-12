@@ -62,19 +62,19 @@ namespace Empiria.Workflow.Requests {
 
     [DataField("REQ_UNIQUE_ID")]
     public string UniqueID {
-      get; protected set;
+      get; private set;
     }
 
 
     [DataField("REQ_CONTROL_ID")]
     public string ControlID {
-      get; protected set;
+      get; private set;
     }
 
 
     [DataField("REQ_REQUESTER_NAME")]
     public string RequesterName {
-      get; protected set;
+      get; private set;
     }
 
 
@@ -86,25 +86,25 @@ namespace Empiria.Workflow.Requests {
 
     [DataField("REQ_NOTES")]
     public string Notes {
-      get; protected set;
+      get; private set;
     }
 
 
     [DataField("REQ_REQUESTER_ORG_UNIT_ID")]
     public OrganizationalUnit RequesterOrgUnit {
-      get; protected set;
+      get; private set;
     }
 
 
     [DataField("REQ_REQUESTER_ID")]
     public Person Requester {
-      get; protected set;
+      get; private set;
     }
 
 
     [DataField("REQ_RESPONSIBLE_ORG_UNIT_ID")]
     public OrganizationalUnit ResponsibleOrgUnit {
-      get; protected set;
+      get; private set;
     }
 
 
@@ -276,6 +276,9 @@ namespace Empiria.Workflow.Requests {
 
     protected override void OnSave() {
       if (base.IsNew) {
+        this.UniqueID = RequestData.GetNextUniqueID(ResponsibleOrgUnit.Acronym, DateTime.Today.Year);
+        this.ControlID = "No determinado";
+
         PostingTime = EmpiriaDateTime.NowWithCentiseconds;
         PostedBy = ExecutionServer.CurrentContact;
       }
@@ -292,6 +295,8 @@ namespace Empiria.Workflow.Requests {
 
       this.WorkflowInstance.Start();
 
+      this.ControlID = RequestData.GetNextControlNumber(DateTime.Today.Year);
+
       this.Status = ActivityStatus.Active;
     }
 
@@ -304,10 +309,20 @@ namespace Empiria.Workflow.Requests {
 
 
     protected virtual internal void Update(RequestFieldsDto fields) {
+      Assertion.Require(fields, nameof(fields));
+
       Assertion.Require(CanUpdate(), InvalidOperationMessage("update"));
 
+      if (fields.RequestTypeUID != RequestType.UID) {
+        base.ReclassifyAs(RequestType.Parse(fields.RequestTypeUID));
+      }
+
+      this.Requester = Person.Parse(ExecutionServer.CurrentUserId);
+      this.RequesterName = Requester.Name;
       this.Description = RequestType.DisplayName;
+
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
+      this.ResponsibleOrgUnit = RequestType.ResponsibleOrgUnit;
     }
 
     #endregion Methods

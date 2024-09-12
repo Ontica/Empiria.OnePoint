@@ -10,6 +10,7 @@
 
 using Empiria.DataObjects;
 using Empiria.Ontology;
+using Empiria.Parties;
 
 using Empiria.Workflow.Definition;
 
@@ -57,6 +58,12 @@ namespace Empiria.Workflow.Requests {
     public FixedList<DataField> InputData {
       get {
         return base.ExtensionData.GetFixedList<DataField>("inputData", false);
+      }
+    }
+
+    public OrganizationalUnit ResponsibleOrgUnit {
+      get {
+        return base.ExtensionData.Get<OrganizationalUnit>("responsibleOrgUnitId");
       }
     }
 
