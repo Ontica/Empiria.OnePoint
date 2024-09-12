@@ -282,14 +282,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    public void Reject() {
-      Assertion.Require(CanReject(),
-                        $"Can not reject this request because its status is {Status.GetName()}.");
-
-      this.Status = ActivityStatus.Rejected;
-    }
-
-
     internal void Start(ProcessDef processDefinition) {
       Assertion.Require(processDefinition, nameof(processDefinition));
 
@@ -300,8 +292,7 @@ namespace Empiria.Workflow.Requests {
 
       this.WorkflowInstance.Start();
 
-      this.FilingTime = this.WorkflowInstance.StartTime;
-      this.FiledBy = ExecutionServer.CurrentContact;
+      this.Status = ActivityStatus.Active;
     }
 
 

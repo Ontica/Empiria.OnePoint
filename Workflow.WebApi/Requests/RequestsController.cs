@@ -111,18 +111,6 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/reject")]
-    public SingleObjectModel RejectRequest([FromUri] string requestUID) {
-
-      using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        RequestHolderDto request = usecases.RejectRequest(requestUID);
-
-        return new SingleObjectModel(base.Request, request);
-      }
-    }
-
-
-    [HttpPost]
     [Route("v4/requests/{requestUID}/start")]
     public SingleObjectModel StartRequest([FromUri] string requestUID) {
 

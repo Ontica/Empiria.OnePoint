@@ -108,19 +108,6 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
-    public RequestHolderDto RejectRequest(string requestUID) {
-      Assertion.Require(requestUID, nameof(requestUID));
-
-      var request = Request.Parse(requestUID);
-
-      request.Reject();
-
-      request.Save();
-
-      return RequestMapper.Map(request);
-    }
-
-
     public FixedList<RequestDescriptorDto> SearchRequests(RequestsQuery query) {
       Assertion.Require(query, nameof(query));
 
@@ -128,8 +115,6 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       string filter = query.MapToFilterString();
       string sort = query.MapToSortString();
-
-      EmpiriaLog.Debug(filter);
 
       FixedList<Request> requests = Request.GetList(filter, sort, 200);
 
@@ -142,9 +127,11 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       var request = Request.Parse(requestUID);
 
-      ProcessDef processDefinition = request.RequestType.ProcessDefinition;
+      ProcessDef processDefinition = request.RequestType.DefaultProcessDefinition;
 
       request.Start(processDefinition);
+
+      request.WorkflowInstance.Save();
 
       request.Save();
 
