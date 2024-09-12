@@ -15,7 +15,6 @@ namespace Empiria.OnePoint.ESign.Providers {
   internal class SeguriSignClient : IESignClient {
 
     public string Sign(string message) {
-
       return Empiria.Security.Cryptographer.GetSHA256(message);
     }
 

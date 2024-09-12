@@ -60,4 +60,4 @@ namespace Empiria.OnePoint.Reporting.Security.WebApi {
 
   }  // class LogsController
 
-}  // namespace Empiria.OnePoint.Security.WebApi
+}  // namespace Empiria.OnePoint.Reporting.Security.WebApi

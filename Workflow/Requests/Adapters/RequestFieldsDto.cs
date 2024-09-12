@@ -27,7 +27,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; set;
     }
 
-
   }  // class RequestFieldsDto
 
 }  // namespace Empiria.Workflow.Requests.Adapters
