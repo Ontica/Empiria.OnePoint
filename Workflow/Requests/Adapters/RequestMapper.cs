@@ -50,7 +50,6 @@ namespace Empiria.Workflow.Requests.Adapters {
         CanCancel = request.CanCancel(),
         CanClose = request.CanClose(),
         CanDelete = request.CanDelete(),
-        CanReject = request.CanReject(),
         CanStart = request.CanStart(),
         CanSuspend = request.CanSuspend(),
         CanUpdate = request.CanUpdate(),

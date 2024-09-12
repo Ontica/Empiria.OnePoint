@@ -135,10 +135,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public bool CanReject {
-      get; internal set;
-    }
-
     public bool CanStart {
       get; internal set;
     }

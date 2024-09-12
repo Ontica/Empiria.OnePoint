@@ -17,9 +17,10 @@ using Empiria.StateEnums;
 
 using Empiria.Workflow.Execution;
 
+using Empiria.Workflow.Definition;
+
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
-using Empiria.Workflow.Definition;
 
 namespace Empiria.Workflow.Requests {
 
@@ -161,6 +162,12 @@ namespace Empiria.Workflow.Requests {
       }
     }
 
+    public bool HasWorkflowInstance {
+      get {
+        return !WorkflowInstance.IsEmptyInstance;
+      }
+    }
+
 
     [DataField("REQ_WKF_INSTANCE_ID")]
     public WorkflowInstance WorkflowInstance {
@@ -174,18 +181,10 @@ namespace Empiria.Workflow.Requests {
 
     #endregion Properties
 
-    #region Methods
-
-    internal void Activate() {
-      Assertion.Require(CanActivate(),
-                        $"Can not activate this request because its status is {Status.GetName()}.");
-
-      Status = ActivityStatus.Active;
-    }
-
+    #region Guards
 
     internal bool CanActivate() {
-      if (Status == ActivityStatus.Suspended) {
+      if (HasWorkflowInstance && Status == ActivityStatus.Suspended) {
         return true;
       }
       return false;
@@ -193,7 +192,7 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanCancel() {
-      if (Status == ActivityStatus.Active || Status == ActivityStatus.Suspended) {
+      if (HasWorkflowInstance && (Status == ActivityStatus.Active || Status == ActivityStatus.Suspended)) {
         return true;
       }
       return false;
@@ -201,7 +200,7 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanClose() {
-      if (Status == ActivityStatus.Active) {
+      if (HasWorkflowInstance && Status == ActivityStatus.Active) {
         return true;
       }
       return false;
@@ -209,15 +208,7 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanDelete() {
-      if (Status == ActivityStatus.Pending) {
-        return true;
-      }
-      return false;
-    }
-
-
-    public bool CanReject() {
-      if (Status == ActivityStatus.Active) {
+      if (!HasWorkflowInstance && Status == ActivityStatus.Pending) {
         return true;
       }
       return false;
@@ -225,15 +216,16 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanStart() {
-      if (Status == ActivityStatus.Pending) {
+      if (!HasWorkflowInstance && Status == ActivityStatus.Pending) {
         return true;
       }
+
       return false;
     }
 
 
     public bool CanSuspend() {
-      if (Status == ActivityStatus.Active) {
+      if (HasWorkflowInstance && Status == ActivityStatus.Active) {
         return true;
       }
       return false;
@@ -241,23 +233,33 @@ namespace Empiria.Workflow.Requests {
 
 
     protected virtual internal bool CanUpdate() {
-      if (Status == ActivityStatus.Pending || Status == ActivityStatus.Active) {
+      if (!HasWorkflowInstance && Status == ActivityStatus.Pending) {
         return true;
       }
       return false;
     }
 
+    #endregion Guards
+
+    #region Methods
+
+    internal void Activate() {
+      Assertion.Require(CanActivate(), InvalidOperationMessage("activate"));
+
+      Status = ActivityStatus.Active;
+    }
+
 
     public void Cancel() {
-      Assertion.Require(CanCancel(),
-                        $"Can not cancel this request because its status is {Status.GetName()}, " +
-                        $"or because has one or more completed tasks that are not reversible.");
+      Assertion.Require(CanCancel(), InvalidOperationMessage("cancel"));
 
       Status = ActivityStatus.Canceled;
     }
 
 
     public void Close() {
+      Assertion.Require(CanClose(), InvalidOperationMessage("close"));
+
       ClosingTime = EmpiriaDateTime.NowWithCentiseconds;
       ClosedBy = ExecutionServer.CurrentContact;
 
@@ -266,8 +268,7 @@ namespace Empiria.Workflow.Requests {
 
 
     public void Delete() {
-      Assertion.Require(CanDelete(),
-                        $"Can not delete this request because its status is {Status.GetName()}.");
+      Assertion.Require(CanDelete(), InvalidOperationMessage("delete"));
 
       this.Status = ActivityStatus.Deleted;
     }
@@ -285,8 +286,7 @@ namespace Empiria.Workflow.Requests {
     internal void Start(ProcessDef processDefinition) {
       Assertion.Require(processDefinition, nameof(processDefinition));
 
-      Assertion.Require(CanStart(),
-                        $"Can not start this request because its status is {Status.GetName()}.");
+      Assertion.Require(CanStart(), InvalidOperationMessage("start"));
 
       this.WorkflowInstance = new WorkflowInstance(processDefinition, this);
 
@@ -297,22 +297,28 @@ namespace Empiria.Workflow.Requests {
 
 
     internal void Suspend() {
-      Assertion.Require(CanSuspend(),
-                        $"Can not suspend this request because its status is {Status.GetName()}.");
+      Assertion.Require(CanSuspend(), InvalidOperationMessage("suspend"));
 
       Status = ActivityStatus.Suspended;
     }
 
 
     protected virtual internal void Update(RequestFieldsDto fields) {
-      Assertion.Require(CanUpdate(),
-                       $"Can not update this request because its status is {Status.GetName()}.");
+      Assertion.Require(CanUpdate(), InvalidOperationMessage("update"));
 
       this.Description = RequestType.DisplayName;
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
     }
 
     #endregion Methods
+
+    #region Helpers
+
+    private string InvalidOperationMessage(string operationName) {
+      return $"Can not {operationName} this request. Its status is {Status.GetName()}.";
+    }
+
+    #endregion Helpers
 
   }  // class Request
 
