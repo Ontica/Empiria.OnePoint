@@ -24,7 +24,7 @@ namespace Empiria.Workflow.Definition.Adapters {
       get; internal set;
     }
 
-    public FixedList<DataField> InputData {
+    public FixedList<DataFieldDto> InputData {
       get; internal set;
     }
 

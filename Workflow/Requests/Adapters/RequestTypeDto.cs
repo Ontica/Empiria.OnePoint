@@ -24,7 +24,15 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public FixedList<DataField> InputData {
+    public string Description {
+      get; internal set;
+    }
+
+    public NamedEntityDto ResponsibleOrgUnit {
+      get; internal set;
+    }
+
+    public FixedList<DataFieldDto> InputData {
       get; internal set;
     }
 

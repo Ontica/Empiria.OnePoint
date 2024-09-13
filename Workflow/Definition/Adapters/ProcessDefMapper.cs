@@ -21,7 +21,8 @@ namespace Empiria.Workflow.Definition.Adapters {
       return new ProcessDefDto {
         UID = processType.UID,
         Name = processType.Name,
-        InputData = processType.InputData,
+        InputData = processType.InputData.Select(x => x.MapToDto())
+                                         .ToFixedList(),
       };
     }
 
