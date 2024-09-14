@@ -13,7 +13,7 @@ namespace Empiria.Workflow.Definition {
 
   /// <summary>Abstract class that defines a workflow gateway.
   /// A gateway serves for activities forking or activities merging.</summary>
-  public abstract class GatewayDef : StepDef {
+  public abstract class GatewayDef : WorkflowObject {
 
     static internal new GatewayDef Parse(int id) {
       return BaseObject.ParseId<GatewayDef>(id);
