@@ -11,6 +11,8 @@
 using Empiria.StateEnums;
 using Empiria.Storage;
 
+using Empiria.Workflow.Execution.Adapters;
+
 namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Maps Requests instances to their DTOs.</summary>
@@ -36,15 +38,23 @@ namespace Empiria.Workflow.Requests.Adapters {
       };
     }
 
-    private static FixedList<WorkflowHistoryItemDto> MapRequestWorkflowHistory(Request request) {
+    static internal FixedList<RequestDescriptorDto> MapToDescriptor(FixedList<Request> requests) {
+      return requests.Select(x => MapToDescriptor(x)).ToFixedList();
+    }
+
+    #region Helpers
+
+    static private FixedList<WorkflowHistoryItemDto> MapRequestWorkflowHistory(Request request) {
       return new FixedList<WorkflowHistoryItemDto>();
     }
 
-    private static FixedList<FileDto> MapRequestFiles(Request request) {
+
+    static private FixedList<FileDto> MapRequestFiles(Request request) {
       return new FixedList<FileDto>();
     }
 
-    private static RequestActionsDto MapRequestActions(Request request) {
+
+    static private RequestActionsDto MapRequestActions(Request request) {
       return new RequestActionsDto {
         CanActivate = request.CanActivate(),
         CanCancel = request.CanCancel(),
@@ -56,11 +66,13 @@ namespace Empiria.Workflow.Requests.Adapters {
       };
     }
 
-    private static FixedList<TaskDto> MapRequestTasks(Request request) {
+
+    static private FixedList<TaskDto> MapRequestTasks(Request request) {
       return new FixedList<TaskDto>();
     }
 
-    private static RequestDto MapRequest(Request request) {
+
+    static private RequestDto MapRequest(Request request) {
       return new RequestDto {
         UID = request.UID,
         RequestType = Map(request.RequestType),
@@ -68,7 +80,6 @@ namespace Empiria.Workflow.Requests.Adapters {
         ControlID = request.ControlID,
         RequesterName = request.RequesterName,
         Description = request.Description,
-        Notes = request.Notes,
         RequestTypeFields = request.RequestTypeFields,
         RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
         ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
@@ -78,18 +89,12 @@ namespace Empiria.Workflow.Requests.Adapters {
         ClosingTime = request.ClosingTime,
         PostedBy = request.PostedBy.MapToNamedEntity(),
         PostingTime = request.PostingTime,
-        Status = request.Status.GetName(),
-
+        Status = request.Status.GetName()
       };
     }
 
 
-    static internal FixedList<RequestDescriptorDto> MapToDescriptor(FixedList<Request> requests) {
-      return requests.Select(x => MapToDescriptor(x)).ToFixedList();
-    }
-
-
-    static internal RequestDescriptorDto MapToDescriptor(Request request) {
+    static private RequestDescriptorDto MapToDescriptor(Request request) {
       return new RequestDescriptorDto {
         UID = request.UID,
         RequestTypeName = request.RequestType.DisplayName,
@@ -110,9 +115,14 @@ namespace Empiria.Workflow.Requests.Adapters {
       return new RequestTypeDto {
         UID = requestType.UID,
         Name = requestType.DisplayName,
-        InputData = requestType.InputData,
+        Description = requestType.Documentation,
+        ResponsibleOrgUnit = requestType.ResponsibleOrgUnit.MapToNamedEntity(),
+        InputData = requestType.InputData.Select(x => x.MapToDto())
+                                         .ToFixedList(),
       };
     }
+
+    #endregion Helpers
 
   }  // class RequestMapper
 
