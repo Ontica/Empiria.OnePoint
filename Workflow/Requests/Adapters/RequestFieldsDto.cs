@@ -17,15 +17,27 @@ namespace Empiria.Workflow.Requests.Adapters {
 
     public string RequestTypeUID {
       get; set;
-    }
+    } = string.Empty;
+
 
     public string RequesterOrgUnitUID {
       get; set;
-    }
+    } = string.Empty;
+
+
+    public string RequestedByUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string Description {
+      get; set;
+    } = string.Empty;
+
 
     public FixedList<FieldValue> RequestTypeFields {
       get; set;
-    }
+    } = new FixedList<FieldValue>();
 
   }  // class RequestFieldsDto
 

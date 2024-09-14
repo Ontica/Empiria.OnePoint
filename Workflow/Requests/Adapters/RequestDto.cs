@@ -12,6 +12,8 @@ using System;
 using Empiria.DataObjects;
 using Empiria.Storage;
 
+using Empiria.Workflow.Execution.Adapters;
+
 namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Output DTO that holds a request with its actions, tasks, files and workflow history.</summary>
@@ -65,10 +67,6 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     public string Description {
-      get; internal set;
-    }
-
-    public string Notes {
       get; internal set;
     }
 

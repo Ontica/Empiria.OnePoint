@@ -84,12 +84,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_NOTES")]
-    public string Notes {
-      get; private set;
-    }
-
-
     [DataField("REQ_REQUESTER_ORG_UNIT_ID")]
     public OrganizationalUnit RequesterOrgUnit {
       get; private set;
@@ -317,9 +311,18 @@ namespace Empiria.Workflow.Requests {
         base.ReclassifyAs(RequestType.Parse(fields.RequestTypeUID));
       }
 
-      this.Requester = Person.Parse(ExecutionServer.CurrentUserId);
+      if (fields.RequestedByUID.Length != 0) {
+        this.Requester = Person.Parse(fields.RequestedByUID);
+      } else {
+        this.Requester = Person.Parse(ExecutionServer.CurrentUserId);
+      }
       this.RequesterName = Requester.Name;
-      this.Description = RequestType.DisplayName;
+
+      if (fields.Description.Length != 0) {
+        this.Description = fields.Description;
+      } else {
+        this.Description = this.RequestType.DisplayName;
+      }
 
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
       this.ResponsibleOrgUnit = RequestType.ResponsibleOrgUnit;
