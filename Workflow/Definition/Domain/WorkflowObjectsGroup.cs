@@ -19,6 +19,8 @@ namespace Empiria.Workflow.Definition {
     }
 
     internal static WorkflowObjectsGroup ParseWithCode(string code) {
+      Assertion.Require(code, nameof(code));
+
       var group = BaseObject.TryParse<WorkflowObjectsGroup>($"WKF_OBJECT_CODE = '{code}'");
 
       Assertion.Require(group, $"Unrecognized process group code '{code}'.");
@@ -28,8 +30,10 @@ namespace Empiria.Workflow.Definition {
 
     #region Properties
 
-    public FixedList<T> GetItems<T>(WorkflowObjectLinkType linkType) where T : WorkflowObject {
-      return WorkflowObjectLink.GetTargets<T>(linkType, this);
+    public FixedList<T> GetItems<T>(WorkflowModelItemType modelItemType) where T : WorkflowObject {
+      Assertion.Require(modelItemType, nameof(modelItemType));
+
+      return WorkflowModelItem.GetTargets<T>(ProcessDef.Empty, modelItemType, this);
     }
 
     #endregion Properties
