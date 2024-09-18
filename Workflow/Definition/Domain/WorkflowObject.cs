@@ -28,6 +28,8 @@ namespace Empiria.Workflow.Definition {
       return BaseObject.ParseKey<WorkflowObject>(uid);
     }
 
+    static public WorkflowObject Empty => BaseObject.ParseEmpty<WorkflowObject>();
+
     #region Properties
 
     [DataField("WKF_OBJECT_CODE")]
@@ -40,7 +42,6 @@ namespace Empiria.Workflow.Definition {
       get; protected set;
     }
 
-
     [DataField("WKF_OBJECT_DESCRIPTION")]
     public string Description {
       get; protected set;
@@ -50,7 +51,6 @@ namespace Empiria.Workflow.Definition {
     public string Tags {
       get; protected set;
     }
-
 
     [DataField("WKF_OBJECT_MANAGER_ID")]
     public Party Manager {

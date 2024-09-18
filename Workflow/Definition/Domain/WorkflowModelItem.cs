@@ -63,7 +63,7 @@ namespace Empiria.Workflow.Definition {
 
     #region Properties
 
-    public WorkflowModelItemType WorkflowObjectLinkType {
+    public WorkflowModelItemType WorkflowModelItemType {
       get {
         return (WorkflowModelItemType) base.GetEmpiriaType();
       }

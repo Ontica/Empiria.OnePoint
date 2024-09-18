@@ -24,6 +24,29 @@ namespace Empiria.Tests.Workflow.Definition {
       var sut = ProcessDef.Empty;
 
       Assert.NotNull(sut);
+      Assert.NotNull(sut.Model);
+      Assert.Empty(sut.Model);
+    }
+
+
+    [Fact]
+    public void Should_Parse_Process_Definition() {
+      var sut = ProcessDef.Parse(101);
+
+      Assert.NotNull(sut);
+      Assert.NotNull(sut.Model);
+      Assert.NotEmpty(sut.Model);
+    }
+
+
+    [Fact]
+    public void Should_Get_Process_Definition_Initial_Steps() {
+      var processDef = ProcessDef.Parse(101);
+
+      FixedList<WorkflowModelItem> sut = processDef.GetInitialSteps();
+
+      Assert.NotNull(sut);
+      Assert.NotEmpty(sut);
     }
 
     #endregion Facts

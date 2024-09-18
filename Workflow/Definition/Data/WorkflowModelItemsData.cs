@@ -15,12 +15,13 @@ namespace Empiria.Workflow.Definition.Data {
   /// <summary>Read and write services for workflow model items.</summary>
   static internal class WorkflowModelItemsData {
 
-    static internal FixedList<WorkflowModelItem> GetProcessItems(ProcessDef processDef) {
+    static internal FixedList<WorkflowModelItem> GetModelItems(ProcessDef processDef) {
       Assertion.Require(processDef, nameof(processDef));
 
       var sql = "SELECT * FROM WKF_MODEL_ITEMS " +
                $"WHERE WKF_MDL_ITEM_PROCESS_DEF_ID = {processDef.Id} AND " +
-                "WKF_MDL_ITEM_STATUS <> 'X'";
+                "WKF_MDL_ITEM_STATUS <> 'X' " +
+                "ORDER BY WKF_MDL_ITEM_POSITION";
 
       var op = DataOperation.Parse(sql);
 

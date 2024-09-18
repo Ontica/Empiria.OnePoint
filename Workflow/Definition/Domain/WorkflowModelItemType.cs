@@ -35,7 +35,9 @@ namespace Empiria.Workflow.Definition {
 
     #region Types
 
-    static public WorkflowModelItemType ProcessesGroupType => Parse("ObjectTypeInfo.WorkflowModelItem.ProcessesGroup");
+    static public WorkflowModelItemType ProcessDefGroup => Parse("ObjectTypeInfo.WorkflowModelItem.ProcessDefinitionGroup");
+
+    static public WorkflowModelItemType SequenceFlow => Parse("ObjectTypeInfo.WorkflowModelItem.Connector.SequenceFlow");
 
     #endregion Types
 
