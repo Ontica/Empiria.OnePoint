@@ -11,7 +11,7 @@
 namespace Empiria.Workflow.Definition {
 
   /// <summary>Represents a workflow event definition.</summary>
-  public class EventDef : WorkflowObject {
+  public class EventDef : StepDef {
 
     static internal new EventDef Parse(int id) {
       return BaseObject.ParseId<EventDef>(id);

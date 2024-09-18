@@ -2,27 +2,27 @@
 *                                                                                                            *
 *  Module   : Workflow Definition                        Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Information Holder                      *
-*  Type     : GatewayDef                                 License   : Please read LICENSE.txt file            *
+*  Type     : StepDef                                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Abstract class that defines a workflow gateway.                                                *
-*             A gateway serves for activities forking or activities merging.                                 *
+*  Summary  : Abstract class that represents a definition of a workflow activity, event or gateway.          *
+*             In BPM a step is known as a flow object.                                                       *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 namespace Empiria.Workflow.Definition {
 
-  /// <summary>Abstract class that defines a workflow gateway.
-  /// A gateway serves for activities forking or activities merging.</summary>
-  public abstract class GatewayDef : StepDef {
+  /// <summary>Abstract class that represents a definition of a workflow activity, event or gateway.
+  /// In BPM a step is known as a flow object.</summary>
+  public abstract class StepDef : WorkflowObject {
 
-    static internal new GatewayDef Parse(int id) {
-      return BaseObject.ParseId<GatewayDef>(id);
+    static internal new StepDef Parse(int id) {
+      return BaseObject.ParseId<StepDef>(id);
     }
 
-    static internal new GatewayDef Parse(string uid) {
-      return BaseObject.ParseKey<GatewayDef>(uid);
+    static internal new StepDef Parse(string uid) {
+      return BaseObject.ParseKey<StepDef>(uid);
     }
 
-  }  // class GatewayDef
+  }  // class StepDef
 
 }  // namespace Empiria.Workflow.Definition

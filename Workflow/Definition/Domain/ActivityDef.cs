@@ -15,7 +15,7 @@ namespace Empiria.Workflow.Definition {
 
   /// <summary>Abstract class that represents a workflow activity definition.
   /// An activity can be a single task, a process or subprocess, or an activity caller.</summary>
-  public abstract class ActivityDef : WorkflowObject {
+  public abstract class ActivityDef : StepDef {
 
     static internal new ActivityDef Parse(int id) {
       return BaseObject.ParseId<ActivityDef>(id);
