@@ -24,6 +24,19 @@ namespace Empiria.Workflow.Execution.Data {
       DataWriter.Execute(op);
     }
 
+
+    static internal void Write(WorkflowStep o, string extensionData) {
+      var op = DataOperation.Parse("write_WKF_Step", o.Id, o.UID,
+                      o.WorkflowInstance.Id, o.WorkflowModelItem.Id, o.No, o.Description,
+                      o.Tags, o.ExternalObjectId, o.RequestedBy.Id, o.RequestedByOrgUnit.Id,
+                      o.AssignedTo.Id, o.AssignedToOrgUnit.Id, o.Deadline, o.CheckInTime,
+                      o.EndTime, o.CheckOutTime, o.PreviousStep.Id, o.NextStep.Id,
+                      extensionData, o.Keywords, (char) o.Status);
+
+      DataWriter.Execute(op);
+    }
+
+
   }  // class WorkflowExecutionData
 
 }  // namespace Empiria.Workflow.Execution.Data
