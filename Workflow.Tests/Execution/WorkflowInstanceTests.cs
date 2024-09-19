@@ -7,7 +7,7 @@
 *  Summary  : Test cases for workflow instances.                                                             *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
+
 using Xunit;
 
 using Empiria.Workflow.Execution;
@@ -22,6 +22,13 @@ namespace Empiria.Tests.Workflow.Execution {
     [Fact]
     public void Should_Parse_Empty_Workflow_Instance() {
       var sut = WorkflowInstance.Empty;
+
+      Assert.NotNull(sut);
+    }
+
+    [Fact]
+    public void Should_Parse_A_Workflow_Instance() {
+      WorkflowInstance sut = TestingConstants.WORKFLOW_INSTANCE;
 
       Assert.NotNull(sut);
     }

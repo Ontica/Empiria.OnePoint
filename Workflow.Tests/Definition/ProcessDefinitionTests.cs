@@ -4,17 +4,17 @@
 *  Assembly : Empiria.OnePoint.Workflow.Tests.dll        Pattern   : Unit tests                              *
 *  Type     : ProcessDefinitionTests                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Test cases for workflow instances.                                                             *
+*  Summary  : Test cases for processes definitions.                                                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
+
 using Xunit;
 
 using Empiria.Workflow.Definition;
 
 namespace Empiria.Tests.Workflow.Definition {
 
-  /// <summary>Test cases for workflow instances.</summary>
+  /// <summary>Test cases for processes definitions.</summary>
   public class ProcessDefinitionTests {
 
     #region Facts
@@ -31,7 +31,7 @@ namespace Empiria.Tests.Workflow.Definition {
 
     [Fact]
     public void Should_Parse_Process_Definition() {
-      var sut = ProcessDef.Parse(101);
+      ProcessDef sut = TestingConstants.PROCESS_DEF_WITH_STEPS;
 
       Assert.NotNull(sut);
       Assert.NotNull(sut.Model);
@@ -40,10 +40,10 @@ namespace Empiria.Tests.Workflow.Definition {
 
 
     [Fact]
-    public void Should_Get_Process_Definition_Initial_Steps() {
-      var processDef = ProcessDef.Parse(101);
+    public void Should_Get_Process_Definition_Sequence_Flows() {
+      ProcessDef processDef = TestingConstants.PROCESS_DEF_WITH_STEPS;
 
-      FixedList<WorkflowModelItem> sut = processDef.GetInitialSteps();
+      FixedList<WorkflowModelItem> sut = processDef.GetSequenceFlows();
 
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);

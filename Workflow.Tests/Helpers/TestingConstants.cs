@@ -8,12 +8,18 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.OnePoint.Workflow.Tests {
+using Empiria.Workflow.Definition;
+using Empiria.Workflow.Execution;
+
+namespace Empiria.Tests.Workflow {
 
   /// <summary>Provides testing constants for Empiria OnePoint workflow services.</summary>
   static public class TestingConstants {
 
+    static internal readonly ProcessDef PROCESS_DEF_WITH_STEPS = ProcessDef.Parse(101);
+
+    static internal readonly WorkflowInstance WORKFLOW_INSTANCE = WorkflowInstance.Parse(1);
 
   }  // class TestingConstants
 
-}  // namespace Empiria.OnePoint.Workflow.Tests
+}  // namespace namespace Empiria.Tests.Workflow
