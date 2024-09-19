@@ -12,7 +12,6 @@ using System;
 using Empiria.Services;
 
 using Empiria.Workflow.Definition;
-using Empiria.Workflow.Execution;
 
 using Empiria.Workflow.Requests.Adapters;
 
@@ -130,8 +129,6 @@ namespace Empiria.Workflow.Requests.UseCases {
       ProcessDef processDefinition = request.RequestType.DefaultProcessDefinition;
 
       request.Start(processDefinition);
-
-      request.WorkflowInstance.Save();
 
       request.Save();
 

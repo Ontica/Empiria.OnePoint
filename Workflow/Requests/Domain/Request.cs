@@ -165,8 +165,7 @@ namespace Empiria.Workflow.Requests {
 
     [DataField("REQ_WKF_INSTANCE_ID")]
     public WorkflowInstance WorkflowInstance {
-      get;
-      private set;
+      get; private set;
     }
 
     public abstract FixedList<FieldValue> RequestTypeFields {
@@ -276,7 +275,12 @@ namespace Empiria.Workflow.Requests {
         PostingTime = EmpiriaDateTime.NowWithCentiseconds;
         PostedBy = ExecutionServer.CurrentContact;
       }
+
       RequestData.Write(this, this.ExtensionData.ToString());
+
+      if (HasWorkflowInstance) {
+        WorkflowInstance.Save();
+      }
     }
 
 

@@ -25,7 +25,7 @@ namespace Empiria.Workflow.Execution {
 
     #region Fields
 
-    private readonly WorkflowEngine _workflowEngine = null;
+    private WorkflowEngine _workflowEngine = null;
 
     #endregion Fields
 
@@ -33,7 +33,6 @@ namespace Empiria.Workflow.Execution {
 
     private WorkflowInstance() {
       // Required by Empiria Framework.
-      _workflowEngine = new WorkflowEngine(this);
     }
 
     public WorkflowInstance(ProcessDef processDefinition, Request request) {
@@ -54,6 +53,10 @@ namespace Empiria.Workflow.Execution {
     }
 
     static internal WorkflowInstance Empty => ParseEmpty<WorkflowInstance>();
+
+    protected override void OnLoad() {
+      _workflowEngine = new WorkflowEngine(this);
+    }
 
     #endregion Constructors and parsers
 
@@ -128,8 +131,9 @@ namespace Empiria.Workflow.Execution {
     #region Methods
 
     protected override void OnSave() {
-      WorkflowExecutionData.Write(this);
-
+      if (base.IsDirty) {
+        WorkflowExecutionData.Write(this);
+      }
       _workflowEngine.SaveChanges();
     }
 
@@ -142,6 +146,8 @@ namespace Empiria.Workflow.Execution {
 
       StartTime = EmpiriaDateTime.NowWithCentiseconds;
       Status = ActivityStatus.Active;
+
+      base.MarkAsDirty();
     }
 
     #endregion Methods
