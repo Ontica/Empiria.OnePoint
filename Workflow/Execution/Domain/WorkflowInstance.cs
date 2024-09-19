@@ -23,10 +23,17 @@ namespace Empiria.Workflow.Execution {
   /// <summary>A workflow instance is a runtime representation of a workflow process model definition.</summary>
   public class WorkflowInstance : BaseObject {
 
+    #region Fields
+
+    private readonly WorkflowEngine _workflowEngine = null;
+
+    #endregion Fields
+
     #region Constructors and parsers
 
     private WorkflowInstance() {
       // Required by Empiria Framework.
+      _workflowEngine = new WorkflowEngine(this);
     }
 
     public WorkflowInstance(ProcessDef processDefinition, Request request) {
@@ -35,6 +42,7 @@ namespace Empiria.Workflow.Execution {
 
       this.ProcessDefinition = processDefinition;
       this.Request = request;
+      _workflowEngine = new WorkflowEngine(this);
     }
 
     static internal WorkflowInstance Parse(int id) {
@@ -121,12 +129,16 @@ namespace Empiria.Workflow.Execution {
 
     protected override void OnSave() {
       WorkflowExecutionData.Write(this);
+
+      _workflowEngine.SaveChanges();
     }
 
 
     internal void Start() {
       Assertion.Require(StartTime == ExecutionServer.DateMaxValue && Status == ActivityStatus.Pending,
-                        $"Workflow instance was already started and has status {Status.GetName()}");
+                        $"Workflow instance was already started and has status {Status.GetName()}.");
+
+      _workflowEngine.Start();
 
       StartTime = EmpiriaDateTime.NowWithCentiseconds;
       Status = ActivityStatus.Active;
