@@ -36,6 +36,8 @@ namespace Empiria.Workflow.Execution {
 
       this.WorkflowInstance = workflowInstance;
       this.WorkflowModelItem = workflowModelItem;
+      this.No = workflowModelItem.Position.ToString("00");
+      this.Description = workflowModelItem.TargetObject.Name;
     }
 
     static internal WorkflowStep Parse(int id) {
@@ -188,7 +190,9 @@ namespace Empiria.Workflow.Execution {
     #region Methods
 
     protected override void OnSave() {
-      WorkflowExecutionData.Write(this, ExtensionData.ToString());
+      if (IsDirty) {
+        WorkflowExecutionData.Write(this, ExtensionData.ToString());
+      }
     }
 
     #endregion Methods
