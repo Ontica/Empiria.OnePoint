@@ -35,6 +35,22 @@ namespace Empiria.Tests.Workflow.Execution {
       Assert.NotNull(sut);
     }
 
+
+    [Fact]
+    public void Should_Parse_All_Workflow_Instances_Tasks() {
+      var workflowInstances = BaseObject.GetList<WorkflowInstance>();
+
+      foreach (var workflowInstance in workflowInstances) {
+        FixedList<WorkflowTask> sut = workflowInstance.GetTasks();
+
+        Assert.NotNull(sut);
+
+        if (workflowInstance.IsStarted) {
+          Assert.NotEmpty(sut);
+        }
+      }
+    }
+
     #endregion Facts
 
   }  // class WorkflowInstanceTests

@@ -8,12 +8,30 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System.Collections.Generic;
+
 using Empiria.Data;
 
 namespace Empiria.Workflow.Execution.Data {
 
   /// <summary>Provides data read and write methods for workflow execution types.</summary>
   static internal class WorkflowExecutionData {
+
+    static internal List<WorkflowStep> GetSteps(WorkflowInstance workflowInstance) {
+      if (workflowInstance.IsEmptyInstance || workflowInstance.IsNew) {
+        return new List<WorkflowStep>();
+      }
+
+      var sql = "SELECT * FROM WKF_Steps " +
+               $"WHERE WKF_INSTANCE_ID = {workflowInstance.Id} AND " +
+                "WKF_STEP_STATUS <> 'X' " +
+                "ORDER BY WKF_STEP_NO";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetList<WorkflowStep>(op);
+    }
+
 
     static internal void Write(WorkflowInstance o) {
       var op = DataOperation.Parse("write_WKF_Instance", o.Id, o.UID,

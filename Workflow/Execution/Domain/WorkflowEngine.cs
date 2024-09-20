@@ -8,9 +8,13 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 using System.Collections.Generic;
 
 using Empiria.Workflow.Definition;
+
+using Empiria.Workflow.Execution.Data;
 
 namespace Empiria.Workflow.Execution {
 
@@ -19,7 +23,7 @@ namespace Empiria.Workflow.Execution {
 
     #region Fields
 
-    private readonly List<WorkflowStep> _steps = new List<WorkflowStep>(16);
+    private readonly Lazy<List<WorkflowStep>> _steps;
 
     #endregion Fields
 
@@ -27,6 +31,8 @@ namespace Empiria.Workflow.Execution {
 
     internal WorkflowEngine(WorkflowInstance workflowInstance) {
       this.WorkflowInstance = workflowInstance;
+
+      _steps = new Lazy<List<WorkflowStep>>(() => WorkflowExecutionData.GetSteps(workflowInstance));
     }
 
     #endregion Constructors and parsers
@@ -43,23 +49,48 @@ namespace Empiria.Workflow.Execution {
       get;
     }
 
+
+    public List<WorkflowStep> Steps {
+      get {
+        return _steps.Value;
+      }
+    }
+
     #endregion Properties
 
     #region Methods
 
+    internal FixedList<WorkflowTask> GetTasks() {
+      var tasks = new List<WorkflowTask>(Steps.Count);
+
+      foreach (WorkflowStep step in Steps) {
+        var task = new WorkflowTask(step);
+
+        tasks.Add(task);
+      }
+
+      return tasks.ToFixedList();
+    }
+
+
     internal void SaveChanges() {
-      foreach (var step in _steps) {
+      foreach (WorkflowStep step in Steps) {
         step.Save();
       }
     }
 
+
     internal void Start() {
-      FixedList<WorkflowModelItem> sequenceFlows = this.ProcessDefinition.GetSequenceFlows();
+      Assertion.Require(!WorkflowInstance.IsStarted,
+                        $"Can not start the WorkflowEngine because its " +
+                        $"workflow instance ({WorkflowInstance.Id}) was already started.");
+
+      FixedList <WorkflowModelItem> sequenceFlows = this.ProcessDefinition.GetSequenceFlows();
 
       foreach (var sequenceFlow in sequenceFlows) {
         var step = new WorkflowStep(WorkflowInstance, sequenceFlow);
 
-        _steps.Add(step);
+        Steps.Add(step);
       }
     }
 
