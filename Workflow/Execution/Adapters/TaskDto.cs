@@ -19,7 +19,7 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public NamedEntity Type {
+    public string TaskNo {
       get; internal set;
     }
 
@@ -31,19 +31,19 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public string Notes {
+    public NamedEntityDto RequestedBy {
       get; internal set;
     }
 
-    public NamedEntity WorkflowInstance {
+    public NamedEntityDto RequestedByOrgUnit {
       get; internal set;
     }
 
-    public DateTime StartDate {
+    public NamedEntityDto AssignedTo {
       get; internal set;
     }
 
-    public DateTime EndDate {
+    public NamedEntityDto AssignedToOrgUnit {
       get; internal set;
     }
 
@@ -51,30 +51,41 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public DateTime PlannedEndDate {
+    public DateTime CheckInTime {
       get; internal set;
     }
 
-    public NamedEntity AssignedTo {
+    public DateTime EndTime {
       get; internal set;
     }
 
-    public NamedEntity AssignedToOrgUnit {
+    public DateTime CheckOutTime {
       get; internal set;
     }
 
-    public NamedEntity RequestedBy {
+    public NamedEntityDto Status {
       get; internal set;
     }
 
-    public NamedEntity RequestedByOrgUnit {
-      get; internal set;
-    }
-
-    public NamedEntity Status {
+    public TaskInvokerDto TaskInvoker {
       get; internal set;
     }
 
   }  // class TaskDto
+
+
+
+  /// <summary>Output DTO that describes a task invoker.</summary>
+  public class TaskInvokerDto {
+
+    public string UID {
+      get; internal set;
+    }
+
+    public string WorkflowInstanceUID {
+      get; internal set;
+    }
+
+  }  // public class TaskInvokerDto
 
 }  // namespace Empiria.Workflow.Execution.Adapters

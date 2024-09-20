@@ -31,7 +31,7 @@ namespace Empiria.Workflow.Requests.Adapters {
     static internal RequestHolderDto Map(Request request) {
       return new RequestHolderDto {
         Request = MapRequest(request),
-        Tasks = MapRequestTasks(request),
+        Tasks = WorkflowTaskMapper.Map(request.WorkflowInstance),
         Actions = MapRequestActions(request),
         Files = MapRequestFiles(request),
         WorkflowHistory = MapRequestWorkflowHistory(request),
@@ -64,11 +64,6 @@ namespace Empiria.Workflow.Requests.Adapters {
         CanSuspend = request.CanSuspend(),
         CanUpdate = request.CanUpdate(),
       };
-    }
-
-
-    static private FixedList<TaskDto> MapRequestTasks(Request request) {
-      return new FixedList<TaskDto>();
     }
 
 
