@@ -25,7 +25,7 @@ namespace Empiria.Workflow.Execution {
 
     #region Fields
 
-    private WorkflowEngine _workflowEngine = null;
+    private readonly Lazy<WorkflowEngine> _workflowEngine;
 
     #endregion Fields
 
@@ -33,6 +33,7 @@ namespace Empiria.Workflow.Execution {
 
     private WorkflowInstance() {
       // Required by Empiria Framework.
+      _workflowEngine = new Lazy<WorkflowEngine>(() => new WorkflowEngine(this));
     }
 
     public WorkflowInstance(ProcessDef processDefinition, Request request) {
@@ -41,7 +42,7 @@ namespace Empiria.Workflow.Execution {
 
       this.ProcessDefinition = processDefinition;
       this.Request = request;
-      _workflowEngine = new WorkflowEngine(this);
+      _workflowEngine = new Lazy<WorkflowEngine>(() => new WorkflowEngine(this));
     }
 
     static internal WorkflowInstance Parse(int id) {
@@ -53,10 +54,6 @@ namespace Empiria.Workflow.Execution {
     }
 
     static internal WorkflowInstance Empty => ParseEmpty<WorkflowInstance>();
-
-    protected override void OnLoad() {
-      _workflowEngine = new WorkflowEngine(this);
-    }
 
     #endregion Constructors and parsers
 
@@ -126,23 +123,45 @@ namespace Empiria.Workflow.Execution {
       }
     }
 
+    public bool IsStarted {
+      get {
+        return !IsEmptyInstance &&
+               StartTime != ExecutionServer.DateMaxValue &&
+               Status != ActivityStatus.Pending;
+      }
+    }
+
+    private WorkflowEngine WorkflowEngine {
+      get {
+        return _workflowEngine.Value;
+      }
+    }
+
     #endregion Properties
 
     #region Methods
+
+    public FixedList<WorkflowTask> GetTasks() {
+      if (!IsStarted) {
+        return new FixedList<WorkflowTask>();
+      }
+      return WorkflowEngine.GetTasks();
+    }
+
 
     protected override void OnSave() {
       if (base.IsDirty) {
         WorkflowExecutionData.Write(this);
       }
-      _workflowEngine.SaveChanges();
+      WorkflowEngine.SaveChanges();
     }
 
 
     internal void Start() {
-      Assertion.Require(StartTime == ExecutionServer.DateMaxValue && Status == ActivityStatus.Pending,
+      Assertion.Require(!IsStarted,
                         $"Workflow instance was already started and has status {Status.GetName()}.");
 
-      _workflowEngine.Start();
+      WorkflowEngine.Start();
 
       StartTime = EmpiriaDateTime.NowWithCentiseconds;
       Status = ActivityStatus.Active;
