@@ -276,16 +276,19 @@ namespace Empiria.Workflow.Requests {
         PostedBy = ExecutionServer.CurrentContact;
       }
 
-      RequestData.Write(this, this.ExtensionData.ToString());
-
       if (HasWorkflowInstance) {
         WorkflowInstance.Save();
       }
+
+      RequestData.Write(this, this.ExtensionData.ToString());
     }
 
 
     internal void Start(ProcessDef processDefinition) {
       Assertion.Require(processDefinition, nameof(processDefinition));
+      Assertion.Require(processDefinition.Status == EntityStatus.Active,
+                        "El proceso asignado a esta solicitud no está activo. " +
+                        "No es posible efectuar la operación.");
 
       Assertion.Require(CanStart(), InvalidOperationMessage("start"));
 
