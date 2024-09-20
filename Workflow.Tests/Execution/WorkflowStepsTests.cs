@@ -20,19 +20,19 @@ namespace Empiria.Tests.Workflow.Execution {
     #region Facts
 
     [Fact]
-    public void Should_Parse_Empty_Workflow_Step() {
-      var sut = WorkflowStep.Empty;
+    public void Should_Parse_All_Workflow_Steps() {
+      var sut = BaseObject.GetList<WorkflowStep>();
 
       Assert.NotNull(sut);
+      Assert.NotEmpty(sut);
     }
 
 
     [Fact]
-    public void Should_Parse_All_Workflow_Steps() {
-      var sut = WorkflowStep.GetList<WorkflowStep>();
+    public void Should_Parse_Empty_Workflow_Step() {
+      var sut = WorkflowStep.Empty;
 
       Assert.NotNull(sut);
-      Assert.NotEmpty(sut);
     }
 
     #endregion Facts

@@ -9,7 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Workflow.Definition;
-using Empiria.Workflow.Execution;
 
 namespace Empiria.Tests.Workflow {
 
@@ -17,8 +16,6 @@ namespace Empiria.Tests.Workflow {
   static public class TestingConstants {
 
     static internal readonly ProcessDef PROCESS_DEF_WITH_STEPS = ProcessDef.Parse(101);
-
-    static internal readonly WorkflowInstance WORKFLOW_INSTANCE = WorkflowInstance.Parse(1);
 
   }  // class TestingConstants
 

@@ -20,15 +20,17 @@ namespace Empiria.Tests.Workflow.Execution {
     #region Facts
 
     [Fact]
-    public void Should_Parse_Empty_Workflow_Instance() {
-      var sut = WorkflowInstance.Empty;
+    public void Should_Parse_All_Workflow_Instances() {
+      var sut = BaseObject.GetList<WorkflowInstance>();
 
       Assert.NotNull(sut);
+      Assert.NotEmpty(sut);
     }
 
+
     [Fact]
-    public void Should_Parse_A_Workflow_Instance() {
-      WorkflowInstance sut = TestingConstants.WORKFLOW_INSTANCE;
+    public void Should_Parse_Empty_Workflow_Instance() {
+      var sut = WorkflowInstance.Empty;
 
       Assert.NotNull(sut);
     }

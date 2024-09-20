@@ -20,6 +20,14 @@ namespace Empiria.Tests.Workflow.Definition {
     #region Facts
 
     [Fact]
+    public void Should_Parse_All_Processes_Definitions() {
+      var sut = BaseObject.GetList<ProcessDef>();
+
+      Assert.NotNull(sut);
+    }
+
+
+    [Fact]
     public void Should_Parse_Empty_Process_Definition() {
       var sut = ProcessDef.Empty;
 
