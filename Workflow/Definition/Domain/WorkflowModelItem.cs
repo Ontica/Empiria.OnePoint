@@ -69,7 +69,6 @@ namespace Empiria.Workflow.Definition {
       }
     }
 
-
     [DataField("WKF_MDL_ITEM_PROCESS_DEF_ID")]
     public ProcessDef ProcessDef {
       get; protected set;
@@ -155,6 +154,32 @@ namespace Empiria.Workflow.Definition {
     [DataField("WKF_MDL_ITEM_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; protected set;
+    }
+
+
+    public AssignationRules AssignationRules {
+      get {
+        if (ConfigurationData.Contains("assignationRules")) {
+          return ConfigurationData.Get<AssignationRules>("assignationRules");
+        } else if (TargetObject is StepDef stepDef) {
+          return stepDef.AssignationRules;
+        } else {
+          return new AssignationRules();
+        }
+      }
+    }
+
+
+    public bool Autoactivate {
+      get {
+        if (ConfigurationData.Contains("autoactivate")) {
+          return ConfigurationData.Get<bool>("autoactivate");
+        } else if (TargetObject is StepDef stepDef) {
+          return stepDef.Autoactivate;
+        } else {
+          return false;
+        }
+      }
     }
 
     #endregion Properties

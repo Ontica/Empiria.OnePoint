@@ -15,6 +15,8 @@ namespace Empiria.Workflow.Definition {
   /// In BPM a step is known as a flow object.</summary>
   public abstract class StepDef : WorkflowObject {
 
+    #region Constructors and parsers
+
     static internal new StepDef Parse(int id) {
       return BaseObject.ParseId<StepDef>(id);
     }
@@ -22,6 +24,25 @@ namespace Empiria.Workflow.Definition {
     static internal new StepDef Parse(string uid) {
       return BaseObject.ParseKey<StepDef>(uid);
     }
+
+    #endregion Constructors and parsers
+
+    #region Properties
+
+    public AssignationRules AssignationRules {
+      get {
+        return ConfigurationData.Get("assignationRules", new AssignationRules());
+      }
+    }
+
+
+    public bool Autoactivate {
+      get {
+        return ConfigurationData.Get<bool>("autoactivate", false);
+      }
+    }
+
+    #endregion Properties
 
   }  // class StepDef
 
