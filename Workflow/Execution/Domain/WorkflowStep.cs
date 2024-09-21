@@ -36,9 +36,10 @@ namespace Empiria.Workflow.Execution {
 
       this.WorkflowInstance = workflowInstance;
       this.WorkflowModelItem = workflowModelItem;
-      this.No = workflowModelItem.Position.ToString("00");
-      this.Description = workflowModelItem.TargetObject.Name;
+
+      LoadDefaultData();
     }
+
 
     static internal WorkflowStep Parse(int id) {
       return BaseObject.ParseId<WorkflowStep>(id);
@@ -196,6 +197,24 @@ namespace Empiria.Workflow.Execution {
     }
 
     #endregion Methods
+
+    #region Helpers
+
+    private void LoadDefaultData() {
+      var defaultRules = new DefaultWorkflowStepRulesBuilder(this);
+
+      this.No = defaultRules.StepNo;
+      this.Description = defaultRules.Description;
+      this.RequestedBy = defaultRules.RequestedBy;
+      this.RequestedByOrgUnit = defaultRules.RequestedByOrgUnit;
+      this.AssignedTo = defaultRules.AssignedTo;
+      this.AssignedToOrgUnit = defaultRules.AssignedToOrgUnit;
+      this.Deadline = defaultRules.Deadline;
+      this.CheckInTime = defaultRules.CheckInTime;
+      this.Status = defaultRules.Status;
+    }
+
+    #endregion Helpers
 
   }  // class WorkflowStep
 
