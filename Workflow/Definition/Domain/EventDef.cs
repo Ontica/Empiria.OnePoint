@@ -21,6 +21,43 @@ namespace Empiria.Workflow.Definition {
       return BaseObject.ParseKey<EventDef>(uid);
     }
 
+    #region Properties
+
+    public bool CatchesMessage {
+      get {
+        return base.ConfigurationData.Get("catchesMessage", false);
+      }
+    }
+
+
+    public bool IsEndEvent {
+      get {
+        return base.ConfigurationData.Get("isEndEvent", false);
+      }
+    }
+
+
+    public bool IsIntermediateEvent {
+      get {
+        return base.ConfigurationData.Get("isIntermediateEvent", false);
+      }
+    }
+
+    public bool IsStartEvent {
+      get {
+        return base.ConfigurationData.Get("isStartEvent", false);
+      }
+    }
+
+
+    public bool ThrowsMessage {
+      get {
+        return base.ConfigurationData.Get("throwsMessage", false);
+      }
+    }
+
+    #endregion Properties
+
   }  // class EventDef
 
 }  // namespace Empiria.Workflow.Definition
