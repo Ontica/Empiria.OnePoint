@@ -25,34 +25,34 @@ namespace Empiria.Workflow.Definition {
 
     public bool CatchesMessage {
       get {
-        return base.ConfigurationData.Get("catchesMessage", false);
+        return base.ConfigurationData.Get(WorkflowConstants.EVENT_CATCHES_MESSAGE, false);
       }
     }
 
 
     public bool IsEndEvent {
       get {
-        return base.ConfigurationData.Get("isEndEvent", false);
+        return base.ConfigurationData.Get(WorkflowConstants.IS_END_EVENT, false);
       }
     }
 
 
     public bool IsIntermediateEvent {
       get {
-        return base.ConfigurationData.Get("isIntermediateEvent", false);
+        return base.ConfigurationData.Get(WorkflowConstants.IS_INTERMEDIATE_EVENT, false);
       }
     }
 
     public bool IsStartEvent {
       get {
-        return base.ConfigurationData.Get("isStartEvent", false);
+        return base.ConfigurationData.Get(WorkflowConstants.IS_START_EVENT, false);
       }
     }
 
 
     public bool ThrowsMessage {
       get {
-        return base.ConfigurationData.Get("throwsMessage", false);
+        return base.ConfigurationData.Get(WorkflowConstants.EVENT_THROWS_MESSAGE, false);
       }
     }
 

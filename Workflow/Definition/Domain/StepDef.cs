@@ -31,14 +31,14 @@ namespace Empiria.Workflow.Definition {
 
     public AssignationRules AssignationRules {
       get {
-        return ConfigurationData.Get("assignationRules", new AssignationRules());
+        return ConfigurationData.Get(WorkflowConstants.ASSIGNATION_RULES, new AssignationRules());
       }
     }
 
 
     public bool Autoactivate {
       get {
-        return ConfigurationData.Get<bool>("autoactivate", false);
+        return ConfigurationData.Get<bool>(WorkflowConstants.AUTOACTIVATE, false);
       }
     }
 

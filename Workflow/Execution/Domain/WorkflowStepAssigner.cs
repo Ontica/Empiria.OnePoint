@@ -27,27 +27,30 @@ namespace Empiria.Workflow.Execution {
 
     public Party RequestedBy {
       get {
-        return GetParty(AssignationRules.RequestedBy, "requestedById");
+        return GetParty(AssignationRules.RequestedBy, WorkflowConstants.REQUESTED_BY_ID);
       }
     }
 
 
     public OrganizationalUnit RequestedByOrgUnit {
       get {
-        return GetOrganizationalUnit(AssignationRules.RequestedByOrgUnit, "requestedByOrgUnitId");
+        return GetOrganizationalUnit(AssignationRules.RequestedByOrgUnit,
+                                     WorkflowConstants.REQUESTED_BY_ORG_UNIT_ID);
       }
     }
 
 
     public Party AssignedTo {
       get {
-        return GetParty(AssignationRules.AssignedTo, "assignedToId");
+        return GetParty(AssignationRules.AssignedTo, WorkflowConstants.ASSIGNED_TO_ID);
       }
     }
 
+
     public OrganizationalUnit AssignedToOrgUnit {
       get {
-        return GetOrganizationalUnit(AssignationRules.AssignedToOrgUnit, "assignedToOrgUnitId");
+        return GetOrganizationalUnit(AssignationRules.AssignedToOrgUnit,
+                                     WorkflowConstants.ASSIGNED_TO_ORG_UNIT_ID);
       }
     }
 
@@ -60,6 +63,7 @@ namespace Empiria.Workflow.Execution {
         return _step.WorkflowModelItem.AssignationRules;
       }
     }
+
 
     private OrganizationalUnit GetOrganizationalUnit(AssignationRule assignationRule,
                                                      string assignedOrgUnitField = "") {
@@ -81,6 +85,7 @@ namespace Empiria.Workflow.Execution {
           return OrganizationalUnit.Empty;
       }
     }
+
 
     private Party GetParty(AssignationRule assignationRule,
                            string assignedPartyField = "") {

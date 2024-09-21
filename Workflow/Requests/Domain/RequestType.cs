@@ -50,20 +50,20 @@ namespace Empiria.Workflow.Requests {
 
     public ProcessDef DefaultProcessDefinition {
       get {
-        return base.ExtensionData.Get<ProcessDef>("defaultProcessDefinitionId");
+        return base.ExtensionData.Get<ProcessDef>(WorkflowConstants.DEFAULT_PROCESS_DEFINITION_ID);
       }
     }
 
 
     public FixedList<DataField> InputData {
       get {
-        return base.ExtensionData.GetFixedList<DataField>("inputData", false);
+        return base.ExtensionData.GetFixedList<DataField>(WorkflowConstants.INPUT_DATA_LIST, false);
       }
     }
 
     public OrganizationalUnit ResponsibleOrgUnit {
       get {
-        return base.ExtensionData.Get<OrganizationalUnit>("responsibleOrgUnitId");
+        return base.ExtensionData.Get<OrganizationalUnit>(WorkflowConstants.RESPONSIBLE_ORG_UNIT_ID);
       }
     }
 

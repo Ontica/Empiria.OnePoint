@@ -32,10 +32,10 @@ namespace Empiria.Workflow.Definition {
 
     static internal AssignationRules Parse(JsonObject json) {
       return new AssignationRules {
-        RequestedBy = json.Get("requestedBy", AssignationRule.None),
-        RequestedByOrgUnit = json.Get("requestedByOrgUnit", AssignationRule.None),
-        AssignedTo = json.Get("assignedTo", AssignationRule.None),
-        AssignedToOrgUnit = json.Get("assignedToOrgUnit", AssignationRule.None),
+        RequestedBy = json.Get(WorkflowConstants.ASSIGN_RULE_REQUESTED_BY, AssignationRule.None),
+        RequestedByOrgUnit = json.Get(WorkflowConstants.ASSIGN_RULE_REQUESTED_BY_ORG_UNIT, AssignationRule.None),
+        AssignedTo = json.Get(WorkflowConstants.ASSIGN_RULE_ASSIGNED_TO, AssignationRule.None),
+        AssignedToOrgUnit = json.Get(WorkflowConstants.ASSIGN_RULE_ASSIGNED_TO_ORG_UNIT, AssignationRule.None),
       };
     }
 

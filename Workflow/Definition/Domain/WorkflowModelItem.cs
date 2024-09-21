@@ -74,35 +74,42 @@ namespace Empiria.Workflow.Definition {
       get; protected set;
     }
 
+
     [DataField("WKF_MDL_ITEM_SOURCE_OBJECT_ID")]
     public WorkflowObject SourceObject {
       get; protected set;
     }
+
 
     [DataField("WKF_MDL_ITEM_TARGET_OBJECT_ID")]
     public WorkflowObject TargetObject {
       get; protected set;
     }
 
+
     [DataField("WKF_MDL_ITEM_CODE")]
     public string Code {
       get; protected set;
     }
+
 
     [DataField("WKF_MDL_ITEM_NAME")]
     public string Name {
       get; protected set;
     }
 
+
     [DataField("WKF_MDL_ITEM_DESCRIPTION")]
     public string Description {
       get; protected set;
     }
 
+
     [DataField("WKF_MDL_ITEM_TAGS")]
     public string Tags {
       get; protected set;
     }
+
 
     [DataField("WKF_MDL_ITEM_EXT_OBJECT_TYPE_ID")]
     public int ExternalObjectTypeId {
@@ -115,10 +122,12 @@ namespace Empiria.Workflow.Definition {
       get; private set;
     }
 
+
     [DataField("WKF_MDL_ITEM_EXT_DATA")]
-    protected internal JsonObject ExtendedData {
+    protected JsonObject ExtendedData {
       get; private set;
     }
+
 
     public virtual string Keywords {
       get {
@@ -131,25 +140,30 @@ namespace Empiria.Workflow.Definition {
       get; set;
     }
 
+
     [DataField("WKF_MDL_ITEM_START_DATE")]
     internal DateTime StartDate {
       get; set;
     }
+
 
     [DataField("WKF_MDL_ITEM_END_DATE")]
     internal DateTime EndDate {
       get; private set;
     }
 
+
     [DataField("WKF_MDL_ITEM_POSTED_BY_ID")]
     internal int PostedById {
       get; private set;
     }
 
+
     [DataField("WKF_MDL_ITEM_POSTING_TIME")]
     internal DateTime PostingTime {
       get; private set;
     }
+
 
     [DataField("WKF_MDL_ITEM_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
@@ -159,8 +173,8 @@ namespace Empiria.Workflow.Definition {
 
     public AssignationRules AssignationRules {
       get {
-        if (ConfigurationData.Contains("assignationRules")) {
-          return ConfigurationData.Get<AssignationRules>("assignationRules");
+        if (ConfigurationData.Contains(WorkflowConstants.ASSIGNATION_RULES)) {
+          return ConfigurationData.Get<AssignationRules>(WorkflowConstants.ASSIGNATION_RULES);
         } else if (TargetObject is StepDef stepDef) {
           return stepDef.AssignationRules;
         } else {
@@ -172,8 +186,8 @@ namespace Empiria.Workflow.Definition {
 
     public bool Autoactivate {
       get {
-        if (ConfigurationData.Contains("autoactivate")) {
-          return ConfigurationData.Get<bool>("autoactivate");
+        if (ConfigurationData.Contains(WorkflowConstants.AUTOACTIVATE)) {
+          return ConfigurationData.Get<bool>(WorkflowConstants.AUTOACTIVATE);
         } else if (TargetObject is StepDef stepDef) {
           return stepDef.Autoactivate;
         } else {

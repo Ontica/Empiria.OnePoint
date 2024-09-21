@@ -29,13 +29,13 @@ namespace Empiria.Workflow.Definition {
 
     public FixedList<DataField> InputData {
       get {
-        return base.ConfigurationData.GetFixedList<DataField>("inputData", false);
+        return base.ConfigurationData.GetFixedList<DataField>(WorkflowConstants.INPUT_DATA_LIST, false);
       }
     }
 
     public FixedList<DataField> OutputData {
       get {
-        return base.ConfigurationData.GetFixedList<DataField>("ouputData", false);
+        return base.ConfigurationData.GetFixedList<DataField>(WorkflowConstants.OUTPUT_DATA_LIST, false);
       }
     }
 
