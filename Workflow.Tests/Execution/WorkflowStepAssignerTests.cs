@@ -11,12 +11,15 @@
 using Xunit;
 
 using Empiria.Workflow.Execution;
-using Empiria.Workflow.Definition;
 
 namespace Empiria.Tests.Workflow.Execution {
 
   /// <summary>Test cases for the workflow step assigner.</summary>
   public class WorkflowStepAssignerTests {
+
+    public WorkflowStepAssignerTests() {
+      TestsCommonMethods.Authenticate();
+    }
 
     #region Facts
 
@@ -25,22 +28,24 @@ namespace Empiria.Tests.Workflow.Execution {
       var steps = BaseObject.GetList<WorkflowStep>();
 
       foreach (var step in steps) {
-        var assigner = new WorkflowStepAssigner(step);
+        var sut = new WorkflowStepAssigner(step);
 
-        AssignationRules sut = assigner.AssignationRules;
-
-        Assert.NotNull(assigner);
+        Assert.NotNull(sut.RequestedBy);
+        Assert.NotNull(sut.RequestedByOrgUnit);
+        Assert.NotNull(sut.AssignedTo);
+        Assert.NotNull(sut.AssignedToOrgUnit);
       }
     }
 
 
     [Fact]
     public void Should_Parse_Assignation_Rules_For_Empty_Workflow_Step() {
-      var assigner = new WorkflowStepAssigner(WorkflowStep.Empty);
+      var sut = new WorkflowStepAssigner(WorkflowStep.Empty);
 
-      AssignationRules sut = assigner.AssignationRules;
-
-      Assert.NotNull(sut);
+      Assert.NotNull(sut.RequestedBy);
+      Assert.NotNull(sut.RequestedByOrgUnit);
+      Assert.NotNull(sut.AssignedTo);
+      Assert.NotNull(sut.AssignedToOrgUnit);
     }
 
     #endregion Facts
