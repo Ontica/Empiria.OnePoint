@@ -105,6 +105,23 @@ namespace Empiria.Workflow.Definition {
 
     #endregion Properties
 
+    #region Methods
+
+    public T GetParty<T>(string partyIdField) where T : Party {
+      Assertion.Require(partyIdField, nameof(partyIdField));
+
+      return ConfigurationData.Get<T>($"parties/{partyIdField}");
+    }
+
+
+    public bool HasParty(string partyIdField) {
+      Assertion.Require(partyIdField, nameof(partyIdField));
+
+      return ConfigurationData.HasValue($"parties/{partyIdField}");
+    }
+
+    #endregion Methods
+
   }  // class WorkflowObject
 
 }  // namespace Empiria.Workflow.Definition

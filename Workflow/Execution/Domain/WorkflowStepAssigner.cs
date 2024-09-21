@@ -66,7 +66,7 @@ namespace Empiria.Workflow.Execution {
 
 
     private OrganizationalUnit GetOrganizationalUnit(AssignationRule assignationRule,
-                                                     string assignedOrgUnitField = "") {
+                                                     string assignedOrgUnitField) {
       switch (assignationRule) {
 
         case AssignationRule.CurrentUser:
@@ -79,7 +79,7 @@ namespace Empiria.Workflow.Execution {
           return _step.WorkflowInstance.Request.ResponsibleOrgUnit;
 
         case AssignationRule.FixedValue:
-          return _step.WorkflowModelItem.ConfigurationData.Get(assignedOrgUnitField, OrganizationalUnit.Empty);
+          return _step.WorkflowModelItem.GetParty(assignedOrgUnitField, OrganizationalUnit.Empty);
 
         default:
           return OrganizationalUnit.Empty;
@@ -88,7 +88,7 @@ namespace Empiria.Workflow.Execution {
 
 
     private Party GetParty(AssignationRule assignationRule,
-                           string assignedPartyField = "") {
+                           string assignedPartyField) {
 
       switch (assignationRule) {
 
@@ -102,7 +102,7 @@ namespace Empiria.Workflow.Execution {
           return _step.WorkflowInstance.Request.ResponsibleOrgUnit;
 
         case AssignationRule.FixedValue:
-          return _step.WorkflowModelItem.ConfigurationData.Get(assignedPartyField, Party.Empty);
+          return _step.WorkflowModelItem.GetParty(assignedPartyField, Party.Empty);
 
         default:
           return Party.Empty;

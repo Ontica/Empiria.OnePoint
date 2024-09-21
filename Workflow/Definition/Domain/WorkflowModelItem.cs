@@ -13,6 +13,7 @@ using System;
 using Empiria.Json;
 
 using Empiria.Ontology;
+using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Workflow.Definition.Data;
@@ -55,7 +56,6 @@ namespace Empiria.Workflow.Definition {
                                              WorkflowObject sourceObject) where T : WorkflowObject {
       return WorkflowModelItemsData.GetTargets<T>(processDef, modelItemType, sourceObject);
     }
-
 
     static public WorkflowModelItem Empty => BaseObject.ParseEmpty<WorkflowModelItem>();
 
@@ -118,7 +118,7 @@ namespace Empiria.Workflow.Definition {
 
 
     [DataField("WKF_MDL_ITEM_CONFIG_DATA")]
-    protected internal JsonObject ConfigurationData {
+    protected JsonObject ConfigurationData {
       get; private set;
     }
 
@@ -175,8 +175,10 @@ namespace Empiria.Workflow.Definition {
       get {
         if (ConfigurationData.Contains(WorkflowConstants.ASSIGNATION_RULES)) {
           return ConfigurationData.Get<AssignationRules>(WorkflowConstants.ASSIGNATION_RULES);
+
         } else if (TargetObject is StepDef stepDef) {
           return stepDef.AssignationRules;
+
         } else {
           return new AssignationRules();
         }
@@ -188,8 +190,10 @@ namespace Empiria.Workflow.Definition {
       get {
         if (ConfigurationData.Contains(WorkflowConstants.AUTOACTIVATE)) {
           return ConfigurationData.Get<bool>(WorkflowConstants.AUTOACTIVATE);
+
         } else if (TargetObject is StepDef stepDef) {
           return stepDef.Autoactivate;
+
         } else {
           return false;
         }
@@ -197,6 +201,28 @@ namespace Empiria.Workflow.Definition {
     }
 
     #endregion Properties
+
+    #region Methods
+
+    internal T GetParty<T>(string partyIdField, T defaultValue) where T : Party {
+      Assertion.Require(partyIdField, nameof(partyIdField));
+      Assertion.Require(defaultValue, nameof(defaultValue));
+
+      if (ConfigurationData.Contains($"parties/{partyIdField}")) {
+        return ConfigurationData.Get<T>($"parties/{partyIdField}");
+
+      } else if (ProcessDef.HasParty(partyIdField)) {
+        return ProcessDef.GetParty<T>(partyIdField);
+
+      } else if (TargetObject is StepDef stepDef && stepDef.HasParty(partyIdField)) {
+        return stepDef.GetParty<T>(partyIdField);
+
+      } else {
+        return defaultValue;
+      }
+    }
+
+    #endregion Methods
 
   } // class WorkflowModelItem
 
