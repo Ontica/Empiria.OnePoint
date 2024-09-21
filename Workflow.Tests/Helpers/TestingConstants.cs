@@ -17,6 +17,8 @@ namespace Empiria.Tests.Workflow {
 
     static internal readonly ProcessDef PROCESS_DEF_WITH_STEPS = ProcessDef.Parse(101);
 
+    static internal readonly WorkflowModelItem WKF_MODEL_ITEM_WITH_ASSIGNATION_RULES = WorkflowModelItem.Parse(1001);
+
   }  // class TestingConstants
 
 }  // namespace namespace Empiria.Tests.Workflow
