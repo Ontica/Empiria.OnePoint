@@ -200,6 +200,13 @@ namespace Empiria.Workflow.Definition {
       }
     }
 
+
+    public bool IsOptional {
+      get {
+        return ConfigurationData.Get(WorkflowConstants.IS_OPTIONAL, false);
+      }
+    }
+
     #endregion Properties
 
     #region Methods

@@ -173,9 +173,20 @@ namespace Empiria.Workflow.Execution {
       get; set;
     }
 
+
     [DataField("WKF_STEP_STATUS", Default = ActivityStatus.Pending)]
     public ActivityStatus Status {
       get; private set;
+    }
+
+
+    public bool IsOptional {
+      get {
+        if (this.ExtensionData.Get(WorkflowConstants.IS_OPTIONAL, false)) {
+          return true;
+        }
+        return this.WorkflowModelItem.IsOptional;
+      }
     }
 
 

@@ -41,6 +41,8 @@ namespace Empiria.Workflow {
 
     static readonly internal string AUTOACTIVATE = "autoactivate";
 
+    static readonly internal string IS_OPTIONAL = "isOptional";
+
     #endregion Control Constants
 
     #region Event Constants
