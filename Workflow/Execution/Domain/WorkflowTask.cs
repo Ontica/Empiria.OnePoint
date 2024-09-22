@@ -140,6 +140,12 @@ namespace Empiria.Workflow.Execution {
       }
     }
 
+    public WorkflowTaskActions Actions {
+      get {
+        return new WorkflowTaskActions(_step);
+      }
+    }
+
     #endregion Properties
 
   }  // class WorkflowTask

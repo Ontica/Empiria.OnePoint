@@ -38,11 +38,25 @@ namespace Empiria.Workflow.Execution.Adapters {
         EndTime = task.EndTime,
         CheckOutTime = task.CheckOutTime,
         Status = new NamedEntityDto(task.Status.ToString(), task.Status.GetName()),
+        Actions = MapActions(task.Actions),
         TaskInvoker = MapTaskInvoker(task)
       };
     }
 
     #region Helpers
+
+    static private TaskDtoActions MapActions(WorkflowTaskActions actions) {
+      return new TaskDtoActions {
+         CanActivate = actions.CanActivate(),
+         CanCancel = actions.CanCancel(),
+         CanClose = actions.CanClose(),
+         CanDelete = actions.CanDelete(),
+         CanStart = actions.CanStart(),
+         CanSuspend = actions.CanSuspend(),
+         CanUpdate = actions.CanUpdate()
+      };
+    }
+
 
     static private TaskInvokerDto MapTaskInvoker(WorkflowTask task) {
       return new TaskInvokerDto {
