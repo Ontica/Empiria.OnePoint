@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using Empiria.StateEnums;
 
 namespace Empiria.Workflow.Execution.Adapters {
@@ -16,12 +15,11 @@ namespace Empiria.Workflow.Execution.Adapters {
   /// <summary>Maps WorkflowTask instances to their DTOs.</summary>
   static internal class WorkflowTaskMapper {
 
-    internal static FixedList<TaskDto> Map(WorkflowInstance workflowInstance) {
-      FixedList<WorkflowTask> tasks = workflowInstance.GetTasks();
-
-      return tasks.Select(x => Map(x)).ToFixedList();
-
+    static internal FixedList<TaskDto> Map(FixedList<WorkflowTask> tasks) {
+      return tasks.Select(x => Map(x))
+                  .ToFixedList();
     }
+
 
     static internal TaskDto Map(WorkflowTask task) {
       return new TaskDto {

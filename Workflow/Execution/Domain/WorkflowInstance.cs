@@ -10,7 +10,6 @@
 using System;
 
 using Empiria.Json;
-
 using Empiria.StateEnums;
 
 using Empiria.Workflow.Requests;
@@ -36,21 +35,37 @@ namespace Empiria.Workflow.Execution {
       _workflowEngine = new Lazy<WorkflowEngine>(() => new WorkflowEngine(this));
     }
 
+
     public WorkflowInstance(ProcessDef processDefinition, Request request) {
       Assertion.Require(processDefinition, nameof(processDefinition));
       Assertion.Require(request, nameof(request));
 
+      Assertion.Require(!processDefinition.IsEmptyInstance,
+                        "Process definition must not be the empty instance.");
+      Assertion.Require(!request.IsEmptyInstance,
+                        "Request must not be the empty instance.");
+
       this.ProcessDefinition = processDefinition;
       this.Request = request;
+
       _workflowEngine = new Lazy<WorkflowEngine>(() => new WorkflowEngine(this));
     }
+
 
     static internal WorkflowInstance Parse(int id) {
       return BaseObject.ParseId<WorkflowInstance>(id);
     }
 
+
     static internal WorkflowInstance Parse(string uid) {
       return BaseObject.ParseKey<WorkflowInstance>(uid);
+    }
+
+
+    static internal FixedList<WorkflowInstance> GetList(Request request) {
+      Assertion.Require(request, nameof (request));
+
+      return WorkflowExecutionData.GetWorkflowInstances(request);
     }
 
     static internal WorkflowInstance Empty => ParseEmpty<WorkflowInstance>();
@@ -59,7 +74,7 @@ namespace Empiria.Workflow.Execution {
 
     #region Properties
 
-    [DataField("WKF_INSTANCE_MODEL_ID")]
+    [DataField("WKF_INSTANCE_PROCESS_DEF_ID")]
     public ProcessDef ProcessDefinition {
       get; private set;
     }

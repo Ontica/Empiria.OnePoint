@@ -12,10 +12,14 @@ using System.Collections.Generic;
 
 using Empiria.Data;
 
+using Empiria.Workflow.Requests;
+
 namespace Empiria.Workflow.Execution.Data {
 
   /// <summary>Provides data read and write methods for workflow execution types.</summary>
   static internal class WorkflowExecutionData {
+
+    #region Read methods
 
     static internal List<WorkflowStep> GetSteps(WorkflowInstance workflowInstance) {
       if (workflowInstance.IsEmptyInstance || workflowInstance.IsNew) {
@@ -32,6 +36,25 @@ namespace Empiria.Workflow.Execution.Data {
       return DataReader.GetList<WorkflowStep>(op);
     }
 
+
+    static internal FixedList<WorkflowInstance> GetWorkflowInstances(Request request) {
+      if (request.IsEmptyInstance || request.IsNew) {
+        return new FixedList<WorkflowInstance>();
+      }
+
+      var sql = "SELECT * FROM WKF_Instances " +
+                $"WHERE WKF_INSTANCE_REQUEST_ID = {request.Id} AND " +
+                "WKF_INSTANCE_STATUS <> 'X' " +
+                "ORDER BY WKF_INSTANCE_ID";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<WorkflowInstance>(op);
+    }
+
+    #endregion Read methods
+
+    #region Write methods
 
     static internal void Write(WorkflowInstance o) {
       var op = DataOperation.Parse("write_WKF_Instance", o.Id, o.UID,
@@ -54,6 +77,7 @@ namespace Empiria.Workflow.Execution.Data {
       DataWriter.Execute(op);
     }
 
+    #endregion Write methods
 
   }  // class WorkflowExecutionData
 
