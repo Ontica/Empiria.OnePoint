@@ -190,15 +190,10 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public ActivityStatus RuntimeStatus {
+    public bool IsProcessActive {
       get {
-        if (this.Status == ActivityStatus.Completed) {
-          return this.Status;
-        }
-        if (this.WorkflowInstance.Request.Status == ActivityStatus.Suspended) {
-          return ActivityStatus.Suspended;
-        }
-        return this.Status;
+        return this.WorkflowInstance.Request.Status == ActivityStatus.Active &&
+               this.WorkflowInstance.Status == ActivityStatus.Active;
       }
     }
 
@@ -208,6 +203,30 @@ namespace Empiria.Workflow.Execution {
         return EmpiriaString.BuildKeywords(this.Description, WorkflowInstance.Request.Description,
                                            this.WorkflowModelItem.Keywords,
                                            this.AssignedTo.Name, this.AssignedToOrgUnit.FullName);
+      }
+    }
+
+
+    public ActivityStatus RuntimeStatus {
+      get {
+        if (this.Status == ActivityStatus.Completed ||
+            this.Status == ActivityStatus.Deleted) {
+          return this.Status;
+        }
+
+        if (this.WorkflowInstance.Request.Status != ActivityStatus.Active) {
+          return this.WorkflowInstance.Request.Status;
+        }
+
+        if (this.WorkflowInstance.Status != ActivityStatus.Active) {
+          return this.WorkflowInstance.Status;
+        }
+
+        if (this.WorkflowInstance.Request.Status == ActivityStatus.Suspended) {
+          return ActivityStatus.Suspended;
+        }
+
+        return this.Status;
       }
     }
 
