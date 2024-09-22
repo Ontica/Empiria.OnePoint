@@ -136,7 +136,7 @@ namespace Empiria.Workflow.Execution {
 
     public ActivityStatus Status {
       get {
-        return _step.Status;
+        return _step.RuntimeStatus;
       }
     }
 

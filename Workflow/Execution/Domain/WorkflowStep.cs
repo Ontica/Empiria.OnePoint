@@ -179,9 +179,23 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    public ActivityStatus RuntimeStatus {
+      get {
+        if (this.Status == ActivityStatus.Completed) {
+          return this.Status;
+        }
+        if (this.WorkflowInstance.Request.Status == ActivityStatus.Suspended) {
+          return ActivityStatus.Suspended;
+        }
+        return this.Status;
+      }
+    }
+
+
     internal protected virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(this.Description, this.WorkflowModelItem.Keywords,
+        return EmpiriaString.BuildKeywords(this.Description, WorkflowInstance.Request.Description,
+                                           this.WorkflowModelItem.Keywords,
                                            this.AssignedTo.Name, this.AssignedToOrgUnit.FullName);
       }
     }
