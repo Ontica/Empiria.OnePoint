@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-
+using System.Collections.Generic;
 using Empiria.DataObjects;
 using Empiria.Json;
 using Empiria.Ontology;
@@ -16,8 +16,6 @@ using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Workflow.Execution;
-
-using Empiria.Workflow.Definition;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
@@ -28,10 +26,17 @@ namespace Empiria.Workflow.Requests {
   [PartitionedType(typeof(RequestType))]
   public abstract class Request : BaseObject {
 
+    #region Fields
+
+    private Lazy<FixedList<WorkflowInstance>> _workflowInstances;
+
+    #endregion Fields
+
     #region Constructors and parsers
 
     protected Request(RequestType powertype) : base(powertype) {
       // Required by Empiria Framework for all partitioned types.
+      ResetWorkflowInstances();
     }
 
     static internal Request Parse(int id) {
@@ -102,14 +107,14 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_FILED_BY_ID")]
-    public Contacts.Contact FiledBy {
+    [DataField("REQ_STARTED_BY_ID")]
+    public Contacts.Contact StartedBy {
       get; private set;
     }
 
 
-    [DataField("REQ_FILING_TIME")]
-    public DateTime FilingTime {
+    [DataField("REQ_START_TIME")]
+    public DateTime StartTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
@@ -132,18 +137,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_POSTED_BY_ID")]
-    public Contacts.Contact PostedBy {
-      get; private set;
-    }
-
-
-    [DataField("REQ_POSTING_TIME")]
-    public DateTime PostingTime {
-      get; private set;
-    }
-
-
     [DataField("REQ_STATUS", Default = ActivityStatus.Pending)]
     public ActivityStatus Status {
       get; private set;
@@ -152,24 +145,27 @@ namespace Empiria.Workflow.Requests {
 
     internal protected virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(UniqueID, ControlID, RequesterName, RequestType.DisplayName);
+        return EmpiriaString.BuildKeywords(UniqueID, ControlID, Description, RequesterName, RequestType.DisplayName);
       }
     }
+
 
     public bool HasWorkflowInstance {
       get {
-        return !WorkflowInstance.IsEmptyInstance;
+        return WorkflowInstances.Count != 0;
       }
     }
 
 
-    [DataField("REQ_WKF_INSTANCE_ID")]
-    public WorkflowInstance WorkflowInstance {
-      get; private set;
-    }
-
     public abstract FixedList<FieldValue> RequestTypeFields {
       get;
+    }
+
+
+    public FixedList<WorkflowInstance> WorkflowInstances {
+      get {
+        return _workflowInstances.Value;
+      }
     }
 
     #endregion Properties
@@ -240,6 +236,7 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(CanActivate(), InvalidOperationMessage("activate"));
 
       Status = ActivityStatus.Active;
+      base.MarkAsDirty();
     }
 
 
@@ -247,6 +244,7 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(CanCancel(), InvalidOperationMessage("cancel"));
 
       Status = ActivityStatus.Canceled;
+      base.MarkAsDirty();
     }
 
 
@@ -257,6 +255,7 @@ namespace Empiria.Workflow.Requests {
       ClosedBy = ExecutionServer.CurrentContact;
 
       Status = ActivityStatus.Completed;
+      base.MarkAsDirty();
     }
 
 
@@ -264,6 +263,19 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(CanDelete(), InvalidOperationMessage("delete"));
 
       this.Status = ActivityStatus.Deleted;
+      base.MarkAsDirty();
+    }
+
+
+    internal FixedList<WorkflowTask> GetTasks() {
+      var allTasksList = new List<WorkflowTask>(32);
+
+      foreach (WorkflowInstance instance in WorkflowInstances) {
+        var tasks = instance.GetTasks();
+
+        allTasksList.AddRange(tasks);
+      }
+      return allTasksList.ToFixedList();
     }
 
 
@@ -271,34 +283,26 @@ namespace Empiria.Workflow.Requests {
       if (base.IsNew) {
         this.UniqueID = RequestData.GetNextUniqueID(ResponsibleOrgUnit.Acronym, DateTime.Today.Year);
         this.ControlID = "No determinado";
-
-        PostingTime = EmpiriaDateTime.NowWithCentiseconds;
-        PostedBy = ExecutionServer.CurrentContact;
-      }
-
-      if (HasWorkflowInstance) {
-        WorkflowInstance.Save();
       }
 
       RequestData.Write(this, this.ExtensionData.ToString());
     }
 
 
-    internal void Start(ProcessDef processDefinition) {
-      Assertion.Require(processDefinition, nameof(processDefinition));
-      Assertion.Require(processDefinition.Status == EntityStatus.Active,
-                        "El proceso asignado a esta solicitud no está activo. " +
-                        "No es posible efectuar la operación.");
-
+    internal void Start() {
       Assertion.Require(CanStart(), InvalidOperationMessage("start"));
 
-      this.WorkflowInstance = new WorkflowInstance(processDefinition, this);
-
-      this.WorkflowInstance.Start();
-
       this.ControlID = RequestData.GetNextControlNumber(DateTime.Today.Year);
-
+      this.StartTime = EmpiriaDateTime.NowWithCentiseconds;
+      this.StartedBy = ExecutionServer.CurrentContact;
       this.Status = ActivityStatus.Active;
+
+      ResetWorkflowInstances();
+
+      Assertion.Ensure(WorkflowInstances.Count != 0,
+                      "At least one workflow instance must be created for this request.");
+
+      base.MarkAsDirty();
     }
 
 
@@ -306,6 +310,7 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(CanSuspend(), InvalidOperationMessage("suspend"));
 
       Status = ActivityStatus.Suspended;
+      base.MarkAsDirty();
     }
 
 
@@ -333,6 +338,7 @@ namespace Empiria.Workflow.Requests {
 
       this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
       this.ResponsibleOrgUnit = RequestType.ResponsibleOrgUnit;
+      base.MarkAsDirty();
     }
 
     #endregion Methods
@@ -341,6 +347,11 @@ namespace Empiria.Workflow.Requests {
 
     private string InvalidOperationMessage(string operationName) {
       return $"Can not {operationName} this request. Its status is {Status.GetName()}.";
+    }
+
+
+    private void ResetWorkflowInstances() {
+      _workflowInstances = new Lazy<FixedList<WorkflowInstance>>(() => WorkflowInstance.GetList(this));
     }
 
     #endregion Helpers

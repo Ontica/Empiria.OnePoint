@@ -82,11 +82,13 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto FiledBy {
+    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FiledBy")]
+    public NamedEntityDto StartedBy {
       get; internal set;
     }
 
-    public DateTime FilingTime {
+    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FilingTime")]
+    public DateTime StartTime {
       get; internal set;
     }
 
@@ -95,14 +97,6 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     public DateTime ClosingTime {
-      get; internal set;
-    }
-
-    public NamedEntityDto PostedBy {
-      get; internal set;
-    }
-
-    public DateTime PostingTime {
       get; internal set;
     }
 

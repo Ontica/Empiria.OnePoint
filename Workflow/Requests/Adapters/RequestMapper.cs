@@ -31,7 +31,7 @@ namespace Empiria.Workflow.Requests.Adapters {
     static internal RequestHolderDto Map(Request request) {
       return new RequestHolderDto {
         Request = MapRequest(request),
-        Tasks = WorkflowTaskMapper.Map(request.WorkflowInstance),
+        Tasks = WorkflowTaskMapper.Map(request.GetTasks()),
         Actions = MapRequestActions(request),
         Files = MapRequestFiles(request),
         WorkflowHistory = MapRequestWorkflowHistory(request),
@@ -78,12 +78,10 @@ namespace Empiria.Workflow.Requests.Adapters {
         RequestTypeFields = request.RequestTypeFields,
         RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
         ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
-        FiledBy = request.FiledBy.MapToNamedEntity(),
-        FilingTime = request.FilingTime,
+        StartedBy = request.StartedBy.MapToNamedEntity(),
+        StartTime = request.StartTime,
         ClosedBy = request.ClosedBy.MapToNamedEntity(),
         ClosingTime = request.ClosingTime,
-        PostedBy = request.PostedBy.MapToNamedEntity(),
-        PostingTime = request.PostingTime,
         Status = request.Status.GetName()
       };
     }
@@ -99,8 +97,8 @@ namespace Empiria.Workflow.Requests.Adapters {
         Description = request.Description,
         RequesterOrgUnitName = request.RequesterOrgUnit.FullName,
         ResponsibleOrgUnitName = request.ResponsibleOrgUnit.FullName,
-        FiledByName = request.FiledBy.FullName,
-        FilingTime = request.FilingTime,
+        FiledByName = request.StartedBy.FullName,
+        FilingTime = request.StartTime,
         Status = request.Status.GetName()
       };
     }
