@@ -7,11 +7,12 @@
 *  Summary  : Use cases for create, update and search requests.                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 
 using Empiria.Services;
+using Empiria.StateEnums;
 
 using Empiria.Workflow.Definition;
+using Empiria.Workflow.Execution;
 
 using Empiria.Workflow.Requests.Adapters;
 
@@ -126,9 +127,21 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       var request = Request.Parse(requestUID);
 
+      Assertion.Require(request.CanStart(), "No se puede iniciar esta solicitud.");
+
       ProcessDef processDefinition = request.RequestType.DefaultProcessDefinition;
 
-      request.Start(processDefinition);
+      Assertion.Require(processDefinition.Status == EntityStatus.Active,
+                        "El proceso asignado a esta solicitud no está activo. " +
+                        "No es posible efectuar la operación.");
+
+      WorkflowInstance workflowInstance = new WorkflowInstance(processDefinition, request);
+
+      workflowInstance.Start();
+
+      workflowInstance.Save();
+
+      request.Start();
 
       request.Save();
 
