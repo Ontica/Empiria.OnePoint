@@ -47,6 +47,9 @@ namespace Empiria.Workflow.Execution {
 
     public string Description {
       get {
+        if (_step.WorkflowModelItem.Name.Length != 0) {
+          return _step.WorkflowModelItem.Name;
+        }
         return _step.WorkflowModelItem.TargetObject.Name;
       }
     }
@@ -89,6 +92,15 @@ namespace Empiria.Workflow.Execution {
 
     public DateTime CheckInTime {
       get {
+        if (_step.WorkflowModelItem.Autoactivate) {
+          return EmpiriaDateTime.NowWithCentiseconds;
+
+        } else if (_step.WorkflowModelItem.TargetObject is StepDef stepDef &&
+                   stepDef.Autoactivate) {
+          return EmpiriaDateTime.NowWithCentiseconds;
+
+        }
+
         return ExecutionServer.DateMaxValue;
       }
     }
@@ -96,14 +108,18 @@ namespace Empiria.Workflow.Execution {
 
     public ActivityStatus Status {
       get {
-        if (!(_step.WorkflowModelItem.SourceObject is EventDef eventDef)) {
+        if (!(_step.WorkflowModelItem.SourceObject is EventDef eventDef) ||
+            !eventDef.IsStartEvent) {
           return ActivityStatus.Waiting;
         }
-        if (!eventDef.IsStartEvent) {
-          return ActivityStatus.Waiting;
-        }
+
         if (_step.WorkflowModelItem.Autoactivate) {
           return ActivityStatus.Active;
+
+        } else if (_step.WorkflowModelItem.TargetObject is StepDef stepDef &&
+                   stepDef.Autoactivate) {
+          return ActivityStatus.Active;
+
         }
 
         return ActivityStatus.Pending;
