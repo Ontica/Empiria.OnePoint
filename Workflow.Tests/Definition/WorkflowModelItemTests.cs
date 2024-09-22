@@ -42,7 +42,7 @@ namespace Empiria.Tests.Workflow.Definition {
 
       AssignationRules sut = modelItem.AssignationRules;
 
-      Assert.Equal(AssignationRule.RequestResponsible, sut.RequestedBy);
+      Assert.Equal(AssignationRule.FixedValue, sut.RequestedBy);
       Assert.Equal(AssignationRule.RequestResponsible, sut.RequestedByOrgUnit);
       Assert.Equal(AssignationRule.CurrentUser, sut.AssignedTo);
       Assert.Equal(AssignationRule.RequestRequester, sut.AssignedToOrgUnit);

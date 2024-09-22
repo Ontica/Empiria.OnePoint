@@ -80,6 +80,7 @@
     <PackageReference Include="Empiria.OnePoint.Security" Version="4.0.0" />
     <PackageReference Include="Empiria.OnePoint.Workflow" Version="4.0.0" />
     <PackageReference Include="Empiria.Budgeting.Processes" Version="4.0.0" />
+    <PackageReference Include="Empiria.Payments.Core" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\extensions\Data.Oracle\Empiria.Data.Oracle.csproj" />
@@ -87,6 +88,7 @@
     <ProjectReference Include="..\Security\Empiria.OnePoint.Security.csproj" />
     <ProjectReference Include="..\Workflow\Empiria.OnePoint.Workflow.csproj" />
     <ProjectReference Include="..\..\financial.budgeting\Processes\Empiria.Budgeting.Processes.csproj" />
+    <ProjectReference Include="..\..\financial.payments\Core\Empiria.Payments.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="empiria.config.json">
@@ -95,5 +97,8 @@
     <None Update="empiria.environment.vars.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Requests\" />
   </ItemGroup>
 </Project>
