@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Requests Management                        Component : Adpaters Layer                          *
+*  Module   : Requests Management                        Component : Adapters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Mapper                                  *
 *  Type     : RequestMapper                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
@@ -31,8 +31,9 @@ namespace Empiria.Workflow.Requests.Adapters {
     static internal RequestHolderDto Map(Request request) {
       return new RequestHolderDto {
         Request = MapRequest(request),
+        WorkflowInstances = WorkflowInstanceMapper.Map(request.WorkflowInstances),
         Tasks = WorkflowTaskMapper.Map(request.GetTasks()),
-        Actions = MapRequestActions(request),
+        Actions = request.Actions.MapToDto(),
         Files = MapRequestFiles(request),
         WorkflowHistory = MapRequestWorkflowHistory(request),
       };
@@ -54,19 +55,6 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
 
-    static private RequestActionsDto MapRequestActions(Request request) {
-      return new RequestActionsDto {
-        CanActivate = request.CanActivate(),
-        CanCancel = request.CanCancel(),
-        CanClose = request.CanClose(),
-        CanDelete = request.CanDelete(),
-        CanStart = request.CanStart(),
-        CanSuspend = request.CanSuspend(),
-        CanUpdate = request.CanUpdate(),
-      };
-    }
-
-
     static private RequestDto MapRequest(Request request) {
       return new RequestDto {
         UID = request.UID,
@@ -80,8 +68,8 @@ namespace Empiria.Workflow.Requests.Adapters {
         ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
         StartedBy = request.StartedBy.MapToNamedEntity(),
         StartTime = request.StartTime,
-        ClosedBy = request.ClosedBy.MapToNamedEntity(),
-        ClosingTime = request.ClosingTime,
+        EndedBy = request.EndedBy.MapToNamedEntity(),
+        EndTime = request.EndTime,
         Status = request.Status.GetName()
       };
     }
@@ -97,8 +85,8 @@ namespace Empiria.Workflow.Requests.Adapters {
         Description = request.Description,
         RequesterOrgUnitName = request.RequesterOrgUnit.FullName,
         ResponsibleOrgUnitName = request.ResponsibleOrgUnit.FullName,
-        FiledByName = request.StartedBy.FullName,
-        FilingTime = request.StartTime,
+        StartedByName = request.StartedBy.FullName,
+        StartTime = request.StartTime,
         Status = request.Status.GetName()
       };
     }

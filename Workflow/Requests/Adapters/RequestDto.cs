@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Requests Management                        Component : Adpaters Layer                          *
+*  Module   : Requests Management                        Component : Adapters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Output DTO                              *
 *  Type     : RequestDto                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+
 using Empiria.DataObjects;
 using Empiria.Storage;
 
@@ -23,7 +24,11 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public RequestActionsDto Actions {
+    public FixedList<WorkflowInstanceDto> WorkflowInstances {
+      get; internal set;
+    }
+
+    public WorkflowActionsDto Actions {
       get; internal set;
     }
 
@@ -38,7 +43,6 @@ namespace Empiria.Workflow.Requests.Adapters {
     public FixedList<WorkflowHistoryItemDto> WorkflowHistory {
       get; internal set;
     }
-
 
   }  // RequestHolderDto
 
@@ -92,11 +96,13 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto ClosedBy {
+    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "ClosedBy")]
+    public NamedEntityDto EndedBy {
       get; internal set;
     }
 
-    public DateTime ClosingTime {
+    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "ClosingTime")]
+    public DateTime EndTime {
       get; internal set;
     }
 
@@ -105,41 +111,6 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
   }  // class RequestDto
-
-
-
-  /// <summary>Inner output DTO with a request actions flags.</summary>
-  public class RequestActionsDto {
-
-    public bool CanActivate {
-      get; internal set;
-    }
-
-    public bool CanCancel {
-      get; internal set;
-    }
-
-    public bool CanClose {
-      get; internal set;
-    }
-
-    public bool CanDelete {
-      get; internal set;
-    }
-
-    public bool CanStart {
-      get; internal set;
-    }
-
-    public bool CanSuspend {
-      get; internal set;
-    }
-
-    public bool CanUpdate {
-      get; internal set;
-    }
-
-  }  // class RequestActionsDto
 
 
 
@@ -178,11 +149,13 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public string FiledByName {
+    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FiledByName")]
+    public string StartedByName {
       get; internal set;
     }
 
-    public DateTime FilingTime {
+    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FilingTime")]
+    public DateTime StartTime {
       get; internal set;
     }
 

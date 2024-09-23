@@ -62,12 +62,12 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
-    public RequestHolderDto CloseRequest(string requestUID) {
+    public RequestHolderDto CompleteRequest(string requestUID) {
       Assertion.Require(requestUID, nameof(requestUID));
 
       var request = Request.Parse(requestUID);
 
-      request.Close();
+      request.Complete();
 
       request.Save();
 
@@ -127,7 +127,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       var request = Request.Parse(requestUID);
 
-      Assertion.Require(request.CanStart(), "No se puede iniciar esta solicitud.");
+      Assertion.Require(request.Actions.CanStart(), "No se puede iniciar esta solicitud.");
 
       ProcessDef processDefinition = request.RequestType.DefaultProcessDefinition;
 

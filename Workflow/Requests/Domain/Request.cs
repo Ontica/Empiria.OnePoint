@@ -120,13 +120,13 @@ namespace Empiria.Workflow.Requests {
 
 
     [DataField("REQ_CLOSED_BY_ID")]
-    public Contacts.Contact ClosedBy {
+    public Contacts.Contact EndedBy {
       get; private set;
     }
 
 
     [DataField("REQ_CLOSING_TIME")]
-    public DateTime ClosingTime {
+    public DateTime EndTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
@@ -157,6 +157,13 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    public RequestActions Actions {
+      get {
+        return new RequestActions(this);
+      }
+    }
+
+
     public abstract FixedList<FieldValue> RequestTypeFields {
       get;
     }
@@ -170,70 +177,10 @@ namespace Empiria.Workflow.Requests {
 
     #endregion Properties
 
-    #region Guards
-
-    internal bool CanActivate() {
-      if (HasWorkflowInstance && Status == ActivityStatus.Suspended) {
-        return true;
-      }
-      return false;
-    }
-
-
-    public bool CanCancel() {
-      if (HasWorkflowInstance && (Status == ActivityStatus.Active || Status == ActivityStatus.Suspended)) {
-        return true;
-      }
-      return false;
-    }
-
-
-    public bool CanClose() {
-      if (HasWorkflowInstance && Status == ActivityStatus.Active) {
-        return true;
-      }
-      return false;
-    }
-
-
-    public bool CanDelete() {
-      if (!HasWorkflowInstance && Status == ActivityStatus.Pending) {
-        return true;
-      }
-      return false;
-    }
-
-
-    public bool CanStart() {
-      if (!HasWorkflowInstance && Status == ActivityStatus.Pending) {
-        return true;
-      }
-
-      return false;
-    }
-
-
-    public bool CanSuspend() {
-      if (HasWorkflowInstance && Status == ActivityStatus.Active) {
-        return true;
-      }
-      return false;
-    }
-
-
-    protected virtual internal bool CanUpdate() {
-      if (!HasWorkflowInstance && Status == ActivityStatus.Pending) {
-        return true;
-      }
-      return false;
-    }
-
-    #endregion Guards
-
     #region Methods
 
     internal void Activate() {
-      Assertion.Require(CanActivate(), InvalidOperationMessage("activate"));
+      Assertion.Require(Actions.CanActivate(), InvalidOperationMessage("activate"));
 
       Status = ActivityStatus.Active;
       base.MarkAsDirty();
@@ -241,26 +188,27 @@ namespace Empiria.Workflow.Requests {
 
 
     public void Cancel() {
-      Assertion.Require(CanCancel(), InvalidOperationMessage("cancel"));
+      Assertion.Require(Actions.CanCancel(), InvalidOperationMessage("cancel"));
 
       Status = ActivityStatus.Canceled;
       base.MarkAsDirty();
     }
 
 
-    public void Close() {
-      Assertion.Require(CanClose(), InvalidOperationMessage("close"));
+    public void Complete() {
+      Assertion.Require(Actions.CanComplete(), InvalidOperationMessage("complete"));
 
-      ClosingTime = EmpiriaDateTime.NowWithCentiseconds;
-      ClosedBy = ExecutionServer.CurrentContact;
+      EndTime = EmpiriaDateTime.NowWithCentiseconds;
+      EndedBy = ExecutionServer.CurrentContact;
 
       Status = ActivityStatus.Completed;
+
       base.MarkAsDirty();
     }
 
 
     public void Delete() {
-      Assertion.Require(CanDelete(), InvalidOperationMessage("delete"));
+      Assertion.Require(Actions.CanDelete(), InvalidOperationMessage("delete"));
 
       this.Status = ActivityStatus.Deleted;
       base.MarkAsDirty();
@@ -290,7 +238,7 @@ namespace Empiria.Workflow.Requests {
 
 
     internal void Start() {
-      Assertion.Require(CanStart(), InvalidOperationMessage("start"));
+      Assertion.Require(Actions.CanStart(), InvalidOperationMessage("start"));
 
       this.ControlID = RequestData.GetNextControlNumber(DateTime.Today.Year);
       this.StartTime = EmpiriaDateTime.NowWithCentiseconds;
@@ -307,7 +255,7 @@ namespace Empiria.Workflow.Requests {
 
 
     internal void Suspend() {
-      Assertion.Require(CanSuspend(), InvalidOperationMessage("suspend"));
+      Assertion.Require(Actions.CanSuspend(), InvalidOperationMessage("suspend"));
 
       Status = ActivityStatus.Suspended;
       base.MarkAsDirty();
@@ -317,7 +265,7 @@ namespace Empiria.Workflow.Requests {
     protected virtual internal void Update(RequestFieldsDto fields) {
       Assertion.Require(fields, nameof(fields));
 
-      Assertion.Require(CanUpdate(), InvalidOperationMessage("update"));
+      Assertion.Require(Actions.CanUpdate(), InvalidOperationMessage("update"));
 
       if (fields.RequestTypeUID != RequestType.UID) {
         base.ReclassifyAs(RequestType.Parse(fields.RequestTypeUID));

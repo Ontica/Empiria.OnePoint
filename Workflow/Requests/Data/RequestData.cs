@@ -66,7 +66,7 @@ namespace Empiria.Workflow.Requests.Data {
       var op = DataOperation.Parse("write_WKF_Request", o.Id, o.UID, o.RequestType.Id,
             o.UniqueID, o.ControlID, o.RequesterName, o.Description,
             o.RequesterOrgUnit.Id, o.Requester.Id, o.ResponsibleOrgUnit.Id,
-            o.StartedBy.Id, o.StartTime, o.ClosedBy.Id, o.ClosingTime,
+            o.StartedBy.Id, o.StartTime, o.EndedBy.Id, o.EndTime,
             extensionData, o.Keywords, (char) o.Status);
 
       DataWriter.Execute(op);

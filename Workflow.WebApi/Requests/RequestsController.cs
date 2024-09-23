@@ -74,15 +74,17 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/close")]
-    public SingleObjectModel CloseRequest([FromUri] string requestUID) {
+    [Route("v4/requests/{requestUID}/close")]   // ToDo: Remove this endpoint
+    [Route("v4/requests/{requestUID}/complete")]
+    public SingleObjectModel CompleteRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        RequestHolderDto request = usecases.CloseRequest(requestUID);
+        RequestHolderDto request = usecases.CompleteRequest(requestUID);
 
         return new SingleObjectModel(base.Request, request);
       }
     }
+
 
     [HttpPost]
     [Route("v4/requests/create")]
