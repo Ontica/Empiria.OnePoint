@@ -60,7 +60,7 @@ namespace Empiria.Workflow.Execution.Data {
       var op = DataOperation.Parse("write_WKF_Instance", o.Id, o.UID,
                                   o.ProcessDefinition.Id, o.Request.Id, o.Parent.Id,
                                   o.ExtensionData.ToString(), o.Keywords,
-                                  o.StartTime, o.CloseTime, (char) o.Status);
+                                  o.StartTime, o.EndTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

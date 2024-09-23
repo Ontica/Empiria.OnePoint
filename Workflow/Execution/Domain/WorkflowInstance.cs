@@ -80,6 +80,26 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    public string Name {
+      get {
+        return ExtensionData.Get("name", ProcessDefinition.Name);
+      }
+      private set {
+        ExtensionData.SetIfValue("name", EmpiriaString.TrimAll(value));
+      }
+    }
+
+
+    public string Description {
+      get {
+        return ExtensionData.Get("description", ProcessDefinition.Description);
+      }
+      private set {
+        ExtensionData.SetIfValue("description", EmpiriaString.TrimAll(value));
+      }
+    }
+
+
     [DataField("WKF_INSTANCE_REQUEST_ID")]
     private int _requestId = -1;
 
@@ -91,6 +111,7 @@ namespace Empiria.Workflow.Execution {
         _requestId = value.Id;
       }
     }
+
 
     [DataField("WKF_INSTANCE_PARENT_ID")]
     private int _parentId;
@@ -121,7 +142,7 @@ namespace Empiria.Workflow.Execution {
 
 
     [DataField("WKF_INSTANCE_CLOSE_TIME")]
-    public DateTime CloseTime {
+    public DateTime EndTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
@@ -138,6 +159,28 @@ namespace Empiria.Workflow.Execution {
       }
     }
 
+
+    public WorkflowInstanceActions Actions {
+      get {
+        return new WorkflowInstanceActions(this);
+      }
+    }
+
+
+    public bool IsOptional {
+      get {
+        return this.ExtensionData.Get(WorkflowConstants.IS_OPTIONAL, false);
+      }
+    }
+
+
+    public bool IsRequestActive {
+      get {
+        return Request.Status == ActivityStatus.Active;
+      }
+    }
+
+
     public bool IsStarted {
       get {
         return !IsEmptyInstance &&
@@ -145,6 +188,7 @@ namespace Empiria.Workflow.Execution {
                Status != ActivityStatus.Pending;
       }
     }
+
 
     private WorkflowEngine WorkflowEngine {
       get {
