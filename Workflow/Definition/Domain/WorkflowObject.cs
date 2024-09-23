@@ -18,7 +18,7 @@ namespace Empiria.Workflow.Definition {
 
   /// <summary>Abstract class that represents a workflow object definition. A workflow object can be a task
   /// or an activity, a gateway element, a connector or a workflow artifact as a data object.</summary>
-  public abstract class WorkflowObject : BaseObject {
+  public abstract class WorkflowObject : BaseObject, INamedEntity {
 
     static internal WorkflowObject Parse(int id) {
       return BaseObject.ParseId<WorkflowObject>(id);

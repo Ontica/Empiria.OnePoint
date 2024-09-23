@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Requests Management                        Component : Adpaters Layer                          *
+*  Module   : Requests Management                        Component : Adapters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Output DTO                              *
 *  Type     : WorkflowHistoryItemDto                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
