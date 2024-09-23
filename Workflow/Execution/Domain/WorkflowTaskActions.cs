@@ -13,7 +13,7 @@ using Empiria.StateEnums;
 namespace Empiria.Workflow.Execution {
 
   /// <summary>Determines the actions that can be performed for a workflow instance task.</summary>
-  public class WorkflowTaskActions {
+  public class WorkflowTaskActions : IWorkflowActions {
 
     private readonly WorkflowStep _step;
 
@@ -37,7 +37,7 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public bool CanClose() {
+    public bool CanComplete() {
       return _step.IsProcessActive &&
               _step.Status == ActivityStatus.Active;
     }

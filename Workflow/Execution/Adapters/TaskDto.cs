@@ -63,13 +63,12 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Status {
+    public string Status {
       get; internal set;
     }
 
-    public TaskDtoActions Actions {
-      get;
-      internal set;
+    public WorkflowActionsDto Actions {
+      get; internal set;
     }
 
     public TaskInvokerDto TaskInvoker {
@@ -77,42 +76,6 @@ namespace Empiria.Workflow.Execution.Adapters {
     }
 
   }  // class TaskDto
-
-
-
-  /// <summary>Inner output DTO with a workflow task actions flags.</summary>
-  public class TaskDtoActions {
-
-    public bool CanActivate {
-      get; internal set;
-    }
-
-    public bool CanCancel {
-      get; internal set;
-    }
-
-    public bool CanClose {
-      get; internal set;
-    }
-
-    public bool CanDelete {
-      get; internal set;
-    }
-
-    public bool CanStart {
-      get; internal set;
-    }
-
-    public bool CanSuspend {
-      get; internal set;
-    }
-
-    public bool CanUpdate {
-      get; internal set;
-    }
-
-  }  // class TaskDtoActions
-
 
 
   /// <summary>Inner output DTO that describes a task invoker.</summary>
