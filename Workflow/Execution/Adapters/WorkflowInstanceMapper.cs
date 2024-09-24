@@ -26,11 +26,16 @@ namespace Empiria.Workflow.Execution.Adapters {
         UID = instance.UID,
         Name = instance.Name,
         Description = instance.Description,
-        ProcessDef = instance.ProcessDefinition.MapToNamedEntity(),
+        RequestedBy = instance.RequestedBy.MapToNamedEntity(),
+        RequestedByOrgUnit = instance.RequestedByOrgUnit.MapToNamedEntity(),
+        ResponsibleOrgUnit = instance.ResponsibleOrgUnit.MapToNamedEntity(),
+        Priority = instance.Priority.MapToDto(),
+        DueTime = instance.DueTime,
         StartTime = instance.StartTime,
         EndTime = instance.EndTime,
         Status = instance.Status.GetName(),
-        Actions = instance.Actions.MapToDto()
+        Actions = instance.Actions.MapToDto(),
+        ProcessDef = instance.ProcessDefinition.MapToNamedEntity()
       };
     }
 

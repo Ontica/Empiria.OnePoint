@@ -43,9 +43,9 @@ namespace Empiria.Workflow.Execution.Data {
       }
 
       var sql = "SELECT * FROM WKF_Instances " +
-                $"WHERE WKF_INSTANCE_REQUEST_ID = {request.Id} AND " +
-                "WKF_INSTANCE_STATUS <> 'X' " +
-                "ORDER BY WKF_INSTANCE_ID";
+                $"WHERE WKF_INST_REQUEST_ID = {request.Id} AND " +
+                "WKF_INST_STATUS <> 'X' " +
+                "ORDER BY WKF_INST_ID";
 
       var op = DataOperation.Parse(sql);
 
@@ -56,11 +56,13 @@ namespace Empiria.Workflow.Execution.Data {
 
     #region Write methods
 
-    static internal void Write(WorkflowInstance o) {
+    static internal void Write(WorkflowInstance o, string extensionData) {
       var op = DataOperation.Parse("write_WKF_Instance", o.Id, o.UID,
-                                  o.ProcessDefinition.Id, o.Request.Id, o.Parent.Id,
-                                  o.ExtensionData.ToString(), o.Keywords,
-                                  o.StartTime, o.EndTime, (char) o.Status);
+                o.ProcessDefinition.Id, o.Request.Id, o.RequestedBy.Id,
+                o.RequestedByOrgUnit.Id, o.ResponsibleOrgUnit.Id,
+                (char) o.Priority, o.DueTime, o.StartedBy.Id, o.StartTime,
+                o.EndTime, o.Parent.Id, extensionData,
+                o.Keywords, (char) o.Status);
 
       DataWriter.Execute(op);
     }
@@ -70,7 +72,7 @@ namespace Empiria.Workflow.Execution.Data {
       var op = DataOperation.Parse("write_WKF_Step", o.Id, o.UID,
                       o.WorkflowInstance.Id, o.WorkflowModelItem.Id, o.No, o.Description,
                       o.Tags, o.ExternalObjectId, o.RequestedBy.Id, o.RequestedByOrgUnit.Id,
-                      o.AssignedTo.Id, o.AssignedToOrgUnit.Id, o.Deadline, o.CheckInTime,
+                      o.AssignedTo.Id, o.AssignedToOrgUnit.Id, o.DueTime, o.StartTime,
                       o.EndTime, o.CheckOutTime, o.PreviousStep.Id, o.NextStep.Id,
                       extensionData, o.Keywords, (char) o.Status);
 

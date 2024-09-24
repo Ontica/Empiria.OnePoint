@@ -27,6 +27,30 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto RequestedBy {
+      get; internal set;
+    }
+
+    public NamedEntityDto RequestedByOrgUnit {
+      get; internal set;
+    }
+
+    public NamedEntityDto ResponsibleOrgUnit {
+      get; internal set;
+    }
+
+    public NamedEntityDto Priority {
+      get; internal set;
+    }
+
+    public DateTime DueTime {
+      get; internal set;
+    }
+
+    public NamedEntityDto StartedBy {
+      get; internal set;
+    }
+
     public DateTime StartTime {
       get; internal set;
     }

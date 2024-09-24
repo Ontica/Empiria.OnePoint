@@ -11,6 +11,7 @@ using System;
 
 using Empiria.Json;
 using Empiria.StateEnums;
+using Empiria.Parties;
 
 using Empiria.Workflow.Requests;
 using Empiria.Workflow.Definition;
@@ -74,9 +75,22 @@ namespace Empiria.Workflow.Execution {
 
     #region Properties
 
-    [DataField("WKF_INSTANCE_PROCESS_DEF_ID")]
+    [DataField("WKF_INST_PROCESS_DEF_ID")]
     public ProcessDef ProcessDefinition {
       get; private set;
+    }
+
+
+    [DataField("WKF_INST_REQUEST_ID")]
+    private int _requestId = -1;
+
+    public Request Request {
+      get {
+        return Request.Parse(_requestId);
+      }
+      private set {
+        _requestId = value.Id;
+      }
     }
 
 
@@ -99,21 +113,56 @@ namespace Empiria.Workflow.Execution {
       }
     }
 
-
-    [DataField("WKF_INSTANCE_REQUEST_ID")]
-    private int _requestId = -1;
-
-    public Request Request {
-      get {
-        return Request.Parse(_requestId);
-      }
-      private set {
-        _requestId = value.Id;
-      }
+    [DataField("WKF_INST_REQUESTED_BY_ID")]
+    public Person RequestedBy {
+      get; private set;
     }
 
 
-    [DataField("WKF_INSTANCE_PARENT_ID")]
+    [DataField("WKF_INST_REQUESTED_BY_ORG_UNIT_ID")]
+    public OrganizationalUnit RequestedByOrgUnit {
+      get; private set;
+    }
+
+
+    [DataField("WKF_INST_RESPONSIBLE_ORG_UNIT_ID")]
+    public OrganizationalUnit ResponsibleOrgUnit {
+      get; private set;
+    }
+
+
+    [DataField("WKF_INST_PRIORITY", Default = Priority.Normal)]
+    public Priority Priority {
+      get;
+      internal set;
+    }
+
+
+    [DataField("WKF_INST_DUE_TIME")]
+    public DateTime DueTime {
+      get; private set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    [DataField("WKF_INST_STARTED_BY_ID")]
+    public Party StartedBy {
+      get; private set;
+    }
+
+
+    [DataField("WKF_INST_START_TIME")]
+    public DateTime StartTime {
+      get; private set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    [DataField("WKF_INST_END_TIME")]
+    public DateTime EndTime {
+      get; private set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    [DataField("WKF_INST_PARENT_ID")]
     private int _parentId;
 
     public WorkflowInstance Parent {
@@ -129,25 +178,13 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    [DataField("WKF_INSTANCE_EXT_DATA")]
-    internal JsonObject ExtensionData {
-      get; private set;
+    [DataField("WKF_INST_EXT_DATA")]
+    private JsonObject ExtensionData {
+      get; set;
     }
 
 
-    [DataField("WKF_INSTANCE_START_TIME")]
-    public DateTime StartTime {
-      get; private set;
-    } = ExecutionServer.DateMaxValue;
-
-
-    [DataField("WKF_INSTANCE_CLOSE_TIME")]
-    public DateTime EndTime {
-      get; private set;
-    } = ExecutionServer.DateMaxValue;
-
-
-    [DataField("WKF_INSTANCE_STATUS", Default = ActivityStatus.Pending)]
+    [DataField("WKF_INST_STATUS", Default = ActivityStatus.Pending)]
     public ActivityStatus Status {
       get; private set;
     }
@@ -210,7 +247,7 @@ namespace Empiria.Workflow.Execution {
 
     protected override void OnSave() {
       if (base.IsDirty) {
-        WorkflowExecutionData.Write(this);
+        WorkflowExecutionData.Write(this, this.ExtensionData.ToString());
       }
       WorkflowEngine.SaveChanges();
     }
