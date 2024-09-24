@@ -65,21 +65,24 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_UNIQUE_ID")]
-    public string UniqueID {
+    [DataField("REQ_REQUEST_NO")]
+    public string RequestNo {
       get; private set;
     }
 
 
-    [DataField("REQ_CONTROL_ID")]
-    public string ControlID {
+    [DataField("REQ_INTERNAL_CONTROL_NO")]
+    public string InternalControlNo {
       get; private set;
     }
 
 
-    [DataField("REQ_REQUESTER_NAME")]
-    public string RequesterName {
-      get; private set;
+    public string Name {
+      get {
+        return ExtensionData.Get("name", this.RequestType.DisplayName);
+      } protected set {
+        ExtensionData.SetIfValue("name", EmpiriaString.TrimAll(value));
+      }
     }
 
 
@@ -89,14 +92,14 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_REQUESTER_ORG_UNIT_ID")]
-    public OrganizationalUnit RequesterOrgUnit {
+    [DataField("REQ_REQUESTED_BY_ID")]
+    public Person RequestedBy {
       get; private set;
     }
 
 
-    [DataField("REQ_REQUESTER_ID")]
-    public Person Requester {
+    [DataField("REQ_REQUESTED_BY_ORG_UNIT_ID")]
+    public OrganizationalUnit RequestedByOrgUnit {
       get; private set;
     }
 
@@ -107,8 +110,21 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    [DataField("REQ_PRIORITY", Default = Priority.Normal)]
+    public Priority Priority {
+      get;
+      internal set;
+    }
+
+
+    [DataField("REQ_DUE_TIME")]
+    public DateTime DueTime {
+      get; private set;
+    } = ExecutionServer.DateMaxValue;
+
+
     [DataField("REQ_STARTED_BY_ID")]
-    public Contacts.Contact StartedBy {
+    public Party StartedBy {
       get; private set;
     }
 
@@ -119,13 +135,7 @@ namespace Empiria.Workflow.Requests {
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("REQ_CLOSED_BY_ID")]
-    public Contacts.Contact EndedBy {
-      get; private set;
-    }
-
-
-    [DataField("REQ_CLOSING_TIME")]
+    [DataField("REQ_END_TIME")]
     public DateTime EndTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
@@ -145,7 +155,8 @@ namespace Empiria.Workflow.Requests {
 
     internal protected virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(UniqueID, ControlID, Description, RequesterName, RequestType.DisplayName);
+        return EmpiriaString.BuildKeywords(RequestNo, InternalControlNo, Name, Description, RequestedBy.Name,
+                                           RequestedByOrgUnit.Name, ResponsibleOrgUnit.Name);
       }
     }
 
@@ -175,6 +186,7 @@ namespace Empiria.Workflow.Requests {
       }
     }
 
+
     #endregion Properties
 
     #region Methods
@@ -183,6 +195,7 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(Actions.CanActivate(), InvalidOperationMessage("activate"));
 
       Status = ActivityStatus.Active;
+
       base.MarkAsDirty();
     }
 
@@ -190,7 +203,10 @@ namespace Empiria.Workflow.Requests {
     public void Cancel() {
       Assertion.Require(Actions.CanCancel(), InvalidOperationMessage("cancel"));
 
+      EndTime = EmpiriaDateTime.NowWithCentiseconds;
+
       Status = ActivityStatus.Canceled;
+
       base.MarkAsDirty();
     }
 
@@ -199,7 +215,6 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(Actions.CanComplete(), InvalidOperationMessage("complete"));
 
       EndTime = EmpiriaDateTime.NowWithCentiseconds;
-      EndedBy = ExecutionServer.CurrentContact;
 
       Status = ActivityStatus.Completed;
 
@@ -210,7 +225,10 @@ namespace Empiria.Workflow.Requests {
     public void Delete() {
       Assertion.Require(Actions.CanDelete(), InvalidOperationMessage("delete"));
 
+      EndTime = EmpiriaDateTime.NowWithCentiseconds;
+
       this.Status = ActivityStatus.Deleted;
+
       base.MarkAsDirty();
     }
 
@@ -229,8 +247,8 @@ namespace Empiria.Workflow.Requests {
 
     protected override void OnSave() {
       if (base.IsNew) {
-        this.UniqueID = RequestData.GetNextUniqueID(ResponsibleOrgUnit.Acronym, DateTime.Today.Year);
-        this.ControlID = "No determinado";
+        this.RequestNo = RequestData.GetNextRequestNo(ResponsibleOrgUnit.Acronym, DateTime.Today.Year);
+        this.InternalControlNo = "Sin asignar";
       }
 
       RequestData.Write(this, this.ExtensionData.ToString());
@@ -240,9 +258,9 @@ namespace Empiria.Workflow.Requests {
     internal void Start() {
       Assertion.Require(Actions.CanStart(), InvalidOperationMessage("start"));
 
-      this.ControlID = RequestData.GetNextControlNumber(DateTime.Today.Year);
+      this.InternalControlNo = RequestData.GetNextInternalControlNo(DateTime.Today.Year);
       this.StartTime = EmpiriaDateTime.NowWithCentiseconds;
-      this.StartedBy = ExecutionServer.CurrentContact;
+      this.StartedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
       this.Status = ActivityStatus.Active;
 
       ResetWorkflowInstances();
@@ -272,11 +290,10 @@ namespace Empiria.Workflow.Requests {
       }
 
       if (fields.RequestedByUID.Length != 0) {
-        this.Requester = Person.Parse(fields.RequestedByUID);
+        this.RequestedBy = Person.Parse(fields.RequestedByUID);
       } else {
-        this.Requester = Person.Parse(ExecutionServer.CurrentUserId);
+        this.RequestedBy = Person.Parse(ExecutionServer.CurrentUserId);
       }
-      this.RequesterName = Requester.Name;
 
       if (fields.Description.Length != 0) {
         this.Description = fields.Description;
@@ -284,8 +301,9 @@ namespace Empiria.Workflow.Requests {
         this.Description = this.RequestType.DisplayName;
       }
 
-      this.RequesterOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
+      this.RequestedByOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
       this.ResponsibleOrgUnit = RequestType.ResponsibleOrgUnit;
+
       base.MarkAsDirty();
     }
 

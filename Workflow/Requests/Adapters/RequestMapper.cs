@@ -33,61 +33,92 @@ namespace Empiria.Workflow.Requests.Adapters {
         Request = MapRequest(request),
         WorkflowInstances = WorkflowInstanceMapper.Map(request.WorkflowInstances),
         Tasks = WorkflowTaskMapper.Map(request.GetTasks()),
-        Actions = request.Actions.MapToDto(),
-        Files = MapRequestFiles(request),
-        WorkflowHistory = MapRequestWorkflowHistory(request),
+        Documents = MapDocuments(request),
+        History = MapHistory(request),
+
+        // ToDo: To be removed
+
+        Actions = request.Actions.MapToDto()
       };
     }
 
-    static internal FixedList<RequestDescriptorDto> MapToDescriptor(FixedList<Request> requests) {
-      return requests.Select(x => MapToDescriptor(x)).ToFixedList();
+    static internal FixedList<RequestListItemDto> MapToListItems(FixedList<Request> requests) {
+      return requests.Select(x => MapToListItem(x)).ToFixedList();
     }
 
     #region Helpers
 
-    static private FixedList<WorkflowHistoryItemDto> MapRequestWorkflowHistory(Request request) {
-      return new FixedList<WorkflowHistoryItemDto>();
+    static private FixedList<FileDto> MapDocuments(Request request) {
+      return new FixedList<FileDto>();
     }
 
 
-    static private FixedList<FileDto> MapRequestFiles(Request request) {
-      return new FixedList<FileDto>();
+    static private FixedList<WorkflowHistoryItemDto> MapHistory(Request request) {
+      return new FixedList<WorkflowHistoryItemDto>();
     }
 
 
     static private RequestDto MapRequest(Request request) {
       return new RequestDto {
         UID = request.UID,
-        RequestType = Map(request.RequestType),
-        UniqueID = request.UniqueID,
-        ControlID = request.ControlID,
-        RequesterName = request.RequesterName,
+        RequestNo = request.RequestNo,
+        InternalControlNo = request.InternalControlNo,
+        Name = request.Name,
         Description = request.Description,
-        RequestTypeFields = request.RequestTypeFields,
-        RequesterOrgUnit = request.RequesterOrgUnit.MapToNamedEntity(),
+        RequestedBy = request.RequestedBy.MapToNamedEntity(),
+        RequestedByOrgUnit = request.RequestedByOrgUnit.MapToNamedEntity(),
         ResponsibleOrgUnit = request.ResponsibleOrgUnit.MapToNamedEntity(),
+        Priority = request.Priority.MapToDto(),
+        DueTime = request.DueTime,
         StartedBy = request.StartedBy.MapToNamedEntity(),
         StartTime = request.StartTime,
-        EndedBy = request.EndedBy.MapToNamedEntity(),
         EndTime = request.EndTime,
-        Status = request.Status.GetName()
+        Status = request.Status.GetName(),
+        Fields = request.RequestTypeFields,
+        Actions = request.Actions.MapToDto(),
+        RequestType = Map(request.RequestType),
+
+        // ToDo: To be removed
+
+        UniqueID = request.RequestNo,
+        ControlID = request.InternalControlNo,
+        RequesterOrgUnit = request.RequestedByOrgUnit.MapToNamedEntity(),
+        RequesterName = request.RequestedBy.Name,
+        FiledBy = request.StartedBy.MapToNamedEntity(),
+        FilingTime = request.StartTime,
+        ClosingTime = request.EndTime,
+        RequestTypeFields = request.RequestTypeFields
       };
     }
 
 
-    static private RequestDescriptorDto MapToDescriptor(Request request) {
-      return new RequestDescriptorDto {
+    static private RequestListItemDto MapToListItem(Request request) {
+      return new RequestListItemDto {
         UID = request.UID,
-        RequestTypeName = request.RequestType.DisplayName,
-        UniqueID = request.UniqueID,
-        ControlID = request.ControlID,
-        RequesterName = request.RequesterName,
+        RequestNo = request.RequestNo,
+        InternalControlNo = request.InternalControlNo,
+        Name = request.Name,
         Description = request.Description,
-        RequesterOrgUnitName = request.RequesterOrgUnit.FullName,
-        ResponsibleOrgUnitName = request.ResponsibleOrgUnit.FullName,
-        StartedByName = request.StartedBy.FullName,
+        RequestedBy = request.RequestedBy.Name,
+        RequestedByOrgUnit = request.RequestedByOrgUnit.Name,
+        ResponsibleOrgUnit = request.ResponsibleOrgUnit.Name,
+        Priority = request.Priority.GetName(),
+        DueTime = request.DueTime,
+        StartedBy = request.StartedBy.Name,
         StartTime = request.StartTime,
-        Status = request.Status.GetName()
+        EndTime = request.EndTime,
+        Status = request.Status.GetName(),
+
+        // ToDo: To be removed
+
+        UniqueID = request.RequestNo,
+        ControlID = request.InternalControlNo,
+        RequestTypeName = request.RequestType.DisplayName,
+        RequesterName = request.RequestedBy.Name,
+        RequesterOrgUnitName = request.RequestedByOrgUnit.Name,
+        ResponsibleOrgUnitName = request.ResponsibleOrgUnit.Name,
+        FiledByName = request.StartedBy.Name,
+        FilingTime = request.EndTime,
       };
     }
 

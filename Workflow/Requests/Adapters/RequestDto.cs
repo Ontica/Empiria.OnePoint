@@ -28,19 +28,21 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public WorkflowActionsDto Actions {
-      get; internal set;
-    }
-
     public FixedList<TaskDto> Tasks {
       get; internal set;
     }
 
-    public FixedList<FileDto> Files {
+    public FixedList<FileDto> Documents {
       get; internal set;
     }
 
-    public FixedList<WorkflowHistoryItemDto> WorkflowHistory {
+    public FixedList<WorkflowHistoryItemDto> History {
+      get; internal set;
+    }
+
+    // ToDo: To be removed
+
+    public WorkflowActionsDto Actions {
       get; internal set;
     }
 
@@ -54,19 +56,15 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public RequestTypeDto RequestType {
+    public string RequestNo {
       get; internal set;
     }
 
-    public string UniqueID {
+    public string InternalControlNo {
       get; internal set;
     }
 
-    public string ControlID {
-      get; internal set;
-    }
-
-    public string RequesterName {
+    public string Name {
       get; internal set;
     }
 
@@ -74,11 +72,11 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public FixedList<FieldValue> RequestTypeFields {
+    public NamedEntityDto RequestedBy {
       get; internal set;
     }
 
-    public NamedEntityDto RequesterOrgUnit {
+    public NamedEntityDto RequestedByOrgUnit {
       get; internal set;
     }
 
@@ -86,22 +84,22 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FiledBy")]
+    public NamedEntityDto Priority {
+      get; internal set;
+    }
+
+    public DateTime DueTime {
+      get; internal set;
+    }
+
     public NamedEntityDto StartedBy {
       get; internal set;
     }
 
-    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FilingTime")]
     public DateTime StartTime {
       get; internal set;
     }
 
-    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "ClosedBy")]
-    public NamedEntityDto EndedBy {
-      get; internal set;
-    }
-
-    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "ClosingTime")]
     public DateTime EndTime {
       get; internal set;
     }
@@ -110,20 +108,20 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-  }  // class RequestDto
-
-
-
-  /// <summary>Output DTO for Request instances for use in lists.</summary>
-  public class RequestDescriptorDto {
-
-    public string UID {
+    public FixedList<FieldValue> Fields {
       get; internal set;
     }
 
-    public string RequestTypeName {
+    public WorkflowActionsDto Actions {
       get; internal set;
     }
+
+    public RequestTypeDto RequestType {
+      get; internal set;
+    }
+
+    // ToDo: To be removed
+
 
     public string UniqueID {
       get; internal set;
@@ -137,7 +135,105 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto FiledBy {
+      get; internal set;
+    }
+
+    public NamedEntityDto RequesterOrgUnit {
+      get; internal set;
+    }
+
+    public DateTime FilingTime {
+      get; internal set;
+    }
+
+    public DateTime ClosingTime {
+      get; internal set;
+    }
+
+    public FixedList<FieldValue> RequestTypeFields {
+      get; internal set;
+    }
+
+  }  // class RequestDto
+
+
+
+  /// <summary>Output DTO for Request instances for use in lists.</summary>
+  public class RequestListItemDto {
+
+    public string UID {
+      get; internal set;
+    }
+
+    public string RequestNo {
+      get; internal set;
+    }
+
+    public string InternalControlNo {
+      get; internal set;
+    }
+
+    public string Name {
+      get; internal set;
+    }
+
     public string Description {
+      get; internal set;
+    }
+
+    public string RequestedBy {
+      get; internal set;
+    }
+
+    public string RequestedByOrgUnit {
+      get; internal set;
+    }
+
+    public string ResponsibleOrgUnit {
+      get; internal set;
+    }
+
+    public string Priority {
+      get; internal set;
+    }
+
+    public DateTime DueTime {
+      get; internal set;
+    }
+
+    public string StartedBy {
+      get; internal set;
+    }
+
+    public DateTime StartTime {
+      get; internal set;
+    }
+
+    public DateTime EndTime {
+      get; internal set;
+    }
+
+    public string Status {
+      get; internal set;
+    }
+
+
+    // ToDo: To be removed
+
+    public string UniqueID {
+      get; internal set;
+    }
+
+    public string ControlID {
+      get; internal set;
+    }
+
+    public string RequestTypeName {
+      get; internal set;
+    }
+
+    public string RequesterName {
       get; internal set;
     }
 
@@ -149,17 +245,11 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FiledByName")]
-    public string StartedByName {
+    public string FiledByName {
       get; internal set;
     }
 
-    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "FilingTime")]
-    public DateTime StartTime {
-      get; internal set;
-    }
-
-    public string Status {
+    public DateTime FilingTime {
       get; internal set;
     }
 

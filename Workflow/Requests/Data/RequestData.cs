@@ -16,16 +16,16 @@ namespace Empiria.Workflow.Requests.Data {
   /// <summary>Provides data read and write services for Request instances.</summary>
   static internal class RequestData {
 
-    static internal string GetNextControlNumber(int year) {
+    static internal string GetNextInternalControlNo(int year) {
       Assertion.Require(year > 0, nameof(year));
 
       if (year >= 2000) {
         year = year - 2000;
       }
 
-      string sql = "SELECT MAX(REQ_CONTROL_ID) " +
+      string sql = "SELECT MAX(REQ_INTERNAL_CONTROL_NO) " +
                    "FROM WKF_REQUESTS " +
-                  $"WHERE REQ_CONTROL_ID LIKE '{year}-%'";
+                  $"WHERE REQ_INTERNAL_CONTROL_NO LIKE '{year}-%'";
 
       string lastControlNo = DataReader.GetScalar(DataOperation.Parse(sql), String.Empty);
 
@@ -40,13 +40,14 @@ namespace Empiria.Workflow.Requests.Data {
       }
     }
 
-    static internal string GetNextUniqueID(string prefix, int year) {
+
+    static internal string GetNextRequestNo(string prefix, int year) {
       Assertion.Require(prefix, nameof(prefix));
       Assertion.Require(year > 0, nameof(year));
 
-      string sql = "SELECT MAX(REQ_UNIQUE_ID) " +
+      string sql = "SELECT MAX(REQ_REQUEST_NO) " +
                    "FROM WKF_REQUESTS " +
-                   $"WHERE REQ_UNIQUE_ID LIKE '{prefix}-{year}-%'";
+                   $"WHERE REQ_REQUEST_NO LIKE '{prefix}-{year}-%'";
 
       string lastUniqueID = DataReader.GetScalar(DataOperation.Parse(sql), String.Empty);
 
@@ -63,11 +64,11 @@ namespace Empiria.Workflow.Requests.Data {
 
 
     static internal void Write(Request o, string extensionData) {
-      var op = DataOperation.Parse("write_WKF_Request", o.Id, o.UID, o.RequestType.Id,
-            o.UniqueID, o.ControlID, o.RequesterName, o.Description,
-            o.RequesterOrgUnit.Id, o.Requester.Id, o.ResponsibleOrgUnit.Id,
-            o.StartedBy.Id, o.StartTime, o.EndedBy.Id, o.EndTime,
-            extensionData, o.Keywords, (char) o.Status);
+      var op = DataOperation.Parse("write_WKF_Request", o.Id, o.UID,
+            o.RequestType.Id, o.RequestNo, o.InternalControlNo, o.Description,
+            o.RequestedBy.Id, o.RequestedByOrgUnit.Id, o.ResponsibleOrgUnit.Id,
+            (char) o.Priority, o.DueTime, o.StartedBy.Id, o.StartTime,
+            o.EndTime, extensionData, o.Keywords, (char) o.Status);
 
       DataWriter.Execute(op);
     }

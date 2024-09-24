@@ -73,7 +73,7 @@ namespace Empiria.Workflow.Execution {
           return OrganizationalUnit.Parse(2);
 
         case AssignationRule.RequestRequester:
-          return _step.WorkflowInstance.Request.RequesterOrgUnit;
+          return _step.WorkflowInstance.Request.RequestedByOrgUnit;
 
         case AssignationRule.RequestResponsible:
           return _step.WorkflowInstance.Request.ResponsibleOrgUnit;
@@ -96,7 +96,7 @@ namespace Empiria.Workflow.Execution {
           return Party.ParseWithContact(ExecutionServer.CurrentContact);
 
         case AssignationRule.RequestRequester:
-          return _step.WorkflowInstance.Request.Requester;
+          return _step.WorkflowInstance.Request.RequestedBy;
 
         case AssignationRule.RequestResponsible:
           return _step.WorkflowInstance.Request.ResponsibleOrgUnit;

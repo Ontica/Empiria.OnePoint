@@ -39,7 +39,7 @@ namespace Empiria.Workflow.Requests.WebApi {
     public CollectionModel SearchRequests([FromBody] RequestsQuery query) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
-        FixedList<RequestDescriptorDto> requests = usecases.SearchRequests(query);
+        FixedList<RequestListItemDto> requests = usecases.SearchRequests(query);
 
         return new CollectionModel(base.Request, requests);
       }

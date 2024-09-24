@@ -25,7 +25,7 @@ namespace Empiria.Workflow.Requests.Adapters {
 
     static internal string MapToFilterString(this RequestsQuery query) {
       string requestsListFilter = BuildRequestsListFilter(query);
-      string requesterOrgUnitFilter = BuildRequesterOrgUnitFilter(query);
+      string requesterOrgUnitFilter = BuildRequestedByOrgUnitFilter(query);
       string requestTypeFilter = BuildRequestTypeFilter(query);
       string requestStatusFilter = BuildRequestStatusFilter(query);
       string dateRangeFilter = BuildDateRangeFilter(query);
@@ -44,7 +44,7 @@ namespace Empiria.Workflow.Requests.Adapters {
       if (query.OrderBy.Length != 0) {
         return query.OrderBy;
       } else {
-        return "REQ_CONTROL_ID, REQ_UNIQUE_ID";
+        return "REQ_INTERNAL_CONTROL_NO, REQ_REQUEST_NO";
       }
     }
 
@@ -60,28 +60,28 @@ namespace Empiria.Workflow.Requests.Adapters {
       string filter = $"{DataCommonMethods.FormatSqlDbDate(query.FromDate)} <= @DATE_FIELD@ AND " +
                       $"@DATE_FIELD@ < {DataCommonMethods.FormatSqlDbDate(query.ToDate.Date.AddDays(1))}";
 
-      if (query.DateSearchField == DateSearchField.FilingDate) {
-        return filter.Replace("@DATE_FIELD@", "REQ_FILING_TIME");
+      if (query.DateSearchField == DateSearchField.DueTime) {
+        return filter.Replace("@DATE_FIELD@", "REQ_DUE_TIME");
 
-      } else if (query.DateSearchField == DateSearchField.ClosingDate) {
-        return filter.Replace("@DATE_FIELD@", "REQ_CLOSING_TIME");
+      } else if (query.DateSearchField == DateSearchField.StartTime) {
+        return filter.Replace("@DATE_FIELD@", "REQ_START_TIME");
 
-      } else if (query.DateSearchField == DateSearchField.PostingDate) {
-        return filter.Replace("@DATE_FIELD@", "REQ_POSTING_TIME");
+      } else if (query.DateSearchField == DateSearchField.EndTime) {
+        return filter.Replace("@DATE_FIELD@", "REQ_END_TIME");
 
       } else {
         throw Assertion.EnsureNoReachThisCode();
       }
     }
 
-    static private string BuildRequesterOrgUnitFilter(RequestsQuery query) {
+    static private string BuildRequestedByOrgUnitFilter(RequestsQuery query) {
       if (query.RequesterOrgUnitUID.Length == 0) {
         return string.Empty;
       }
 
       var requesterOrgUnit = OrganizationalUnit.Parse(query.RequesterOrgUnitUID);
 
-      return $"REQ_REQUESTER_ORG_UNIT_ID = {requesterOrgUnit.Id}";
+      return $"REQ_REQUESTED_BY_ORG_UNIT_ID = {requesterOrgUnit.Id}";
     }
 
 

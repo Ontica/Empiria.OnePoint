@@ -18,11 +18,11 @@ namespace Empiria.Workflow.Requests.Adapters {
 
     None,
 
-    PostingDate,
+    DueTime,
 
-    FilingDate,
+    StartTime,
 
-    ClosingDate,
+    EndTime,
 
   }
 
