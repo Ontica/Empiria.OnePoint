@@ -47,11 +47,15 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public DateTime Deadline {
+    public NamedEntityDto Priority {
       get; internal set;
     }
 
-    public DateTime CheckInTime {
+    public DateTime DueTime {
+      get; internal set;
+    }
+
+    public DateTime StartTime {
       get; internal set;
     }
 
@@ -59,11 +63,11 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public DateTime CheckOutTime {
+    public string Status {
       get; internal set;
     }
 
-    public string Status {
+    public NamedEntityDto WorkflowInstance {
       get; internal set;
     }
 

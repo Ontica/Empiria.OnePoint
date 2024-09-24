@@ -44,7 +44,7 @@ namespace Empiria.Workflow.Execution {
 
     public string TaskNo {
       get {
-        return _step.No;
+        return _step.StepNo;
       }
     }
 
@@ -56,14 +56,18 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public WorkflowObject WorkflowObject {
+    public StepDef StepDefinition {
       get {
-        return _step.WorkflowModelItem.TargetObject;
+        return _step.StepDefinition;
       }
     }
 
+
     public string Name {
       get {
+        if (_step.WorkflowModelItem.TargetObject.Distinct(_step.StepDefinition)) {
+          return _step.StepDefinition.Name;
+        }
         if (_step.WorkflowModelItem.Name.Length != 0) {
           return _step.WorkflowModelItem.Name;
         }
@@ -106,16 +110,22 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public DateTime Deadline {
+    public Priority Priority {
       get {
-        return _step.Deadline;
+        return _step.Priority;
+      }
+    }
+
+    public DateTime DueTime {
+      get {
+        return _step.DueTime;
       }
     }
 
 
-    public DateTime CheckInTime {
+    public DateTime StartTime {
       get {
-        return _step.CheckInTime;
+        return _step.StartTime;
       }
     }
 
@@ -123,13 +133,6 @@ namespace Empiria.Workflow.Execution {
     public DateTime EndTime {
       get {
         return _step.EndTime;
-      }
-    }
-
-
-    public DateTime CheckOutTime {
-      get {
-        return _step.CheckOutTime;
       }
     }
 

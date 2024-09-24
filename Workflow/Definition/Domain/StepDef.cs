@@ -25,6 +25,8 @@ namespace Empiria.Workflow.Definition {
       return BaseObject.ParseKey<StepDef>(uid);
     }
 
+    static internal new StepDef Empty => BaseObject.ParseEmpty<StepDef>();
+
     #endregion Constructors and parsers
 
     #region Properties

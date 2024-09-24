@@ -21,7 +21,7 @@ using Empiria.Workflow.Execution.Data;
 namespace Empiria.Workflow.Execution {
 
   /// <summary>A workflow instance is a runtime representation of a workflow process model definition.</summary>
-  public class WorkflowInstance : BaseObject {
+  public class WorkflowInstance : BaseObject, INamedEntity {
 
     #region Fields
 

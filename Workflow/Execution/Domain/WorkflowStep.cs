@@ -36,6 +36,7 @@ namespace Empiria.Workflow.Execution {
 
       this.WorkflowInstance = workflowInstance;
       this.WorkflowModelItem = workflowModelItem;
+      this.StepDefinition = (StepDef) WorkflowModelItem.TargetObject;
 
       LoadDefaultData();
     }
@@ -67,8 +68,14 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    [DataField("WKF_STEP_DEF_ID")]
+    public StepDef StepDefinition {
+      get; private set;
+    }
+
+
     [DataField("WKF_STEP_NO")]
-    public string No {
+    public string StepNo {
       get; private set;
     }
 
@@ -83,12 +90,6 @@ namespace Empiria.Workflow.Execution {
     public string Tags {
       get; private set;
     }
-
-
-    [DataField("WKF_STEP_EXT_OBJECT_ID")]
-    public int ExternalObjectId {
-      get; private set;
-    } = -1;
 
 
     [DataField("WKF_STEP_REQUESTED_BY_ID")]
@@ -115,14 +116,20 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    [DataField("WKF_STEP_DEADLINE")]
-    public DateTime Deadline {
+    [DataField("WKF_STEP_PRIORITY", Default = Priority.Normal)]
+    public Priority Priority {
+      get; private set;
+    }
+
+
+    [DataField("WKF_STEP_DUE_TIME")]
+    public DateTime DueTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("WKF_STEP_CHECK_IN_TIME")]
-    public DateTime CheckInTime {
+    [DataField("WKF_STEP_START_TIME")]
+    public DateTime StartTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
@@ -132,41 +139,6 @@ namespace Empiria.Workflow.Execution {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
-
-    [DataField("WKF_STEP_CHECK_OUT_TIME")]
-    public DateTime CheckOutTime {
-      get; private set;
-    } = ExecutionServer.DateMaxValue;
-
-
-    [DataField("WKF_STEP_PREVIOUS_STEP_ID")]
-    private int _previousStepId = -1;
-    public WorkflowStep PreviousStep {
-      get {
-        if (this.IsEmptyInstance) {
-          return this;
-        }
-        return WorkflowStep.Parse(_previousStepId);
-      }
-      private set {
-        _previousStepId = value.Id;
-      }
-    }
-
-
-    [DataField("WKF_STEP_NEXT_STEP_ID")]
-    private int _nextStepId = -1;
-    public WorkflowStep NextStep {
-      get {
-        if (this.IsEmptyInstance) {
-          return this;
-        }
-        return WorkflowStep.Parse(_nextStepId);
-      }
-      private set {
-        _nextStepId = value.Id;
-      }
-    }
 
     [DataField("WKF_STEP_EXT_DATA")]
     private JsonObject ExtensionData {
@@ -247,14 +219,15 @@ namespace Empiria.Workflow.Execution {
     private void LoadDefaultData() {
       var defaultRules = new DefaultWorkflowStepRulesBuilder(this);
 
-      this.No = defaultRules.StepNo;
+      this.StepNo = defaultRules.StepNo;
       this.Description = defaultRules.Description;
       this.RequestedBy = defaultRules.RequestedBy;
       this.RequestedByOrgUnit = defaultRules.RequestedByOrgUnit;
       this.AssignedTo = defaultRules.AssignedTo;
       this.AssignedToOrgUnit = defaultRules.AssignedToOrgUnit;
-      this.Deadline = defaultRules.Deadline;
-      this.CheckInTime = defaultRules.CheckInTime;
+      this.Priority = defaultRules.Priority;
+      this.DueTime = defaultRules.DueTime;
+      this.StartTime = defaultRules.StartTime;
       this.Status = defaultRules.Status;
     }
 

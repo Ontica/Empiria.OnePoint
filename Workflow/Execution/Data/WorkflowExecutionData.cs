@@ -70,11 +70,10 @@ namespace Empiria.Workflow.Execution.Data {
 
     static internal void Write(WorkflowStep o, string extensionData) {
       var op = DataOperation.Parse("write_WKF_Step", o.Id, o.UID,
-                      o.WorkflowInstance.Id, o.WorkflowModelItem.Id, o.No, o.Description,
-                      o.Tags, o.ExternalObjectId, o.RequestedBy.Id, o.RequestedByOrgUnit.Id,
-                      o.AssignedTo.Id, o.AssignedToOrgUnit.Id, o.DueTime, o.StartTime,
-                      o.EndTime, o.CheckOutTime, o.PreviousStep.Id, o.NextStep.Id,
-                      extensionData, o.Keywords, (char) o.Status);
+                      o.WorkflowInstance.Id, o.WorkflowModelItem.Id, o.StepDefinition.Id,
+                      o.StepNo, o.Description, o.Tags, o.RequestedBy.Id, o.RequestedByOrgUnit.Id,
+                      o.AssignedTo.Id, o.AssignedToOrgUnit.Id, (char) o.Priority, o.DueTime,
+                      o.StartTime, o.EndTime, extensionData, o.Keywords, (char) o.Status);
 
       DataWriter.Execute(op);
     }

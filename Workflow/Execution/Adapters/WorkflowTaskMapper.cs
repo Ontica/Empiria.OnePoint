@@ -31,11 +31,12 @@ namespace Empiria.Workflow.Execution.Adapters {
         RequestedByOrgUnit = task.RequestedByOrgUnit.MapToNamedEntity(),
         AssignedTo = task.AssignedTo.MapToNamedEntity(),
         AssignedToOrgUnit = task.AssignedToOrgUnit.MapToNamedEntity(),
-        Deadline = task.Deadline,
-        CheckInTime = task.CheckInTime,
+        Priority = task.Priority.MapToDto(),
+        DueTime = task.DueTime,
+        StartTime = task.StartTime,
         EndTime = task.EndTime,
-        CheckOutTime = task.CheckOutTime,
         Status = task.Status.GetName(),
+        WorkflowInstance = task.WorkflowInstance.MapToNamedEntity(),
         Actions = task.Actions.MapToDto(),
         TaskInvoker = MapTaskInvoker(task)
       };
@@ -45,7 +46,7 @@ namespace Empiria.Workflow.Execution.Adapters {
 
     static private TaskInvokerDto MapTaskInvoker(WorkflowTask task) {
       return new TaskInvokerDto {
-        UID = task.WorkflowObject.Code,
+        UID = task.StepDefinition.Code,
         WorkflowInstanceUID = task.WorkflowInstance.UID
       };
     }

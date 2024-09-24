@@ -83,14 +83,21 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public DateTime Deadline {
+    public Priority Priority {
+      get {
+        return Priority.Normal;
+      }
+    }
+
+
+    public DateTime DueTime {
       get {
         return ExecutionServer.DateMaxValue;
       }
     }
 
 
-    public DateTime CheckInTime {
+    public DateTime StartTime {
       get {
         if (_step.WorkflowModelItem.Autoactivate) {
           return EmpiriaDateTime.NowWithCentiseconds;
