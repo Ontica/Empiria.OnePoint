@@ -65,13 +65,13 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_REQUEST_NO")]
+    [DataField("WMS_REQ_REQUEST_NO")]
     public string RequestNo {
       get; private set;
     }
 
 
-    [DataField("REQ_INTERNAL_CONTROL_NO")]
+    [DataField("WMS_REQ_INTERNAL_CONTROL_NO")]
     public string InternalControlNo {
       get; private set;
     }
@@ -86,68 +86,68 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    [DataField("REQ_DESCRIPTION")]
+    [DataField("WMS_REQ_DESCRIPTION")]
     public string Description {
       get; protected set;
     }
 
 
-    [DataField("REQ_REQUESTED_BY_ID")]
+    [DataField("WMS_REQ_REQUESTED_BY_ID")]
     public Person RequestedBy {
       get; private set;
     }
 
 
-    [DataField("REQ_REQUESTED_BY_ORG_UNIT_ID")]
+    [DataField("WMS_REQ_REQUESTED_BY_ORG_UNIT_ID")]
     public OrganizationalUnit RequestedByOrgUnit {
       get; private set;
     }
 
 
-    [DataField("REQ_RESPONSIBLE_ORG_UNIT_ID")]
+    [DataField("WMS_REQ_RESPONSIBLE_ORG_UNIT_ID")]
     public OrganizationalUnit ResponsibleOrgUnit {
       get; private set;
     }
 
 
-    [DataField("REQ_PRIORITY", Default = Priority.Normal)]
+    [DataField("WMS_REQ_PRIORITY", Default = Priority.Normal)]
     public Priority Priority {
       get;
       internal set;
     }
 
 
-    [DataField("REQ_DUE_TIME")]
+    [DataField("WMS_REQ_DUE_TIME")]
     public DateTime DueTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("REQ_STARTED_BY_ID")]
+    [DataField("WMS_REQ_STARTED_BY_ID")]
     public Party StartedBy {
       get; private set;
     }
 
 
-    [DataField("REQ_START_TIME")]
+    [DataField("WMS_REQ_START_TIME")]
     public DateTime StartTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("REQ_END_TIME")]
+    [DataField("WMS_REQ_END_TIME")]
     public DateTime EndTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("REQ_EXT_DATA")]
+    [DataField("WMS_REQ_EXT_DATA")]
     protected JsonObject ExtensionData {
       get; private set;
     }
 
 
-    [DataField("REQ_STATUS", Default = ActivityStatus.Pending)]
+    [DataField("WMS_REQ_STATUS", Default = ActivityStatus.Pending)]
     public ActivityStatus Status {
       get; private set;
     }

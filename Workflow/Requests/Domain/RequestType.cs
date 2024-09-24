@@ -42,7 +42,7 @@ namespace Empiria.Workflow.Requests {
       return Empty.ExtensionData.GetFixedList<RequestType>($"lists/{listName}", false);
     }
 
-    static public RequestType Empty => RequestType.Parse("ObjectTypeInfo.Request");
+    static public RequestType Empty => RequestType.Parse("ObjectTypeInfo.WorkflowRequest");
 
     #endregion Constructors and parsers
 

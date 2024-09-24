@@ -23,9 +23,9 @@ namespace Empiria.Workflow.Requests.Data {
         year = year - 2000;
       }
 
-      string sql = "SELECT MAX(REQ_INTERNAL_CONTROL_NO) " +
-                   "FROM WKF_REQUESTS " +
-                  $"WHERE REQ_INTERNAL_CONTROL_NO LIKE '{year}-%'";
+      string sql = "SELECT MAX(WMS_REQ_INTERNAL_CONTROL_NO) " +
+                   "FROM WMS_REQUESTS " +
+                  $"WHERE WMS_REQ_INTERNAL_CONTROL_NO LIKE '{year}-%'";
 
       string lastControlNo = DataReader.GetScalar(DataOperation.Parse(sql), String.Empty);
 
@@ -45,9 +45,9 @@ namespace Empiria.Workflow.Requests.Data {
       Assertion.Require(prefix, nameof(prefix));
       Assertion.Require(year > 0, nameof(year));
 
-      string sql = "SELECT MAX(REQ_REQUEST_NO) " +
-                   "FROM WKF_REQUESTS " +
-                   $"WHERE REQ_REQUEST_NO LIKE '{prefix}-{year}-%'";
+      string sql = "SELECT MAX(WMS_REQ_REQUEST_NO) " +
+                   "FROM WMS_REQUESTS " +
+                   $"WHERE WMS_REQ_REQUEST_NO LIKE '{prefix}-{year}-%'";
 
       string lastUniqueID = DataReader.GetScalar(DataOperation.Parse(sql), String.Empty);
 
@@ -64,7 +64,7 @@ namespace Empiria.Workflow.Requests.Data {
 
 
     static internal void Write(Request o, string extensionData) {
-      var op = DataOperation.Parse("write_WKF_Request", o.Id, o.UID,
+      var op = DataOperation.Parse("write_WMS_Request", o.Id, o.UID,
             o.RequestType.Id, o.RequestNo, o.InternalControlNo, o.Description,
             o.RequestedBy.Id, o.RequestedByOrgUnit.Id, o.ResponsibleOrgUnit.Id,
             (char) o.Priority, o.DueTime, o.StartedBy.Id, o.StartTime,

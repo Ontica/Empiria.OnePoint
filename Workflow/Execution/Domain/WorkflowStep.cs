@@ -56,97 +56,97 @@ namespace Empiria.Workflow.Execution {
 
     #region Properties
 
-    [DataField("WKF_INSTANCE_ID")]
+    [DataField("WMS_INSTANCE_ID")]
     public WorkflowInstance WorkflowInstance {
       get; private set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_ID")]
+    [DataField("WMS_MODEL_ITEM_ID")]
     public WorkflowModelItem WorkflowModelItem {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_DEF_ID")]
+    [DataField("WMS_STEP_DEF_ID")]
     public StepDef StepDefinition {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_NO")]
+    [DataField("WMS_STEP_NO")]
     public string StepNo {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_DESCRIPTION")]
+    [DataField("WMS_STEP_DESCRIPTION")]
     public string Description {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_TAGS")]
+    [DataField("WMS_STEP_TAGS")]
     public string Tags {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_REQUESTED_BY_ID")]
+    [DataField("WMS_STEP_REQUESTED_BY_ID")]
     public Party RequestedBy {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_REQUESTED_BY_ORG_UNIT_ID")]
+    [DataField("WMS_STEP_REQUESTED_BY_ORG_UNIT_ID")]
     public OrganizationalUnit RequestedByOrgUnit {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_ASSIGNED_TO_ID")]
+    [DataField("WMS_STEP_ASSIGNED_TO_ID")]
     public Party AssignedTo {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_ASSIGNED_TO_ORG_UNIT_ID")]
+    [DataField("WMS_STEP_ASSIGNED_TO_ORG_UNIT_ID")]
     public OrganizationalUnit AssignedToOrgUnit {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_PRIORITY", Default = Priority.Normal)]
+    [DataField("WMS_STEP_PRIORITY", Default = Priority.Normal)]
     public Priority Priority {
       get; private set;
     }
 
 
-    [DataField("WKF_STEP_DUE_TIME")]
+    [DataField("WMS_STEP_DUE_TIME")]
     public DateTime DueTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("WKF_STEP_START_TIME")]
+    [DataField("WMS_STEP_START_TIME")]
     public DateTime StartTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("WKF_STEP_END_TIME")]
+    [DataField("WMS_STEP_END_TIME")]
     public DateTime EndTime {
       get; private set;
     } = ExecutionServer.DateMaxValue;
 
 
-    [DataField("WKF_STEP_EXT_DATA")]
+    [DataField("WMS_STEP_EXT_DATA")]
     private JsonObject ExtensionData {
       get; set;
     }
 
 
-    [DataField("WKF_STEP_STATUS", Default = ActivityStatus.Pending)]
+    [DataField("WMS_STEP_STATUS", Default = ActivityStatus.Pending)]
     public ActivityStatus Status {
       get; private set;
     }

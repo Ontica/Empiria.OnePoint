@@ -69,61 +69,61 @@ namespace Empiria.Workflow.Definition {
       }
     }
 
-    [DataField("WKF_MDL_ITEM_PROCESS_DEF_ID")]
+    [DataField("WMS_MDL_ITEM_PROCESS_DEF_ID")]
     public ProcessDef ProcessDef {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_SOURCE_OBJECT_ID")]
+    [DataField("WMS_MDL_ITEM_SOURCE_OBJECT_ID")]
     public WorkflowObject SourceObject {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_TARGET_OBJECT_ID")]
+    [DataField("WMS_MDL_ITEM_TARGET_OBJECT_ID")]
     public WorkflowObject TargetObject {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_CODE")]
+    [DataField("WMS_MDL_ITEM_CODE")]
     public string Code {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_NAME")]
+    [DataField("WMS_MDL_ITEM_NAME")]
     public string Name {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_DESCRIPTION")]
+    [DataField("WMS_MDL_ITEM_DESCRIPTION")]
     public string Description {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_TAGS")]
+    [DataField("WMS_MDL_ITEM_TAGS")]
     public string Tags {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_EXT_OBJECT_TYPE_ID")]
+    [DataField("WMS_MDL_ITEM_EXT_OBJECT_TYPE_ID")]
     public int ExternalObjectTypeId {
       get; protected set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_CONFIG_DATA")]
+    [DataField("WMS_MDL_ITEM_CONFIG_DATA")]
     protected JsonObject ConfigurationData {
       get; private set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_EXT_DATA")]
+    [DataField("WMS_MDL_ITEM_EXT_DATA")]
     protected JsonObject ExtendedData {
       get; private set;
     }
@@ -135,37 +135,37 @@ namespace Empiria.Workflow.Definition {
       }
     }
 
-    [DataField("WKF_MDL_ITEM_POSITION")]
+    [DataField("WMS_MDL_ITEM_POSITION")]
     internal int Position {
       get; set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_START_DATE")]
+    [DataField("WMS_MDL_ITEM_START_DATE")]
     internal DateTime StartDate {
       get; set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_END_DATE")]
+    [DataField("WMS_MDL_ITEM_END_DATE")]
     internal DateTime EndDate {
       get; private set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_POSTED_BY_ID")]
+    [DataField("WMS_MDL_ITEM_POSTED_BY_ID")]
     internal int PostedById {
       get; private set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_POSTING_TIME")]
+    [DataField("WMS_MDL_ITEM_POSTING_TIME")]
     internal DateTime PostingTime {
       get; private set;
     }
 
 
-    [DataField("WKF_MDL_ITEM_STATUS", Default = EntityStatus.Active)]
+    [DataField("WMS_MDL_ITEM_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; protected set;
     }

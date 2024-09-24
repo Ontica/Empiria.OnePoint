@@ -32,42 +32,42 @@ namespace Empiria.Workflow.Definition {
 
     #region Properties
 
-    [DataField("WKF_OBJECT_CODE")]
+    [DataField("WMS_OBJECT_CODE")]
     public string Code {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_NAME")]
+    [DataField("WMS_OBJECT_NAME")]
     public string Name {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_DESCRIPTION")]
+    [DataField("WMS_OBJECT_DESCRIPTION")]
     public string Description {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_TAGS")]
+    [DataField("WMS_OBJECT_TAGS")]
     public string Tags {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_MANAGER_ID")]
+    [DataField("WMS_OBJECT_MANAGER_ID")]
     public Party Manager {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_EXT_OBJECT_TYPE_ID")]
+    [DataField("WMS_OBJECT_EXT_OBJECT_TYPE_ID")]
     protected int ExtendedObjectTypeId {
       get; set;
     }
 
-    [DataField("WKF_OBJECT_CONFIG_DATA")]
+    [DataField("WMS_OBJECT_CONFIG_DATA")]
     protected JsonObject ConfigurationData {
       get; private set;
     }
 
-    [DataField("WKF_OBJECT_EXT_DATA")]
+    [DataField("WMS_OBJECT_EXT_DATA")]
     protected JsonObject ExtensionData {
       get; private set;
     }
@@ -78,27 +78,27 @@ namespace Empiria.Workflow.Definition {
       }
     }
 
-    [DataField("WKF_OBJECT_START_DATE")]
+    [DataField("WMS_OBJECT_START_DATE")]
     public DateTime StartDate {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_END_DATE")]
+    [DataField("WMS_OBJECT_END_DATE")]
     public DateTime EndDate {
       get; protected set;
     }
 
-    [DataField("WKF_OBJECT_POSTING_TIME")]
+    [DataField("WMS_OBJECT_POSTING_TIME")]
     public DateTime PostingTime {
       get; private set;
     }
 
-    [DataField("WKF_OBJECT_POSTED_BY_ID")]
+    [DataField("WMS_OBJECT_POSTED_BY_ID")]
     public Party PostedBy {
       get; private set;
     }
 
-    [DataField("WKF_OBJECT_STATUS", Default = EntityStatus.Active)]
+    [DataField("WMS_OBJECT_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; private set;
     }

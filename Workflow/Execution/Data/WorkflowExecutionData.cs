@@ -26,10 +26,10 @@ namespace Empiria.Workflow.Execution.Data {
         return new List<WorkflowStep>();
       }
 
-      var sql = "SELECT * FROM WKF_Steps " +
-               $"WHERE WKF_INSTANCE_ID = {workflowInstance.Id} AND " +
-                "WKF_STEP_STATUS <> 'X' " +
-                "ORDER BY WKF_STEP_NO";
+      var sql = "SELECT * FROM WMS_Steps " +
+               $"WHERE WMS_INSTANCE_ID = {workflowInstance.Id} AND " +
+                "WMS_STEP_STATUS <> 'X' " +
+                "ORDER BY WMS_STEP_NO";
 
       var op = DataOperation.Parse(sql);
 
@@ -42,10 +42,10 @@ namespace Empiria.Workflow.Execution.Data {
         return new FixedList<WorkflowInstance>();
       }
 
-      var sql = "SELECT * FROM WKF_Instances " +
-                $"WHERE WKF_INST_REQUEST_ID = {request.Id} AND " +
-                "WKF_INST_STATUS <> 'X' " +
-                "ORDER BY WKF_INST_ID";
+      var sql = "SELECT * FROM WMS_Instances " +
+                $"WHERE WMS_INST_REQUEST_ID = {request.Id} AND " +
+                "WMS_INST_STATUS <> 'X' " +
+                "ORDER BY WMS_INSTANCE_ID";
 
       var op = DataOperation.Parse(sql);
 
@@ -57,7 +57,7 @@ namespace Empiria.Workflow.Execution.Data {
     #region Write methods
 
     static internal void Write(WorkflowInstance o, string extensionData) {
-      var op = DataOperation.Parse("write_WKF_Instance", o.Id, o.UID,
+      var op = DataOperation.Parse("write_WMS_Instance", o.Id, o.UID,
                 o.ProcessDefinition.Id, o.Request.Id, o.RequestedBy.Id,
                 o.RequestedByOrgUnit.Id, o.ResponsibleOrgUnit.Id,
                 (char) o.Priority, o.DueTime, o.StartedBy.Id, o.StartTime,
@@ -69,7 +69,7 @@ namespace Empiria.Workflow.Execution.Data {
 
 
     static internal void Write(WorkflowStep o, string extensionData) {
-      var op = DataOperation.Parse("write_WKF_Step", o.Id, o.UID,
+      var op = DataOperation.Parse("write_WMS_Step", o.Id, o.UID,
                       o.WorkflowInstance.Id, o.WorkflowModelItem.Id, o.StepDefinition.Id,
                       o.StepNo, o.Description, o.Tags, o.RequestedBy.Id, o.RequestedByOrgUnit.Id,
                       o.AssignedTo.Id, o.AssignedToOrgUnit.Id, (char) o.Priority, o.DueTime,

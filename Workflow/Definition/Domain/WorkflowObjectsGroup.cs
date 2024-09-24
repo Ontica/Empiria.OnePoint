@@ -21,7 +21,7 @@ namespace Empiria.Workflow.Definition {
     internal static WorkflowObjectsGroup ParseWithCode(string code) {
       Assertion.Require(code, nameof(code));
 
-      var group = BaseObject.TryParse<WorkflowObjectsGroup>($"WKF_OBJECT_CODE = '{code}'");
+      var group = BaseObject.TryParse<WorkflowObjectsGroup>($"WMS_OBJECT_CODE = '{code}'");
 
       Assertion.Require(group, $"Unrecognized process group code '{code}'.");
 

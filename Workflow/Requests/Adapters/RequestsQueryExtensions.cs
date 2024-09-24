@@ -44,7 +44,7 @@ namespace Empiria.Workflow.Requests.Adapters {
       if (query.OrderBy.Length != 0) {
         return query.OrderBy;
       } else {
-        return "REQ_INTERNAL_CONTROL_NO, REQ_REQUEST_NO";
+        return "WMS_REQ_INTERNAL_CONTROL_NO, WMS_REQ_REQUEST_NO";
       }
     }
 
@@ -61,13 +61,13 @@ namespace Empiria.Workflow.Requests.Adapters {
                       $"@DATE_FIELD@ < {DataCommonMethods.FormatSqlDbDate(query.ToDate.Date.AddDays(1))}";
 
       if (query.DateSearchField == DateSearchField.DueTime) {
-        return filter.Replace("@DATE_FIELD@", "REQ_DUE_TIME");
+        return filter.Replace("@DATE_FIELD@", "WMS_REQ_DUE_TIME");
 
       } else if (query.DateSearchField == DateSearchField.StartTime) {
-        return filter.Replace("@DATE_FIELD@", "REQ_START_TIME");
+        return filter.Replace("@DATE_FIELD@", "WMS_REQ_START_TIME");
 
       } else if (query.DateSearchField == DateSearchField.EndTime) {
-        return filter.Replace("@DATE_FIELD@", "REQ_END_TIME");
+        return filter.Replace("@DATE_FIELD@", "WMS_REQ_END_TIME");
 
       } else {
         throw Assertion.EnsureNoReachThisCode();
@@ -81,7 +81,7 @@ namespace Empiria.Workflow.Requests.Adapters {
 
       var requesterOrgUnit = OrganizationalUnit.Parse(query.RequesterOrgUnitUID);
 
-      return $"REQ_REQUESTED_BY_ORG_UNIT_ID = {requesterOrgUnit.Id}";
+      return $"WMS_REQ_REQUESTED_BY_ORG_UNIT_ID = {requesterOrgUnit.Id}";
     }
 
 
@@ -100,7 +100,7 @@ namespace Empiria.Workflow.Requests.Adapters {
         filter += requestType.Id;
       }
 
-      return $"REQ_TYPE_ID IN ({filter})";
+      return $"WMS_REQUEST_TYPE_ID IN ({filter})";
     }
 
 
@@ -111,16 +111,16 @@ namespace Empiria.Workflow.Requests.Adapters {
 
       var requestType = RequestType.Parse(query.RequestTypeUID);
 
-      return $"REQ_TYPE_ID = {requestType.Id}";
+      return $"WMS_REQUEST_TYPE_ID = {requestType.Id}";
     }
 
 
     static private string BuildRequestStatusFilter(RequestsQuery query) {
       if (query.RequestStatus == ActivityStatus.All) {
-        return $"REQ_STATUS <> 'X'";
+        return $"WMS_REQ_STATUS <> 'X'";
       }
 
-      return $"REQ_STATUS = '{(char) query.RequestStatus}'";
+      return $"WMS_REQ_STATUS = '{(char) query.RequestStatus}'";
     }
 
     #endregion Helpers
