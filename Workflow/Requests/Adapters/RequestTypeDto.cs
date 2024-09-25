@@ -19,7 +19,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-
     public string Name {
       get; internal set;
     }

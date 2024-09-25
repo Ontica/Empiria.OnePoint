@@ -33,7 +33,7 @@ namespace Empiria.Workflow.Execution.Adapters {
         DueTime = instance.DueTime,
         StartTime = instance.StartTime,
         EndTime = instance.EndTime,
-        Status = instance.Status.GetName(),
+        Status = instance.Status.MapToDto(),
         Actions = instance.Actions.MapToDto(),
         ProcessDef = instance.ProcessDefinition.MapToNamedEntity()
       };

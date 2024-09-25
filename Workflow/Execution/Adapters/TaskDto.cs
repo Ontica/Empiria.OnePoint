@@ -63,7 +63,7 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public string Status {
+    public NamedEntityDto Status {
       get; internal set;
     }
 

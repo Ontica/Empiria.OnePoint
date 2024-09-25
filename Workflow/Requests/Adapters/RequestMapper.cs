@@ -35,10 +35,6 @@ namespace Empiria.Workflow.Requests.Adapters {
         Tasks = WorkflowTaskMapper.Map(request.GetTasks()),
         Documents = MapDocuments(request),
         History = MapHistory(request),
-
-        // ToDo: To be removed
-
-        Actions = request.Actions.MapToDto()
       };
     }
 
@@ -76,18 +72,7 @@ namespace Empiria.Workflow.Requests.Adapters {
         Status = request.Status.GetName(),
         Fields = request.RequestTypeFields,
         Actions = request.Actions.MapToDto(),
-        RequestType = Map(request.RequestType),
-
-        // ToDo: To be removed
-
-        UniqueID = request.RequestNo,
-        ControlID = request.InternalControlNo,
-        RequesterOrgUnit = request.RequestedByOrgUnit.MapToNamedEntity(),
-        RequesterName = request.RequestedBy.Name,
-        FiledBy = request.StartedBy.MapToNamedEntity(),
-        FilingTime = request.StartTime,
-        ClosingTime = request.EndTime,
-        RequestTypeFields = request.RequestTypeFields
+        RequestType = Map(request.RequestType)
       };
     }
 
@@ -107,18 +92,7 @@ namespace Empiria.Workflow.Requests.Adapters {
         StartedBy = request.StartedBy.Name,
         StartTime = request.StartTime,
         EndTime = request.EndTime,
-        Status = request.Status.GetName(),
-
-        // ToDo: To be removed
-
-        UniqueID = request.RequestNo,
-        ControlID = request.InternalControlNo,
-        RequestTypeName = request.RequestType.DisplayName,
-        RequesterName = request.RequestedBy.Name,
-        RequesterOrgUnitName = request.RequestedByOrgUnit.Name,
-        ResponsibleOrgUnitName = request.ResponsibleOrgUnit.Name,
-        FiledByName = request.StartedBy.Name,
-        FilingTime = request.EndTime,
+        Status = request.Status.GetName()
       };
     }
 

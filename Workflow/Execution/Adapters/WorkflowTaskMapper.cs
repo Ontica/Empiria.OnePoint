@@ -35,7 +35,7 @@ namespace Empiria.Workflow.Execution.Adapters {
         DueTime = task.DueTime,
         StartTime = task.StartTime,
         EndTime = task.EndTime,
-        Status = task.Status.GetName(),
+        Status = task.Status.MapToDto(),
         WorkflowInstance = task.WorkflowInstance.MapToNamedEntity(),
         Actions = task.Actions.MapToDto(),
         TaskInvoker = MapTaskInvoker(task)

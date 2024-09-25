@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Workflow.Execution;
-
 namespace Empiria.Workflow {
 
   /// <summary>Base output DTO for workflow object actions.</summary>
@@ -28,6 +26,10 @@ namespace Empiria.Workflow {
     }
 
     public bool CanDelete {
+      get; internal set;
+    }
+
+    public bool CanInsertWorkItems {
       get; internal set;
     }
 

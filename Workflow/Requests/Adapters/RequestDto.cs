@@ -40,12 +40,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    // ToDo: To be removed
-
-    public WorkflowActionsDto Actions {
-      get; internal set;
-    }
-
   }  // RequestHolderDto
 
 
@@ -120,41 +114,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    // ToDo: To be removed
-
-
-    public string UniqueID {
-      get; internal set;
-    }
-
-    public string ControlID {
-      get; internal set;
-    }
-
-    public string RequesterName {
-      get; internal set;
-    }
-
-    public NamedEntityDto FiledBy {
-      get; internal set;
-    }
-
-    public NamedEntityDto RequesterOrgUnit {
-      get; internal set;
-    }
-
-    public DateTime FilingTime {
-      get; internal set;
-    }
-
-    public DateTime ClosingTime {
-      get; internal set;
-    }
-
-    public FixedList<FieldValue> RequestTypeFields {
-      get; internal set;
-    }
-
   }  // class RequestDto
 
 
@@ -215,41 +174,6 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     public string Status {
-      get; internal set;
-    }
-
-
-    // ToDo: To be removed
-
-    public string UniqueID {
-      get; internal set;
-    }
-
-    public string ControlID {
-      get; internal set;
-    }
-
-    public string RequestTypeName {
-      get; internal set;
-    }
-
-    public string RequesterName {
-      get; internal set;
-    }
-
-    public string RequesterOrgUnitName {
-      get; internal set;
-    }
-
-    public string ResponsibleOrgUnitName {
-      get; internal set;
-    }
-
-    public string FiledByName {
-      get; internal set;
-    }
-
-    public DateTime FilingTime {
       get; internal set;
     }
 

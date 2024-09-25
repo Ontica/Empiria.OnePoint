@@ -31,7 +31,6 @@ namespace Empiria.Workflow {
 
 
 
-
   /// <summary>Extension methods por IWorkflowActions interface.</summary>
   static public class IWorkflowActionsExtensions {
 
@@ -41,6 +40,7 @@ namespace Empiria.Workflow {
         CanCancel = actions.CanCancel(),
         CanComplete = actions.CanComplete(),
         CanDelete = actions.CanDelete(),
+        CanInsertWorkItems = true,
         CanStart = actions.CanStart(),
         CanSuspend = actions.CanSuspend(),
         CanUpdate = actions.CanUpdate()
