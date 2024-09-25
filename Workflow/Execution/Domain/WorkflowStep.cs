@@ -16,6 +16,7 @@ using Empiria.StateEnums;
 
 using Empiria.Workflow.Definition;
 
+using Empiria.Workflow.Execution.Adapters;
 using Empiria.Workflow.Execution.Data;
 
 namespace Empiria.Workflow.Execution {
@@ -152,6 +153,13 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    public WorkflowTaskActions Actions {
+      get {
+        return new WorkflowTaskActions(this);
+      }
+    }
+
+
     public bool IsOptional {
       get {
         if (this.ExtensionData.Get(WorkflowConstants.IS_OPTIONAL, false)) {
@@ -210,6 +218,23 @@ namespace Empiria.Workflow.Execution {
       if (IsDirty) {
         WorkflowExecutionData.Write(this, ExtensionData.ToString());
       }
+    }
+
+
+    internal void Update(WorkflowStepFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Description = EmpiriaString.TrimAll(fields.Description);
+      DueTime = fields.DueTime;
+      Priority = fields.Priority;
+      RequestedByOrgUnit = fields.GetRequestedByOrgUnit();
+      RequestedBy = fields.GetRequestedBy();
+      AssignedTo = fields.GetAssignedTo();
+      AssignedToOrgUnit = fields.GetAssignedToOrgUnit();
+
+      base.MarkAsDirty();
     }
 
     #endregion Methods
