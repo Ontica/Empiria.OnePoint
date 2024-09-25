@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Workflow Execution                         Component : Adpaters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Output DTO                              *
-*  Type     : TaskDto                                    License   : Please read LICENSE.txt file            *
+*  Type     : WorkflowStepDto                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Output DTO for a Workflow Task instance.                                                       *
+*  Summary  : Output DTO for a WorkflowStep instances.                                                       *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -12,14 +12,14 @@ using System;
 
 namespace Empiria.Workflow.Execution.Adapters {
 
-  /// <summary>Output DTO for a Workflow Task instance.</summary>
-  public class TaskDto {
+  /// <summary>Output DTO for a WorkflowStep instances.</summary>
+  public class WorkflowStepDto {
 
     public string UID {
       get; internal set;
     }
 
-    public string TaskNo {
+    public string StepNo {
       get; internal set;
     }
 
@@ -75,15 +75,23 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public TaskInvokerDto TaskInvoker {
+    public WorkflowStepInvokerDto StepInvoker {
       get; internal set;
     }
 
-  }  // class TaskDto
+
+    // ToDo: To be removed
+
+    public string TaskNo {
+      get; internal set;
+    }
+
+  }  // class WorkflowStepDto
 
 
-  /// <summary>Inner output DTO that describes a task invoker.</summary>
-  public class TaskInvokerDto {
+
+  /// <summary>Inner output DTO that describes a WorkflowStep invoker.</summary>
+  public class WorkflowStepInvokerDto {
 
     public string UID {
       get; internal set;
@@ -93,6 +101,6 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-  }  // public class TaskInvokerDto
+  }  // public class WorkflowStepInvokerDto
 
 }  // namespace Empiria.Workflow.Execution.Adapters

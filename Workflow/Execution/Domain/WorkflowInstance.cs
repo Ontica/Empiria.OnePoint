@@ -237,11 +237,11 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
-    public FixedList<WorkflowTask> GetTasks() {
+    public FixedList<WorkflowStep> GetSteps() {
       if (!IsStarted) {
-        return new FixedList<WorkflowTask>();
+        return new FixedList<WorkflowStep>();
       }
-      return WorkflowEngine.GetTasks();
+      return WorkflowEngine.Steps.ToFixedList();
     }
 
 

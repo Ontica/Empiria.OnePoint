@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Workflow Execution                         Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Service provider                        *
-*  Type     : WorkflowTaskActions                        License   : Please read LICENSE.txt file            *
+*  Type     : WorkflowStepActions                        License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Determines the actions that can be performed for a workflow instance task.                     *
+*  Summary  : Determines the actions that can be performed in the context of a WorkflowStep.                 *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -12,12 +12,12 @@ using Empiria.StateEnums;
 
 namespace Empiria.Workflow.Execution {
 
-  /// <summary>Determines the actions that can be performed for a workflow instance task.</summary>
-  public class WorkflowTaskActions : IWorkflowActions {
+  /// <summary>Determines the actions that can be performed in the context of a WorkflowStep.</summary>
+  public class WorkflowStepActions : IWorkflowActions {
 
     private readonly WorkflowStep _step;
 
-    internal WorkflowTaskActions(WorkflowStep step) {
+    internal WorkflowStepActions(WorkflowStep step) {
       _step = step;
     }
 
@@ -69,6 +69,6 @@ namespace Empiria.Workflow.Execution {
               _step.Status != ActivityStatus.Completed;
     }
 
-  } // class WorkflowTaskActions
+  } // class WorkflowStepActions
 
 }  // namespace Empiria.Workflow.Execution

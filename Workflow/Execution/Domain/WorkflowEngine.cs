@@ -60,18 +60,6 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
-    internal FixedList<WorkflowTask> GetTasks() {
-      var tasks = new List<WorkflowTask>(Steps.Count);
-
-      foreach (WorkflowStep step in Steps) {
-        var task = new WorkflowTask(step);
-
-        tasks.Add(task);
-      }
-
-      return tasks.ToFixedList();
-    }
-
 
     internal void SaveChanges() {
       foreach (WorkflowStep step in Steps) {

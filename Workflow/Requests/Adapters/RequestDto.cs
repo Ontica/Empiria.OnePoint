@@ -28,7 +28,7 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public FixedList<TaskDto> Tasks {
+    public FixedList<WorkflowStepDto> Steps {
       get; internal set;
     }
 
@@ -37,6 +37,12 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     public FixedList<WorkflowHistoryItemDto> History {
+      get; internal set;
+    }
+
+    // ToDo: To be removed
+
+    public FixedList<WorkflowStepDto> Tasks {
       get; internal set;
     }
 

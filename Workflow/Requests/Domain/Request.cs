@@ -233,15 +233,15 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal FixedList<WorkflowTask> GetTasks() {
-      var allTasksList = new List<WorkflowTask>(32);
+    internal FixedList<WorkflowStep> GetSteps() {
+      var allStepsList = new List<WorkflowStep>(32);
 
       foreach (WorkflowInstance instance in WorkflowInstances) {
-        var tasks = instance.GetTasks();
+        var steps = instance.GetSteps();
 
-        allTasksList.AddRange(tasks);
+        allStepsList.AddRange(steps);
       }
-      return allTasksList.ToFixedList();
+      return allStepsList.ToFixedList();
     }
 
 

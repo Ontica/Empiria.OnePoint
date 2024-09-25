@@ -81,6 +81,19 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    public string Name {
+      get {
+        if (WorkflowModelItem.TargetObject.Distinct(StepDefinition)) {
+          return StepDefinition.Name;
+        }
+        if (WorkflowModelItem.Name.Length != 0) {
+          return WorkflowModelItem.Name;
+        }
+        return WorkflowModelItem.TargetObject.Name;
+      }
+    }
+
+
     [DataField("WMS_STEP_DESCRIPTION")]
     public string Description {
       get; private set;
@@ -153,9 +166,9 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public WorkflowTaskActions Actions {
+    public WorkflowStepActions Actions {
       get {
-        return new WorkflowTaskActions(this);
+        return new WorkflowStepActions(this);
       }
     }
 

@@ -31,7 +31,7 @@ namespace Empiria.Workflow.Execution.UseCases {
 
     #region Use cases
 
-    public TaskDto UpdateWorkflowStep(string workflowStepUID, WorkflowStepFields fields) {
+    public WorkflowStepDto UpdateWorkflowStep(string workflowStepUID, WorkflowStepFields fields) {
       Assertion.Require(workflowStepUID, nameof(workflowStepUID));
       Assertion.Require(fields, nameof(fields));
 
@@ -46,7 +46,7 @@ namespace Empiria.Workflow.Execution.UseCases {
 
       workflowStep.Save();
 
-      return WorkflowTaskMapper.Map(new WorkflowTask(workflowStep));
+      return WorkflowStepMapper.Map(workflowStep);
     }
 
     #endregion Use cases

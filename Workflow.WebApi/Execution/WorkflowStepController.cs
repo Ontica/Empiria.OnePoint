@@ -31,7 +31,7 @@ namespace Empiria.Workflow.Execution.WebApi {
       base.RequireBody(fields);
 
       using (var usecases = WorkflowStepUseCases.UseCaseInteractor()) {
-        TaskDto step = usecases.UpdateWorkflowStep(workflowStepUID, fields);
+        WorkflowStepDto step = usecases.UpdateWorkflowStep(workflowStepUID, fields);
 
         return new SingleObjectModel(base.Request, step);
       }

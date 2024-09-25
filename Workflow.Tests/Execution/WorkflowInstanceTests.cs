@@ -37,11 +37,11 @@ namespace Empiria.Tests.Workflow.Execution {
 
 
     [Fact]
-    public void Should_Parse_All_Workflow_Instances_Tasks() {
+    public void Should_Parse_All_Workflow_Instances_Steps() {
       var workflowInstances = BaseObject.GetList<WorkflowInstance>();
 
       foreach (var workflowInstance in workflowInstances) {
-        FixedList<WorkflowTask> sut = workflowInstance.GetTasks();
+        FixedList<WorkflowStep> sut = workflowInstance.GetSteps();
 
         Assert.NotNull(sut);
 
