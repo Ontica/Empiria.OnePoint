@@ -32,38 +32,36 @@ namespace Empiria.Workflow.Definition.Data {
     static internal FixedList<T> GetSources<T>(ProcessDef processDef,
                                                WorkflowModelItemType modelItemType,
                                                WorkflowObject targetObject) where T : WorkflowObject {
-      var sql = "SELECT * FROM WMS_OBJECTS " +
-               $"WHERE WMS_OBJECT_ID IN " +
-                  $"(SELECT WMS_MDL_ITEM_SOURCE_OBJECT_ID " +
-                    $"FROM WMS_MODEL_ITEMS " +
-                    $"WHERE WMS_MDL_ITEM_PROCESS_DEF_ID = {processDef.Id} AND " +
-                    $"WMS_MODEL_ITEM_TYPE_ID = {modelItemType.Id} AND " +
-                    $"WMS_MDL_ITEM_TARGET_OBJECT_ID = {targetObject.Id} AND " +
-                    $"WMS_MDL_ITEM_STATUS <> 'X' " +
-                    $"ORDER BY WMS_MDL_ITEM_POSITION)";
+      var sql = $"SELECT * FROM WMS_MODEL_ITEMS " +
+                $"WHERE WMS_MDL_ITEM_PROCESS_DEF_ID = {processDef.Id} AND " +
+                $"WMS_MODEL_ITEM_TYPE_ID = {modelItemType.Id} AND " +
+                $"WMS_MDL_ITEM_TARGET_OBJECT_ID = {targetObject.Id} AND " +
+                $"WMS_MDL_ITEM_STATUS <> 'X' " +
+                $"ORDER BY WMS_MDL_ITEM_POSITION";
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetFixedList<T>(op);
+      return DataReader.GetFixedList<WorkflowModelItem>(op)
+                       .Select(x => (T) x.SourceObject)
+                       .ToFixedList();
     }
 
 
     static internal FixedList<T> GetTargets<T>(ProcessDef processDef,
                                                WorkflowModelItemType modelItemType,
                                                WorkflowObject sourceObject) where T : WorkflowObject {
-      var sql = "SELECT * FROM WMS_OBJECTS " +
-               $"WHERE WMS_OBJECT_ID IN " +
-                 $"(SELECT WMS_MDL_ITEM_TARGET_OBJECT_ID " +
-                   $"FROM WMS_MODEL_ITEMS " +
-                   $"WHERE WMS_MDL_ITEM_PROCESS_DEF_ID = {processDef.Id} AND " +
-                   $"WMS_MODEL_ITEM_TYPE_ID = {modelItemType.Id} AND " +
-                   $"WMS_MDL_ITEM_SOURCE_OBJECT_ID = {sourceObject.Id} AND " +
-                   $"WMS_MDL_ITEM_STATUS <> 'X' " +
-                   $"ORDER BY WMS_MDL_ITEM_POSITION)";
+      var sql = $"SELECT * FROM WMS_MODEL_ITEMS " +
+                $"WHERE WMS_MDL_ITEM_PROCESS_DEF_ID = {processDef.Id} AND " +
+                $"WMS_MODEL_ITEM_TYPE_ID = {modelItemType.Id} AND " +
+                $"WMS_MDL_ITEM_SOURCE_OBJECT_ID = {sourceObject.Id} AND " +
+                $"WMS_MDL_ITEM_STATUS <> 'X' " +
+                $"ORDER BY WMS_MDL_ITEM_POSITION";
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetFixedList<T>(op);
+      return DataReader.GetFixedList<WorkflowModelItem>(op)
+                       .Select(x => (T) x.TargetObject)
+                       .ToFixedList();
     }
 
   }  // class WorkflowModelItemsData

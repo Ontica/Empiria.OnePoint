@@ -35,6 +35,8 @@ namespace Empiria.Workflow.Definition {
 
     #region Types
 
+    static public WorkflowModelItemType RequestDefListItem => Parse("ObjectTypeInfo.WorkflowModelItem.RequestsDefListItem");
+
     static public WorkflowModelItemType SequenceFlow => Parse("ObjectTypeInfo.WorkflowModelItem.Connector.SequenceFlow");
 
     #endregion Types
