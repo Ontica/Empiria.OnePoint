@@ -14,8 +14,6 @@ using Empiria.Parties;
 using Empiria.Services;
 using Empiria.StateEnums;
 
-using Empiria.Workflow.Requests.Adapters;
-
 namespace Empiria.Workflow.Requests.UseCases {
 
   /// <summary>Use cases taht returns catalogues information for requests.</summary>
@@ -47,28 +45,6 @@ namespace Empiria.Workflow.Requests.UseCases {
       return list.Select(x => new NamedEntityDto(x.UID, x.FullName))
                  .ToFixedList();
     }
-
-
-    public FixedList<RequestTypeDto> RequestTypes(string requestsList) {
-      Assertion.Require(requestsList, nameof(requestsList));
-
-      FixedList<RequestType> requestTypes = RequestType.GetList(requestsList);
-
-      return RequestMapper.Map(requestTypes);
-    }
-
-
-    public FixedList<RequestTypeDto> RequestTypes(string requestsList,
-                                                  string requesterOrgUnitUID) {
-
-      Assertion.Require(requestsList, nameof(requestsList));
-      Assertion.Require(requesterOrgUnitUID, nameof(requesterOrgUnitUID));
-
-      FixedList<RequestType> requestTypes = RequestType.GetList(requestsList);
-
-      return RequestMapper.Map(requestTypes);
-    }
-
 
 
     public FixedList<NamedEntityDto> ResponsibleList(string workitemTypeUID) {

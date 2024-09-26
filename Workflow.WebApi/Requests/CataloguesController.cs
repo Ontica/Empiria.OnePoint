@@ -7,13 +7,12 @@
 *  Summary  : Web API used to retrive requests related catalogues.                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
+
 using System.Web.Http;
 
 using Empiria.WebApi;
 
 using Empiria.Workflow.Requests.UseCases;
-using Empiria.Workflow.Requests.Adapters;
 
 namespace Empiria.Workflow.Requests.WebApi {
 
@@ -27,45 +26,21 @@ namespace Empiria.Workflow.Requests.WebApi {
     public CollectionModel GetOrganizationalUnits([FromUri] string requestsList) {
 
       using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> orgUnits = usecases.OrganizationalUnits(requestsList);
+        FixedList<NamedEntityDto> list = usecases.OrganizationalUnits(requestsList);
 
-        return new CollectionModel(base.Request, orgUnits);
+        return new CollectionModel(base.Request, list);
       }
     }
 
-
-    [HttpGet]
-    [Route("v4/requests/catalogues/requests-types")]
-    public CollectionModel GetRequestsTypes([FromUri] string requestsList,
-                                            [FromUri] string requesterOrgUnitUID) {
-
-      using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
-        FixedList<RequestTypeDto> requestsTypes = usecases.RequestTypes(requestsList,
-                                                                        requesterOrgUnitUID);
-
-        return new CollectionModel(base.Request, requestsTypes);
-      }
-    }
-
-    [HttpGet]
-    [Route("v4/requests/catalogues/requests-types")]
-    public CollectionModel GetRequestsTypes([FromUri] string requestsList) {
-
-      using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
-        FixedList<RequestTypeDto> requestsTypes = usecases.RequestTypes(requestsList);
-
-        return new CollectionModel(base.Request, requestsTypes);
-      }
-    }
 
     [HttpGet]
     [Route("v4/requests/catalogues/responsible-list")]
     public CollectionModel GetResponsibleList() {
 
       using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> orgUnits = usecases.ResponsibleList(string.Empty);
+        FixedList<NamedEntityDto> list = usecases.ResponsibleList(string.Empty);
 
-        return new CollectionModel(base.Request, orgUnits);
+        return new CollectionModel(base.Request, list);
       }
     }
 
@@ -75,9 +50,9 @@ namespace Empiria.Workflow.Requests.WebApi {
     public CollectionModel GetStatusList() {
 
       using (var usecases = CataloguesUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> orgUnits = usecases.StatusList();
+        FixedList<NamedEntityDto> list = usecases.StatusList();
 
-        return new CollectionModel(base.Request, orgUnits);
+        return new CollectionModel(base.Request, list);
       }
     }
 

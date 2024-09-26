@@ -1,19 +1,19 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Requests Management                        Component : Adapters Layer                          *
+*  Module   : Workflow Definition                        Component : Adapters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Output DTO                              *
-*  Type     : RequestTypeDto                             License   : Please read LICENSE.txt file            *
+*  Type     : RequestDefDto                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Output data transfer object for RequestType instances.                                         *
+*  Summary  : Output data transfer object for RequestDef instances.                                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.DataObjects;
 
-namespace Empiria.Workflow.Requests.Adapters {
+namespace Empiria.Workflow.Definition.Adapters {
 
-  /// <summary>Output data transfer object for RequestType instances.</summary>
-  public class RequestTypeDto {
+  /// <summary>Output data transfer object for RequestDef instances.</summary>
+  public class RequestDefDto {
 
     public string UID {
       get; internal set;
@@ -35,6 +35,6 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-  }  // class RequestTypeDto
+  }  // class RequestDefDto
 
-}  // namespace Empiria.Workflow.Requests.Adapters
+}  // namespace Empiria.Workflow.Definition.Adapters
