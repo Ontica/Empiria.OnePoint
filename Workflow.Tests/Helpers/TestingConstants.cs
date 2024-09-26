@@ -15,7 +15,7 @@ namespace Empiria.Tests.Workflow {
   /// <summary>Provides testing constants for Empiria OnePoint workflow services.</summary>
   static public class TestingConstants {
 
-    static internal readonly ProcessDef PROCESS_DEF_WITH_STEPS = ProcessDef.Parse(101);
+    static internal readonly ProcessDef PROCESS_DEF_WITH_STEPS = ProcessDef.Parse(201);
 
     static internal readonly WorkflowModelItem WKF_MODEL_ITEM_WITH_ASSIGNATION_RULES = WorkflowModelItem.Parse(1001);
 
