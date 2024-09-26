@@ -13,6 +13,7 @@ using System;
 using Empiria.DataObjects;
 using Empiria.Storage;
 
+using Empiria.Workflow.Definition.Adapters;
 using Empiria.Workflow.Execution.Adapters;
 
 namespace Empiria.Workflow.Requests.Adapters {
@@ -116,7 +117,13 @@ namespace Empiria.Workflow.Requests.Adapters {
       get; internal set;
     }
 
-    public RequestTypeDto RequestType {
+    public RequestDefDto RequestDef {
+      get; internal set;
+    }
+
+    // ToDo: To be removed
+
+    public RequestDefDto RequestType {
       get; internal set;
     }
 

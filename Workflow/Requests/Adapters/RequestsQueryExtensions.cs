@@ -12,6 +12,8 @@ using Empiria.Data;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Workflow.Definition;
+
 namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Extension methods for RequestsQuery interface adapter.</summary>
@@ -24,15 +26,15 @@ namespace Empiria.Workflow.Requests.Adapters {
     }
 
     static internal string MapToFilterString(this RequestsQuery query) {
-      string requestsListFilter = BuildRequestsListFilter(query);
+      string requestDefFilter = BuildRequestDefinitionFilter(query);
       string requesterOrgUnitFilter = BuildRequestedByOrgUnitFilter(query);
-      string requestTypeFilter = BuildRequestTypeFilter(query);
+      string requestsListFilter = BuildRequestsListFilter(query);
       string requestStatusFilter = BuildRequestStatusFilter(query);
       string dateRangeFilter = BuildDateRangeFilter(query);
 
-      var filter = new Filter(requestsListFilter);
+      var filter = new Filter(requestDefFilter);
       filter.AppendAnd(requesterOrgUnitFilter);
-      filter.AppendAnd(requestTypeFilter);
+      filter.AppendAnd(requestsListFilter);
       filter.AppendAnd(requestStatusFilter);
       filter.AppendAnd(dateRangeFilter);
 
@@ -90,28 +92,29 @@ namespace Empiria.Workflow.Requests.Adapters {
         return string.Empty;
       }
 
-      var list = RequestType.GetList(query.RequestsList);
+      var list = RequestDef.GetList(query.RequestsList);
 
       string filter = string.Empty;
-      foreach (var requestType in list) {
+
+      foreach (RequestDef requestDef in list) {
         if (filter.Length != 0) {
           filter += ", ";
         }
-        filter += requestType.Id;
+        filter += requestDef.Id;
       }
 
-      return $"WMS_REQUEST_TYPE_ID IN ({filter})";
+      return $"WMS_REQUEST_DEF_ID IN ({filter})";
     }
 
 
-    static private string BuildRequestTypeFilter(RequestsQuery query) {
-      if (query.RequestTypeUID.Length == 0) {
+    static private string BuildRequestDefinitionFilter(RequestsQuery query) {
+      if (query.RequestDefUID.Length == 0) {
         return string.Empty;
       }
 
-      var requestType = RequestType.Parse(query.RequestTypeUID);
+      var requestType = RequestDef.Parse(query.RequestDefUID);
 
-      return $"WMS_REQUEST_TYPE_ID = {requestType.Id}";
+      return $"WMS_REQUEST_DEF_ID = {requestType.Id}";
     }
 
 

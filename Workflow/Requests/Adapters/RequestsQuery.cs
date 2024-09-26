@@ -35,7 +35,8 @@ namespace Empiria.Workflow.Requests.Adapters {
     } = string.Empty;
 
 
-    public string RequestTypeUID {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "RequestTypeUID")]
+    public string RequestDefUID {
       get; set;
     } = string.Empty;
 

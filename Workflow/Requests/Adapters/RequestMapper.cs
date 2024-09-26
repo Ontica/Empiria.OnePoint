@@ -11,17 +11,14 @@
 using Empiria.StateEnums;
 using Empiria.Storage;
 
+using Empiria.Workflow.Definition.Adapters;
+
 using Empiria.Workflow.Execution.Adapters;
 
 namespace Empiria.Workflow.Requests.Adapters {
 
   /// <summary>Maps Requests instances to their DTOs.</summary>
   static internal class RequestMapper {
-
-    static internal FixedList<RequestTypeDto> Map(FixedList<RequestType> requestsTypes) {
-      return requestsTypes.Select(x => Map(x)).ToFixedList();
-    }
-
 
     static internal FixedList<RequestHolderDto> Map(FixedList<Request> requests) {
       return requests.Select(x => Map(x)).ToFixedList();
@@ -76,7 +73,10 @@ namespace Empiria.Workflow.Requests.Adapters {
         Status = request.Status.GetName(),
         Fields = request.RequestTypeFields,
         Actions = request.Actions.MapToDto(),
-        RequestType = Map(request.RequestType)
+        RequestDef = RequestDefMapper.Map(request.RequestDef),
+
+        // ToDo: To be removed
+        RequestType = RequestDefMapper.Map(request.RequestDef)
       };
     }
 
@@ -97,18 +97,6 @@ namespace Empiria.Workflow.Requests.Adapters {
         StartTime = request.StartTime,
         EndTime = request.EndTime,
         Status = request.Status.GetName()
-      };
-    }
-
-
-    static private RequestTypeDto Map(RequestType requestType) {
-      return new RequestTypeDto {
-        UID = requestType.UID,
-        Name = requestType.DisplayName,
-        Description = requestType.Documentation,
-        ResponsibleOrgUnit = requestType.ResponsibleOrgUnit.MapToNamedEntity(),
-        InputData = requestType.InputData.Select(x => x.MapToDto())
-                                         .ToFixedList(),
       };
     }
 
