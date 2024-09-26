@@ -15,7 +15,8 @@ namespace Empiria.Workflow.Requests.Adapters {
   /// <summary>Input fields DTO used to create or update a request.</summary>
   public class RequestFieldsDto {
 
-    public string RequestTypeUID {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "RequestTypeUID")]
+    public string RequestDefUID {
       get; set;
     } = string.Empty;
 

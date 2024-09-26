@@ -129,7 +129,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       Assertion.Require(request.Actions.CanStart(), "No se puede iniciar esta solicitud.");
 
-      ProcessDef processDefinition = request.RequestDefinition.DefaultProcessDefinition;
+      ProcessDef processDefinition = request.RequestDef.DefaultProcessDefinition;
 
       Assertion.Require(processDefinition.Status == EntityStatus.Active,
                         "El proceso asignado a esta solicitud no está activo. " +

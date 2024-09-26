@@ -65,8 +65,8 @@ namespace Empiria.Workflow.Requests.Data {
 
     static internal void Write(Request o, string extensionData) {
       var op = DataOperation.Parse("write_WMS_Request", o.Id, o.UID,
-            o.RequestType.Id, o.RequestNo, o.InternalControlNo, o.Description,
-            o.RequestedBy.Id, o.RequestedByOrgUnit.Id, o.ResponsibleOrgUnit.Id,
+            o.RequestType.Id, o.RequestDef.Id, o.RequestNo, o.InternalControlNo,
+            o.Description, o.RequestedBy.Id, o.RequestedByOrgUnit.Id, o.ResponsibleOrgUnit.Id,
             (char) o.Priority, o.DueTime, o.StartedBy.Id, o.StartTime,
             o.EndTime, extensionData, o.Keywords, (char) o.Status);
 

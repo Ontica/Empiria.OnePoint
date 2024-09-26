@@ -9,16 +9,19 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
 using System.Collections.Generic;
+
 using Empiria.DataObjects;
 using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Workflow.Definition;
 using Empiria.Workflow.Execution;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
+
 
 namespace Empiria.Workflow.Requests {
 
@@ -65,6 +68,13 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    [DataField("WMS_REQUEST_DEF_ID")]
+    public RequestDef RequestDef {
+      get;
+      private set;
+    }
+
+
     [DataField("WMS_REQ_REQUEST_NO")]
     public string RequestNo {
       get; private set;
@@ -79,7 +89,7 @@ namespace Empiria.Workflow.Requests {
 
     public string Name {
       get {
-        return ExtensionData.Get("name", this.RequestType.DisplayName);
+        return ExtensionData.Get("name", this.RequestDef.Name);
       } protected set {
         ExtensionData.SetIfValue("name", EmpiriaString.TrimAll(value));
       }
@@ -155,7 +165,8 @@ namespace Empiria.Workflow.Requests {
 
     internal protected virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(RequestNo, InternalControlNo, Name, Description, RequestedBy.Name,
+        return EmpiriaString.BuildKeywords(RequestNo, InternalControlNo, Name, Description,
+                                           RequestDef.Name, RequestedBy.Name,
                                            RequestedByOrgUnit.Name, ResponsibleOrgUnit.Name);
       }
     }
@@ -285,8 +296,11 @@ namespace Empiria.Workflow.Requests {
 
       Assertion.Require(Actions.CanUpdate(), InvalidOperationMessage("update"));
 
-      if (fields.RequestTypeUID != RequestType.UID) {
-        base.ReclassifyAs(RequestType.Parse(fields.RequestTypeUID));
+      if (fields.RequestDefUID != this.RequestDef.UID) {
+        this.RequestDef = RequestDef.Parse(fields.RequestDefUID);
+        if (!this.RequestDef.RequestType.Equals(this.RequestType)) {
+          base.ReclassifyAs(RequestDef.RequestType);
+        }
       }
 
       if (fields.RequestedByUID.Length != 0) {
@@ -298,11 +312,11 @@ namespace Empiria.Workflow.Requests {
       if (fields.Description.Length != 0) {
         this.Description = fields.Description;
       } else {
-        this.Description = this.RequestType.DisplayName;
+        this.Description = this.RequestDef.Name;
       }
 
       this.RequestedByOrgUnit = OrganizationalUnit.Parse(fields.RequesterOrgUnitUID);
-      this.ResponsibleOrgUnit = RequestType.ResponsibleOrgUnit;
+      this.ResponsibleOrgUnit = RequestDef.ResponsibleOrgUnit;
 
       base.MarkAsDirty();
     }
