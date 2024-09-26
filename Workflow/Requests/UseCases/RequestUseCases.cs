@@ -78,9 +78,9 @@ namespace Empiria.Workflow.Requests.UseCases {
     public RequestHolderDto CreateRequest(RequestFieldsDto fields) {
       Assertion.Require(fields, nameof(fields));
 
-      var requestType = RequestType.Parse(fields.RequestTypeUID);
+      var requestDef = RequestDef.Parse(fields.RequestDefUID);
 
-      Request request = requestType.CreateRequest(fields);
+      Request request = requestDef.RequestType.CreateRequest(fields);
 
       request.Save();
 
@@ -129,7 +129,7 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       Assertion.Require(request.Actions.CanStart(), "No se puede iniciar esta solicitud.");
 
-      ProcessDef processDefinition = request.RequestType.DefaultProcessDefinition;
+      ProcessDef processDefinition = request.RequestDefinition.DefaultProcessDefinition;
 
       Assertion.Require(processDefinition.Status == EntityStatus.Active,
                         "El proceso asignado a esta solicitud no está activo. " +

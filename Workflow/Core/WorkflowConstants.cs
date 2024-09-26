@@ -69,6 +69,8 @@ namespace Empiria.Workflow {
 
     #region Process Constants
 
+    static readonly internal string REQUEST_TYPE_ID = "requestTypeId";
+
     static readonly internal string DEFAULT_PROCESS_DEFINITION_ID = "defaultProcessDefinitionId";
 
     #endregion Process Constants

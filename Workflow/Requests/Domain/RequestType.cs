@@ -8,11 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.DataObjects;
 using Empiria.Ontology;
-using Empiria.Parties;
-
-using Empiria.Workflow.Definition;
 
 using Empiria.Workflow.Requests.Adapters;
 
@@ -36,38 +32,9 @@ namespace Empiria.Workflow.Requests {
       return RequestType.Parse<RequestType>(typeName);
     }
 
-    static internal FixedList<RequestType> GetList(string listName) {
-      Assertion.Require(listName, nameof(listName));
-
-      return Empty.ExtensionData.GetFixedList<RequestType>($"lists/{listName}", false);
-    }
-
     static public RequestType Empty => RequestType.Parse("ObjectTypeInfo.WorkflowRequest");
 
     #endregion Constructors and parsers
-
-    #region Properties
-
-    public ProcessDef DefaultProcessDefinition {
-      get {
-        return base.ExtensionData.Get<ProcessDef>(WorkflowConstants.DEFAULT_PROCESS_DEFINITION_ID);
-      }
-    }
-
-
-    public FixedList<DataField> InputData {
-      get {
-        return base.ExtensionData.GetFixedList<DataField>(WorkflowConstants.INPUT_DATA_LIST, false);
-      }
-    }
-
-    public OrganizationalUnit ResponsibleOrgUnit {
-      get {
-        return base.ExtensionData.Get<OrganizationalUnit>(WorkflowConstants.RESPONSIBLE_ORG_UNIT_ID);
-      }
-    }
-
-    #endregion Properties
 
     #region Methods
 
