@@ -51,7 +51,7 @@ namespace Empiria.Tests.Workflow.Definition {
     public void Should_Get_Process_Definition_Sequence_Flows() {
       ProcessDef processDef = TestingConstants.PROCESS_DEF_WITH_STEPS;
 
-      FixedList<WorkflowModelItem> sut = processDef.GetSequenceFlows();
+      FixedList<WorkflowModelItem> sut = processDef.GetWorkflowModelItems();
 
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);

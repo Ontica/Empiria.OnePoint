@@ -67,11 +67,7 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public WorkflowActionsDto Actions {
-      get; internal set;
-    }
-
-    public WorkflowStepInvokerDto StepInvoker {
+    public NamedEntityDto WorkflowModelItem {
       get; internal set;
     }
 
@@ -80,6 +76,14 @@ namespace Empiria.Workflow.Execution.Adapters {
     }
 
     public NamedEntityDto WorkflowInstance {
+      get; internal set;
+    }
+
+    public WorkflowActionsDto Actions {
+      get; internal set;
+    }
+
+    public WorkflowStepInvokerDto StepInvoker {
       get; internal set;
     }
 

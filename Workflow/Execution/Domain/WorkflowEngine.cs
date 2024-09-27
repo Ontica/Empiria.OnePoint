@@ -77,10 +77,10 @@ namespace Empiria.Workflow.Execution {
                         $"Can not start the WorkflowEngine because its " +
                         $"workflow instance ({WorkflowInstance.Id}) was already started.");
 
-      FixedList <WorkflowModelItem> sequenceFlows = this.ProcessDefinition.GetSequenceFlows();
+      FixedList<WorkflowModelItem> modelItems = this.ProcessDefinition.GetWorkflowModelItems();
 
-      foreach (var sequenceFlow in sequenceFlows) {
-        var step = CreateStep(sequenceFlow);
+      foreach (WorkflowModelItem modelItem in modelItems) {
+        var step = CreateStep(modelItem);
 
         Steps.Add(step);
       }

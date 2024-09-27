@@ -36,10 +36,11 @@ namespace Empiria.Workflow.Execution.Adapters {
         StartTime = step.StartTime,
         EndTime = step.EndTime,
         Status = step.Status.MapToDto(),
-        Actions = step.Actions.MapToDto(),
-        StepInvoker = MapStepInvoker(step),
+        WorkflowModelItem = step.WorkflowModelItem.MapToNamedEntity(),
         Request = step.Request.MapToNamedEntity(),
         WorkflowInstance = step.WorkflowInstance.MapToNamedEntity(),
+        Actions = step.Actions.MapToDto(),
+        StepInvoker = MapStepInvoker(step),
 
         // ToDo: To be removed
 

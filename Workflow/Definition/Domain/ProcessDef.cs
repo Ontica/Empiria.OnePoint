@@ -54,8 +54,15 @@ namespace Empiria.Workflow.Definition {
 
     #region Methods
 
-    internal FixedList<WorkflowModelItem> GetSequenceFlows() {
-      return Model.FindAll(x => x.WorkflowModelItemType.Equals(WorkflowModelItemType.SequenceFlow));
+    internal FixedList<WorkflowModelItem> GetWorkflowModelItems() {
+      return Model.FindAll(x => x.WorkflowModelItemType.Equals(WorkflowModelItemType.SequenceFlow) &&
+                               !x.IsOptional);
+    }
+
+
+    internal FixedList<WorkflowModelItem> GetOptionalWorkflowModelItems() {
+      return Model.FindAll(x => x.WorkflowModelItemType.Equals(WorkflowModelItemType.SequenceFlow) &&
+                                x.IsOptional);
     }
 
     #endregion Methods

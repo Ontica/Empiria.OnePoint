@@ -86,7 +86,8 @@ namespace Empiria.Tests.Workflow.Execution {
         RequestedByOrgUnitUID = "Empty",
         RequestedByUID = "Empty",
         RequestUID = sut.Request.UID,
-        WorkflowInstanceUID = sut.WorkflowInstance.UID
+        WorkflowInstanceUID = sut.WorkflowInstance.UID,
+        WorkflowModelItemUID = sut.WorkflowModelItem.UID
       };
 
       sut.Update(fields);
