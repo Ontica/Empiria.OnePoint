@@ -67,15 +67,19 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto WorkflowInstance {
-      get; internal set;
-    }
-
     public WorkflowActionsDto Actions {
       get; internal set;
     }
 
     public WorkflowStepInvokerDto StepInvoker {
+      get; internal set;
+    }
+
+    public NamedEntityDto Request {
+      get; internal set;
+    }
+
+    public NamedEntityDto WorkflowInstance {
       get; internal set;
     }
 

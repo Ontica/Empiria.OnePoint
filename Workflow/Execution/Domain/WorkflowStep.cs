@@ -16,6 +16,8 @@ using Empiria.StateEnums;
 
 using Empiria.Workflow.Definition;
 
+using Empiria.Workflow.Requests;
+
 using Empiria.Workflow.Execution.Adapters;
 using Empiria.Workflow.Execution.Data;
 
@@ -56,6 +58,12 @@ namespace Empiria.Workflow.Execution {
     #endregion Constructors and parsers
 
     #region Properties
+
+    public Request Request {
+      get {
+        return WorkflowInstance.Request;
+      }
+    }
 
     [DataField("WMS_INSTANCE_ID")]
     public WorkflowInstance WorkflowInstance {

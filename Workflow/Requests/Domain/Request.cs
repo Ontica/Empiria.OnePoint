@@ -27,7 +27,7 @@ namespace Empiria.Workflow.Requests {
 
   /// <summary>Abstract partitioned type that represents a request that can be filed.</summary>
   [PartitionedType(typeof(RequestType))]
-  public abstract class Request : BaseObject {
+  public abstract class Request : BaseObject, INamedEntity {
 
     #region Fields
 

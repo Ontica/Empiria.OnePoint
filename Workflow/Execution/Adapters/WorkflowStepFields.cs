@@ -52,6 +52,16 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
+
+    public string RequestUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string WorkflowInstanceUID {
+      get; set;
+    } = string.Empty;
+
   }  // class WorkflowStepFields
 
 
@@ -77,6 +87,8 @@ namespace Empiria.Workflow.Execution.Adapters {
 
     static internal void EnsureValid(this WorkflowStepFields fields) {
       Assertion.Require(fields.Description, nameof(fields.Description));
+      Assertion.Require(fields.RequestUID, nameof(fields.RequestUID));
+      Assertion.Require(fields.WorkflowInstanceUID, nameof(fields.WorkflowInstanceUID));
       _ = GetAssignedTo(fields);
       _ = GetAssignedToOrgUnit(fields);
       _ = GetRequestedBy(fields);
