@@ -60,6 +60,10 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
+    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem) {
+      return new WorkflowStep(WorkflowInstance, workflowModelItem);
+    }
+
 
     internal void SaveChanges() {
       foreach (WorkflowStep step in Steps) {
@@ -76,7 +80,7 @@ namespace Empiria.Workflow.Execution {
       FixedList <WorkflowModelItem> sequenceFlows = this.ProcessDefinition.GetSequenceFlows();
 
       foreach (var sequenceFlow in sequenceFlows) {
-        var step = new WorkflowStep(WorkflowInstance, sequenceFlow);
+        var step = CreateStep(sequenceFlow);
 
         Steps.Add(step);
       }

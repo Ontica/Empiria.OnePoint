@@ -13,6 +13,9 @@ using System;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Workflow.Definition;
+using Empiria.Workflow.Requests;
+
 namespace Empiria.Workflow.Execution.Adapters {
 
   /// <summary>Fields input DTO used to update workflow steps.</summary>
@@ -62,6 +65,11 @@ namespace Empiria.Workflow.Execution.Adapters {
       get; set;
     } = string.Empty;
 
+
+    public string WorkflowModelItemUID {
+      get; set;
+    } = string.Empty;
+
   }  // class WorkflowStepFields
 
 
@@ -89,10 +97,20 @@ namespace Empiria.Workflow.Execution.Adapters {
       Assertion.Require(fields.Description, nameof(fields.Description));
       Assertion.Require(fields.RequestUID, nameof(fields.RequestUID));
       Assertion.Require(fields.WorkflowInstanceUID, nameof(fields.WorkflowInstanceUID));
+      Assertion.Require(fields.WorkflowModelItemUID, nameof(fields.WorkflowModelItemUID));
+
       _ = GetAssignedTo(fields);
       _ = GetAssignedToOrgUnit(fields);
       _ = GetRequestedBy(fields);
       _ = GetRequestedByOrgUnit(fields);
+      _ = GetRequest(fields);
+      _ = GetWorkflowInstance(fields);
+      _ = GetWorkflowModelItem(fields);
+    }
+
+
+    static internal Request GetRequest(this WorkflowStepFields fields) {
+      return Request.Parse(fields.RequestUID);
     }
 
 
@@ -109,6 +127,16 @@ namespace Empiria.Workflow.Execution.Adapters {
         return OrganizationalUnit.Empty;
       }
       return OrganizationalUnit.Parse(fields.RequestedByOrgUnitUID);
+    }
+
+
+    static internal WorkflowInstance GetWorkflowInstance(this WorkflowStepFields fields) {
+      return WorkflowInstance.Parse(fields.WorkflowInstanceUID);
+    }
+
+
+    static internal WorkflowModelItem GetWorkflowModelItem(this WorkflowStepFields fields) {
+      return WorkflowModelItem.Parse(fields.WorkflowModelItemUID);
     }
 
   }  // class WorkflowStepFieldsExtensions

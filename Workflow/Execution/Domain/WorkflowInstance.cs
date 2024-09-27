@@ -237,6 +237,20 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
+    internal void AddStep(WorkflowStep step) {
+      Assertion.Require(step, nameof(step));
+
+      WorkflowEngine.Steps.Add(step);
+    }
+
+
+    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem) {
+      Assertion.Require(workflowModelItem, nameof(workflowModelItem));
+
+      return WorkflowEngine.CreateStep(workflowModelItem);
+    }
+
+
     public FixedList<WorkflowStep> GetSteps() {
       if (!IsStarted) {
         return new FixedList<WorkflowStep>();

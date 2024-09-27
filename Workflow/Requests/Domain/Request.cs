@@ -17,11 +17,12 @@ using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Workflow.Definition;
+
 using Empiria.Workflow.Execution;
+using Empiria.Workflow.Execution.Adapters;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
-
 
 namespace Empiria.Workflow.Requests {
 
@@ -241,6 +242,26 @@ namespace Empiria.Workflow.Requests {
       this.Status = ActivityStatus.Deleted;
 
       base.MarkAsDirty();
+    }
+
+
+    internal WorkflowStep AddStep(WorkflowStepFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      WorkflowInstance workflowinstance = fields.GetWorkflowInstance();
+
+      Assertion.Require(WorkflowInstances.Contains(workflowinstance),
+                       $"Workflow instance {workflowinstance.Id} does not belong to this request {Id}.");
+
+      WorkflowStep step = workflowinstance.CreateStep(fields.GetWorkflowModelItem());
+
+      step.Update(fields);
+
+      workflowinstance.AddStep(step);
+
+      return step;
     }
 
 
