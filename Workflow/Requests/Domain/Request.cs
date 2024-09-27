@@ -28,7 +28,7 @@ namespace Empiria.Workflow.Requests {
 
   /// <summary>Abstract partitioned type that represents a request that can be filed.</summary>
   [PartitionedType(typeof(RequestType))]
-  public abstract class Request : BaseObject, INamedEntity {
+  public class Request : BaseObject, INamedEntity {
 
     #region Fields
 
@@ -164,7 +164,7 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal protected virtual string Keywords {
+    protected internal virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(RequestNo, InternalControlNo, Name, Description,
                                            RequestDef.Name, RequestedBy.Name,
@@ -187,8 +187,10 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    public abstract FixedList<FieldValue> RequestTypeFields {
-      get;
+    public virtual FixedList<FieldValue> RequestTypeFields {
+      get {
+        return new FixedList<FieldValue>();
+      }
     }
 
 
