@@ -279,6 +279,10 @@ namespace Empiria.Workflow.Execution {
       base.MarkAsDirty();
     }
 
+    internal void RemoveStep(WorkflowStep workflowStep) {
+      workflowStep.Delete();
+    }
+
     #endregion Methods
 
   }  // class WorkflowInstance

@@ -12,6 +12,7 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
+using Empiria.Workflow.Execution.Adapters;
 using Empiria.Workflow.Execution.UseCases;
 
 namespace Empiria.Workflow.Execution.WebApi {
@@ -33,6 +34,35 @@ namespace Empiria.Workflow.Execution.WebApi {
     }
 
     #endregion Query web apis
+
+    #region Command web apis
+
+    [HttpPost]
+    [Route("v4/workflow/execution/workflow-instances/{workflowInstanceUID:guid}/steps")]
+    public SingleObjectModel InsertWorkflowStep([FromUri] string workflowInstanceUID,
+                                                [FromBody] WorkflowStepFields fields) {
+
+      using (var usecases = WorkflowInstanceUseCases.UseCaseInteractor()) {
+        WorkflowStepDto step = usecases.InsertWorkflowStep(workflowInstanceUID, fields);
+
+        return new SingleObjectModel(base.Request, step);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v4/workflow/execution/workflow-instances/{workflowInstanceUID:guid}/steps/{workflowStepUID:guid}")]
+    public NoDataModel RemoveWorkflowStep([FromUri] string workflowInstanceUID,
+                                          [FromUri] string workflowStepUID) {
+
+      using (var usecases = WorkflowInstanceUseCases.UseCaseInteractor()) {
+        usecases.RemoveWorkflowStep(workflowInstanceUID, workflowStepUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+    #endregion Command web apis
 
   }  // class WorkflowInstanceController
 
