@@ -56,6 +56,11 @@ namespace Empiria.Workflow.Execution.Adapters {
     } = ExecutionServer.DateMaxValue;
 
 
+    public string PreviousStepUID {
+      get; set;
+    } = string.Empty;
+
+
     public string RequestUID {
       get; set;
     } = string.Empty;
@@ -106,6 +111,14 @@ namespace Empiria.Workflow.Execution.Adapters {
       _ = GetRequest(fields);
       _ = GetWorkflowInstance(fields);
       _ = GetWorkflowModelItem(fields);
+    }
+
+
+    static internal WorkflowStep GetPreviousStep(this WorkflowStepFields fields) {
+      if (fields.PreviousStepUID.Length == 0) {
+        return WorkflowStep.Empty;
+      }
+      return WorkflowStep.Parse(fields.PreviousStepUID);
     }
 
 
