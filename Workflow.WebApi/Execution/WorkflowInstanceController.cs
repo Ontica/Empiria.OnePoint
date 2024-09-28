@@ -50,6 +50,22 @@ namespace Empiria.Workflow.Execution.WebApi {
     }
 
 
+    [HttpPatch, HttpPut]
+    [Route("v4/workflow/execution/workflow-instances/{workflowInstanceUID:guid}/steps/{workflowStepUID:guid}")]
+    public SingleObjectModel UpdateWorkflowStep([FromUri] string workflowInstanceUID,
+                                                [FromUri] string workflowStepUID,
+                                                [FromBody] WorkflowStepFields fields) {
+
+      base.RequireBody(fields);
+
+      using (var usecases = WorkflowInstanceUseCases.UseCaseInteractor()) {
+        WorkflowStepDto step = usecases.UpdateWorkflowStep(workflowInstanceUID, workflowStepUID, fields);
+
+        return new SingleObjectModel(base.Request, step);
+      }
+    }
+
+
     [HttpDelete]
     [Route("v4/workflow/execution/workflow-instances/{workflowInstanceUID:guid}/steps/{workflowStepUID:guid}")]
     public NoDataModel RemoveWorkflowStep([FromUri] string workflowInstanceUID,

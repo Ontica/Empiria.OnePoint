@@ -74,6 +74,25 @@ namespace Empiria.Workflow.Execution.UseCases {
       workflowStep.Save();
     }
 
+
+    public WorkflowStepDto UpdateWorkflowStep(string workflowInstanceUID,
+                                              string workflowStepUID,
+                                              WorkflowStepFields fields) {
+      Assertion.Require(workflowInstanceUID, nameof(workflowInstanceUID));
+      Assertion.Require(workflowStepUID, nameof(workflowStepUID));
+
+
+      var workflowInstance = WorkflowInstance.Parse(workflowInstanceUID);
+
+      var workflowStep = WorkflowStep.Parse(workflowStepUID);
+
+      workflowInstance.UpdateStep(workflowStep, fields);
+
+      workflowStep.Save();
+
+      return WorkflowStepMapper.Map(workflowStep);
+    }
+
     #endregion Use cases
 
   }  // class WorkflowInstanceUseCases

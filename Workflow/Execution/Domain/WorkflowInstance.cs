@@ -17,6 +17,7 @@ using Empiria.Workflow.Requests;
 using Empiria.Workflow.Definition;
 
 using Empiria.Workflow.Execution.Data;
+using Empiria.Workflow.Execution.Adapters;
 
 namespace Empiria.Workflow.Execution {
 
@@ -267,6 +268,11 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    internal void RemoveStep(WorkflowStep workflowStep) {
+      workflowStep.Delete();
+    }
+
+
     internal void Start() {
       Assertion.Require(!IsStarted,
                         $"Workflow instance was already started and has status {Status.GetName()}.");
@@ -279,8 +285,9 @@ namespace Empiria.Workflow.Execution {
       base.MarkAsDirty();
     }
 
-    internal void RemoveStep(WorkflowStep workflowStep) {
-      workflowStep.Delete();
+
+    internal void UpdateStep(WorkflowStep workflowStep, WorkflowStepFields fields) {
+      workflowStep.Update(fields);
     }
 
     #endregion Methods
