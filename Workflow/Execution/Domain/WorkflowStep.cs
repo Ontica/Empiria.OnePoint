@@ -33,9 +33,13 @@ namespace Empiria.Workflow.Execution {
       // Required by Empiria Framework.
     }
 
-    public WorkflowStep(WorkflowInstance workflowInstance, WorkflowModelItem workflowModelItem) {
+    public WorkflowStep(WorkflowInstance workflowInstance,
+                        WorkflowModelItem workflowModelItem,
+                        WorkflowStep previousStep) {
+
       Assertion.Require(workflowInstance, nameof(workflowInstance));
       Assertion.Require(workflowModelItem, nameof(workflowModelItem));
+      Assertion.Require(previousStep, nameof(previousStep));
 
       this.WorkflowInstance = workflowInstance;
       this.WorkflowModelItem = workflowModelItem;

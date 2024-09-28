@@ -60,8 +60,11 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
-    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem) {
-      return new WorkflowStep(WorkflowInstance, workflowModelItem);
+    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem, WorkflowStep previousStep) {
+      Assertion.Require(workflowModelItem, nameof(workflowModelItem));
+      Assertion.Require(previousStep, nameof(previousStep));
+
+      return new WorkflowStep(WorkflowInstance, workflowModelItem, previousStep);
     }
 
 
@@ -79,10 +82,14 @@ namespace Empiria.Workflow.Execution {
 
       FixedList<WorkflowModelItem> modelItems = this.ProcessDefinition.GetWorkflowModelItems();
 
+      WorkflowStep previousStep = WorkflowStep.Empty;
+
       foreach (WorkflowModelItem modelItem in modelItems) {
-        var step = CreateStep(modelItem);
+        WorkflowStep step = CreateStep(modelItem, previousStep);
 
         Steps.Add(step);
+
+        previousStep = step;
       }
     }
 

@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using Empiria.Services;
 
 using Empiria.Workflow.Definition;
@@ -46,16 +45,15 @@ namespace Empiria.Workflow.Execution.UseCases {
 
     public WorkflowStepDto InsertWorkflowStep(string workflowInstanceUID, WorkflowStepFields fields) {
       Assertion.Require(workflowInstanceUID, nameof(workflowInstanceUID));
+      Assertion.Require(fields, nameof(fields));
 
       var workflowInstance = WorkflowInstance.Parse(workflowInstanceUID);
 
       fields.EnsureValid();
 
-      WorkflowStep step = workflowInstance.CreateStep(fields.GetWorkflowModelItem());
+      WorkflowStep step = workflowInstance.InsertStep(fields);
 
-      step.Update(fields);
-
-      step.Save();
+      workflowInstance.Save();
 
       return WorkflowStepMapper.Map(step);
     }

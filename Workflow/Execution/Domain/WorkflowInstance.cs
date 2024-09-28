@@ -228,7 +228,7 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    private WorkflowEngine WorkflowEngine {
+    internal WorkflowEngine WorkflowEngine {
       get {
         return _workflowEngine.Value;
       }
@@ -238,25 +238,31 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
-    internal void AddStep(WorkflowStep step) {
-      Assertion.Require(step, nameof(step));
-
-      WorkflowEngine.Steps.Add(step);
-    }
-
-
-    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem) {
-      Assertion.Require(workflowModelItem, nameof(workflowModelItem));
-
-      return WorkflowEngine.CreateStep(workflowModelItem);
-    }
-
 
     public FixedList<WorkflowStep> GetSteps() {
       if (!IsStarted) {
         return new FixedList<WorkflowStep>();
       }
       return WorkflowEngine.Steps.ToFixedList();
+    }
+
+
+    internal WorkflowStep InsertStep(WorkflowStepFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Assertion.Require(fields.GetWorkflowInstance().Equals(this),
+                        $"Workflow instance mismatch.");
+
+      WorkflowStep step = WorkflowEngine.CreateStep(fields.GetWorkflowModelItem(),
+                                                    fields.GetPreviousStep());
+
+      step.Update(fields);
+
+      WorkflowEngine.Steps.Add(step);
+
+      return step;
     }
 
 

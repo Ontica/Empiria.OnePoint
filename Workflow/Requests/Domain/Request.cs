@@ -247,26 +247,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal WorkflowStep AddStep(WorkflowStepFields fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      fields.EnsureValid();
-
-      WorkflowInstance workflowinstance = fields.GetWorkflowInstance();
-
-      Assertion.Require(WorkflowInstances.Contains(workflowinstance),
-                       $"Workflow instance {workflowinstance.Id} does not belong to this request {Id}.");
-
-      WorkflowStep step = workflowinstance.CreateStep(fields.GetWorkflowModelItem());
-
-      step.Update(fields);
-
-      workflowinstance.AddStep(step);
-
-      return step;
-    }
-
-
     internal FixedList<WorkflowStep> GetSteps() {
       var allStepsList = new List<WorkflowStep>(32);
 

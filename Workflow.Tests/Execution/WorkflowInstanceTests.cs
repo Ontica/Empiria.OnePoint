@@ -8,9 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 using Xunit;
 
 using Empiria.Workflow.Execution;
+using Empiria.Workflow.Execution.Adapters;
 
 namespace Empiria.Tests.Workflow.Execution {
 
@@ -18,6 +21,42 @@ namespace Empiria.Tests.Workflow.Execution {
   public class WorkflowInstanceTests {
 
     #region Facts
+
+    [Fact]
+    public void Should_Insert_Workflow_Step() {
+      var workflowInstance = WorkflowInstance.Parse(2);
+
+      var fields = new WorkflowStepFields {
+        Description = "  Esta es  la  nueva   descripción  ",
+        DueTime = DateTime.Today.AddDays(4).Date,
+        Priority = StateEnums.Priority.High,
+        AssignedToOrgUnitUID = "Empty",
+        AssignedToUID = "Empty",
+        RequestedByOrgUnitUID = "Empty",
+        RequestedByUID = "Empty",
+        RequestUID = workflowInstance.Request.UID,
+        WorkflowInstanceUID = workflowInstance.UID,
+        WorkflowModelItemUID = "2effa02d-8de4-4989-addd-6e2ad87cab6b"
+      };
+
+      var countSut = workflowInstance.GetSteps().Count;
+
+      WorkflowStep sut = workflowInstance.InsertStep(fields);
+
+      Assert.Equal(EmpiriaString.TrimAll(fields.Description), sut.Description);
+      Assert.Equal(fields.DueTime, sut.DueTime);
+      Assert.Equal(fields.Priority, sut.Priority);
+      Assert.Equal(fields.AssignedToOrgUnitUID, sut.AssignedToOrgUnit.UID);
+      Assert.Equal(fields.AssignedToUID, sut.AssignedTo.UID);
+      Assert.Equal(fields.RequestedByOrgUnitUID, sut.RequestedByOrgUnit.UID);
+      Assert.Equal(fields.RequestedByUID, sut.RequestedBy.UID);
+      Assert.Equal(fields.RequestUID, sut.Request.UID);
+      Assert.Equal(fields.WorkflowInstanceUID, sut.WorkflowInstance.UID);
+      Assert.Equal(fields.WorkflowModelItemUID, sut.WorkflowModelItem.UID);
+
+      Assert.Equal(countSut + 1, workflowInstance.GetSteps().Count);
+    }
+
 
     [Fact]
     public void Should_Parse_All_Workflow_Instances() {
