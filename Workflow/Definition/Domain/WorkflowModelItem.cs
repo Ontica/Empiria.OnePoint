@@ -99,6 +99,16 @@ namespace Empiria.Workflow.Definition {
     }
 
 
+    string INamedEntity.Name {
+      get {
+        if (this.Name.Length != 0) {
+          return Name;
+        }
+        return TargetObject.Name;
+      }
+    }
+
+
     [DataField("WMS_MDL_ITEM_DESCRIPTION")]
     public string Description {
       get; protected set;
