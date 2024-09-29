@@ -41,7 +41,13 @@ namespace Empiria.Tests.Workflow.Execution {
 
       var countSut = workflowInstance.GetSteps().Count;
 
-      WorkflowStep sut = workflowInstance.InsertStep(fields);
+      WorkflowInstanceEngine engine = workflowInstance.GetEngine();
+
+      WorkflowStep sut = engine.CreateStep(fields.GetWorkflowModelItem(), fields.GetPreviousStep());
+
+      sut.Update(fields);
+
+      engine.InsertStep(sut);
 
       Assert.Equal(EmpiriaString.TrimAll(fields.Description), sut.Description);
       Assert.Equal(fields.DueTime, sut.DueTime);

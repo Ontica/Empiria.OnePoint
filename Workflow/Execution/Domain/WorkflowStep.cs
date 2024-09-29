@@ -239,13 +239,12 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
-    internal void Delete() {
-      Assertion.Require(this.Actions.CanDelete(), "Can not delete this step.");
-
+    internal void OnRemove() {
       Status = ActivityStatus.Deleted;
 
       MarkAsDirty();
     }
+
 
     protected override void OnSave() {
       if (IsDirty) {

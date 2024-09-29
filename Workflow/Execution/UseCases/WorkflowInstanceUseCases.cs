@@ -51,9 +51,15 @@ namespace Empiria.Workflow.Execution.UseCases {
 
       fields.EnsureValid();
 
-      WorkflowStep step = workflowInstance.InsertStep(fields);
+      WorkflowInstanceEngine engine = workflowInstance.GetEngine();
 
-      workflowInstance.Save();
+      WorkflowStep step = engine.CreateStep(fields.GetWorkflowModelItem(), fields.GetPreviousStep());
+
+      step.Update(fields);
+
+      step = engine.InsertStep(step);
+
+      engine.Save();
 
       return WorkflowStepMapper.Map(step);
     }
@@ -65,11 +71,13 @@ namespace Empiria.Workflow.Execution.UseCases {
 
       var workflowInstance = WorkflowInstance.Parse(workflowInstanceUID);
 
-      var workflowStep = WorkflowStep.Parse(workflowStepUID);
+      var workflowStep = workflowInstance.GetStep(workflowStepUID);
 
-      workflowInstance.RemoveStep(workflowStep);
+      WorkflowInstanceEngine engine = workflowInstance.GetEngine();
 
-      workflowStep.Save();
+      engine.RemoveStep(workflowStep);
+
+      engine.Save();
     }
 
 
@@ -82,9 +90,9 @@ namespace Empiria.Workflow.Execution.UseCases {
 
       var workflowInstance = WorkflowInstance.Parse(workflowInstanceUID);
 
-      var workflowStep = WorkflowStep.Parse(workflowStepUID);
+      var workflowStep = workflowInstance.GetStep(workflowStepUID);
 
-      workflowInstance.UpdateStep(workflowStep, fields);
+      workflowStep.Update(fields);
 
       workflowStep.Save();
 

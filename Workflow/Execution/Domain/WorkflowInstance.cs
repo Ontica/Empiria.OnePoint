@@ -17,7 +17,6 @@ using Empiria.Workflow.Requests;
 using Empiria.Workflow.Definition;
 
 using Empiria.Workflow.Execution.Data;
-using Empiria.Workflow.Execution.Adapters;
 
 namespace Empiria.Workflow.Execution {
 
@@ -206,13 +205,6 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    public bool IsRequestActive {
-      get {
-        return Request.Status == ActivityStatus.Active;
-      }
-    }
-
-
     public bool IsStarted {
       get {
         return !IsEmptyInstance &&
@@ -221,41 +213,31 @@ namespace Empiria.Workflow.Execution {
       }
     }
 
-
-    internal WorkflowInstanceEngine Engine {
-      get {
-        return _engine.Value;
-      }
-    }
-
     #endregion Properties
 
     #region Methods
+
+    internal WorkflowInstanceEngine GetEngine() {
+      return _engine.Value;
+    }
+
+
+    public WorkflowStep GetStep(string workflowStepUID) {
+      Assertion.Require(workflowStepUID, nameof(workflowStepUID));
+
+      WorkflowStep step = GetSteps().Find(x => x.UID == workflowStepUID);
+
+      Assertion.Require(step, "Step not found.");
+
+      return step;
+    }
+
 
     public FixedList<WorkflowStep> GetSteps() {
       if (!IsStarted) {
         return new FixedList<WorkflowStep>();
       }
-      return Engine.Steps.ToFixedList();
-    }
-
-
-    internal WorkflowStep InsertStep(WorkflowStepFields fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      fields.EnsureValid();
-
-      Assertion.Require(fields.GetWorkflowInstance().Equals(this),
-                        $"Workflow instance mismatch.");
-
-      WorkflowStep step = Engine.CreateStep(fields.GetWorkflowModelItem(),
-                                            fields.GetPreviousStep());
-
-      step.Update(fields);
-
-      Engine.Steps.Add(step);
-
-      return step;
+      return GetEngine().GetSteps();
     }
 
 
@@ -271,14 +253,6 @@ namespace Empiria.Workflow.Execution {
       Status = ActivityStatus.Active;
 
       base.MarkAsDirty();
-    }
-
-    internal void RemoveStep(WorkflowStep workflowStep) {
-      workflowStep.Delete();
-    }
-
-    internal void UpdateStep(WorkflowStep workflowStep, WorkflowStepFields fields) {
-      workflowStep.Update(fields);
     }
 
     #endregion Methods

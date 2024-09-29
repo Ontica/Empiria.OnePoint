@@ -49,13 +49,6 @@ namespace Empiria.Workflow.Execution {
       get;
     }
 
-
-    public List<WorkflowStep> Steps {
-      get {
-        return _steps.Value;
-      }
-    }
-
     #endregion Properties
 
     #region Methods
@@ -68,11 +61,39 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    public FixedList<WorkflowStep> GetSteps() {
+      return _steps.Value.ToFixedList();
+    }
+
+
+    internal WorkflowStep InsertStep(WorkflowStep workflowStep) {
+      Assertion.Require(workflowStep, nameof(workflowStep));
+
+      Assertion.Require(workflowStep.WorkflowInstance.Equals(this.WorkflowInstance),
+                        $"Workflow instance mismatch.");
+
+      _steps.Value.Add(workflowStep);
+
+      return workflowStep;
+    }
+
+
+    internal void RemoveStep(WorkflowStep workflowStep) {
+      Assertion.Require(workflowStep, nameof(workflowStep));
+
+      Assertion.Require(workflowStep.Actions.CanDelete(), "Can not delete this step.");
+
+      workflowStep.OnRemove();
+
+      _steps.Value.Remove(workflowStep);
+    }
+
+
     internal void Save() {
 
       this.WorkflowInstance.Save();
 
-      foreach (WorkflowStep step in Steps) {
+      foreach (WorkflowStep step in GetSteps()) {
         step.Save();
       }
     }
@@ -90,7 +111,7 @@ namespace Empiria.Workflow.Execution {
       foreach (WorkflowModelItem modelItem in modelItems) {
         WorkflowStep step = CreateStep(modelItem, previousStep);
 
-        Steps.Add(step);
+        _steps.Value.Add(step);
 
         previousStep = step;
       }
