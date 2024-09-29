@@ -28,14 +28,14 @@ namespace Empiria.Workflow.Requests.Adapters {
     static internal RequestHolderDto Map(Request request) {
       return new RequestHolderDto {
         Request = MapRequest(request),
-        WorkflowInstances = WorkflowInstanceMapper.Map(request.WorkflowInstances),
-        Steps = WorkflowStepMapper.Map(request.GetSteps()),
+        WorkflowInstances = WorkflowInstanceMapper.Map(request.Engine.WorkflowInstances),
+        Steps = WorkflowStepMapper.Map(request.Engine.GetSteps()),
         Documents = MapDocuments(request),
         History = MapHistory(request),
 
         // ToDo: To be removed
 
-        Tasks = WorkflowStepMapper.Map(request.GetSteps()),
+        Tasks = WorkflowStepMapper.Map(request.Engine.GetSteps()),
       };
     }
 

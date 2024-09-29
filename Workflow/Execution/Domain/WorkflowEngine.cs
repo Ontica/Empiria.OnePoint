@@ -68,7 +68,10 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    internal void SaveChanges() {
+    internal void Save() {
+
+      this.WorkflowInstance.Save();
+
       foreach (WorkflowStep step in Steps) {
         step.Save();
       }
@@ -78,7 +81,7 @@ namespace Empiria.Workflow.Execution {
     internal void Start() {
       Assertion.Require(!WorkflowInstance.IsStarted,
                         $"Can not start the WorkflowEngine because its " +
-                        $"workflow instance ({WorkflowInstance.Id}) was already started.");
+                        $"workflow instance {WorkflowInstance.Id} was already started.");
 
       FixedList<WorkflowModelItem> modelItems = this.ProcessDefinition.GetWorkflowModelItems();
 
@@ -91,6 +94,8 @@ namespace Empiria.Workflow.Execution {
 
         previousStep = step;
       }
+
+      WorkflowInstance.OnStart();
     }
 
     #endregion Methods

@@ -64,12 +64,6 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    static internal FixedList<WorkflowInstance> GetList(Request request) {
-      Assertion.Require(request, nameof (request));
-
-      return WorkflowExecutionData.GetWorkflowInstances(request);
-    }
-
     static internal WorkflowInstance Empty => ParseEmpty<WorkflowInstance>();
 
     #endregion Constructors and parsers
@@ -228,7 +222,7 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    internal WorkflowEngine WorkflowEngine {
+    internal WorkflowEngine Engine {
       get {
         return _workflowEngine.Value;
       }
@@ -243,7 +237,7 @@ namespace Empiria.Workflow.Execution {
       if (!IsStarted) {
         return new FixedList<WorkflowStep>();
       }
-      return WorkflowEngine.Steps.ToFixedList();
+      return Engine.Steps.ToFixedList();
     }
 
 
@@ -255,12 +249,12 @@ namespace Empiria.Workflow.Execution {
       Assertion.Require(fields.GetWorkflowInstance().Equals(this),
                         $"Workflow instance mismatch.");
 
-      WorkflowStep step = WorkflowEngine.CreateStep(fields.GetWorkflowModelItem(),
-                                                    fields.GetPreviousStep());
+      WorkflowStep step = Engine.CreateStep(fields.GetWorkflowModelItem(),
+                                            fields.GetPreviousStep());
 
       step.Update(fields);
 
-      WorkflowEngine.Steps.Add(step);
+      Engine.Steps.Add(step);
 
       return step;
     }
@@ -270,27 +264,19 @@ namespace Empiria.Workflow.Execution {
       if (base.IsDirty) {
         WorkflowExecutionData.Write(this, this.ExtensionData.ToString());
       }
-      WorkflowEngine.SaveChanges();
     }
 
 
-    internal void RemoveStep(WorkflowStep workflowStep) {
-      workflowStep.Delete();
-    }
-
-
-    internal void Start() {
-      Assertion.Require(!IsStarted,
-                        $"Workflow instance was already started and has status {Status.GetName()}.");
-
-      WorkflowEngine.Start();
-
+    internal void OnStart() {
       StartTime = EmpiriaDateTime.NowWithCentiseconds;
       Status = ActivityStatus.Active;
 
       base.MarkAsDirty();
     }
 
+    internal void RemoveStep(WorkflowStep workflowStep) {
+      workflowStep.Delete();
+    }
 
     internal void UpdateStep(WorkflowStep workflowStep, WorkflowStepFields fields) {
       workflowStep.Update(fields);

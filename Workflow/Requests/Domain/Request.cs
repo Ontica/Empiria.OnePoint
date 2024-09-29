@@ -1,14 +1,13 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
 *  Module   : Requests Management                        Component : Domain Layer                            *
-*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Abstract Partitioned Type               *
+*  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Partitioned Type                        *
 *  Type     : Request                                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Abstract partitioned type that represents a request that can be filed.                         *
+*  Summary  : Partitioned type that represents a request.                                                    *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
-using System.Collections.Generic;
 
 using Empiria.DataObjects;
 using Empiria.Json;
@@ -19,20 +18,19 @@ using Empiria.StateEnums;
 using Empiria.Workflow.Definition;
 
 using Empiria.Workflow.Execution;
-using Empiria.Workflow.Execution.Adapters;
 
 using Empiria.Workflow.Requests.Data;
 using Empiria.Workflow.Requests.Adapters;
 
 namespace Empiria.Workflow.Requests {
 
-  /// <summary>Abstract partitioned type that represents a request that can be filed.</summary>
+  /// <summary>Partitioned type that represents a request.</summary>
   [PartitionedType(typeof(RequestType))]
   public class Request : BaseObject, INamedEntity {
 
     #region Fields
 
-    private Lazy<FixedList<WorkflowInstance>> _workflowInstances;
+    private readonly Lazy<RequestWorkflowEngine> _engine;
 
     #endregion Fields
 
@@ -40,7 +38,8 @@ namespace Empiria.Workflow.Requests {
 
     protected Request(RequestType powertype) : base(powertype) {
       // Required by Empiria Framework for all partitioned types.
-      ResetWorkflowInstances();
+
+      _engine = new Lazy<RequestWorkflowEngine>(() => new RequestWorkflowEngine(this));
     }
 
     static internal Request Parse(int id) {
@@ -164,18 +163,18 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    public bool HasWorkflowInstances {
+      get {
+        return Engine.HasWorkflowInstances;
+      }
+    }
+
+
     protected internal virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(RequestNo, InternalControlNo, Name, Description,
                                            RequestDef.Name, RequestedBy.Name,
                                            RequestedByOrgUnit.Name, ResponsibleOrgUnit.Name);
-      }
-    }
-
-
-    public bool HasWorkflowInstance {
-      get {
-        return WorkflowInstances.Count != 0;
       }
     }
 
@@ -194,12 +193,11 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    public FixedList<WorkflowInstance> WorkflowInstances {
+    internal RequestWorkflowEngine Engine {
       get {
-        return _workflowInstances.Value;
+        return _engine.Value;
       }
     }
-
 
     #endregion Properties
 
@@ -247,18 +245,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal FixedList<WorkflowStep> GetSteps() {
-      var allStepsList = new List<WorkflowStep>(32);
-
-      foreach (WorkflowInstance instance in WorkflowInstances) {
-        var steps = instance.GetSteps();
-
-        allStepsList.AddRange(steps);
-      }
-      return allStepsList.ToFixedList();
-    }
-
-
     protected override void OnSave() {
       if (base.IsNew) {
         this.RequestNo = RequestData.GetNextRequestNo(ResponsibleOrgUnit.Acronym, DateTime.Today.Year);
@@ -269,18 +255,11 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal void Start() {
-      Assertion.Require(Actions.CanStart(), InvalidOperationMessage("start"));
-
+    internal void OnStart() {
       this.InternalControlNo = RequestData.GetNextInternalControlNo(DateTime.Today.Year);
       this.StartTime = EmpiriaDateTime.NowWithCentiseconds;
       this.StartedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
       this.Status = ActivityStatus.Active;
-
-      ResetWorkflowInstances();
-
-      Assertion.Ensure(WorkflowInstances.Count != 0,
-                      "At least one workflow instance must be created for this request.");
 
       base.MarkAsDirty();
     }
@@ -290,6 +269,7 @@ namespace Empiria.Workflow.Requests {
       Assertion.Require(Actions.CanSuspend(), InvalidOperationMessage("suspend"));
 
       Status = ActivityStatus.Suspended;
+
       base.MarkAsDirty();
     }
 
@@ -330,11 +310,6 @@ namespace Empiria.Workflow.Requests {
 
     private string InvalidOperationMessage(string operationName) {
       return $"Can not {operationName} this request. Its status is {Status.GetName()}.";
-    }
-
-
-    private void ResetWorkflowInstances() {
-      _workflowInstances = new Lazy<FixedList<WorkflowInstance>>(() => WorkflowInstance.GetList(this));
     }
 
     #endregion Helpers

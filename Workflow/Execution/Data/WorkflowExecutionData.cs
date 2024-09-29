@@ -37,9 +37,9 @@ namespace Empiria.Workflow.Execution.Data {
     }
 
 
-    static internal FixedList<WorkflowInstance> GetWorkflowInstances(Request request) {
+    static internal List<WorkflowInstance> GetWorkflowInstances(Request request) {
       if (request.IsEmptyInstance || request.IsNew) {
-        return new FixedList<WorkflowInstance>();
+        return new List<WorkflowInstance>();
       }
 
       var sql = "SELECT * FROM WMS_Instances " +
@@ -49,7 +49,7 @@ namespace Empiria.Workflow.Execution.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetFixedList<WorkflowInstance>(op);
+      return DataReader.GetList<WorkflowInstance>(op);
     }
 
     #endregion Read methods
