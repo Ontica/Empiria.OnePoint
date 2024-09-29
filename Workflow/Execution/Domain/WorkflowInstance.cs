@@ -26,7 +26,7 @@ namespace Empiria.Workflow.Execution {
 
     #region Fields
 
-    private readonly Lazy<WorkflowEngine> _workflowEngine;
+    private readonly Lazy<WorkflowInstanceEngine> _engine;
 
     #endregion Fields
 
@@ -34,7 +34,7 @@ namespace Empiria.Workflow.Execution {
 
     private WorkflowInstance() {
       // Required by Empiria Framework.
-      _workflowEngine = new Lazy<WorkflowEngine>(() => new WorkflowEngine(this));
+      _engine = new Lazy<WorkflowInstanceEngine>(() => new WorkflowInstanceEngine(this));
     }
 
 
@@ -50,7 +50,7 @@ namespace Empiria.Workflow.Execution {
       this.ProcessDefinition = processDefinition;
       this.Request = request;
 
-      _workflowEngine = new Lazy<WorkflowEngine>(() => new WorkflowEngine(this));
+      _engine = new Lazy<WorkflowInstanceEngine>(() => new WorkflowInstanceEngine(this));
     }
 
 
@@ -222,16 +222,15 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    internal WorkflowEngine Engine {
+    internal WorkflowInstanceEngine Engine {
       get {
-        return _workflowEngine.Value;
+        return _engine.Value;
       }
     }
 
     #endregion Properties
 
     #region Methods
-
 
     public FixedList<WorkflowStep> GetSteps() {
       if (!IsStarted) {

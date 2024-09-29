@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Workflow Execution                         Component : Domain Layer                            *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Information Holder                      *
-*  Type     : WorkflowEngine                             License   : Please read LICENSE.txt file            *
+*  Type     : WorkflowInstanceEngine                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Performs operations of a workflow process in the context of a workflow instance.               *
 *                                                                                                            *
@@ -19,7 +19,7 @@ using Empiria.Workflow.Execution.Data;
 namespace Empiria.Workflow.Execution {
 
   /// <summary>Performs operations of a workflow process in the context of a workflow instance.</summary>
-  internal class WorkflowEngine {
+  internal class WorkflowInstanceEngine {
 
     #region Fields
 
@@ -29,7 +29,7 @@ namespace Empiria.Workflow.Execution {
 
     #region Constructors and parsers
 
-    internal WorkflowEngine(WorkflowInstance workflowInstance) {
+    internal WorkflowInstanceEngine(WorkflowInstance workflowInstance) {
       this.WorkflowInstance = workflowInstance;
 
       _steps = new Lazy<List<WorkflowStep>>(() => WorkflowExecutionData.GetSteps(workflowInstance));
@@ -100,6 +100,6 @@ namespace Empiria.Workflow.Execution {
 
     #endregion Methods
 
-  }  // class WorkflowEngine
+  }  // class WorkflowInstanceEngine
 
 }  // namespace Empiria.Workflow.Execution
