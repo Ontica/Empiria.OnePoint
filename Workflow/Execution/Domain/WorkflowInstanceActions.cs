@@ -22,51 +22,59 @@ namespace Empiria.Workflow.Execution {
     }
 
     public bool CanActivate() {
-      return _workflowInstance.IsRequestActive &&
-             _workflowInstance.Status == ActivityStatus.Suspended;
+      return _workflowInstance.Status == ActivityStatus.Suspended &&
+             RequestIsActive();
     }
 
 
     public bool CanCancel() {
-      return _workflowInstance.IsRequestActive &&
-              (_workflowInstance.Status == ActivityStatus.Pending ||
+      return  (_workflowInstance.Status == ActivityStatus.Pending ||
               _workflowInstance.Status == ActivityStatus.Active ||
               _workflowInstance.Status == ActivityStatus.Suspended) &&
-              _workflowInstance.IsOptional;
+              _workflowInstance.IsOptional &&
+              RequestIsActive();
     }
 
 
     public bool CanComplete() {
-      return _workflowInstance.IsRequestActive &&
-             _workflowInstance.Status == ActivityStatus.Active;
+      return _workflowInstance.Status == ActivityStatus.Active &&
+             RequestIsActive();
     }
 
 
     public bool CanDelete() {
-      return _workflowInstance.IsRequestActive &&
-             _workflowInstance.Status == ActivityStatus.Pending &&
-             _workflowInstance.IsOptional;
+      return _workflowInstance.Status == ActivityStatus.Pending &&
+             _workflowInstance.IsOptional &&
+             RequestIsActive();
     }
 
 
     public bool CanStart() {
-      return _workflowInstance.IsRequestActive &&
-             _workflowInstance.Status == ActivityStatus.Pending;
+      return _workflowInstance.Status == ActivityStatus.Pending &&
+             RequestIsActive();
     }
 
 
     public bool CanSuspend() {
-      return _workflowInstance.IsRequestActive &&
-             _workflowInstance.Status == ActivityStatus.Active;
+      return _workflowInstance.Status == ActivityStatus.Active &&
+              RequestIsActive();
     }
 
 
     public bool CanUpdate() {
-      return _workflowInstance.IsRequestActive &&
-              _workflowInstance.Status != ActivityStatus.Canceled &&
+      return  _workflowInstance.Status != ActivityStatus.Canceled &&
               _workflowInstance.Status != ActivityStatus.Deleted &&
-              _workflowInstance.Status != ActivityStatus.Completed;
+              _workflowInstance.Status != ActivityStatus.Completed &&
+              RequestIsActive();
     }
+
+    #region Helpers
+
+    public bool RequestIsActive() {
+      return _workflowInstance.Request.Status == ActivityStatus.Active;
+    }
+
+    #endregion Helpers
 
   }  // class WorkflowInstanceActions
 

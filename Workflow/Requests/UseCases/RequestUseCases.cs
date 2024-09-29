@@ -129,9 +129,11 @@ namespace Empiria.Workflow.Requests.UseCases {
 
       Assertion.Require(request.Actions.CanStart(), "No se puede iniciar esta solicitud.");
 
-      request.Engine.Start();
+      var requestEngine = request.GetEngine();
 
-      request.Engine.Save();
+      requestEngine.Start();
+
+      requestEngine.Save();
 
       return RequestMapper.Map(request);
     }

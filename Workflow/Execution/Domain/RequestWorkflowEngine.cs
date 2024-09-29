@@ -71,7 +71,9 @@ namespace Empiria.Workflow.Execution {
       _request.Save();
 
       foreach (var workflowInstance in _workflowInstances.Value) {
-        workflowInstance.Engine.Save();
+        WorkflowInstanceEngine engine = workflowInstance.GetEngine();
+
+        engine.Save();
       }
     }
 
@@ -90,7 +92,9 @@ namespace Empiria.Workflow.Execution {
 
       WorkflowInstance workflowInstance = new WorkflowInstance(processDefinition, _request);
 
-      workflowInstance.Engine.Start();
+      WorkflowInstanceEngine engine = workflowInstance.GetEngine();
+
+      engine.Start();
 
       _workflowInstances.Value.Add(workflowInstance);
 

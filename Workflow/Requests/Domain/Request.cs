@@ -185,12 +185,6 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    internal RequestWorkflowEngine Engine {
-      get {
-        return _engine.Value;
-      }
-    }
-
     #endregion Properties
 
     #region Methods
@@ -237,8 +231,17 @@ namespace Empiria.Workflow.Requests {
     }
 
 
+    internal RequestWorkflowEngine GetEngine() {
+      return _engine.Value;
+    }
+
+    public FixedList<WorkflowStep> GetSteps() {
+      return GetEngine().GetSteps();
+    }
+
+
     public FixedList<WorkflowInstance> GetWorkflowInstances() {
-      return Engine.GetWorkflowInstances();
+      return GetEngine().GetWorkflowInstances();
     }
 
 
