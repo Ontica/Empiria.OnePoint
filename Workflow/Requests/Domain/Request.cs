@@ -162,14 +162,6 @@ namespace Empiria.Workflow.Requests {
       get; private set;
     }
 
-
-    public bool HasWorkflowInstances {
-      get {
-        return Engine.HasWorkflowInstances;
-      }
-    }
-
-
     protected internal virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(RequestNo, InternalControlNo, Name, Description,
@@ -242,6 +234,11 @@ namespace Empiria.Workflow.Requests {
       this.Status = ActivityStatus.Deleted;
 
       base.MarkAsDirty();
+    }
+
+
+    public FixedList<WorkflowInstance> GetWorkflowInstances() {
+      return Engine.GetWorkflowInstances();
     }
 
 

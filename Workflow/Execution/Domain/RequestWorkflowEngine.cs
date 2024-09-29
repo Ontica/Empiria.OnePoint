@@ -45,19 +45,6 @@ namespace Empiria.Workflow.Execution {
 
     #region Properties
 
-    public bool HasWorkflowInstances {
-      get {
-        return WorkflowInstances.Count > 0;
-      }
-    }
-
-
-    public FixedList<WorkflowInstance> WorkflowInstances {
-      get {
-        return _workflowInstances.Value.ToFixedList();
-      }
-    }
-
     #endregion Properties
 
     #region Methods
@@ -65,7 +52,7 @@ namespace Empiria.Workflow.Execution {
     internal FixedList<WorkflowStep> GetSteps() {
       var allStepsList = new List<WorkflowStep>(32);
 
-      foreach (WorkflowInstance instance in WorkflowInstances) {
+      foreach (WorkflowInstance instance in GetWorkflowInstances()) {
         var steps = instance.GetSteps();
 
         allStepsList.AddRange(steps);
@@ -74,11 +61,16 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    public FixedList<WorkflowInstance> GetWorkflowInstances() {
+      return _workflowInstances.Value.ToFixedList();
+    }
+
+
     internal void Save() {
 
       _request.Save();
 
-      foreach (var workflowInstance in WorkflowInstances) {
+      foreach (var workflowInstance in _workflowInstances.Value) {
         workflowInstance.Engine.Save();
       }
     }
@@ -86,7 +78,7 @@ namespace Empiria.Workflow.Execution {
 
     internal void Start() {
 
-      Assertion.Require(!WorkflowInstances.Contains(x => x.IsStarted),
+      Assertion.Require(!GetWorkflowInstances().Contains(x => x.IsStarted),
                         $"Can not start the RequestWorkflowEngine because has at " +
                         $"least one workflow instance that is already started.");
 

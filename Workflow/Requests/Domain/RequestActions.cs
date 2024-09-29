@@ -22,8 +22,8 @@ namespace Empiria.Workflow.Requests {
     }
 
     public bool CanActivate() {
-      if (_request.HasWorkflowInstances &&
-          _request.Status == ActivityStatus.Suspended) {
+      if (_request.Status == ActivityStatus.Suspended &&
+          RequestHasWorkflowInstances()) {
         return true;
       }
       return false;
@@ -31,9 +31,9 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanCancel() {
-      if (_request.HasWorkflowInstances &&
-         (_request.Status == ActivityStatus.Active ||
-          _request.Status == ActivityStatus.Suspended)) {
+      if ((_request.Status == ActivityStatus.Active ||
+          _request.Status == ActivityStatus.Suspended) &&
+          RequestHasWorkflowInstances()) {
         return true;
       }
       return false;
@@ -41,8 +41,8 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanComplete() {
-      if (_request.HasWorkflowInstances &&
-          _request.Status == ActivityStatus.Active) {
+      if (_request.Status == ActivityStatus.Active &&
+          RequestHasWorkflowInstances()) {
         return true;
       }
       return false;
@@ -50,8 +50,8 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanDelete() {
-      if (_request.HasWorkflowInstances &&
-          _request.Status == ActivityStatus.Pending) {
+      if (_request.Status == ActivityStatus.Pending &&
+          RequestHasWorkflowInstances()) {
         return true;
       }
       return false;
@@ -59,8 +59,8 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanStart() {
-      if (!_request.HasWorkflowInstances &&
-           _request.Status == ActivityStatus.Pending) {
+      if (_request.Status == ActivityStatus.Pending &&
+          !RequestHasWorkflowInstances()) {
         return true;
       }
 
@@ -69,8 +69,8 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanSuspend() {
-      if (_request.HasWorkflowInstances &&
-          _request.Status == ActivityStatus.Active) {
+      if (_request.Status == ActivityStatus.Active &&
+          RequestHasWorkflowInstances()) {
         return true;
       }
       return false;
@@ -78,12 +78,20 @@ namespace Empiria.Workflow.Requests {
 
 
     public bool CanUpdate() {
-      if (!_request.HasWorkflowInstances &&
-          _request.Status == ActivityStatus.Pending) {
+      if (_request.Status == ActivityStatus.Pending &&
+          !RequestHasWorkflowInstances()) {
         return true;
       }
       return false;
     }
+
+    #region Helpers
+
+    private bool RequestHasWorkflowInstances() {
+      return _request.GetWorkflowInstances().Count > 0;
+    }
+
+    #endregion Helpers
 
   }  // class RequestActions
 

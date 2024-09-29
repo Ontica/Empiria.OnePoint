@@ -28,7 +28,7 @@ namespace Empiria.Workflow.Requests.Adapters {
     static internal RequestHolderDto Map(Request request) {
       return new RequestHolderDto {
         Request = MapRequest(request),
-        WorkflowInstances = WorkflowInstanceMapper.Map(request.Engine.WorkflowInstances),
+        WorkflowInstances = WorkflowInstanceMapper.Map(request.GetWorkflowInstances()),
         Steps = WorkflowStepMapper.Map(request.Engine.GetSteps()),
         Documents = MapDocuments(request),
         History = MapHistory(request),
