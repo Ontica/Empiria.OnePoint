@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 
 using Empiria.Workflow.Definition;
-
 using Empiria.Workflow.Execution.Data;
 
 namespace Empiria.Workflow.Execution {
@@ -53,11 +52,10 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
-    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem, WorkflowStep previousStep) {
+    internal WorkflowStep CreateStep(WorkflowModelItem workflowModelItem) {
       Assertion.Require(workflowModelItem, nameof(workflowModelItem));
-      Assertion.Require(previousStep, nameof(previousStep));
 
-      return new WorkflowStep(WorkflowInstance, workflowModelItem, previousStep);
+      return new WorkflowStep(WorkflowInstance, workflowModelItem);
     }
 
 
@@ -109,11 +107,12 @@ namespace Empiria.Workflow.Execution {
       WorkflowStep previousStep = WorkflowStep.Empty;
 
       foreach (WorkflowModelItem modelItem in modelItems) {
-        WorkflowStep step = CreateStep(modelItem, previousStep);
+        WorkflowStep step = CreateStep(modelItem);
 
         _steps.Value.Add(step);
 
         previousStep = step;
+
       }
 
       WorkflowInstance.OnStart();

@@ -43,7 +43,7 @@ namespace Empiria.Tests.Workflow.Execution {
 
       WorkflowInstanceEngine engine = workflowInstance.GetEngine();
 
-      WorkflowStep sut = engine.CreateStep(fields.GetWorkflowModelItem(), fields.GetPreviousStep());
+      WorkflowStep sut = engine.CreateStep(fields.GetWorkflowModelItem());
 
       sut.Update(fields);
 

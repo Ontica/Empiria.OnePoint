@@ -53,7 +53,7 @@ namespace Empiria.Workflow.Execution.UseCases {
 
       WorkflowInstanceEngine engine = workflowInstance.GetEngine();
 
-      WorkflowStep step = engine.CreateStep(fields.GetWorkflowModelItem(), fields.GetPreviousStep());
+      WorkflowStep step = engine.CreateStep(fields.GetWorkflowModelItem());
 
       step.Update(fields);
 
