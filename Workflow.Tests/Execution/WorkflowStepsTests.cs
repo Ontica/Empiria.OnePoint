@@ -28,6 +28,11 @@ namespace Empiria.Tests.Workflow.Execution {
 
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);
+
+      foreach (var step in sut) {
+        Assert.NotNull(step.PreviousStep);
+        Assert.NotNull(step.NextStep);
+      }
     }
 
 
@@ -36,6 +41,10 @@ namespace Empiria.Tests.Workflow.Execution {
       var sut = WorkflowStep.Empty;
 
       Assert.NotNull(sut);
+      Assert.NotNull(sut.PreviousStep);
+      Assert.True(sut.PreviousStep.IsEmptyInstance);
+      Assert.NotNull(sut.NextStep);
+      Assert.True(sut.NextStep.IsEmptyInstance);
     }
 
 

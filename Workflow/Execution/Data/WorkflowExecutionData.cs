@@ -73,7 +73,8 @@ namespace Empiria.Workflow.Execution.Data {
                       o.WorkflowInstance.Id, o.WorkflowModelItem.Id, o.StepDefinition.Id,
                       o.StepNo, o.Description, o.Tags, o.RequestedBy.Id, o.RequestedByOrgUnit.Id,
                       o.AssignedTo.Id, o.AssignedToOrgUnit.Id, (char) o.Priority, o.DueTime,
-                      o.StartTime, o.EndTime, extensionData, o.Keywords, (char) o.Status);
+                      o.StartTime, o.EndTime, o.PreviousStep.Id, o.NextStep.Id,
+                      extensionData, o.Keywords, (char) o.Status);
 
       DataWriter.Execute(op);
     }

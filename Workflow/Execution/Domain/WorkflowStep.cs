@@ -9,6 +9,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
+using System.Data;
 
 using Empiria.Json;
 using Empiria.Parties;
@@ -21,11 +22,19 @@ using Empiria.Workflow.Requests;
 using Empiria.Workflow.Execution.Adapters;
 using Empiria.Workflow.Execution.Data;
 
+
 namespace Empiria.Workflow.Execution {
 
   /// <summary> A workflow step is an actual runtime workflow event, activity or gateway,
   /// under the execution context of a workflow instance.</summary>
   public class WorkflowStep : BaseObject {
+
+    #region Fields
+
+    private Lazy<WorkflowStep> _previousStep = new Lazy<WorkflowStep>(() => Empty);
+    private Lazy<WorkflowStep> _nextStep = new Lazy<WorkflowStep>(() => Empty);
+
+    #endregion Fields
 
     #region Constructors and parsers
 
@@ -34,12 +43,10 @@ namespace Empiria.Workflow.Execution {
     }
 
     public WorkflowStep(WorkflowInstance workflowInstance,
-                        WorkflowModelItem workflowModelItem,
-                        WorkflowStep previousStep) {
+                        WorkflowModelItem workflowModelItem) {
 
       Assertion.Require(workflowInstance, nameof(workflowInstance));
       Assertion.Require(workflowModelItem, nameof(workflowModelItem));
-      Assertion.Require(previousStep, nameof(previousStep));
 
       this.WorkflowInstance = workflowInstance;
       this.WorkflowModelItem = workflowModelItem;
@@ -50,14 +57,19 @@ namespace Empiria.Workflow.Execution {
 
 
     static internal WorkflowStep Parse(int id) {
-      return BaseObject.ParseId<WorkflowStep>(id);
+      return ParseId<WorkflowStep>(id);
     }
 
     static internal WorkflowStep Parse(string uid) {
-      return BaseObject.ParseKey<WorkflowStep>(uid);
+      return ParseKey<WorkflowStep>(uid);
     }
 
     static internal WorkflowStep Empty => ParseEmpty<WorkflowStep>();
+
+    protected override void OnLoadObjectData(DataRow row) {
+      _previousStep = new Lazy<WorkflowStep>(() => Parse((int) row["WMS_STEP_PREVIOUS_STEP_ID"]));
+      _nextStep = new Lazy<WorkflowStep>(() => Parse((int) row["WMS_STEP_NEXT_STEP_ID"]));
+    }
 
     #endregion Constructors and parsers
 
@@ -166,6 +178,26 @@ namespace Empiria.Workflow.Execution {
     } = ExecutionServer.DateMaxValue;
 
 
+    public WorkflowStep PreviousStep {
+      get {
+        return _previousStep.Value;
+      }
+      set {
+        _previousStep = new Lazy<WorkflowStep>(() => value);
+      }
+    }
+
+
+    public WorkflowStep NextStep {
+      get {
+        return _nextStep.Value;
+      }
+      set {
+        _nextStep = new Lazy<WorkflowStep>(() => value);
+      }
+    }
+
+
     [DataField("WMS_STEP_EXT_DATA")]
     private JsonObject ExtensionData {
       get; set;
@@ -250,6 +282,30 @@ namespace Empiria.Workflow.Execution {
       if (IsDirty) {
         WorkflowExecutionData.Write(this, ExtensionData.ToString());
       }
+    }
+
+
+    internal void SetPreviousStep(WorkflowStep previousStep) {
+      Assertion.Require(previousStep, nameof(previousStep));
+      Assertion.Require(previousStep.IsEmptyInstance ||
+                        previousStep.WorkflowInstance.Equals(this.WorkflowInstance),
+                        "previousStep.WorkflowInstance mismatch.");
+
+      this.PreviousStep = previousStep;
+
+      base.MarkAsDirty();
+    }
+
+
+    internal void SetNextStep(WorkflowStep nextStep) {
+      Assertion.Require(nextStep, nameof(nextStep));
+      Assertion.Require(nextStep.IsEmptyInstance ||
+                        nextStep.WorkflowInstance.Equals(this.WorkflowInstance),
+                        "nextStep.WorkflowInstance mismatch.");
+
+      this.NextStep = nextStep;
+
+      base.MarkAsDirty();
     }
 
 
