@@ -290,6 +290,9 @@ namespace Empiria.Workflow.Execution {
       Assertion.Require(previousStep.IsEmptyInstance ||
                         previousStep.WorkflowInstance.Equals(this.WorkflowInstance),
                         "previousStep.WorkflowInstance mismatch.");
+      if (this.IsEmptyInstance) {
+        return;
+      }
 
       this.PreviousStep = previousStep;
 
@@ -302,6 +305,9 @@ namespace Empiria.Workflow.Execution {
       Assertion.Require(nextStep.IsEmptyInstance ||
                         nextStep.WorkflowInstance.Equals(this.WorkflowInstance),
                         "nextStep.WorkflowInstance mismatch.");
+      if (this.IsEmptyInstance) {
+        return;
+      }
 
       this.NextStep = nextStep;
 

@@ -109,11 +109,17 @@ namespace Empiria.Workflow.Execution {
       foreach (WorkflowModelItem modelItem in modelItems) {
         WorkflowStep step = CreateStep(modelItem);
 
+        step.SetPreviousStep(previousStep);
+
+        if (!previousStep.IsEmptyInstance) {
+          previousStep.SetNextStep(step);
+        }
+
         _steps.Value.Add(step);
 
         previousStep = step;
 
-      }
+      }  // foreach
 
       WorkflowInstance.OnStart();
     }
