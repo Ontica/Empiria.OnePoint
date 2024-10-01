@@ -48,6 +48,8 @@ namespace Empiria.Workflow.Execution {
       Assertion.Require(workflowInstance, nameof(workflowInstance));
       Assertion.Require(workflowModelItem, nameof(workflowModelItem));
 
+      base.GenerateId();
+
       this.WorkflowInstance = workflowInstance;
       this.WorkflowModelItem = workflowModelItem;
       this.StepDefinition = (StepDef) WorkflowModelItem.TargetObject;
