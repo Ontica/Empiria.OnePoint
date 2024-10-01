@@ -67,13 +67,18 @@ namespace Empiria.Workflow.Execution {
     }
 
 
-    internal WorkflowStep InsertStep(WorkflowStep workflowStep) {
+    internal WorkflowStep InsertStep(WorkflowStep workflowStep,
+                                     StepInsertionPoint insertionPoint) {
+
       Assertion.Require(workflowStep, nameof(workflowStep));
+      Assertion.Require(insertionPoint, nameof(insertionPoint));
 
       Assertion.Require(workflowStep.WorkflowInstance.Equals(this.WorkflowInstance),
                         $"Workflow instance mismatch.");
 
-      _steps.Value.Add(workflowStep);
+      int insertionIndex = insertionPoint.CalculateInsertionIndex(GetSteps());
+
+      _steps.Value.Insert(insertionIndex, workflowStep);
 
       UpdateStepsNumbers();
 

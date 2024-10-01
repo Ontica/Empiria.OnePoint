@@ -57,7 +57,7 @@ namespace Empiria.Workflow.Execution.UseCases {
 
       step.Update(fields);
 
-      step = engine.InsertStep(step);
+      step = engine.InsertStep(step, fields.GetInsertionPoint());
 
       engine.Save();
 

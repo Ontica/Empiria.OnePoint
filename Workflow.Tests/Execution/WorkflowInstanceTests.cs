@@ -47,7 +47,7 @@ namespace Empiria.Tests.Workflow.Execution {
 
       sut.Update(fields);
 
-      engine.InsertStep(sut);
+      engine.InsertStep(sut, fields.GetInsertionPoint());
 
       Assert.Equal(EmpiriaString.TrimAll(fields.Description), sut.Description);
       Assert.Equal(fields.DueTime, sut.DueTime);

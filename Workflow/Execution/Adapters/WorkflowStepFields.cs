@@ -10,6 +10,7 @@
 
 using System;
 
+using Empiria.Commands;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
@@ -56,7 +57,12 @@ namespace Empiria.Workflow.Execution.Adapters {
     } = ExecutionServer.DateMaxValue;
 
 
-    public string PreviousStepUID {
+    public PositioningRule PositioningRule {
+      get; set;
+    } = PositioningRule.AtEnd;
+
+
+    public string PositioningOffsetStepUID {
       get; set;
     } = string.Empty;
 
@@ -82,22 +88,6 @@ namespace Empiria.Workflow.Execution.Adapters {
   /// <summary>Extension methods for WorkflowStepFields class.</summary>
   static internal class WorkflowStepFieldsExtensions {
 
-    static internal Party GetAssignedTo(this WorkflowStepFields fields) {
-      if (string.IsNullOrWhiteSpace(fields.AssignedToUID)) {
-        return Party.Empty;
-      }
-      return Party.Parse(fields.AssignedToUID);
-    }
-
-
-    static internal OrganizationalUnit GetAssignedToOrgUnit(this WorkflowStepFields fields) {
-      if (string.IsNullOrWhiteSpace(fields.AssignedToOrgUnitUID)) {
-        return OrganizationalUnit.Empty;
-      }
-      return OrganizationalUnit.Parse(fields.AssignedToOrgUnitUID);
-    }
-
-
     static internal void EnsureValid(this WorkflowStepFields fields) {
       Assertion.Require(fields.Description, nameof(fields.Description));
       Assertion.Require(fields.RequestUID, nameof(fields.RequestUID));
@@ -114,11 +104,35 @@ namespace Empiria.Workflow.Execution.Adapters {
     }
 
 
-    static internal WorkflowStep GetPreviousStep(this WorkflowStepFields fields) {
-      if (fields.PreviousStepUID.Length == 0) {
-        return WorkflowStep.Empty;
+    static internal Party GetAssignedTo(this WorkflowStepFields fields) {
+      if (string.IsNullOrWhiteSpace(fields.AssignedToUID)) {
+        return Party.Empty;
       }
-      return WorkflowStep.Parse(fields.PreviousStepUID);
+      return Party.Parse(fields.AssignedToUID);
+    }
+
+
+    static internal OrganizationalUnit GetAssignedToOrgUnit(this WorkflowStepFields fields) {
+      if (string.IsNullOrWhiteSpace(fields.AssignedToOrgUnitUID)) {
+        return OrganizationalUnit.Empty;
+      }
+      return OrganizationalUnit.Parse(fields.AssignedToOrgUnitUID);
+    }
+
+
+    static internal StepInsertionPoint GetInsertionPoint(this WorkflowStepFields fields) {
+      Assertion.Require(fields.PositioningRule != PositioningRule.Undefined, nameof(fields.PositioningRule));
+
+      if (fields.PositioningRule == PositioningRule.AtStart ||
+          fields.PositioningRule == PositioningRule.AtEnd) {
+
+        return new StepInsertionPoint(fields.PositioningRule, WorkflowStep.Empty);
+      }
+
+      Assertion.Require(fields.PositioningOffsetStepUID, nameof(fields.PositioningOffsetStepUID));
+
+      return new StepInsertionPoint(fields.PositioningRule,
+                                    WorkflowStep.Parse(fields.PositioningOffsetStepUID));
     }
 
 
