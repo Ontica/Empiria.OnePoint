@@ -75,6 +75,8 @@ namespace Empiria.Workflow.Execution {
 
       _steps.Value.Add(workflowStep);
 
+      UpdateStepsNumbers();
+
       return workflowStep;
     }
 
@@ -106,6 +108,8 @@ namespace Empiria.Workflow.Execution {
       _removedSteps.Add(workflowStep);
 
       _steps.Value.Remove(workflowStep);
+
+      UpdateStepsNumbers();
     }
 
 
@@ -151,6 +155,28 @@ namespace Empiria.Workflow.Execution {
     }
 
     #endregion Methods
+
+    #region Helpers
+
+    private string GetStepNewNo(WorkflowStep step, int position) {
+      return position.ToString("D2");
+    }
+
+
+    private void UpdateStepsNumbers() {
+
+      for (int i = 0; i < _steps.Value.Count; i++) {
+        var step = _steps.Value[i];
+
+        string newStepNo = GetStepNewNo(step, i + 1);
+
+        if (step.StepNo != newStepNo) {
+          step.SetStepNo(newStepNo);
+        }
+      }
+    }
+
+    #endregion Helpers
 
   }  // class WorkflowInstanceEngine
 

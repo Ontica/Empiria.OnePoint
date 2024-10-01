@@ -303,6 +303,15 @@ namespace Empiria.Workflow.Execution {
     }
 
 
+    internal void SetStepNo(string newStepNo) {
+      Assertion.Require(newStepNo, nameof(newStepNo));
+
+      this.StepNo = newStepNo;
+
+      base.MarkAsDirty();
+    }
+
+
     internal void SetPreviousStep(WorkflowStep previousStep) {
       Assertion.Require(previousStep, nameof(previousStep));
       Assertion.Require(previousStep.IsEmptyInstance ||
