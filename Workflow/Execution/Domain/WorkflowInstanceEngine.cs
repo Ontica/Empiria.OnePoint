@@ -9,8 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-
 using System.Collections.Generic;
+
+using Empiria.StateEnums;
 
 using Empiria.Workflow.Definition;
 using Empiria.Workflow.Execution.Data;
@@ -23,6 +24,8 @@ namespace Empiria.Workflow.Execution {
     #region Fields
 
     private readonly Lazy<List<WorkflowStep>> _steps;
+
+    private readonly List<WorkflowStep> _removedSteps = new List<WorkflowStep>();
 
     #endregion Fields
 
@@ -81,7 +84,26 @@ namespace Empiria.Workflow.Execution {
 
       Assertion.Require(workflowStep.Actions.CanDelete(), "Can not delete this step.");
 
+      var antecedents = _steps.Value.FindAll(x => x.NextStep.Equals(workflowStep));
+
+      foreach (WorkflowStep antecedent in antecedents) {
+        antecedent.SetNextStep(workflowStep.NextStep);
+      }
+
+      var subsequents = _steps.Value.FindAll(x => x.PreviousStep.Equals(workflowStep));
+
+      foreach (WorkflowStep subsequent in subsequents) {
+        subsequent.SetPreviousStep(workflowStep.PreviousStep);
+
+        if (workflowStep.Status == ActivityStatus.Pending &&
+            subsequent.Status == ActivityStatus.Waiting) {
+          subsequent.OnPrepare();
+        }
+      }
+
       workflowStep.OnRemove();
+
+      _removedSteps.Add(workflowStep);
 
       _steps.Value.Remove(workflowStep);
     }
@@ -93,6 +115,10 @@ namespace Empiria.Workflow.Execution {
 
       foreach (WorkflowStep step in GetSteps()) {
         step.Save();
+      }
+
+      foreach (WorkflowStep removedStep in _removedSteps) {
+        removedStep.Save();
       }
     }
 

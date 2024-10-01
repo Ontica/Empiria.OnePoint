@@ -184,7 +184,7 @@ namespace Empiria.Workflow.Execution {
       get {
         return _previousStep.Value;
       }
-      set {
+      private set {
         _previousStep = new Lazy<WorkflowStep>(() => value);
       }
     }
@@ -194,7 +194,7 @@ namespace Empiria.Workflow.Execution {
       get {
         return _nextStep.Value;
       }
-      set {
+      private set {
         _nextStep = new Lazy<WorkflowStep>(() => value);
       }
     }
@@ -273,10 +273,26 @@ namespace Empiria.Workflow.Execution {
 
     #region Methods
 
+    internal void OnPrepare() {
+      if (this.Status != ActivityStatus.Waiting) {
+        return;
+      }
+
+      if (this.WorkflowModelItem.Autoactivate &&
+         !this.AssignedTo.IsEmptyInstance) {
+        this.Status = ActivityStatus.Active;
+      } else {
+        this.Status = ActivityStatus.Pending;
+      }
+
+      base.MarkAsDirty();
+    }
+
+
     internal void OnRemove() {
       Status = ActivityStatus.Deleted;
 
-      MarkAsDirty();
+      base.MarkAsDirty();
     }
 
 
