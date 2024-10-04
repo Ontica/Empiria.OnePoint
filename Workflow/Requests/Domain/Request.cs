@@ -274,7 +274,7 @@ namespace Empiria.Workflow.Requests {
     }
 
 
-    protected virtual internal void Update(RequestFieldsDto fields) {
+    protected virtual internal void Update(RequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       Assertion.Require(Actions.CanUpdate(), InvalidOperationMessage("update"));

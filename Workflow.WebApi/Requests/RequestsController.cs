@@ -7,7 +7,7 @@
 *  Summary  : Web API used to create, update and manage requests.                                            *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
+
 using System.Web.Http;
 
 using Empiria.WebApi;
@@ -23,7 +23,7 @@ namespace Empiria.Workflow.Requests.WebApi {
     #region Query web apis
 
     [HttpGet]
-    [Route("v4/requests/{requestUID}")]
+    [Route("v4/requests/{requestUID:guid}")]
     public SingleObjectModel GetRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -50,7 +50,7 @@ namespace Empiria.Workflow.Requests.WebApi {
     #region Command web apis
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/activate")]
+    [Route("v4/requests/{requestUID:guid}/activate")]
     public SingleObjectModel ActivateRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -62,7 +62,7 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/cancel")]
+    [Route("v4/requests/{requestUID:guid}/cancel")]
     public SingleObjectModel CancelRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -74,8 +74,8 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/close")]   // ToDo: Remove this endpoint
-    [Route("v4/requests/{requestUID}/complete")]
+    [Route("v4/requests/{requestUID:guid}/close")]   // ToDo: Remove this endpoint
+    [Route("v4/requests/{requestUID:guid}/complete")]
     public SingleObjectModel CompleteRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -88,7 +88,7 @@ namespace Empiria.Workflow.Requests.WebApi {
 
     [HttpPost]
     [Route("v4/requests/create")]
-    public SingleObjectModel CreateRequest([FromBody] RequestFieldsDto fields) {
+    public SingleObjectModel CreateRequest([FromBody] RequestFields fields) {
 
       base.RequireBody(fields);
 
@@ -101,7 +101,7 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpDelete]
-    [Route("v4/requests/{requestUID}")]
+    [Route("v4/requests/{requestUID:guid}")]
     public NoDataModel DeleteRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -113,7 +113,7 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/start")]
+    [Route("v4/requests/{requestUID:guid}/start")]
     public SingleObjectModel StartRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -125,7 +125,7 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPost]
-    [Route("v4/requests/{requestUID}/suspend")]
+    [Route("v4/requests/{requestUID:guid}/suspend")]
     public SingleObjectModel SuspendRequest([FromUri] string requestUID) {
 
       using (var usecases = RequestUseCases.UseCaseInteractor()) {
@@ -137,9 +137,9 @@ namespace Empiria.Workflow.Requests.WebApi {
 
 
     [HttpPatch, HttpPut]
-    [Route("v4/requests/{requestUID}")]
+    [Route("v4/requests/{requestUID:guid}")]
     public SingleObjectModel UpdateRequest([FromUri] string requestUID,
-                                           [FromBody] RequestFieldsDto fields) {
+                                           [FromBody] RequestFields fields) {
 
       base.RequireBody(fields);
 

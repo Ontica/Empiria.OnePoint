@@ -38,7 +38,7 @@ namespace Empiria.Workflow.Requests {
 
     #region Methods
 
-    public Request CreateRequest(RequestFieldsDto fields) {
+    public Request CreateRequest(RequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       var request = base.CreateObject<Request>();

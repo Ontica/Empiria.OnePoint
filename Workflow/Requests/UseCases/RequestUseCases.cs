@@ -75,7 +75,7 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
-    public RequestHolderDto CreateRequest(RequestFieldsDto fields) {
+    public RequestHolderDto CreateRequest(RequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       var requestDef = RequestDef.Parse(fields.RequestDefUID);
@@ -152,7 +152,7 @@ namespace Empiria.Workflow.Requests.UseCases {
     }
 
 
-    public RequestHolderDto UpdateRequest(string requestUID, RequestFieldsDto fields) {
+    public RequestHolderDto UpdateRequest(string requestUID, RequestFields fields) {
       Assertion.Require(requestUID, nameof(requestUID));
       Assertion.Require(fields, nameof(fields));
 
