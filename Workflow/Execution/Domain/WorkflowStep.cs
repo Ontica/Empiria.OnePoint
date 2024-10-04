@@ -347,7 +347,7 @@ namespace Empiria.Workflow.Execution {
 
       fields.EnsureValid();
 
-      Description = EmpiriaString.TrimAll(fields.Description);
+      Description = PatchField(fields.Description, this.Name);
       DueTime = fields.DueTime;
       Priority = fields.Priority;
       RequestedByOrgUnit = fields.GetRequestedByOrgUnit();

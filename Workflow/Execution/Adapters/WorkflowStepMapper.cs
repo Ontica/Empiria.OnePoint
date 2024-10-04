@@ -1,6 +1,6 @@
 ﻿/* Empiria OnePoint ******************************************************************************************
 *                                                                                                            *
-*  Module   : Workflow Execution                         Component : Adpaters Layer                          *
+*  Module   : Workflow Execution                         Component : Adapters Layer                          *
 *  Assembly : Empiria.OnePoint.Workflow.dll              Pattern   : Mapper                                  *
 *  Type     : WorkflowStepMapper                         License   : Please read LICENSE.txt file            *
 *                                                                                                            *
@@ -35,7 +35,7 @@ namespace Empiria.Workflow.Execution.Adapters {
         DueTime = step.DueTime,
         StartTime = step.StartTime,
         EndTime = step.EndTime,
-        Status = step.Status.MapToDto(),
+        Status = step.RuntimeStatus.MapToDto(),
         WorkflowModelItem = step.WorkflowModelItem.MapToNamedEntity(),
         Request = step.Request.MapToNamedEntity(),
         WorkflowInstance = step.WorkflowInstance.MapToNamedEntity(),

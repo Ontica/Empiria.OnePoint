@@ -89,7 +89,6 @@ namespace Empiria.Workflow.Execution.Adapters {
   static internal class WorkflowStepFieldsExtensions {
 
     static internal void EnsureValid(this WorkflowStepFields fields) {
-      Assertion.Require(fields.Description, nameof(fields.Description));
       Assertion.Require(fields.RequestUID, nameof(fields.RequestUID));
       Assertion.Require(fields.WorkflowInstanceUID, nameof(fields.WorkflowInstanceUID));
       Assertion.Require(fields.WorkflowModelItemUID, nameof(fields.WorkflowModelItemUID));
