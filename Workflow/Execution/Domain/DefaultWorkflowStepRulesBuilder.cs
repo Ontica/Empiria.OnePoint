@@ -100,11 +100,11 @@ namespace Empiria.Workflow.Execution {
     public DateTime StartTime {
       get {
         if (_step.WorkflowModelItem.Autoactivate) {
-          return EmpiriaDateTime.NowWithCentiseconds;
+          return ExecutionServer.NowWithCentiseconds;
 
         } else if (_step.WorkflowModelItem.TargetObject is StepDef stepDef &&
                    stepDef.Autoactivate) {
-          return EmpiriaDateTime.NowWithCentiseconds;
+          return ExecutionServer.NowWithCentiseconds;
 
         }
 

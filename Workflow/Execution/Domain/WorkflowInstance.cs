@@ -249,7 +249,7 @@ namespace Empiria.Workflow.Execution {
 
 
     internal void OnStart() {
-      StartTime = EmpiriaDateTime.NowWithCentiseconds;
+      StartTime = ExecutionServer.NowWithCentiseconds;
       Status = ActivityStatus.Active;
 
       base.MarkAsDirty();

@@ -201,7 +201,7 @@ namespace Empiria.Workflow.Requests {
     public void Cancel() {
       Assertion.Require(Actions.CanCancel(), InvalidOperationMessage("cancel"));
 
-      EndTime = EmpiriaDateTime.NowWithCentiseconds;
+      EndTime = ExecutionServer.NowWithCentiseconds;
 
       Status = ActivityStatus.Canceled;
 
@@ -212,7 +212,7 @@ namespace Empiria.Workflow.Requests {
     public void Complete() {
       Assertion.Require(Actions.CanComplete(), InvalidOperationMessage("complete"));
 
-      EndTime = EmpiriaDateTime.NowWithCentiseconds;
+      EndTime = ExecutionServer.NowWithCentiseconds;
 
       Status = ActivityStatus.Completed;
 
@@ -223,7 +223,7 @@ namespace Empiria.Workflow.Requests {
     public void Delete() {
       Assertion.Require(Actions.CanDelete(), InvalidOperationMessage("delete"));
 
-      EndTime = EmpiriaDateTime.NowWithCentiseconds;
+      EndTime = ExecutionServer.NowWithCentiseconds;
 
       this.Status = ActivityStatus.Deleted;
 
@@ -257,7 +257,7 @@ namespace Empiria.Workflow.Requests {
 
     internal void OnStart() {
       this.InternalControlNo = RequestData.GetNextInternalControlNo(DateTime.Today.Year);
-      this.StartTime = EmpiriaDateTime.NowWithCentiseconds;
+      this.StartTime = ExecutionServer.NowWithCentiseconds;
       this.StartedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
       this.Status = ActivityStatus.Active;
 
