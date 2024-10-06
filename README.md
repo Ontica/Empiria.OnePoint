@@ -3,8 +3,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5b3ebddf0bce44188ad00877840a18f6)](https://www.codacy.com/gh/Ontica/Empiria.OnePoint/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ontica/Empiria.OnePoint&amp;utm_campaign=Badge_Grade) &nbsp; &nbsp; [![Maintainability](https://api.codeclimate.com/v1/badges/a66f2027efa4d2091661/maintainability)](https://codeclimate.com/github/Ontica/Empiria.OnePoint/maintainability)
 
 [Empiria OnePoint](http://www.ontica.org/) is a suite of software components that allow governments
-to provide services to people and organizations using a single point of contact. Also provides services
-for integrated security, workflow and organizations management.
+to provide services to people and organizations using a single point of contact.
 
 This repository contains the system's domain components, application services (uses cases),
 a web API interface to interact with the backend, and connectors to hook other systems and components
@@ -19,9 +18,9 @@ components and, as usual, needs some of the [Empiria Extensions](https://github.
 
 Empiria OnePoint services are packaged into the following software modules:
 
-1.  **Requests Management**  
+1.  **EFiling**
 
-    Infrastructure to securely manage documents and forms fulfilled by people, business and organizations.  
+    Infrastructure to securely manage procedure filings, documents and forms fulfilled by people, business and organizations.  
 
 2.  **Knowledge Base Management**  
 
@@ -32,10 +31,6 @@ Empiria OnePoint services are packaged into the following software modules:
 3.  **Security Management**  
 
     Infrastructure used to manage authentication and security in a centralized way.  
-
-4.  **Workflow Management**  
-
-    Infrastructure used to manage centralized workflow and services requests.  
 
 ## License
 
