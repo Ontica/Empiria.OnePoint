@@ -28,10 +28,6 @@ Empiria OnePoint services are packaged into the following software modules:
 
     Also contains components that provides help desk services connected to an issue tracking system.  
 
-3.  **Security Management**  
-
-    Infrastructure used to manage authentication and security in a centralized way.  
-
 ## License
 
 This system is distributed by the GNU AFFERO GENERAL PUBLIC LICENSE.
