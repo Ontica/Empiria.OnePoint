@@ -1,7 +1,7 @@
 ﻿Empiria OnePoint ESign Tests Module License
 ===========================================
 
-Copyright (c) 2017-2024. La Vía Óntica SC, Ontica LLC y autores.
+Copyright (c) 2017-2025. La Vía Óntica SC, Ontica LLC y autores.
                          Todos los derechos reservados.
 -----------------------------------------------------------------------
 
