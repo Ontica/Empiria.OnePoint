@@ -2,26 +2,16 @@
   "appName": "Empiria OnePoint ESign Tests suite",
   "description": "Tests suite for electronic sign services module.",
   "version": "2.0",
-  "date": "2023-03-17",
+  "date": "2025-06-25",
   "settings": [
-    {
-      "type": "",
-      "key": "ApplicationKey",
-      "value": "{{APPLICATION-KEY}}"
-    },
     {
       "type": "",
       "key": "GlobalConfigurationFile",
       "value": "{{GLOBAL-CONFIGURATION-FILE}}"
     },
     {
-      "type": "Tests",
-      "key": "SessionToken",
-      "value": "{{TESTING-SESSION-TOKEN}}"
-    },
-    {
-      "type": "Data",
-      "key": "IsObjectIdGeneratorServer",
+      "type": "",
+      "key": "IsTestingModule",
       "value": true
     }
   ]
